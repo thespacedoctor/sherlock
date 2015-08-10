@@ -1,0 +1,157 @@
+* 2015/07/06 14:52:23 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/07/06 15:07:16 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'good' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = good
+              
+* 2015/07/06 15:07:24 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/06 15:29:10 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/06 15:29:30 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/06 15:29:50 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/06 15:30:14 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/06 15:31:31 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/06 16:11:01 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/07/06 16:17:02 - dryxPython.logs - ERROR (__init__.py > execute_mysql_write_query > 145) - MySQL write command not executed for this query: << 
+                    insert into tcs_cross_matches (
+                       transient_object_id,
+                       catalogue_object_id,
+                       catalogue_table_id,
+                       separation,
+                       z,
+                       scale,
+                       distance,
+                       distance_modulus,
+                       search_parameters_id,
+                       date_added)
+                    values (
+                       1155839691170810700,
+                       "1237665532259730830",
+                       36,
+                       12.2769570836,
+                       None,
+                       None,
+                       None,
+                       None,
+                       100,
+                       "2015-07-06 16:17:02")
+                     >>
+The error was: (1054, "Unknown column 'None' in 'field list'")   
+* 2015/07/07 15:33:14 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/07/07 16:40:29 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/07 16:41:17 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'update' at line 3")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = --update
+              
+* 2015/07/07 16:41:40 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/07 16:42:18 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1054, "Unknown column 'GOOD' in 'where clause'")
+Here is the sqlQuery
+	
+                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
+                from tcs_transient_objects
+                where id = GOOD
+              
+* 2015/07/08 10:02:43 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/07/08 16:16:03 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/07/09 14:05:24 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/07/09 15:21:59 - dryxPython.logs - ERROR (_conesearcher.py > __init__ > 112) - the table `None` is not recognised listed in the settings file  
+* 2015/07/09 15:21:59 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1146, "Table 'panstarrs1.None' doesn't exist")
+Here is the sqlQuery
+	select * from None  where (htm16ID between 49533364292 and 49533364293
+or htm16ID between 49533364295 and 49533364295
+or htm16ID between 49533364344 and 49533364347
+)
+ and (cx * 0.94760027828589266 + cy * -0.01562238586965590 + cz * -0.31907625052992961 >= cos(0.00001454441043329))  
+* 2015/07/09 15:27:32 - dryxPython.logs - ERROR (_conesearcher.py > __init__ > 112) - the table `None` is not recognised listed in the settings file  
+* 2015/07/09 15:27:32 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1146, "Table 'panstarrs1.None' doesn't exist")
+Here is the sqlQuery
+	select * from None  where (htm16ID between 49533364292 and 49533364293
+or htm16ID between 49533364295 and 49533364295
+or htm16ID between 49533364344 and 49533364347
+)
+ and (cx * 0.94760027828589266 + cy * -0.01562238586965590 + cz * -0.31907625052992961 >= cos(0.00001454441043329))  
+* 2015/07/09 15:53:34 - dryxPython.logs - ERROR (_conesearcher.py > __init__ > 112) - the table `None` is not recognised listed in the settings file  
+* 2015/07/09 15:53:34 - dryxPython.logs - ERROR (__init__.py > execute_mysql_read_query > 199) - MySQL raised an error - read command not executed.
+(1146, "Table 'panstarrs1.None' doesn't exist")
+Here is the sqlQuery
+	select * from None  where (htm16ID between 49533364224 and 49533364479
+or htm16ID between 49533364608 and 49533364611
+or htm16ID between 49533364617 and 49533364617
+or htm16ID between 49533364620 and 49533364623
+or htm16ID between 49533365120 and 49533365135
+or htm16ID between 49533365152 and 49533365183
+or htm16ID between 49533408384 and 49533408391
+or htm16ID between 49533408398 and 49533408398
+or htm16ID between 49533408832 and 49533408832
+or htm16ID between 49533409088 and 49533409088
+)
+ and (cx * 0.94760027828589266 + cy * -0.01562238586965590 + cz * -0.31907625052992961 >= cos(0.00009696273622191))  
+* 2015/07/16 15:08:30 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/07/31 11:19:34 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/08/03 10:12:27 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/08/04 10:09:37 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
