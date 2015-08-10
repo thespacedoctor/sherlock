@@ -289,7 +289,8 @@ class classifier():
                            distance,
                            distance_modulus,
                            search_parameters_id,
-                           date_added)
+                           date_added,
+                           association_type)
                         values (
                            %s,
                            "%s",
@@ -300,8 +301,9 @@ class classifier():
                            %s,
                            %s,
                            %s,
+                           "%s",
                            "%s")
-                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], crossmatch["searchParametersId"], now)
+                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], crossmatch["searchParametersId"], now, crossmatch["association_type"])
                 dms.execute_mysql_write_query(
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,

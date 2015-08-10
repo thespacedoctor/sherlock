@@ -155,7 +155,7 @@ class conesearcher():
 
         # CREATE CARTESIAN SECTION OF QUERY
         cartesianClause = 'and (cx * %.17f + cy * %.17f + cz * %.17f >= cos(%.17f))' % (
-            cartesians[0], cartesians[1], cartesians[2], math.radians(self.radius/3600.0))
+            cartesians[0], cartesians[1], cartesians[2], math.radians(self.radius / 3600.0))
 
         # DECIDE WHAT COLUMNS TO REQUEST
         if self.queryType == 1:

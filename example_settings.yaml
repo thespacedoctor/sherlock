@@ -110,88 +110,107 @@ search algorithm:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_cat_v_sdss_dr9_spect_qsos
+        stop algorithm on match: no
     milliquas:
         angular radius arcsec: 3.0
         transient classification: AGN
         database table: tcs_cat_milliquas
+        stop algorithm on match: no
     veron:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_veron_cat
+        stop algorithm on match: no
     ned qso:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_cat_v_ned_qsos
+        stop algorithm on match: no
     ned nt:
         angular radius arcsec: 3.0
         physical radius kpc: 0.5
         transient classification: NT
         database table: tcs_cat_v_ned_galaxies
+        stop algorithm on match: no
     sdss spec nt:
         angular radius arcsec: 3.0
         physical radius kpc: 0.5
         transient classification: NT
         database table: tcs_cat_v_sdss_dr9_spect_galaxies
+        stop algorithm on match: no
     sdss phot nt: 
         angular radius arcsec: 0.5
         transient classification: NT
         database table: tcs_cat_v_sdss_dr9_galaxies_notspec
+        stop algorithm on match: no
     ps1 md nt:
         angular radius arcsec: 0.5
         transient classification: NT
         database table: tcs_cat_v_ps1_medium_deep_ref_galaxies
+        stop algorithm on match: no
     ned spec sn:
         angular radius arcsec: 40.0
         physical radius kpc: 15.0
         transient classification: SN
         database table: tcs_cat_v_ned_galaxies
+        stop algorithm on match: no
     sdss spec sn:
         angular radius arcsec: 40.0
         physical radius kpc: 15.0
         transient classification: SN
         database table: tcs_cat_v_sdss_dr9_spect_galaxies
+        stop algorithm on match: no
     ned phot sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_cat_v_ned_galaxies
+        stop algorithm on match: no
     sdss phot sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_cat_v_sdss_dr9_galaxies_notspec
+        stop algorithm on match: no
     sdss faint stars sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_cat_v_sdss_dr9_stars
         mag column: petroMag_r
         faint limit: 21.0
+        stop algorithm on match: no
     2mass faint stars sn:
         angular radius arcsec: 1.0
         transient classification: SN
         database table: tcs_cat_v_2mass_psc_noextended
         mag column: j_m
         faint limit: 18.0
+        stop algorithm on match: no
     gsc faint stars sn:
         angular radius arcsec: 1.0
         transient classification: SN
         database table: tcs_cat_v_guide_star_ps
         mag column: VMag
         faint limit: 20.0
+        stop algorithm on match: no
     ps1 ubercal star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_ps1_ubercal_stars
+        stop algorithm on match: no
     sdss star:
         angular radius arcsec: 19.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_v_sdss_dr9_stars
+        stop algorithm on match: no
     2mass star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_v_2mass_psc_noextended
+        stop algorithm on match: no
     gsc star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_v_guide_star_ps
+        stop algorithm on match: no
 
 
 supplementary search:
@@ -199,6 +218,7 @@ supplementary search:
         angular radius arcsec: 30.0
         transient classification: KEPLER
         database table: tcs_cat_kepler_k2
+        stop algorithm on match: no
 
 
 

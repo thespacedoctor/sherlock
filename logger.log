@@ -155,3 +155,4 @@ or htm16ID between 49533409088 and 49533409088
 * 2015/07/31 11:19:34 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
 * 2015/08/03 10:12:27 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
 * 2015/08/04 10:09:37 - dryxPython.logs - WARNING (_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
+* 2015/08/10 11:57:22 - dryxPython.logs - WARNING (/Users/Dave/git_repos/sherlock/sherlock/_database.py > _checkServer > 174) - Connection to `127.0.0.1` on port `9002` failed - try again: [Errno 61] Connection refused  
