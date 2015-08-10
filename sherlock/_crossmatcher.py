@@ -104,17 +104,19 @@ class crossmatcher():
             match = False  # SET TO TRUE WHENEVER A MATCH IS FIRST FOUND
             # THE LIST OF OBJECTS FOUND ASSOCIATED WITH THE SOURCE
             matches = []
+            allMatches = []
             # SET TO TRUE WHENEVER WE WANT TO TERMINATE THE SEARCH
             searchDone = False
+            self.stopAlgoritm = False
 
             # GRAB SEARCH ALGORITHM AND ITERATE THROUGH IT IN ORDER
             # PRESENTED IN THE SETTINGS FILE
             sa = self.settings["search algorithm"]
             for searchName, searchPara in sa.iteritems():
 
-                if "physical radius kpc" in searchPara:
-                    # THE PHYSICAL SEPARATION SEARCHES
-                    if not match:
+                if self.stopAlgoritm == False:
+                    if "physical radius kpc" in searchPara:
+                        # THE PHYSICAL SEPARATION SEARCHES
                         self.log.info(
                             'checking physical distance crossmatches in %(searchName)s' % locals())
                         searchDone, matches = self._physical_separation_search(
@@ -122,9 +124,8 @@ class crossmatcher():
                             searchPara=searchPara,
                             searchName=searchName
                         )
-                else:
-                    # THE ANGULAR SEPARATION SEARCHES
-                    if not match:
+                    else:
+                        # THE ANGULAR SEPARATION SEARCHES
                         self.log.info(
                             'Crossmatching against %(searchName)s' % locals())
                         searchDone, matches = self.searchCatalogue(
@@ -132,11 +133,14 @@ class crossmatcher():
                             searchPara=searchPara,
                             searchName=searchName
                         )
+                if len(matches) and "stop algorithm on match" in searchPara and searchPara["stop algorithm on match"]:
+                    self.stopAlgoritm = True
                 # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
                 if searchDone and matches:
                     match = True
                     objectType = self.settings[
                         "classifications"][searchPara["transient classification"]]["flag"]
+                    allMatches = allMatches + matches
 
             # IF NO MATCH IS FOUND THEN WE HAVE AN 'ORPHAN'
             if not match:
@@ -144,7 +148,7 @@ class crossmatcher():
 
             # PERFORM ANY SUPPLIMENTARY SEARCHES
             ss = self.settings["supplementary search"]
-            for searchName, searchPara in sa.iteritems():
+            for searchName, searchPara in ss.iteritems():
                 searchDone, supMatches = self.searchCatalogue(
                     objectList=[transient],
                     searchPara=searchPara,
@@ -154,13 +158,7 @@ class crossmatcher():
                     objectType = objectType + \
                         self.settings["classifications"][
                             searchPara["transient classification"]]["flag"]
-                    if matches:
-                        matches = supMatches
-                    else:
-                        matches = matches.extend(supMatches)
-
-            self.matches = matches
-            self.objectType = objectType
+                allMatches = allMatches + matches
 
             # ADD DETAILS TO THE lOGS
             oldClass = transient['object_classification']
@@ -174,25 +172,29 @@ class crossmatcher():
             # BUILD THE LIST OF CROSSMATCH DICTIONARIES AND ADD THEM THE THE
             # LIST OF ALL SOURCE CLASSIFICATIONS
             crossmatches = []
-            if matches:
-                inputRow = matches[0][0]
-                catalogueTableName = [matches[0][2]][0]
-                catalogueTableId = self.settings[
-                    "CAT_ID_RA_DEC_COLS"][catalogueTableName][1]
-                for row in matches[0][1]:
-                    crossmatch = {}
-                    crossmatch["transientObjectId"] = inputRow["id"]
-                    crossmatch["catalogueObjectId"] = row[1][
-                        self.settings["CAT_ID_RA_DEC_COLS"][catalogueTableName][0][0]]
-                    crossmatch["catalogueTableId"] = catalogueTableId
-                    crossmatch["separation"] = row[0]
-                    crossmatch["z"] = row[1]["xmz"]
-                    crossmatch["scale"] = row[1]["xmscale"]
-                    crossmatch["distance"] = row[1]["xmdistance"]
-                    crossmatch["distanceModulus"] = row[1]["xmdistanceModulus"]
-                    crossmatch["searchParametersId"] = self.settings[
-                        "search parameter id"]
-                    crossmatches.append(crossmatch)
+            if allMatches:
+                inputRow = allMatches[0][0]
+                for m in allMatches:
+                    catalogueTableName = m[2]
+                    thisObjectType = m[3]
+                    catalogueTableId = self.settings[
+                        "CAT_ID_RA_DEC_COLS"][catalogueTableName][1]
+                    for row in m[1]:
+                        crossmatch = {}
+                        crossmatch["transientObjectId"] = inputRow["id"]
+                        crossmatch["catalogueObjectId"] = row[1][
+                            self.settings["CAT_ID_RA_DEC_COLS"][catalogueTableName][0][0]]
+                        crossmatch["catalogueTableId"] = catalogueTableId
+                        crossmatch["separation"] = row[0]
+                        crossmatch["z"] = row[1]["xmz"]
+                        crossmatch["scale"] = row[1]["xmscale"]
+                        crossmatch["distance"] = row[1]["xmdistance"]
+                        crossmatch["distanceModulus"] = row[
+                            1]["xmdistanceModulus"]
+                        crossmatch["searchParametersId"] = self.settings[
+                            "search parameter id"]
+                        crossmatch["association_type"] = thisObjectType
+                        crossmatches.append(crossmatch)
 
             classification = {'id': transient['id'], 'object_classification_old': transient[
                 'object_classification'], 'object_classification_new': objectType, 'crossmatches': crossmatches}
@@ -210,6 +212,8 @@ class crossmatcher():
         # EXTRACT PARAMETERS
         radius = searchPara["angular radius arcsec"]
         catalogueName = searchPara["database table"]
+        matchedType = self.settings[
+            "classifications"][searchPara["transient classification"]]["flag"]
 
         # VARIABLES
         matchedObjects = []
@@ -280,7 +284,8 @@ class crossmatcher():
                     xm[1]['xmscale'] = xmscale
                     xm[1]['xmdistance'] = xmdistance
                     xm[1]['xmdistanceModulus'] = xmdistanceModulus
-                matchedObjects.append([row, xmObjects, catalogueName])
+                matchedObjects.append(
+                    [row, xmObjects, catalogueName, matchedType])
 
         # FAINT STAR CUTS
         if searchDone and matchedObjects and magColumn and searchName != "sdss star":
@@ -292,7 +297,7 @@ class crossmatcher():
                     matchSubset.append(row)
             if matchSubset:
                 faintStarMatches.append(
-                    [matchedObjects[0][0], matchSubset, matchedObjects[0][2]])
+                    [matchedObjects[0][0], matchSubset, matchedObjects[0][2], matchedObjects[0][3]])
             matchedObjects = faintStarMatches
         elif searchName == "sdss star":
             sdssStarMatches = []
@@ -313,7 +318,7 @@ class crossmatcher():
                         matchSubset.append(row)
             if matchSubset:
                 sdssStarMatches.append(
-                    [matchedObjects[0][0], matchSubset, matchedObjects[0][2]])
+                    [matchedObjects[0][0], matchSubset, matchedObjects[0][2], matchedObjects[0][3]])
             matchedObjects = sdssStarMatches
 
         return searchDone, matchedObjects
@@ -373,6 +378,8 @@ class crossmatcher():
         matchedObjects = []
         matchSubset = []
         physicalRadius = searchPara["physical radius kpc"]
+        matchedType = self.settings[
+            "classifications"][searchPara["transient classification"]]["flag"]
 
         # ANGULAR CONESEARCH ON CATALOGUE
         searchDone, matches = self.searchCatalogue(
@@ -392,7 +399,7 @@ class crossmatcher():
 
         if matchSubset:
             matchedObjects.append(
-                [matches[0][0], matchSubset, matches[0][2]])
+                [matches[0][0], matchSubset, matches[0][2], matchedType])
 
         self.log.info('completed the ``_physical_separation_search`` method')
 
