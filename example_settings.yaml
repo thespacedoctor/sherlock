@@ -110,107 +110,126 @@ search algorithm:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_cat_v_sdss_dr9_spect_qsos
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     milliquas:
         angular radius arcsec: 3.0
         transient classification: AGN
         database table: tcs_cat_milliquas
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     veron:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_veron_cat
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     ned qso:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_cat_v_ned_qsos
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     ned nt:
         angular radius arcsec: 3.0
         physical radius kpc: 0.5
         transient classification: NT
         database table: tcs_cat_v_ned_galaxies
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     sdss spec nt:
         angular radius arcsec: 3.0
         physical radius kpc: 0.5
         transient classification: NT
         database table: tcs_cat_v_sdss_dr9_spect_galaxies
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     sdss phot nt: 
         angular radius arcsec: 0.5
         transient classification: NT
         database table: tcs_cat_v_sdss_dr9_galaxies_notspec
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     ps1 md nt:
         angular radius arcsec: 0.5
         transient classification: NT
         database table: tcs_cat_v_ps1_medium_deep_ref_galaxies
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     ned spec sn:
         angular radius arcsec: 40.0
         physical radius kpc: 15.0
         transient classification: SN
         database table: tcs_cat_v_ned_galaxies
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     sdss spec sn:
         angular radius arcsec: 40.0
         physical radius kpc: 15.0
         transient classification: SN
         database table: tcs_cat_v_sdss_dr9_spect_galaxies
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     ned phot sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_cat_v_ned_galaxies
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     sdss phot sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_cat_v_sdss_dr9_galaxies_notspec
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     sdss faint stars sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_cat_v_sdss_dr9_stars
         mag column: petroMag_r
         faint limit: 21.0
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     2mass faint stars sn:
         angular radius arcsec: 1.0
         transient classification: SN
         database table: tcs_cat_v_2mass_psc_noextended
         mag column: j_m
         faint limit: 18.0
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     gsc faint stars sn:
         angular radius arcsec: 1.0
         transient classification: SN
         database table: tcs_cat_v_guide_star_ps
         mag column: VMag
         faint limit: 20.0
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     ps1 ubercal star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_ps1_ubercal_stars
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     sdss star:
         angular radius arcsec: 19.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_v_sdss_dr9_stars
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     2mass star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_v_2mass_psc_noextended
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
     gsc star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_cat_v_guide_star_ps
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
 
 
 supplementary search:
@@ -218,7 +237,8 @@ supplementary search:
         angular radius arcsec: 30.0
         transient classification: KEPLER
         database table: tcs_cat_kepler_k2
-        stop algorithm on match: no
+        stop algorithm on match: True
+        match nearest source only: True
 
 
 
@@ -338,13 +358,11 @@ logging settings:
             formatter: console_style
             stream: ext://sys.stdout
         file:
-            class: logging.handlers.GroupWriteRotatingFileHandler
-            level: WARNING
+            class: logging.FileHandler
+            level: DEBUG
             formatter: file_style
             filename: logger.log
             mode: w+
-            maxBytes: 102400
-            backupCount: 1
     root:
-        level: WARNING
+        level: INFO
         handlers: [file,console]

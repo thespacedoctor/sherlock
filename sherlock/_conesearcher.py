@@ -50,6 +50,7 @@ class conesearcher():
         - ``settings`` -- the settings dictionary
         - ``queryType`` -- queryType ["quick" | "full" | "count"]
         - ``htmLevel`` -- htmLevel [16 | 21]
+        - ``nearestOnly`` -- return only the nearest object if true
     """
     # Initialisation
 
@@ -63,7 +64,8 @@ class conesearcher():
             dbConn=False,
             settings=False,
             htmLevel=16,
-            queryType="quick"
+            queryType="quick",
+            nearestOnly=False
     ):
         self.log = log
         log.debug("instansiating a new '_conesearcher' object")
@@ -75,6 +77,7 @@ class conesearcher():
         self.queryType = queryType
         self.radius = radius
         self.tableName = tableName
+        self.nearestOnly = nearestOnly
         # xt-self-arg-tmpx
 
         # VARIABLE DATA ATRRIBUTES
@@ -125,19 +128,19 @@ class conesearcher():
             - ``message`` -- message of success/failure
             - ``results`` -- the results for the conesearch
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         self._build_sql_query_from_htm()
         self._grab_conesearch_results_from_db()
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return self.message, self.results
 
     def _build_sql_query_from_htm(
             self):
         """ build sql query from htm
         """
-        self.log.info('starting the ``_build_sql_query_from_htm`` method')
+        self.log.debug('starting the ``_build_sql_query_from_htm`` method')
 
         # BUILD WHERE SECTION OF CLAUSE
         self.radius = float(self.radius)
@@ -172,14 +175,14 @@ class conesearcher():
         self.sqlQuery = "select %(columns)s from %(tableName)s %(htmWhereClause)s %(cartesianClause)s" % locals(
         )
 
-        self.log.info('completed the ``_build_sql_query_from_htm`` method')
+        self.log.debug('completed the ``_build_sql_query_from_htm`` method')
         return None
 
     def _grab_conesearch_results_from_db(
             self):
         """ grab conesearch results from db
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_grab_conesearch_results_from_db`` method')
 
         self.results = []
@@ -215,12 +218,17 @@ class conesearcher():
                 self.results.append([separation, row])
 
             # SORT BY SEPARATION
-            self.results.sort
+            from operator import itemgetter
+            self.results = sorted(self.results, key=itemgetter(0))
+
+            # IF NEAREST ONLY REQUESTED
+            if self.nearestOnly == True:
+                self.results = [self.results[0]]
         else:
             tableName = self.tableName
             self.message = "No matches from %(tableName)s." % locals()
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_grab_conesearch_results_from_db`` method')
         return None
 
