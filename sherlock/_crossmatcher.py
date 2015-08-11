@@ -70,11 +70,11 @@ class crossmatcher():
         **Return:**
             - ``classifications`` - list of all classifications
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         self._crossmatch_transients_against_catalogues()
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return self.classifications
 
     def _crossmatch_transients_against_catalogues(
@@ -82,7 +82,7 @@ class crossmatcher():
         """ crossmatch transients against catalogues
         """
 
-        self.log.info(
+        self.log.debug(
             'starting the ``_crossmatch_transients_against_catalogues`` method')
 
         numberOfTransients = len(self.transients)
@@ -93,12 +93,17 @@ class crossmatcher():
             tId = transient['id']
             tName = transient['name']
 
+            print "\n\n\n"
+
             # PRINT A STATUS UPDATE
             count += 1
             if count > 1:
                 # CURSOR UP ONE LINE AND CLEAR LINE
                 sys.stdout.write("\x1b[1A\x1b[2K")
-            print "Classifying object %(tId)s (%(tName)s) [%(thisIndex)s/%(numberOfTransients)d]" % locals()
+            thisCount = thisIndex + 1
+            message = "Classifying object %(tId)s (%(tName)s) [%(thisCount)s/%(numberOfTransients)d]" % locals(
+            )
+            self.log.info('\n\n\nmessage: %(message)s' % locals())
 
             # RESET MATCH VALUES
             match = False  # SET TO TRUE WHENEVER A MATCH IS FIRST FOUND
@@ -113,52 +118,62 @@ class crossmatcher():
             # PRESENTED IN THE SETTINGS FILE
             sa = self.settings["search algorithm"]
             for searchName, searchPara in sa.iteritems():
+                self.log.info("""  searching: %(searchName)s""" % locals())
+                if "physical radius kpc" in searchPara:
+                    # THE PHYSICAL SEPARATION SEARCHES
+                    self.log.info(
+                        'checking physical distance crossmatches in %(searchName)s' % locals())
+                    searchDone, matches = self._physical_separation_search(
+                        objectRow=transient,
+                        searchPara=searchPara,
+                        searchName=searchName
+                    )
+                else:
+                    # THE ANGULAR SEPARATION SEARCHES
+                    self.log.info(
+                        'Crossmatching against %(searchName)s' % locals())
+                    searchDone, matches = self.searchCatalogue(
+                        objectList=[transient],
+                        searchPara=searchPara,
+                        searchName=searchName
+                    )
 
-                if self.stopAlgoritm == False:
-                    if "physical radius kpc" in searchPara:
-                        # THE PHYSICAL SEPARATION SEARCHES
-                        self.log.info(
-                            'checking physical distance crossmatches in %(searchName)s' % locals())
-                        searchDone, matches = self._physical_separation_search(
-                            objectRow=transient,
-                            searchPara=searchPara,
-                            searchName=searchName
-                        )
-                    else:
-                        # THE ANGULAR SEPARATION SEARCHES
-                        self.log.info(
-                            'Crossmatching against %(searchName)s' % locals())
-                        searchDone, matches = self.searchCatalogue(
-                            objectList=[transient],
-                            searchPara=searchPara,
-                            searchName=searchName
-                        )
-                if len(matches) and "stop algorithm on match" in searchPara and searchPara["stop algorithm on match"]:
-                    self.stopAlgoritm = True
                 # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
                 if searchDone and matches:
+                    self.log.info("     match found for %(tName)s" % locals())
                     match = True
+                    # @action update objectType -- it gets overwritten with each subsequent search
                     objectType = self.settings[
                         "classifications"][searchPara["transient classification"]]["flag"]
                     allMatches = allMatches + matches
 
+                    if "stop algorithm on match" in searchPara and searchPara["stop algorithm on match"] == True:
+                        self.stopAlgoritm = True
+                        self.log.info(
+                            "     stopping algorithm for %(tName)s" % locals())
+                        break
+
             # IF NO MATCH IS FOUND THEN WE HAVE AN 'ORPHAN'
             if not match:
+                self.log.info(
+                    "   %(tName)s classified as an orphan" % locals())
                 objectType = self.settings["classifications"]["ORPHAN"]["flag"]
 
             # PERFORM ANY SUPPLIMENTARY SEARCHES
             ss = self.settings["supplementary search"]
             for searchName, searchPara in ss.iteritems():
+                self.log.info("""  searching: %(searchName)s""" % locals())
                 searchDone, supMatches = self.searchCatalogue(
                     objectList=[transient],
                     searchPara=searchPara,
                     searchName=searchName
                 )
                 if searchDone and supMatches:
+                    self.log.info("     match found for %(tName)s" % locals())
                     objectType = objectType + \
                         self.settings["classifications"][
                             searchPara["transient classification"]]["flag"]
-                allMatches = allMatches + matches
+                    allMatches = allMatches + supMatches
 
             # ADD DETAILS TO THE lOGS
             oldClass = transient['object_classification']
@@ -196,11 +211,13 @@ class crossmatcher():
                         crossmatch["association_type"] = thisObjectType
                         crossmatches.append(crossmatch)
 
+            self.log.info('crossmatches: %(crossmatches)s' % locals())
+
             classification = {'id': transient['id'], 'object_classification_old': transient[
                 'object_classification'], 'object_classification_new': objectType, 'crossmatches': crossmatches}
             self.classifications.append(classification)
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_crossmatch_transients_against_catalogues`` method')
         return None
 
@@ -229,6 +246,7 @@ class crossmatcher():
             faintLimit = False
 
         for row in objectList:
+
             cs = conesearcher(
                 log=self.log,
                 ra=row['ra'],
@@ -237,7 +255,7 @@ class crossmatcher():
                 tableName=catalogueName,
                 queryType=2,
                 dbConn=self.dbConn,
-                settings=self.settings
+                settings=self.settings,
             )
 
             message, xmObjects = cs.get()
@@ -321,6 +339,10 @@ class crossmatcher():
                     [matchedObjects[0][0], matchSubset, matchedObjects[0][2], matchedObjects[0][3]])
             matchedObjects = sdssStarMatches
 
+        if "match nearest source only" in searchPara and searchPara["match nearest source only"] == True and len(matchedObjects):
+            matchedObjects = [[matchedObjects[0][0], [
+                matchedObjects[0][1][0]], matchedObjects[0][2], matchedObjects[0][3]]]
+
         return searchDone, matchedObjects
 
     def _lookup_classification_dict(
@@ -334,7 +356,7 @@ class crossmatcher():
         **Return:**
             - classifications
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_append_reversed_classification_dictionary`` method')
 
         flagTypes = []
@@ -356,7 +378,7 @@ class crossmatcher():
                 # We got a None (i.e. NULL) valueflags
                 return ''
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_append_reversed_classification_dictionary`` method')
         return ' + '.join(flagTypes)
 
@@ -367,10 +389,10 @@ class crossmatcher():
             # -
 
         **Return:**
-            - searchDone -- did search complete successfully 
+            - searchDone -- did search complete successfully
             - matchedObjects -- any sources matched against the object
         """
-        self.log.info('starting the ``_physical_separation_search`` method')
+        self.log.debug('starting the ``_physical_separation_search`` method')
 
         # SETUP PARAMETERS
         tableName = searchPara["database table"]
@@ -381,10 +403,15 @@ class crossmatcher():
         matchedType = self.settings[
             "classifications"][searchPara["transient classification"]]["flag"]
 
+        # RETURN ALL ANGULAR MATCHES BEFORE RETURNING NEAREST PHYSICAL SEARCH
+        nearestOnly = searchPara["match nearest source only"]
+        tmpSearchPara = dict(searchPara)
+        tmpSearchPara["match nearest source only"] = False
+
         # ANGULAR CONESEARCH ON CATALOGUE
         searchDone, matches = self.searchCatalogue(
             objectList=[objectRow],
-            searchPara=searchPara,
+            searchPara=tmpSearchPara,
             searchName=searchName
         )
 
@@ -393,15 +420,25 @@ class crossmatcher():
         if searchDone and matches:
             for row in matches[0][1]:
                 if row[1]["xmscale"] and row[1]["xmscale"] * row[0] < physicalRadius:
+                    physicalSeparation = row[1]["xmscale"] * row[0]
                     self.log.info(
                         "\t\tPhysical separation = %.2f kpc" % (row[1]["xmscale"] * row[0]))
-                    matchSubset.append(row)
+                    matchSubset.append([physicalSeparation, row])
 
         if matchSubset:
-            matchedObjects.append(
-                [matches[0][0], matchSubset, matches[0][2], matchedType])
+            from operator import itemgetter
+            matchSubset = sorted(matchSubset, key=itemgetter(0))
 
-        self.log.info('completed the ``_physical_separation_search`` method')
+            if nearestOnly == True:
+                theseMatches = [matchSubset[0][1]]
+            else:
+                theseMatches = []
+                for i in matchSubset:
+                    theseMatches.append(i[1])
+                sys.exit(0)
+            matchedObjects.append(
+                [matches[0][0], theseMatches, matches[0][2], matchedType])
+        self.log.debug('completed the ``_physical_separation_search`` method')
 
         return searchDone, matchedObjects
 

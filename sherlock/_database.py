@@ -67,16 +67,16 @@ class database():
         **Return:**
             - ``self.transientsDbConn, self.cataloguesDbConn`` -- two database connections
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
         self._setup_database_connections()
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return self.transientsDbConn, self.cataloguesDbConn
 
     def _setup_database_connections(
             self):
         """ setup database connections for transient and catalogue databases
         """
-        self.log.info('starting the ``_setup_database_connections`` method')
+        self.log.debug('starting the ``_setup_database_connections`` method')
 
         from subprocess import Popen, PIPE, STDOUT
 
@@ -87,7 +87,7 @@ class database():
             connected = self._checkServer(
                 self.settings["database settings"]["static catalogues"]["host"], sshPort)
             if connected:
-                self.log.info('ssh tunnel already exists - moving on')
+                self.log.debug('ssh tunnel already exists - moving on')
             else:
                 # GRAB TUNNEL SETTINGS FROM SETTINGS FILE
                 ru = self.settings["ssh tunnel"]["remote user"]
@@ -151,13 +151,13 @@ class database():
         self.log.debug('transientsDbConn: %s' % (thisConn,))
         self.transientsDbConn = thisConn
 
-        self.log.info('completed the ``_setup_database_connections`` method')
+        self.log.debug('completed the ``_setup_database_connections`` method')
         return None
 
     def _checkServer(self, address, port):
         """Check that the TCP Port we've decided to use for tunnelling is available
         """
-        self.log.info('starting the ``_checkServer`` method')
+        self.log.debug('starting the ``_checkServer`` method')
 
         # CREATE A TCP SOCKET
         import socket
@@ -166,7 +166,7 @@ class database():
             """Attempting to connect to `%(address)s` on port `%(port)s`""" % locals())
         try:
             s.connect((address, port))
-            self.log.info(
+            self.log.debug(
                 """Connected to `%(address)s` on port `%(port)s`""" % locals())
             return True
         except socket.error, e:

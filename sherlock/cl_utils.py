@@ -68,7 +68,7 @@ def main(arguments=None):
 
     ## START LOGGING ##
     startTime = dcu.get_now_sql_datetime()
-    log.info(
+    log.debug(
         '--- STARTING TO RUN THE cl_utils.py AT %s' %
         (startTime,))
 
@@ -118,8 +118,8 @@ def main(arguments=None):
     ## FINISH LOGGING ##
     endTime = dcu.get_now_sql_datetime()
     runningTime = dcu.calculate_time_difference(startTime, endTime)
-    log.info('-- FINISHED ATTEMPT TO RUN THE cl_utils.py AT %s (RUNTIME: %s) --' %
-             (endTime, runningTime, ))
+    log.debug('-- FINISHED ATTEMPT TO RUN THE cl_utils.py AT %s (RUNTIME: %s) --' %
+              (endTime, runningTime, ))
 
     return
 

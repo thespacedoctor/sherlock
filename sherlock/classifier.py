@@ -105,7 +105,7 @@ class classifier():
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         # CHOOSE METHOD TO GRAB TRANSIENT METADATA BEFORE CLASSIFICATION
         if len(self.transientIdList) > 0:
@@ -118,14 +118,14 @@ class classifier():
         if self.update:
             self._update_transient_database()
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return self.classifications
 
     def _get_individual_transient_metadata(
             self):
         """ get individual transient metadata from the transient database
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_get_individual_transient_metadata`` method')
 
         for tran in self.transientIdList:
@@ -145,7 +145,7 @@ class classifier():
                 log.warning(
                     'could not find transient in database with id %(tran)s' % locals())
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_get_individual_transient_metadata`` method')
         return None
 
@@ -153,7 +153,7 @@ class classifier():
             self):
         """ get transient metadata from a given workflow list in the transient database
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_get_transient_metadata_from_database_list`` method')
 
         workflowListId = self.workflowListId
@@ -170,7 +170,7 @@ class classifier():
             log=self.log
         )
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_get_transient_metadata_from_database_list`` method')
         return None
 
@@ -178,10 +178,10 @@ class classifier():
             self):
         """ determine workflow list id from settings file
         """
-        self.log.info('starting the ``_determine_workflow_list_id`` method')
+        self.log.debug('starting the ``_determine_workflow_list_id`` method')
         self.workflowListId = self.settings[
             "workflow lists"][self.workflowListId.upper()]
-        self.log.info('completed the ``_determine_workflow_list_id`` method')
+        self.log.debug('completed the ``_determine_workflow_list_id`` method')
         return None
 
     # use the tab-trigger below for new method
@@ -199,7 +199,7 @@ class classifier():
             - @review: when complete, clean _crossmatch_transients_against_catalogue method
             - @review: when complete add logging
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_crossmatch_transients_against_catalogue`` method')
 
         from sherlock import crossmatcher
@@ -221,7 +221,7 @@ class classifier():
         # print "*** Object ID = %(tid)s (%(name)s): CLASSIFICATION =
         # %(classification)s (PREVIOUSLY = %(oldClassification)s)" % locals()
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_crossmatch_transients_against_catalogue`` method')
         return None
 
@@ -240,7 +240,7 @@ class classifier():
             - @review: when complete, clean _update_transient_database method
             - @review: when complete add logging
         """
-        self.log.info('starting the ``_update_transient_database`` method')
+        self.log.debug('starting the ``_update_transient_database`` method')
 
         from datetime import datetime, date, time
         now = datetime.now()
@@ -264,7 +264,7 @@ class classifier():
 
             # DELETE PREVIOUS CROSSMATCHES
             sqlQuery = u"""
-                    delete from tcs_cross_matches where transient_object_id = %(transientObjectId)s and association_type is null
+                    delete from tcs_cross_matches where transient_object_id = %(transientObjectId)s
                 """ % locals()
             dms.execute_mysql_write_query(
                 sqlQuery=sqlQuery,
@@ -310,7 +310,7 @@ class classifier():
                     log=self.log
                 )
 
-        self.log.info('completed the ``_update_transient_database`` method')
+        self.log.debug('completed the ``_update_transient_database`` method')
         return None
 
     # use the tab-trigger below for new method
