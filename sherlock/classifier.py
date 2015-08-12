@@ -277,6 +277,8 @@ class classifier():
                 for k, v in crossmatch.iteritems():
                     if v == None:
                         crossmatch[k] = "null"
+                if "physical_separation_kpc" not in crossmatch.keys():
+                    crossmatch["physical_separation_kpc"] = "null"
 
                 sqlQuery = u"""
                         insert into tcs_cross_matches (
@@ -290,7 +292,8 @@ class classifier():
                            distance_modulus,
                            search_parameters_id,
                            date_added,
-                           association_type)
+                           association_type,
+                           physical_separation_kpc)
                         values (
                            %s,
                            "%s",
@@ -302,8 +305,9 @@ class classifier():
                            %s,
                            %s,
                            "%s",
-                           "%s")
-                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], crossmatch["searchParametersId"], now, crossmatch["association_type"])
+                           "%s",
+                           %s)
+                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], crossmatch["searchParametersId"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"])
                 dms.execute_mysql_write_query(
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,
