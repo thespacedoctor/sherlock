@@ -209,6 +209,12 @@ class crossmatcher():
                         crossmatch["searchParametersId"] = self.settings[
                             "search parameter id"]
                         crossmatch["association_type"] = thisObjectType
+                        if "physical_separation_kpc" in row[
+                                1].keys():
+                            crossmatch["physical_separation_kpc"] = row[
+                                1]["physical_separation_kpc"]
+                        else:
+                            crossmatch["physical_separation_kpc"] = "null"
                         crossmatches.append(crossmatch)
 
             self.log.info('crossmatches: %(crossmatches)s' % locals())
@@ -421,6 +427,7 @@ class crossmatcher():
             for row in matches[0][1]:
                 if row[1]["xmscale"] and row[1]["xmscale"] * row[0] < physicalRadius:
                     physicalSeparation = row[1]["xmscale"] * row[0]
+                    row[1]["physical_separation_kpc"] = physicalSeparation
                     self.log.info(
                         "\t\tPhysical separation = %.2f kpc" % (row[1]["xmscale"] * row[0]))
                     matchSubset.append([physicalSeparation, row])
