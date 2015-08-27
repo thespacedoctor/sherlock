@@ -2,7 +2,7 @@ version: 1
 
 database settings:
     static catalogues:
-        db: panstarrs1
+        db: crossmatch_catalogues
         host: 127.0.0.1
         user: pessto
         password: p355t0

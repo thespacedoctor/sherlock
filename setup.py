@@ -27,6 +27,9 @@ setup(name='sherlock',
       test_suite='nose.collector',
       tests_require=['nose', 'nose-cover3'],
       entry_points={
-          'console_scripts': ['sherlock=sherlock.cl_utils:main'],
+          'console_scripts': [
+              'sherlock=sherlock.cl_utils:main',
+              'sherlock-importers=sherlock.imports.importers_clutils:main'
+          ],
       },
       zip_safe=False)
