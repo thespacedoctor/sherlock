@@ -442,7 +442,7 @@ class crossmatcher():
                 theseMatches = []
                 for i in matchSubset:
                     theseMatches.append(i[1])
-                sys.exit(0)
+
             matchedObjects.append(
                 [matches[0][0], theseMatches, matches[0][2], matchedType])
         self.log.debug('completed the ``_physical_separation_search`` method')

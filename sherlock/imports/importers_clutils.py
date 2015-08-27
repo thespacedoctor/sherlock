@@ -1,19 +1,32 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-# SHERLOCK #
-: INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
-=============================================================================================
+importers_clutils.py
+====================
+:Summary:
+    CL Utils for the Sherlock importers
+
+:Author:
+    David Young
+
+:Date Created:
+    August 25, 2015
+
+:dryx syntax:
+    - ``_someObject`` = a 'private' object that should only be changed for debugging
+
+:Notes:
+    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+
+:Tasks:
+    @review: when complete pull all general functions and classes into dryxPython
 
 Usage:
-    sherlock match -s <pathToSettingsFile> (<objectid> <objectid>...| -l <transientListId>) [--update]
-    sherlock clean [-s <pathToSettingsFile>]
+    sherlock-importers milliquas <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
 
     -h, --help            show this help message
     -v, --version         show version
     -s, --settings        the settings file
-    -l, --transientlistId          the id of the transient list to classify
-    -u, --update          update the transient database with new classifications and crossmatches
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -26,9 +39,7 @@ from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
 from dryxPython.projectsetup import setup_main_clutil
-from classifier import classifier
-from cleanup_database_tables import cleanup_database_tables
-# from ..__init__ import *
+from sherlock.imports import milliquas as milliquasImporter
 
 
 def tab_complete(text, state):
@@ -37,13 +48,13 @@ def tab_complete(text, state):
 
 def main(arguments=None):
     """
-    The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command
+    The main function used when ``importers_clutils.py`` is run as a single script from the cl, or when installed as a cl command
     """
     # setup the command-line util settings
     su = setup_main_clutil(
         arguments=arguments,
         docString=__doc__,
-        logLevel="DEBUG",
+        logLevel="WARNING",
         options_first=False,
         projectName="sherlock"
     )
@@ -71,8 +82,8 @@ def main(arguments=None):
 
     ## START LOGGING ##
     startTime = dcu.get_now_sql_datetime()
-    log.debug(
-        '--- STARTING TO RUN THE cl_utils.py AT %s' %
+    log.info(
+        '--- STARTING TO RUN THE importers_clutils.py AT %s' %
         (startTime,))
 
     # set options interactively if user requests
@@ -105,22 +116,14 @@ def main(arguments=None):
 
     # call the worker function
     # x-if-settings-or-database-credientials
-
-    if match:
-        sherlock = classifier(
+    if milliquas:
+        testObject = milliquasImporter(
             log=log,
             settings=settings,
-            update=updateFlag,
-            workflowListId=transientListId,
-            transientIdList=objectid
+            pathToDataFile=pathToDataFile,
+            version=cat_version
         )
-        sherlock.get()
-    if clean:
-        cleaner = cleanup_database_tables(
-            log=log,
-            settings=settings
-        )
-        cleaner.get()
+        testObject.get()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()
@@ -128,8 +131,8 @@ def main(arguments=None):
     ## FINISH LOGGING ##
     endTime = dcu.get_now_sql_datetime()
     runningTime = dcu.calculate_time_difference(startTime, endTime)
-    log.debug('-- FINISHED ATTEMPT TO RUN THE cl_utils.py AT %s (RUNTIME: %s) --' %
-              (endTime, runningTime, ))
+    log.info('-- FINISHED ATTEMPT TO RUN THE importers_clutils.py AT %s (RUNTIME: %s) --' %
+             (endTime, runningTime, ))
 
     return
 
