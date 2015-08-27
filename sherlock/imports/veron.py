@@ -1,10 +1,10 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-milliquas.py
+veron.py
 ============
 :Summary:
-    Import Milliquas catagloue from plain text file
+    Import veron catagloue from plain text file
 
 :Author:
     David Young
@@ -20,8 +20,6 @@ milliquas.py
 
 :Tasks:
     @review: when complete pull all general functions and classes into dryxPython
-
-# xdocopt-usage-tempx
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -42,21 +40,21 @@ from dryxPython.projectsetup import setup_main_clutil
 from ._base_importer import _base_importer
 
 
-class milliquas(_base_importer):
+class veron(_base_importer):
 
     """
-    The worker class for the milliquas module
+    The worker class for the veron module
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
-        - ``pathToDataFIle`` -- path to the milliquas data file
-        - ``version`` -- version of the milliquas catalogue
-
+        - ``pathToDataFIle`` -- path to the veron data file
+        - ``version`` -- version of the veron catalogue
+        - ``catalogueName`` -- the name of the catalogue
 
     **Todo**
-        - @review: when complete, clean milliquas class
+        - @review: when complete, clean veron class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
     """
@@ -67,10 +65,10 @@ class milliquas(_base_importer):
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the milliquas object
+        """get the veron object
 
         **Return:**
-            - ``milliquas``
+            - ``veron``
 
         **Todo**
             - @review: when complete, clean get method
@@ -78,16 +76,16 @@ class milliquas(_base_importer):
         """
         self.log.info('starting the ``get`` method')
 
-        self.dictList = self.create_dictionary_of_milliquas()
+        self.dictList = self.create_dictionary_of_veron()
         self.add_data_to_database_table()
         self.add_htmids_to_database_table()
 
         self.log.info('completed the ``get`` method')
-        return milliquas
+        return veron
 
-    def create_dictionary_of_milliquas(
+    def create_dictionary_of_veron(
             self):
-        """create dictionary of milliquas
+        """create dictionary of veron
 
         **Key Arguments:**
             # -
@@ -96,35 +94,68 @@ class milliquas(_base_importer):
             - None
 
         **Todo**
-            - @review: when complete, clean create_dictionary_of_milliquas method
+            - @review: when complete, clean create_dictionary_of_veron method
             - @review: when complete add logging
         """
-        self.log.info('starting the ``create_dictionary_of_milliquas`` method')
+        self.log.info('starting the ``create_dictionary_of_veron`` method')
 
         dictList = []
         lines = string.split(self.catData, '\n')
-        inserts = [
-            11, 25, 51, 57, 64, 71, 75, 78, 81, 89, 97, 106, 110, 134, 158, 181]
-        keys = ["raDeg", "decDeg", "name", "descrip", "rmag", "bmag", "comment", "r_psf_class", "b_psf_class", "z",
-                "src_cat_name", "src_cat_z", "qso_prob", "x_name", "r_name", "alt_id1", "alt_id2"]
 
         totalCount = len(lines)
         count = 0
-
+        switch = 0
         for line in lines:
+            if (len(line) == 0 or line[0] in ["#", " "]) and switch == 0:
+                continue
+            else:
+                switch = 1
             count += 1
             if count > 1:
                 # Cursor up one line and clear line
                 sys.stdout.write("\x1b[1A\x1b[2K")
-            print "%(count)s / %(totalCount)s milliquas data added to memory" % locals()
+            print "%(count)s / %(totalCount)s veron data added to memory" % locals()
+
+            if count == 1:
+                theseKeys = []
+                someKeys = string.split(line, '|')
+                for key in someKeys:
+                    if key == "_RAJ2000":
+                        key = "raDeg"
+                    if key == "_DEJ2000":
+                        key = "decDeg"
+                    if key == "Cl":
+                        key = "class"
+                    if key == "nR":
+                        key = "not_radio"
+                    if key == "Name":
+                        key = "name"
+                    if key == "l_z":
+                        key = "redshift_flag"
+                    if key == "z":
+                        key = "redshift"
+                    if key == "Sp":
+                        key = "spectral_classification"
+                    if key == "n_Vmag":
+                        key = "magnitude_filter"
+                    if key == "Vmag":
+                        key = "magnitude"
+                    if key == "B-V":
+                        key = "B_V"
+                    if key == "U-B":
+                        key = "U_B"
+                    if key == "Mabs":
+                        key = "abs_magnitude"
+                    theseKeys.append(key)
+                continue
+
+            if count in [2, 3]:
+                continue
 
             thisDict = {}
-            for insert in inserts:
-                line.replace("–", "-")
-                line = line[:insert] + "|" + line[insert:]
-
             theseValues = string.split(line, '|')
-            for k, v in zip(keys, theseValues):
+
+            for k, v in zip(theseKeys, theseValues):
                 v = v.strip()
                 if len(v) == 0 or v == "-":
                     v = None
@@ -132,66 +163,8 @@ class milliquas(_base_importer):
             dictList.append(thisDict)
 
         self.log.info(
-            'completed the ``create_dictionary_of_milliquas`` method')
+            'completed the ``create_dictionary_of_veron`` method')
         return dictList
-
-    # use the tab-trigger below for new method
-    def add_data_to_database_table(
-            self):
-        """add data to database table
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean add_data_to_database_table method
-            - @review: when complete add logging
-        """
-        self.log.info('starting the ``add_data_to_database_table`` method')
-
-        dms.insert_list_of_dictionaries_into_database(
-            dbConn=self.cataloguesDbConn,
-            log=self.log,
-            dictList=self.dictList,
-            dbTableName=self.dbTableName,
-            uniqueKeyList=["raDeg", "name"],
-        )
-
-        self.log.info('completed the ``add_data_to_database_table`` method')
-        return None
-
-    # use the tab-trigger below for new method
-    def add_htmids_to_database_table(
-            self):
-        """add htmids to database table
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean add_htmids_to_database_table method
-            - @review: when complete add logging
-        """
-        self.log.info('starting the ``add_htmids_to_database_table`` method')
-
-        from dryxPython import mysql as dms
-        dms.add_HTMIds_to_mysql_tables.add_HTMIds_to_mysql_tables(
-            raColName="raDeg",
-            declColName="decDeg",
-            tableName=self.dbTableName,
-            dbConn=self.cataloguesDbConn,
-            log=self.log,
-            primaryIdColumnName="primaryId"
-        )
-
-        self.log.info('completed the ``add_htmids_to_database_table`` method')
-        return None
 
     # use the tab-trigger below for new method
     # xt-class-method

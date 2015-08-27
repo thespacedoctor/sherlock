@@ -1,0 +1,1 @@
+# xnose-test-module-template

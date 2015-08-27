@@ -22,7 +22,7 @@ importers_clutils.py
     @review: when complete pull all general functions and classes into dryxPython
 
 Usage:
-    sherlock-importers milliquas <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+    sherlock-importers <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
 
     -h, --help            show this help message
     -v, --version         show version
@@ -40,6 +40,7 @@ from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
 from dryxPython.projectsetup import setup_main_clutil
 from sherlock.imports import milliquas as milliquasImporter
+from sherlock.imports import veron as veronImporter
 
 
 def tab_complete(text, state):
@@ -116,12 +117,22 @@ def main(arguments=None):
 
     # call the worker function
     # x-if-settings-or-database-credientials
-    if milliquas:
+    if cat_name == "milliquas":
         testObject = milliquasImporter(
             log=log,
             settings=settings,
             pathToDataFile=pathToDataFile,
-            version=cat_version
+            version=cat_version,
+            catalogueName=cat_name
+        )
+        testObject.get()
+    if cat_name == "veron":
+        testObject = veronImporter(
+            log=log,
+            settings=settings,
+            pathToDataFile=pathToDataFile,
+            version=cat_version,
+            catalogueName=cat_name
         )
         testObject.get()
 

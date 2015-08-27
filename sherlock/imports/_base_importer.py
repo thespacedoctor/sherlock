@@ -1,10 +1,10 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-milliquas.py
+_base_importer.py
 ============
 :Summary:
-    Import Milliquas catagloue from plain text file
+    The base importer for sherlock imports
 
 :Author:
     David Young
@@ -20,8 +20,6 @@ milliquas.py
 
 :Tasks:
     @review: when complete pull all general functions and classes into dryxPython
-
-# xdocopt-usage-tempx
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -39,24 +37,25 @@ from dryxPython import mysql as dms
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
 from dryxPython.projectsetup import setup_main_clutil
-from ._base_importer import _base_importer
+# from ..__init__ import *
 
 
-class milliquas(_base_importer):
+class _base_importer():
 
     """
-    The worker class for the milliquas module
+    The worker class for the _base_importer module
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
-        - ``pathToDataFIle`` -- path to the milliquas data file
-        - ``version`` -- version of the milliquas catalogue
+        - ``pathToDataFIle`` -- path to the _base_importer data file
+        - ``version`` -- version of the _base_importer catalogue
+        - ``catalogueName`` -- name of the catalogue
 
 
     **Todo**
-        - @review: when complete, clean milliquas class
+        - @review: when complete, clean _base_importer class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
     """
@@ -64,13 +63,67 @@ class milliquas(_base_importer):
     # 1. @flagged: what are the unique attrributes for each object? Add them
     # to __init__
 
-    # 4. @flagged: what actions does each object have to be able to perform? Add them here
+    def __init__(
+            self,
+            log,
+            settings=False,
+            pathToDataFile=False,
+            version=False,
+            catalogueName=""
+    ):
+        self.log = log
+        log.debug("instansiating a new '_base_importer' object")
+        self.settings = settings
+        self.pathToDataFile = pathToDataFile
+        self.version = version
+        self.catalogueName = catalogueName
+        # xt-self-arg-tmpx
+
+        # INITIAL ACTIONS
+        # SETUP DATABASE CONNECTIONS
+        from sherlock import database
+        db = database(
+            log=self.log,
+            settings=self.settings
+        )
+        self.transientsDbConn, self.cataloguesDbConn = db.get()
+
+        pathToReadFile = pathToDataFile
+        try:
+            self.log.debug("attempting to open the file %s" %
+                           (pathToReadFile,))
+            readFile = codecs.open(pathToReadFile, mode='r')
+            self.catData = readFile.read()
+            readFile.close()
+        except IOError, e:
+            message = 'could not open the file %s' % (pathToReadFile,)
+            self.log.critical(message)
+            raise IOError(message)
+
+        readFile.close()
+
+        # BUILD VERSION TEXT
+        if self.version:
+            self.version = "_v" + \
+                self.version.replace(" ", "").replace(
+                    "v", "").replace(".", "_")
+        else:
+            self.version = ""
+        version = self.version
+
+        # BUILD THE DATABASE TABLE NAME
+        self.dbTableName = "tcs_cat_%(catalogueName)s%(version)s" % locals()
+
+        self.databaseInsertbatchSize = 2500
+
+        return None
+
     # Method Attributes
     def get(self):
-        """get the milliquas object
+        """get the _base_importer object
 
         **Return:**
-            - ``milliquas``
+            - ``_base_importer``
 
         **Todo**
             - @review: when complete, clean get method
@@ -78,16 +131,16 @@ class milliquas(_base_importer):
         """
         self.log.info('starting the ``get`` method')
 
-        self.dictList = self.create_dictionary_of_milliquas()
-        self.add_data_to_database_table()
+        # self.dictList = self.create_dictionary_of__base_importer()
+        # self.add_data_to_database_table()
         self.add_htmids_to_database_table()
 
         self.log.info('completed the ``get`` method')
-        return milliquas
+        return _base_importer
 
-    def create_dictionary_of_milliquas(
+    def create_dictionary_of__base_importer(
             self):
-        """create dictionary of milliquas
+        """create dictionary of _base_importer
 
         **Key Arguments:**
             # -
@@ -96,10 +149,11 @@ class milliquas(_base_importer):
             - None
 
         **Todo**
-            - @review: when complete, clean create_dictionary_of_milliquas method
+            - @review: when complete, clean create_dictionary_of__base_importer method
             - @review: when complete add logging
         """
-        self.log.info('starting the ``create_dictionary_of_milliquas`` method')
+        self.log.info(
+            'starting the ``create_dictionary_of__base_importer`` method')
 
         dictList = []
         lines = string.split(self.catData, '\n')
@@ -116,7 +170,9 @@ class milliquas(_base_importer):
             if count > 1:
                 # Cursor up one line and clear line
                 sys.stdout.write("\x1b[1A\x1b[2K")
-            print "%(count)s / %(totalCount)s milliquas data added to memory" % locals()
+            if count > totalCount:
+                count = totalCount
+            print "%(count)s / %(totalCount)s _base_importer data added to memory" % locals()
 
             thisDict = {}
             for insert in inserts:
@@ -132,7 +188,7 @@ class milliquas(_base_importer):
             dictList.append(thisDict)
 
         self.log.info(
-            'completed the ``create_dictionary_of_milliquas`` method')
+            'completed the ``create_dictionary_of__base_importer`` method')
         return dictList
 
     # use the tab-trigger below for new method
@@ -157,7 +213,8 @@ class milliquas(_base_importer):
             log=self.log,
             dictList=self.dictList,
             dbTableName=self.dbTableName,
-            uniqueKeyList=["raDeg", "name"],
+            uniqueKeyList=["raDeg", "decDeg"],
+            batchSize=self.databaseInsertbatchSize
         )
 
         self.log.info('completed the ``add_data_to_database_table`` method')
@@ -217,3 +274,4 @@ class milliquas(_base_importer):
 
 if __name__ == '__main__':
     main()
+# xt-module-general
