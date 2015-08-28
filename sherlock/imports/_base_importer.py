@@ -113,8 +113,10 @@ class _base_importer():
 
         # BUILD THE DATABASE TABLE NAME
         self.dbTableName = "tcs_cat_%(catalogueName)s%(version)s" % locals()
-
+        self.primaryIdColumnName = "primaryId"
         self.databaseInsertbatchSize = 2500
+        self.raColName = "raDeg"
+        self.declColName = "decDeg"
 
         return None
 
@@ -213,7 +215,7 @@ class _base_importer():
             log=self.log,
             dictList=self.dictList,
             dbTableName=self.dbTableName,
-            uniqueKeyList=["raDeg", "decDeg"],
+            uniqueKeyList=[self.raColName, "decDeg"],
             batchSize=self.databaseInsertbatchSize
         )
 
@@ -239,12 +241,12 @@ class _base_importer():
 
         from dryxPython import mysql as dms
         dms.add_HTMIds_to_mysql_tables.add_HTMIds_to_mysql_tables(
-            raColName="raDeg",
-            declColName="decDeg",
+            raColName=self.raColName,
+            declColName=self.declColName,
             tableName=self.dbTableName,
             dbConn=self.cataloguesDbConn,
             log=self.log,
-            primaryIdColumnName="primaryId"
+            primaryIdColumnName=self.primaryIdColumnName
         )
 
         self.log.info('completed the ``add_htmids_to_database_table`` method')
