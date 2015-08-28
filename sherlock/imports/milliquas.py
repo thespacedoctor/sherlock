@@ -78,8 +78,8 @@ class milliquas(_base_importer):
         """
         self.log.info('starting the ``get`` method')
 
-        self.dictList = self.create_dictionary_of_milliquas()
-        self.add_data_to_database_table()
+        # self.dictList = self.create_dictionary_of_milliquas()
+        # self.add_data_to_database_table()
         self.add_htmids_to_database_table()
 
         self.log.info('completed the ``get`` method')
@@ -134,64 +134,6 @@ class milliquas(_base_importer):
         self.log.info(
             'completed the ``create_dictionary_of_milliquas`` method')
         return dictList
-
-    # use the tab-trigger below for new method
-    def add_data_to_database_table(
-            self):
-        """add data to database table
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean add_data_to_database_table method
-            - @review: when complete add logging
-        """
-        self.log.info('starting the ``add_data_to_database_table`` method')
-
-        dms.insert_list_of_dictionaries_into_database(
-            dbConn=self.cataloguesDbConn,
-            log=self.log,
-            dictList=self.dictList,
-            dbTableName=self.dbTableName,
-            uniqueKeyList=["raDeg", "name"],
-        )
-
-        self.log.info('completed the ``add_data_to_database_table`` method')
-        return None
-
-    # use the tab-trigger below for new method
-    def add_htmids_to_database_table(
-            self):
-        """add htmids to database table
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean add_htmids_to_database_table method
-            - @review: when complete add logging
-        """
-        self.log.info('starting the ``add_htmids_to_database_table`` method')
-
-        from dryxPython import mysql as dms
-        dms.add_HTMIds_to_mysql_tables.add_HTMIds_to_mysql_tables(
-            raColName="raDeg",
-            declColName="decDeg",
-            tableName=self.dbTableName,
-            dbConn=self.cataloguesDbConn,
-            log=self.log,
-            primaryIdColumnName="primaryId"
-        )
-
-        self.log.info('completed the ``add_htmids_to_database_table`` method')
-        return None
 
     # use the tab-trigger below for new method
     # xt-class-method
