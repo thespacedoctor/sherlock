@@ -70,7 +70,7 @@ class database():
         self.log.debug('starting the ``get`` method')
         self._setup_database_connections()
         self.log.debug('completed the ``get`` method')
-        return self.transientsDbConn, self.cataloguesDbConn
+        return self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn
 
     def _setup_database_connections(
             self):
@@ -150,6 +150,31 @@ class database():
         thisConn.autocommit(True)
         self.log.debug('transientsDbConn: %s' % (thisConn,))
         self.transientsDbConn = thisConn
+
+        # SETUP DATABASE CONNECTION FOR PESSTO MARSHALL DATABASE
+        if "pessto marshall" in self.settings["database settings"]:
+            host = self.settings["database settings"][
+                "pessto marshall"]["host"]
+            user = self.settings["database settings"][
+                "pessto marshall"]["user"]
+            passwd = self.settings["database settings"][
+                "pessto marshall"]["password"]
+            dbName = self.settings["database settings"][
+                "pessto marshall"]["db"]
+            thisConn = ms.connect(
+                host=host,
+                user=user,
+                passwd=passwd,
+                db=dbName,
+                port=sshPort,
+                use_unicode=True,
+                charset='utf8'
+            )
+            thisConn.autocommit(True)
+            self.log.debug('pmDbConn: %s' % (thisConn,))
+            self.pmDbConn = thisConn
+        else:
+            self.pmDbConn = False
 
         self.log.debug('completed the ``_setup_database_connections`` method')
         return None

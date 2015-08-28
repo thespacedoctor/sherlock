@@ -42,6 +42,7 @@ from dryxPython.projectsetup import setup_main_clutil
 from sherlock.imports import milliquas as milliquasImporter
 from sherlock.imports import veron as veronImporter
 from sherlock.imports import tmp_sdss as sdssImporter
+from sherlock.imports import pessto_marshall_streams as pesstoImporter
 
 
 def tab_complete(text, state):
@@ -138,6 +139,15 @@ def main(arguments=None):
         testObject.get()
     if "sdss" in cat_name:
         testObject = sdssImporter(
+            log=log,
+            settings=settings,
+            pathToDataFile=pathToDataFile,
+            version=cat_version,
+            catalogueName=cat_name
+        )
+        testObject.get()
+    if "pessto" in cat_name:
+        testObject = pesstoImporter(
             log=log,
             settings=settings,
             pathToDataFile=pathToDataFile,

@@ -82,7 +82,7 @@ class classifier():
             log=self.log,
             settings=self.settings
         )
-        self.transientsDbConn, self.cataloguesDbConn = db.get()
+        self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
 
         # DETERMINE WORKFLOW LIST TO LIFT UNCLASSIFIED TRANSIENT FOUND
         if isinstance(self.workflowListId, str):
