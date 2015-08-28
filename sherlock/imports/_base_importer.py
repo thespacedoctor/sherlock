@@ -86,7 +86,7 @@ class _base_importer():
             log=self.log,
             settings=self.settings
         )
-        self.transientsDbConn, self.cataloguesDbConn = db.get()
+        self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
 
         pathToReadFile = pathToDataFile
         try:
