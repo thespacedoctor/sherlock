@@ -111,18 +111,6 @@ class tmp_sdss(_base_importer):
         batchSize = 1250
         t = self.dbTableName
 
-<<<<<<< HEAD
-        # sqlQuery = u"""
-        #     select distinct objId from %(t)s where qubMasterFlag = 2
-        # """ % locals()
-        # count = dms.execute_mysql_read_query(
-        #     sqlQuery=sqlQuery,
-        #     dbConn=self.cataloguesDbConn,
-        #     log=self.log
-        # )
-        # totalRows = len(count)
-        totalRows = 300000000
-=======
         sqlQuery = u"""
             select distinct objId from %(t)s where qubMasterFlag = 2
         """ % locals()
@@ -133,7 +121,6 @@ class tmp_sdss(_base_importer):
         )
         totalRows = len(count)
         #totalRows = 300000000
->>>>>>> feature update: add master id creator for SDSS tables
         count = ""
 
         total = totalRows
