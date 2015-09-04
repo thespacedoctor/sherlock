@@ -120,7 +120,7 @@ class tmp_sdss(_base_importer):
             log=self.log
         )
         totalRows = len(count)
-        #totalRows = 300000000
+        totalRows = 500000000
         count = ""
 
         total = totalRows
