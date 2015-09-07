@@ -195,7 +195,7 @@ update %(t)s set qubMasterFlag = 0 where objId = %(objid)s  and qubMasterFlag !=
             return
         else:
             sqlQuery = u"""
-                select distinct objId from %(t)s  where objType = "Q"
+                select distinct objid from %(t)s  where objType = "Q"
             """ % locals()
             count = dms.execute_mysql_read_query(
                 sqlQuery=sqlQuery,
@@ -224,7 +224,7 @@ update %(t)s set qubMasterFlag = 0 where objId = %(objid)s  and qubMasterFlag !=
             print "%(end)s / %(totalRows)s (%(percent)1.1f%%) master objIds updated in %(t)s" % locals()
 
             sqlQuery = u"""
-                select distinct objId from %(t)s  where objType = "Q" limit %(start)s , %(batchSize)s  
+                select distinct objid from %(t)s  where objType = "Q" limit %(start)s , %(batchSize)s  
             """ % locals()
 
             rows = dms.execute_mysql_read_query(
