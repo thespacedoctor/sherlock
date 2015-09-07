@@ -111,15 +111,15 @@ class tmp_sdss(_base_importer):
         batchSize = 1250
         t = self.dbTableName
 
-        sqlQuery = u"""
-            select distinct objId from %(t)s where qubMasterFlag = 2
-        """ % locals()
-        count = dms.execute_mysql_read_query(
-            sqlQuery=sqlQuery,
-            dbConn=self.cataloguesDbConn,
-            log=self.log
-        )
-        totalRows = len(count)
+        # sqlQuery = u"""
+        #     select distinct objId from %(t)s where qubMasterFlag = 2
+        # """ % locals()
+        # count = dms.execute_mysql_read_query(
+        #     sqlQuery=sqlQuery,
+        #     dbConn=self.cataloguesDbConn,
+        #     log=self.log
+        # )
+        # totalRows = len(count)
         totalRows = 500000000
         count = ""
 

@@ -1,0 +1,36 @@
+ALTER TABLE `tcs_2mass_psc_cat` RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_2mass_xsc_cat`  RENAME TO  `cat_2mass_extended_source`;
+ALTER TABLE `tcs_cat_cataclysmic_binaries_ritter2014`  RENAME TO  `cat_cataclysmic_binaries_and_low_mass_xray_binaries_ritter2014`;
+ALTER TABLE `tcs_cat_cvs_downes2006`  RENAME TO  `cat_atlas_of_cataclysmic_variables_downes2006`;
+ALTER TABLE `tcs_cat_deep2dr3`  RENAME TO  `cat_deep2_dr3_redshift_catalogue`;
+ALTER TABLE `tcs_cat_kepler_k2`  RENAME TO  `cat_kepler_k2`;
+ALTER TABLE `tcs_cat_md01_chiappetti2005`  RENAME TO  `legacy_tcs_cat_md01_chiappetti2005`;
+ALTER TABLE `tcs_cat_md01_pierre2007`  RENAME TO  `legacy_tcs_cat_md01_pierre2007`;
+ALTER TABLE `tcs_cat_md02_giacconi2002`  RENAME TO  `legacy_tcs_cat_md02_giacconi2002`;
+ALTER TABLE `tcs_cat_md02_lefevre2004`  RENAME TO  `legacy_tcs_cat_md02_lefevre2004`;
+ALTER TABLE `tcs_cat_md02_lehmer2005`  RENAME TO  `legacy_tcs_cat_md02_lehmer2005`;
+ALTER TABLE `tcs_cat_md02_virani2006`  RENAME TO  `legacy_tcs_cat_md02_virani2006`;
+ALTER TABLE `tcs_cat_md04_hasinger2007`  RENAME TO  `legacy_tcs_cat_md04_hasinger2007`;
+ALTER TABLE `tcs_cat_md04_trump2007`  RENAME TO  `legacy_tcs_cat_md04_trump2007`;
+ALTER TABLE `tcs_cat_md05_brunner2008`  RENAME TO  `legacy_tcs_cat_md05_brunner2008`;
+ALTER TABLE `tcs_cat_md07_laird2009`  RENAME TO  `legacy_tcs_cat_md07_laird2009`;
+ALTER TABLE `tcs_cat_md07_nandra2005`  RENAME TO  `legacy_tcs_cat_md07_nandra2005`;
+ALTER TABLE `tcs_cat_md08_manners2003`  RENAME TO  `legacy_tcs_cat_md08_manners2003`;
+ALTER TABLE `tcs_cat_milliquas`  RENAME TO  `cat_milliquas`;
+
+
+ALTER TABLE `tcs_cat_ps1_medium_deep_ref`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_cat_ps1_ubercal_stars`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_cat_sdss_dr12_photo_stars_galaxies`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_cat_sdss_dr12_spect_galaxies_qsos`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_cat_sdss_dr9_photo_stars_galaxies`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_cat_sdss_dr9_spect_galaxies_qsos`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_cat_sdss_stars_galaxies`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_cat_sdss_stars_galaxies_htmtest`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_guide_star_cat`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_ned_cat`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_photpipe_detections`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_sdss_galaxies_cat`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_sdss_spect_galaxies_cat`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_sdss_stars_cat`  RENAME TO  `cat_2mass_point_source`;
+ALTER TABLE `tcs_veron_cat`  RENAME TO  `cat_2mass_point_source`;
