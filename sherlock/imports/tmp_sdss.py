@@ -170,6 +170,85 @@ update %(t)s set qubMasterFlag = 0 where objId = %(objid)s  and qubMasterFlag !=
         return None
 
     # use the tab-trigger below for new method
+    def set_master_obj_types(
+            self):
+        """set master obj types
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Todo**
+            - @review: when complete, clean set_master_obj_types method
+            - @review: when complete add logging
+        """
+        self.log.info('starting the ``set_master_obj_types`` method')
+
+        batchSize = 1250
+        t = self.dbTableName
+
+        if "photo" in t:
+            totalRows = 500000000
+            return
+        else:
+            sqlQuery = u"""
+                select distinct objId from %(t)s  where objType = "Q"
+            """ % locals()
+            count = dms.execute_mysql_read_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.cataloguesDbConn,
+                log=self.log
+            )
+            totalRows = len(count)
+        count = ""
+
+        total = totalRows
+        batches = int(total / batchSize)
+
+        start = 0
+        end = 0
+        theseBatches = []
+        for i in range(batches):
+            end = end + batchSize
+            if end > total:
+                end = total
+            start = i * batchSize
+
+            if start > 1:
+                # Cursor up one line and clear line
+                sys.stdout.write("\x1b[1A\x1b[2K")
+            percent = (float(end) / float(totalRows)) * 100.
+            print "%(end)s / %(totalRows)s (%(percent)1.1f%%) master objIds updated in %(t)s" % locals()
+
+            sqlQuery = u"""
+                select distinct objId from %(t)s  where objType = "Q" limit %(start)s , %(batchSize)s  
+            """ % locals()
+
+            rows = dms.execute_mysql_read_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.cataloguesDbConn,
+                log=self.log
+            )
+            sqlQuery = ""
+            for row in rows:
+                objid = row["objid"]
+                sqlQuery = sqlQuery + \
+                    u"""\nupdate %(t)s set objType = "Q" where objId = %(objid)s;""" % locals(
+                    )
+
+            dms.execute_mysql_write_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.cataloguesDbConn,
+                log=self.log,
+                Force=False
+            )
+
+        self.log.info('completed the ``set_master_obj_types`` method')
+        return None
+
+    # use the tab-trigger below for new method
     # xt-class-method
 
 if __name__ == '__main__':
