@@ -86,6 +86,7 @@ class tmp_sdss(_base_importer):
         # self.dictList = self.create_dictionary_of_tmp_sdss()
         # self.add_data_to_database_table()
         self.create_master_id()
+        self.set_master_obj_types()
 
         # self.add_htmids_to_database_table()
 
