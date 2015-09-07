@@ -111,16 +111,18 @@ class tmp_sdss(_base_importer):
         batchSize = 1250
         t = self.dbTableName
 
-        sqlQuery = u"""
-            select distinct objId from %(t)s where qubMasterFlag = 2
-        """ % locals()
-        count = dms.execute_mysql_read_query(
-            sqlQuery=sqlQuery,
-            dbConn=self.cataloguesDbConn,
-            log=self.log
-        )
-        totalRows = len(count)
-        # totalRows = 500000000
+        if "photo" in t:
+            totalRows = 500000000
+        else:
+            sqlQuery = u"""
+                select distinct objId from %(t)s where qubMasterFlag = 2
+            """ % locals()
+            count = dms.execute_mysql_read_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.cataloguesDbConn,
+                log=self.log
+            )
+            totalRows = len(count)
         count = ""
 
         total = totalRows
@@ -142,7 +144,7 @@ class tmp_sdss(_base_importer):
             print "%(end)s / %(totalRows)s (%(percent)1.1f%%) masterFlags updated in %(t)s" % locals()
 
             sqlQuery = u"""
-                select distinct objid from %(t)s where qubMasterFlag = 2 limit %(start)s, %(batchSize)s  
+                select distinct objid from %(t)s where qubMasterFlag = 2 limit 0, %(batchSize)s  
             """ % locals()
 
             print sqlQuery
