@@ -131,7 +131,7 @@ class tmp_sdss(_base_importer):
         start = 0
         end = 0
         theseBatches = []
-        for i in range(batches + 1):
+        for i in range(batches):
             end = end + batchSize
             if end > total:
                 end = total
@@ -146,9 +146,6 @@ class tmp_sdss(_base_importer):
             sqlQuery = u"""
                 select distinct objid from %(t)s where qubMasterFlag = 2 limit 0, %(batchSize)s  
             """ % locals()
-
-            print sqlQuery
-            print ""
 
             rows = dms.execute_mysql_read_query(
                 sqlQuery=sqlQuery,
