@@ -22,7 +22,8 @@ importers_clutils.py
     @review: when complete pull all general functions and classes into dryxPython
 
 Usage:
-    sherlock-importers <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+    sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+    sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
 
     -h, --help            show this help message
     -v, --version         show version
@@ -120,51 +121,53 @@ def main(arguments=None):
 
     # call the worker function
     # x-if-settings-or-database-credientials
-    if cat_name == "milliquas":
-        testObject = milliquasImporter(
-            log=log,
-            settings=settings,
-            pathToDataFile=pathToDataFile,
-            version=cat_version,
-            catalogueName=cat_name
-        )
-        testObject.get()
-    if cat_name == "veron":
-        testObject = veronImporter(
-            log=log,
-            settings=settings,
-            pathToDataFile=pathToDataFile,
-            version=cat_version,
-            catalogueName=cat_name
-        )
-        testObject.get()
-    if "sdss" in cat_name:
-        testObject = sdssImporter(
-            log=log,
-            settings=settings,
-            pathToDataFile=pathToDataFile,
-            version=cat_version,
-            catalogueName=cat_name
-        )
-        testObject.get()
-    if "pessto" in cat_name:
-        testObject = pesstoImporter(
-            log=log,
-            settings=settings,
-            pathToDataFile=pathToDataFile,
-            version=cat_version,
-            catalogueName=cat_name
-        )
-        testObject.get()
-    if "ned_d" in cat_name:
-        testObject = nedImporter(
-            log=log,
-            settings=settings,
-            pathToDataFile=pathToDataFile,
-            version=cat_version,
-            catalogueName=cat_name
-        )
-        testObject.get()
+    if cat:
+        if cat_name == "milliquas":
+            testObject = milliquasImporter(
+                log=log,
+                settings=settings,
+                pathToDataFile=pathToDataFile,
+                version=cat_version,
+                catalogueName=cat_name
+            )
+            testObject.get()
+        if cat_name == "veron":
+            testObject = veronImporter(
+                log=log,
+                settings=settings,
+                pathToDataFile=pathToDataFile,
+                version=cat_version,
+                catalogueName=cat_name
+            )
+            testObject.get()
+        if "sdss" in cat_name:
+            testObject = sdssImporter(
+                log=log,
+                settings=settings,
+                pathToDataFile=pathToDataFile,
+                version=cat_version,
+                catalogueName=cat_name
+            )
+            testObject.get()
+        if "ned_d" in cat_name:
+            testObject = nedImporter(
+                log=log,
+                settings=settings,
+                pathToDataFile=pathToDataFile,
+                version=cat_version,
+                catalogueName=cat_name
+            )
+            testObject.get()
+    elif stream:
+        if "pessto" in stream_name:
+            testObject = pesstoImporter(
+                log=log,
+                settings=settings,
+                pathToDataFile=pathToDataFile,
+                version=cat_version,
+                catalogueName=cat_name
+            )
+            testObject.get()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()

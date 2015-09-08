@@ -88,19 +88,21 @@ class _base_importer():
         )
         self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
 
-        pathToReadFile = pathToDataFile
-        try:
-            self.log.debug("attempting to open the file %s" %
-                           (pathToReadFile,))
-            readFile = codecs.open(pathToReadFile, mode='r')
-            self.catData = readFile.read()
+        if pathToDataFile:
+            pathToReadFile = pathToDataFile
+            try:
+                self.log.debug("attempting to open the file %s" %
+                               (pathToReadFile,))
+                readFile = codecs.open(pathToReadFile, mode='r')
+                self.catData = readFile.read()
+                readFile.close()
+            except IOError, e:
+                message = 'could not open the file %s' % (pathToReadFile,)
+                self.log.critical(message)
+                raise IOError(message)
             readFile.close()
-        except IOError, e:
-            message = 'could not open the file %s' % (pathToReadFile,)
-            self.log.critical(message)
-            raise IOError(message)
-
-        readFile.close()
+        else:
+            self.catData = None
 
         # BUILD VERSION TEXT
         if self.version:
