@@ -78,8 +78,8 @@ class milliquas(_base_importer):
         """
         self.log.info('starting the ``get`` method')
 
-        # self.dictList = self.create_dictionary_of_milliquas()
-        # self.add_data_to_database_table()
+        self.dictList = self.create_dictionary_of_milliquas()
+        self.add_data_to_database_table()
         self.add_htmids_to_database_table()
 
         self.log.info('completed the ``get`` method')

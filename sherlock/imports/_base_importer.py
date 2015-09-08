@@ -117,6 +117,7 @@ class _base_importer():
         self.databaseInsertbatchSize = 2500
         self.raColName = "raDeg"
         self.declColName = "decDeg"
+        self.uniqueKeyList = [self.raColName, "decDeg"]
 
         return None
 
@@ -215,7 +216,7 @@ class _base_importer():
             log=self.log,
             dictList=self.dictList,
             dbTableName=self.dbTableName,
-            uniqueKeyList=[self.raColName, "decDeg"],
+            uniqueKeyList=self.uniqueKeyList,
             batchSize=self.databaseInsertbatchSize
         )
 
@@ -238,6 +239,9 @@ class _base_importer():
             - @review: when complete add logging
         """
         self.log.info('starting the ``add_htmids_to_database_table`` method')
+
+        tableName = self.dbTableName
+        print "Adding HTMIds to %(tableName)s" % locals()
 
         from dryxPython import mysql as dms
         dms.add_HTMIds_to_mysql_tables.add_HTMIds_to_mysql_tables(

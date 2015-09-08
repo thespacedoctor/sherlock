@@ -43,6 +43,7 @@ from sherlock.imports import milliquas as milliquasImporter
 from sherlock.imports import veron as veronImporter
 from sherlock.imports import tmp_sdss as sdssImporter
 from sherlock.imports import pessto_marshall_streams as pesstoImporter
+from sherlock.imports.ned_d import ned_d as nedImporter
 
 
 def tab_complete(text, state):
@@ -148,6 +149,15 @@ def main(arguments=None):
         testObject.get()
     if "pessto" in cat_name:
         testObject = pesstoImporter(
+            log=log,
+            settings=settings,
+            pathToDataFile=pathToDataFile,
+            version=cat_version,
+            catalogueName=cat_name
+        )
+        testObject.get()
+    if "ned_d" in cat_name:
+        testObject = nedImporter(
             log=log,
             settings=settings,
             pathToDataFile=pathToDataFile,
