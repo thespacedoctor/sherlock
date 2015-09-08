@@ -1,4 +1,1 @@
-from _get_extra_info_for_galaxies import get_extra_info_for_galaxies
-from _update_the_database_table import update_the_database_table
-from _get_image_stamps_for_galaxies import get_image_stamps_for_galaxies
 from ned_d import ned_d
