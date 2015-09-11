@@ -97,6 +97,7 @@ class pessto_marshall_streams(_base_importer):
             self.dictList = self.create_dictionary_of_pessto_marshall_streams()
             self.add_data_to_database_table()
             self.add_htmids_to_database_table()
+            self._update_database_helper_table()
 
         self.log.info('completed the ``get`` method')
         return pessto_marshall_streams
@@ -141,6 +142,38 @@ class pessto_marshall_streams(_base_importer):
         self.log.info(
             'completed the ``create_dictionary_of_pessto_marshall_streams`` method')
         return dictList
+
+    # use the tab-trigger below for new method
+    def _update_database_helper_table(
+            self):
+        """ update dataasbe helper table
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Todo**
+            - @review: when complete, clean _update_database_helper_table method
+            - @review: when complete add logging
+        """
+        self.log.info('starting the ``_update_database_helper_table`` method')
+
+        tableName = self.dbTableName
+
+        sqlQuery = u"""
+            update tcs_helper_catalogue_tables_info set last_updated = now() where table_name = "%(tableName)s";
+        """ % locals()
+
+        dms.execute_mysql_write_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn,
+            log=self.log
+        )
+
+        self.log.info('completed the ``_update_database_helper_table`` method')
+        return None
 
     # use the tab-trigger below for new method
     # xt-class-method

@@ -8,6 +8,7 @@
 Usage:
     sherlock match -s <pathToSettingsFile> (<objectid> <objectid>...| -l <transientListId>) [--update]
     sherlock clean [-s <pathToSettingsFile>]
+    sherlock wiki [-s <pathToSettingsFile>]
 
     -h, --help            show this help message
     -v, --version         show version
@@ -28,6 +29,7 @@ from dryxPython import commonutils as dcu
 from dryxPython.projectsetup import setup_main_clutil
 from classifier import classifier
 from cleanup_database_tables import cleanup_database_tables
+from commonutils import update_wiki_pages
 # from ..__init__ import *
 
 
@@ -121,6 +123,12 @@ def main(arguments=None):
             settings=settings
         )
         cleaner.get()
+    if wiki:
+        updateWiki = update_wiki_pages(
+            log=log,
+            settings=settings
+        )
+        updateWiki.get()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()
