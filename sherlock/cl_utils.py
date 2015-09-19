@@ -6,7 +6,7 @@
 =============================================================================================
 
 Usage:
-    sherlock match -s <pathToSettingsFile> (<objectid> <objectid>...| -l <transientListId>) [--update]
+    sherlock match [--update] [-s <pathToSettingsFile>]
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
 
@@ -113,8 +113,7 @@ def main(arguments=None):
             log=log,
             settings=settings,
             update=updateFlag,
-            workflowListId=transientListId,
-            transientIdList=objectid
+            transientIdList=[]
         )
         sherlock.get()
     if clean:

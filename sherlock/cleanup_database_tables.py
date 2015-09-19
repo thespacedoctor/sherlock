@@ -267,8 +267,6 @@ class cleanup_database_tables():
                 quiet=True
             )
 
-        print "Row counts updated in `tcs_helper_catalogue_views_info` database table"
-
         self.log.info(
             'completed the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
         return None

@@ -95,7 +95,6 @@ class database():
                 rh = self.settings["ssh tunnel"]["remote datbase host"]
 
                 cmd = "ssh -fnN %(ru)s@%(rip)s -L %(sshPort)s:%(rh)s:3306" % locals()
-                print cmd
                 p = Popen(cmd, shell=True, close_fds=True)
                 output = p.communicate()[0]
                 self.log.debug('output: %(output)s' % locals())
