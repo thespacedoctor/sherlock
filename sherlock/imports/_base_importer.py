@@ -52,6 +52,7 @@ class _base_importer():
         - ``pathToDataFIle`` -- path to the _base_importer data file
         - ``version`` -- version of the _base_importer catalogue
         - ``catalogueName`` -- name of the catalogue
+        - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
 
 
     **Todo**
@@ -69,7 +70,8 @@ class _base_importer():
             settings=False,
             pathToDataFile=False,
             version=False,
-            catalogueName=""
+            catalogueName="",
+            coordinateList=[]
     ):
         self.log = log
         log.debug("instansiating a new '_base_importer' object")
@@ -77,6 +79,7 @@ class _base_importer():
         self.pathToDataFile = pathToDataFile
         self.version = version
         self.catalogueName = catalogueName
+        self.coordinateList = coordinateList
         # xt-self-arg-tmpx
 
         # INITIAL ACTIONS

@@ -47,10 +47,13 @@ class conesearcher():
         - ``dec`` -- dec of location to search
         - ``tableName`` -- the name of the database table to perform conesearch on
         - ``radius`` -- radius of the conesearch to perform (arcsec)
+        - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
         - ``settings`` -- the settings dictionary
         - ``queryType`` -- queryType ["quick" | "full" | "count"]
         - ``htmLevel`` -- htmLevel [16 | 21]
         - ``nearestOnly`` -- return only the nearest object if true
+        - ``physicalSearch`` -- is this a physical search (False for angular search only)
+        - ``transType`` -- type of transient if match is found
     """
     # Initialisation
 
@@ -61,11 +64,14 @@ class conesearcher():
             dec,
             tableName,
             radius,
+            colMaps,
             dbConn=False,
             settings=False,
             htmLevel=16,
             queryType="quick",
-            nearestOnly=False
+            nearestOnly=False,
+            physicalSearch=False,
+            transType=False
     ):
         self.log = log
         log.debug("instansiating a new '_conesearcher' object")
@@ -78,6 +84,10 @@ class conesearcher():
         self.radius = radius
         self.tableName = tableName
         self.nearestOnly = nearestOnly
+        self.colMaps = colMaps
+        self.physicalSearch = physicalSearch
+        self.transType = transType
+
         # xt-self-arg-tmpx
 
         # VARIABLE DATA ATRRIBUTES
@@ -106,21 +116,9 @@ class conesearcher():
         except:
             pass
 
-        # GRAB THE NAMES OF THE IMPORTANT COLUMNS FOR SETTINGS FILE
-        if self.tableName in settings["CAT_ID_RA_DEC_COLS"]:
-            self.quickColumns = settings[
-                "CAT_ID_RA_DEC_COLS"][self.tableName][0]
-        else:
-            log.error(
-                'the table `%(tableName)s` is not recognised listed in the settings file' % locals())
-
         return None
 
     # METHOD ATTRIBUTES
-    def close(self):
-        del self
-        return None
-
     def get(self):
         """get the conesearcher object
 
@@ -185,6 +183,34 @@ class conesearcher():
         self.log.debug(
             'starting the ``_grab_conesearch_results_from_db`` method')
 
+        # ACCOUNT FOR TYPE OF SEARCH
+        if self.physicalSearch == False and self.transType == "SN":
+            where = ""
+            if self.colMaps[self.tableName]["redshiftColName"]:
+                where += " and %s is null" % (
+                    self.colMaps[self.tableName]["redshiftColName"],)
+            if self.colMaps[self.tableName]["distanceColName"]:
+                where += " and %s is null" % (
+                    self.colMaps[self.tableName]["distanceColName"],)
+            if self.colMaps[self.tableName]["semiMajorColName"]:
+                where += " and %s is null" % (
+                    self.colMaps[self.tableName]["semiMajorColName"],)
+            self.sqlQuery += where
+        elif self.physicalSearch == True:
+            where = ""
+            if self.colMaps[self.tableName]["redshiftColName"]:
+                where += " or %s is not null" % (
+                    self.colMaps[self.tableName]["redshiftColName"],)
+            if self.colMaps[self.tableName]["distanceColName"]:
+                where += " or %s is not null" % (
+                    self.colMaps[self.tableName]["distanceColName"],)
+            if self.colMaps[self.tableName]["semiMajorColName"]:
+                where += " or %s is not null" % (
+                    self.colMaps[self.tableName]["semiMajorColName"],)
+            if len(where):
+                where = " and (" + where[4:] + ")"
+                self.sqlQuery += where
+
         self.results = []
         rows = dms.execute_mysql_read_query(
             sqlQuery=self.sqlQuery,
@@ -198,16 +224,18 @@ class conesearcher():
                 self.results = [[0.0, rows[0]['number']]]
                 return "Count", self.results
 
-            theseCols = self.settings["CAT_ID_RA_DEC_COLS"][self.tableName]
             # CALCULATE THE ANGULAR SEPARATION FOR EACH ROW
             for row in rows:
                 if self.tableName == 'tcs_guide_star_cat' or self.tableName == 'tcs_cat_v_guide_star_ps':
                     # Guide star cat RA and DEC are in RADIANS
-                    ra2 = math.degrees(row[theseCols[0][1]])
-                    dec2 = math.degrees(row[theseCols[0][2]])
+                    ra2 = math.degrees(
+                        row[self.colMaps[self.tableName]["raColName"]])
+                    dec2 = math.degrees(
+                        row[self.colMaps[self.tableName]["decColName"]])
                 else:
-                    ra2 = row[theseCols[0][1]]
-                    dec2 = row[theseCols[0][2]]
+                    ra2 = row[self.colMaps[self.tableName]["raColName"]]
+                    dec2 = row[self.colMaps[self.tableName]["decColName"]]
+
                 separation, northSep, eastSep = dat.get_angular_separation(
                     log=self.log,
                     ra1=self.ra,

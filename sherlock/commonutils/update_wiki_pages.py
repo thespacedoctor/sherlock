@@ -107,6 +107,7 @@ class update_wiki_pages():
 
         self._get_table_infos()
         self._get_view_infos()
+        self._get_stream_view_infos()
         self._create_md_tables()
         self._write_wiki_pages()
         self._update_github()
@@ -171,6 +172,34 @@ class update_wiki_pages():
         )
 
         self.log.info('completed the ``_get_view_infos`` method')
+        return None
+
+    def _get_stream_view_infos(
+            self):
+        """ get table infos
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Todo**
+            - @review: when complete, clean _get_view_infos method
+            - @review: when complete add logging
+        """
+        self.log.info('starting the ``_get_stream_view_infos`` method')
+
+        sqlQuery = u"""
+            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%"  and table_name like "%%stream" order by number_of_rows desc;
+        """ % locals()
+        self.streamInfo = dms.execute_mysql_read_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn,
+            log=self.log
+        )
+
+        self.log.info('completed the ``_get_stream_view_infos`` method')
         return None
 
     # use the tab-trigger below for new method
@@ -265,6 +294,54 @@ class update_wiki_pages():
 
         self.mdView = header + rows
 
+        header = u"""
+| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |"""
+
+        rows = u""
+        for ti in self.streamInfo:
+            table_name = ti["table_name"]
+            description = ti["description"]
+            url = ti["url"]
+            number_of_rows = ti["number_of_rows"]
+            reference_url = ti["reference_url"]
+            reference_text = ti["reference_text"]
+            notes = ti["notes"]
+            vizier_link = ti["vizier_link"]
+            in_ned = ti["in_ned"]
+            object_types = ti["object_types"]
+            version_number = ti["version_number"]
+            last_updated = ti["last_updated"]
+            legacy_table = ti["legacy_table"]
+            old_table_name = ti["old_table_name"]
+
+            number_of_rows = str(number_of_rows)
+            thisLen = len(number_of_rows)
+            newNumber = ""
+            count = 0
+            while count < thisLen:
+                count += 1
+                newNumber = number_of_rows[-count] + newNumber
+                if count % 3 == 0:
+                    newNumber = "," + newNumber
+            if newNumber[0] == ",":
+                newNumber = newNumber[1:]
+
+            if len(vizier_link) and vizier_link != 0 and vizier_link != "0":
+                vizier_link = u"[✓](%(vizier_link)s)" % locals()
+            else:
+                vizier_link = u""
+
+            if in_ned:
+                in_ned = u"✓"
+            else:
+                in_ned = u""
+
+            rows += u"""
+| <sub>%(table_name)s</sub> | <sub>[%(description)s](%(url)s)</sub> | <sub>[%(reference_text)s](%(reference_url)s)</sub> | <sub>%(newNumber)s</sub> | <sub>%(object_types)s</sub> |""" % locals()
+
+        self.mdStream = header + rows
+
         self.log.info('completed the ``_create_md_tables`` method')
         return None
 
@@ -307,6 +384,17 @@ class update_wiki_pages():
 """ % locals()
 
         writeFile.write(lastUpdated + self.mdView)
+        writeFile.close()
+
+        pathToWriteFile = self.settings[
+            "sherlock wiki root"] + "/Crossmatch-Catalogue Streams.md"
+        writeFile = codecs.open(pathToWriteFile, encoding='utf-8', mode='w')
+        now = datetime.now()
+        now = now.strftime("%Y-%m-%d %H:%M")
+        lastUpdated = """Last Updated %(now)s  
+""" % locals()
+
+        writeFile.write(lastUpdated + self.mdStream)
         writeFile.close()
 
         self.log.info('completed the ``_write_wiki_pages`` method')

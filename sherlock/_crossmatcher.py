@@ -25,6 +25,7 @@ os.environ['TERM'] = 'vt100'
 import readline
 import glob
 import pickle
+import math
 from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import astrotools as dat
@@ -41,6 +42,7 @@ class crossmatcher():
         - ``dbConn`` -- mysql database connection for the catalogues
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
+        - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
         - ``transients`` -- the list of transients
     """
     # INITIALISATION
@@ -50,6 +52,7 @@ class crossmatcher():
             log,
             dbConn=False,
             settings=False,
+            colMaps=False,
             transients=[]
     ):
         self.log = log
@@ -57,6 +60,7 @@ class crossmatcher():
         self.dbConn = dbConn
         self.settings = settings
         self.transients = transients
+        self.colMaps = colMaps
         # xt-self-arg-tmpx
 
         # VARIABLE DATA ATRRIBUTES
@@ -85,6 +89,7 @@ class crossmatcher():
         self.log.debug(
             'starting the ``_crossmatch_transients_against_catalogues`` method')
 
+        # COUNT NUMBER OF TRANSIENT TO CROSSMATCH
         numberOfTransients = len(self.transients)
         count = 0
 
@@ -92,8 +97,6 @@ class crossmatcher():
         for thisIndex, transient in enumerate(self.transients):
             tId = transient['id']
             tName = transient['name']
-
-            print "\n\n\n"
 
             # PRINT A STATUS UPDATE
             count += 1
@@ -103,6 +106,7 @@ class crossmatcher():
             thisCount = thisIndex + 1
             message = "Classifying object %(tId)s (%(tName)s) [%(thisCount)s/%(numberOfTransients)d]" % locals(
             )
+            print message
             self.log.info('\n\n\nmessage: %(message)s' % locals())
 
             # RESET MATCH VALUES
@@ -143,8 +147,7 @@ class crossmatcher():
                     self.log.info("     match found for %(tName)s" % locals())
                     match = True
                     # @action update objectType -- it gets overwritten with each subsequent search
-                    objectType = self.settings[
-                        "classifications"][searchPara["transient classification"]]["flag"]
+                    objectType = searchPara["transient classification"]
                     allMatches = allMatches + matches
 
                     if "stop algorithm on match" in searchPara and searchPara["stop algorithm on match"] == True:
@@ -157,7 +160,7 @@ class crossmatcher():
             if not match:
                 self.log.info(
                     "   %(tName)s classified as an orphan" % locals())
-                objectType = self.settings["classifications"]["ORPHAN"]["flag"]
+                objectType = "ORPHAN"
 
             # PERFORM ANY SUPPLIMENTARY SEARCHES
             ss = self.settings["supplementary search"]
@@ -171,8 +174,7 @@ class crossmatcher():
                 if searchDone and supMatches:
                     self.log.info("     match found for %(tName)s" % locals())
                     objectType = objectType + \
-                        self.settings["classifications"][
-                            searchPara["transient classification"]]["flag"]
+                        searchPara["transient classification"]
                     allMatches = allMatches + supMatches
 
             # ADD DETAILS TO THE lOGS
@@ -192,14 +194,18 @@ class crossmatcher():
                 for m in allMatches:
                     catalogueTableName = m[2]
                     thisObjectType = m[3]
-                    catalogueTableId = self.settings[
-                        "CAT_ID_RA_DEC_COLS"][catalogueTableName][1]
+                    catalogueTableId = self.colMaps[
+                        catalogueTableName]["table_id"]
                     for row in m[1]:
                         crossmatch = {}
                         crossmatch["transientObjectId"] = inputRow["id"]
                         crossmatch["catalogueObjectId"] = row[1][
-                            self.settings["CAT_ID_RA_DEC_COLS"][catalogueTableName][0][0]]
+                            self.colMaps[catalogueTableName]["objectNameColName"]]
                         crossmatch["catalogueTableId"] = catalogueTableId
+                        crossmatch["catalogueTableName"] = self.colMaps[
+                            catalogueTableName]["table_name"]
+                        crossmatch["catalogueViewName"] = self.colMaps[
+                            catalogueTableName]["view_name"]
                         crossmatch["separation"] = row[0]
                         crossmatch["z"] = row[1]["xmz"]
                         crossmatch["scale"] = row[1]["xmscale"]
@@ -209,6 +215,18 @@ class crossmatcher():
                         crossmatch["searchParametersId"] = self.settings[
                             "search parameter id"]
                         crossmatch["association_type"] = thisObjectType
+                        crossmatch["sourceType"] = row[1]["sourceType"]
+                        crossmatch["sourceSubType"] = row[1]["sourceSubType"]
+                        crossmatch["searchName"] = row[1]["searchName"]
+                        crossmatch["xmdirectdistance"] = row[
+                            1]["xmdirectdistance"]
+                        crossmatch["xmdirectdistanceModulus"] = row[
+                            1]["xmdirectdistanceModulus"]
+                        crossmatch["xmdirectdistancescale"] = row[
+                            1]["xmdirectdistancescale"]
+                        crossmatch["xmmajoraxis"] = row[1]["xmmajoraxis"]
+                        if crossmatch["sourceSubType"] == "null":
+                            crossmatch["sourceSubType"] = None
                         if "physical_separation_kpc" in row[
                                 1].keys():
                             crossmatch["physical_separation_kpc"] = row[
@@ -233,10 +251,15 @@ class crossmatcher():
         from sherlock import conesearcher
 
         # EXTRACT PARAMETERS
+        if "physical radius kpc" in searchPara:
+            physicalSearch = True
+            searchName = searchName + " physical"
+        else:
+            physicalSearch = False
+            searchName = searchName + " angular"
         radius = searchPara["angular radius arcsec"]
         catalogueName = searchPara["database table"]
-        matchedType = self.settings[
-            "classifications"][searchPara["transient classification"]]["flag"]
+        matchedType = searchPara["transient classification"]
 
         # VARIABLES
         matchedObjects = []
@@ -258,10 +281,13 @@ class crossmatcher():
                 ra=row['ra'],
                 dec=row['dec'],
                 radius=radius,
+                colMaps=self.colMaps,
                 tableName=catalogueName,
                 queryType=2,
                 dbConn=self.dbConn,
                 settings=self.settings,
+                physicalSearch=physicalSearch,
+                transType=searchPara["transient classification"]
             )
 
             message, xmObjects = cs.get()
@@ -279,21 +305,25 @@ class crossmatcher():
                 nearestSep = xmObjects[0][0]
                 nearestCatRow = xmObjects[0][1]
                 nearestCatId = nearestCatRow[
-                    self.settings["CAT_ID_RA_DEC_COLS"][catalogueName][0][0]]
-
-                redshift = None
-                xmz = None
-                xmscale = None
-                xmdistance = None
-                xmdistanceModulus = None
+                    self.colMaps[catalogueName]["objectNameColName"]]
 
                 # CALCULATE PHYSICAL PARAMETERS ... IF WE CAN
                 for xm in xmObjects:
+                    redshift = None
+                    xmz = None
+                    xmscale = None
+                    xmdistance = None
+                    xmdistanceModulus = None
+                    xmmajoraxis = None
+                    xmdirectdistance = None
+                    xmdirectdistancescale = None
+                    xmdirectdistanceModulus = None
+
                     # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
-                    if len(self.settings["CAT_ID_RA_DEC_COLS"][catalogueName][0]) > 3:
+                    if self.colMaps[catalogueName]["redshiftColName"]:
                         # THE CATALOGUE HAS A REDSHIFT COLUMN
                         redshift = xm[1][
-                            self.settings["CAT_ID_RA_DEC_COLS"][catalogueName][0][3]]
+                            self.colMaps[catalogueName]["redshiftColName"]]
                     if redshift and redshift > 0.0:
                         # CALCULATE DISTANCE MODULUS, ETC
                         redshiftInfo = dat.convert_redshift_to_distance(
@@ -304,15 +334,47 @@ class crossmatcher():
                             xmscale = redshiftInfo['da_scale']
                             xmdistance = redshiftInfo['dl_mpc']
                             xmdistanceModulus = redshiftInfo['dmod']
+                    # ADD MAJOR AXIS VALUE
+                    if "or within semi major axis" in searchPara and searchPara["or within semi major axis"] == True and self.colMaps[catalogueName]["semiMajorColName"] and xm[1][self.colMaps[catalogueName]["semiMajorColName"]]:
+                        xmmajoraxis = xm[1][
+                            self.colMaps[catalogueName]["semiMajorColName"]] * self.colMaps[catalogueName]["semiMajorToArcsec"]
+                    # ADD DISTANCE VALUES
+                    if self.colMaps[catalogueName]["distanceColName"] and xm[1][self.colMaps[catalogueName]["distanceColName"]]:
+                        xmdirectdistance = xm[1][
+                            self.colMaps[catalogueName]["distanceColName"]]
+                        xmdirectdistancescale = xmdirectdistance / 206.264806
+                        xmdirectdistanceModulus = 5 * \
+                            math.log10(xmdirectdistance * 1e6) - 5
                     xm[1]['xmz'] = xmz
                     xm[1]['xmscale'] = xmscale
                     xm[1]['xmdistance'] = xmdistance
                     xm[1]['xmdistanceModulus'] = xmdistanceModulus
+                    xm[1]['xmmajoraxis'] = xmmajoraxis
+                    xm[1]['xmdirectdistance'] = xmdirectdistance
+                    xm[1]['xmdirectdistancescale'] = xmdirectdistancescale
+                    xm[1]['xmdirectdistanceModulus'] = xmdirectdistanceModulus
+
+                # GRAB SOURCE TYPES
+                for xm in xmObjects:
+                    subType = None
+                    # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
+                    if self.colMaps[catalogueName]["subTypeColName"]:
+                        # THE CATALOGUE HAS A REDSHIFT COLUMN
+                        subType = xm[1][
+                            self.colMaps[catalogueName]["subTypeColName"]]
+                        if subType == "null":
+                            subType = None
+
+                    xm[1]['sourceSubType'] = subType
+                    xm[1]['sourceType'] = self.colMaps[
+                        catalogueName]["object_type"]
+                    xm[1]["searchName"] = searchName
+
                 matchedObjects.append(
                     [row, xmObjects, catalogueName, matchedType])
 
         # FAINT STAR CUTS
-        if searchDone and matchedObjects and magColumn and searchName != "sdss star":
+        if searchDone and matchedObjects and magColumn:
             faintStarMatches = []
             matchSubset = []
             for row in matchedObjects[0][1]:
@@ -323,7 +385,7 @@ class crossmatcher():
                 faintStarMatches.append(
                     [matchedObjects[0][0], matchSubset, matchedObjects[0][2], matchedObjects[0][3]])
             matchedObjects = faintStarMatches
-        elif searchName == "sdss star":
+        elif "tcs_view_star_sdss" in catalogueName:
             sdssStarMatches = []
             matchSubset = []
             if searchDone and matchedObjects:
@@ -331,8 +393,8 @@ class crossmatcher():
                     rMag = row[1]["petroMag_r"]
                     separation = row[0]
                     # Line passes through (x,y) = (2.5,18) and (19,13)
-                    lineTwo = -((18 - 13) / (19 - 2.5)) * separation + \
-                        13 + 19 * ((18 - 13) / (19 - 2.5))
+                    lineTwo = -((18 - 13) / (19 - 2.5)) * \
+                        separation + 13 + 19 * ((18 - 13) / (19 - 2.5))
                     if rMag < 13.0:
                         matchSubset.append(row)
                     elif rMag >= 13.0 and rMag < 18.0:
@@ -406,8 +468,7 @@ class crossmatcher():
         matchedObjects = []
         matchSubset = []
         physicalRadius = searchPara["physical radius kpc"]
-        matchedType = self.settings[
-            "classifications"][searchPara["transient classification"]]["flag"]
+        matchedType = searchPara["transient classification"]
 
         # RETURN ALL ANGULAR MATCHES BEFORE RETURNING NEAREST PHYSICAL SEARCH
         nearestOnly = searchPara["match nearest source only"]
@@ -420,16 +481,48 @@ class crossmatcher():
             searchPara=tmpSearchPara,
             searchName=searchName
         )
+        if "physical radius kpc" in searchPara:
+            physicalSearch = True
+            searchName = searchName + " physical"
+        else:
+            physicalSearch = False
+            searchName = searchName + " angular"
 
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
         # A PHYSICAL SEPARATION WITHIN THE PHYSICAL RADIUS.
         if searchDone and matches:
             for row in matches[0][1]:
-                if row[1]["xmscale"] and row[1]["xmscale"] * row[0] < physicalRadius:
+                thisMatch = False
+                physicalSeparation = None
+                newSearchName = searchName
+
+                # CALCULATE MOST ACCURATE PHYSICAL SEPARATION
+                if row[1]["xmdirectdistancescale"]:
+                    physicalSeparation = row[1][
+                        "xmdirectdistancescale"] * row[0]
+                elif row[1]["xmscale"]:
                     physicalSeparation = row[1]["xmscale"] * row[0]
+
+                # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
+                if row[1]["xmmajoraxis"] and row[0] < row[1]["xmmajoraxis"] * 1.5:
+                    thisMatch = True
+                    newSearchName = newSearchName + \
+                        " (within 1.5 * major axis)"
+                # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
+                elif row[1]["xmdirectdistancescale"] and physicalSeparation < physicalRadius:
+                    thisMatch = True
+                    newSearchName = newSearchName + " (direct distance)"
+                # NEW CHECK FOR A REDSHIFT DISTANCE
+                elif row[1]["xmscale"] and physicalSeparation < physicalRadius:
+                    thisMatch = True
+                    newSearchName = newSearchName + " (redshift distance)"
+
+                if thisMatch == True:
                     row[1]["physical_separation_kpc"] = physicalSeparation
-                    self.log.info(
-                        "\t\tPhysical separation = %.2f kpc" % (row[1]["xmscale"] * row[0]))
+                    if physicalSeparation:
+                        self.log.info(
+                            "\t\tPhysical separation = %.2f kpc" % (physicalSeparation,))
+                    row[1]["searchName"] = newSearchName
                     matchSubset.append([physicalSeparation, row])
 
         if matchSubset:
