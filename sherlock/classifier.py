@@ -17,9 +17,6 @@ classifier.py
 
 :Notes:
     - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
-    @review: when complete pull all general functions and classes into dryxPython
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -81,14 +78,7 @@ class classifier():
 
     # METHOD ATTRIBUTES
     def get(self):
-        """get the classifier object
-
-        **Return:**
-            - ``classifier``
-
-        **Todo**
-            - @review: when complete, clean get method
-            - @review: when complete add logging
+        """perform the classifications
         """
         self.log.debug('starting the ``get`` method')
 
@@ -109,7 +99,7 @@ class classifier():
             self._update_transient_database()
 
         self.log.debug('completed the ``get`` method')
-        return self.classifications
+        return None
 
     def _get_individual_transient_metadata(
             self):
@@ -261,6 +251,9 @@ class classifier():
                            transient_object_id,
                            catalogue_object_id,
                            catalogue_table_id,
+                           catalogue_object_ra,
+                           catalogue_object_dec,
+                           original_search_radius_arcsec,
                            separation,
                            z,
                            scale,
@@ -288,6 +281,9 @@ class classifier():
                            %s,
                            %s,
                            %s,
+                           %s,
+                           %s,
+                           %s,
                            "%s",
                            "%s",
                            %s,
@@ -300,7 +296,7 @@ class classifier():
                            %s,
                            %s,
                            %s)
-                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
+                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
                 dms.execute_mysql_write_query(
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,
@@ -344,7 +340,7 @@ class classifier():
                 rank += 1
                 primaryId = row["id"]
                 sqlQuery = u"""
-                    update tcs_cross_matches set rank = %(rank)s where id = %(primaryId)s 
+                    update tcs_cross_matches set rank = %(rank)s where id = %(primaryId)s
                 """ % locals()
                 rows = dms.execute_mysql_read_query(
                     sqlQuery=sqlQuery,
@@ -407,12 +403,13 @@ class classifier():
             thisList = str(i["ra"]) + " " + str(i["dec"])
             coordinateList.append(thisList)
 
+        coordinateList = self._remove_previous_ned_queries(
+            coordinateList=coordinateList
+        )
+
         this = ned_conesearch(
             log=self.log,
             settings=self.settings,
-            pathToDataFile=False,
-            version=False,
-            catalogueName="",
             coordinateList=coordinateList
         )
         this.get()
@@ -420,20 +417,12 @@ class classifier():
         self.log.info('completed the ``_update_ned_stream`` method')
         return None
 
-    # use the tab-trigger below for new method
     def _grab_column_name_map_from_database(
             self):
         """ grab column name map from database
 
-        **Key Arguments:**
-            # -
-
         **Return:**
             - None
-
-        **Todo**
-            - @review: when complete, clean _grab_column_name_map_from_database method
-            - @review: when complete add logging
         """
         self.log.info(
             'starting the ``_grab_column_name_map_from_database`` method')
@@ -455,20 +444,12 @@ class classifier():
             'completed the ``_grab_column_name_map_from_database`` method')
         return None
 
-    # use the tab-trigger below for new method
     def _create_crossmatch_table_if_not_existing(
             self):
-        """ create crossmatch table if not existing
-
-        **Key Arguments:**
-            # -
+        """ create crossmatch table if it does not yet exist in the transients database
 
         **Return:**
             - None
-
-        **Todo**
-            - @review: when complete, clean _create_crossmatch_table_if_not_existing method
-            - @review: when complete add logging
         """
         self.log.info(
             'starting the ``_create_crossmatch_table_if_not_existing`` method')
@@ -516,6 +497,92 @@ class classifier():
         self.log.info(
             'completed the ``_create_crossmatch_table_if_not_existing`` method')
         return None
+
+    # use the tab-trigger below for new method
+    def _remove_previous_ned_queries(
+            self,
+            coordinateList):
+        """ remove previous ned queries
+
+        **Key Arguments:**
+            # - ``coordinateList`` -- set of coordinate to check for previous queries
+
+        **Return:**
+            - ``updatedCoordinateList`` -- coordinate list with previous queries removed
+        """
+        self.log.info('starting the ``_remove_previous_ned_queries`` method')
+
+        # IMPORTS
+        import htmCircle
+        import math
+        from dryxPython import astrotools as dat
+        from datetime import datetime, date, time, timedelta
+
+        # 1 DEGREE QUERY RADIUS
+        radius = 60. * 60.
+        updatedCoordinateList = []
+
+        # FOR EACH TRANSIENT IN COORDINATE LIST
+        for c in coordinateList:
+            this = c.split(" ")
+            raDeg = float(this[0])
+            decDeg = float(this[1])
+
+            # BUILD WHERE SECTION OF CLAUSE
+            htmWhereClause = htmCircle.htmCircleRegion(
+                16, raDeg, decDeg, float(radius))
+
+            # CONVERT RA AND DEC TO CARTESIAN COORDINATES
+            ra = math.radians(raDeg)
+            dec = math.radians(decDeg)
+            cos_dec = math.cos(dec)
+            cx = math.cos(ra) * cos_dec
+            cy = math.sin(ra) * cos_dec
+            cz = math.sin(dec)
+            cartesians = (cx, cy, cz)
+
+            # CREATE CARTESIAN SECTION OF QUERY
+            cartesianClause = 'and (cx * %.17f + cy * %.17f + cz * %.17f >= cos(%.17f))' % (
+                cartesians[0], cartesians[1], cartesians[2], math.radians(radius / 3600.0))
+
+            # CALCULATE THE OLDEST RESULTS LIMIT
+            now = datetime.now()
+            td = timedelta(
+                days=self.settings["ned stream refresh rate in days"])
+            refreshLimit = now - td
+            refreshLimit = refreshLimit.strftime("%Y-%m-%d %H:%M:%S")
+
+            # FINALLY BUILD THE FULL QUERY AND HIT DATABASE
+            sqlQuery = "select * from tcs_helper_ned_query_history %(htmWhereClause)s %(cartesianClause)s and dateQueried > '%(refreshLimit)s'" % locals(
+            )
+            rows = dms.execute_mysql_read_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.cataloguesDbConn,
+                log=self.log
+            )
+
+            # DETERMINE WHICH COORDINATES REQUIRE A NED QUERY
+            match = False
+            for row in rows:
+                raStream = row["raDeg"]
+                decStream = row["decDeg"]
+                radiusStream = row["arcsecRadius"]
+                dateStream = row["dateQueried"]
+                angularSeparation, northSep, eastSep = dat.get_angular_separation(
+                    log=self.log,
+                    ra1=raDeg,
+                    dec1=decDeg,
+                    ra2=raStream,
+                    dec2=decStream
+                )
+                if angularSeparation + self.settings["first pass ned search radius arcec"] < radiusStream:
+                    match = True
+
+            if match == False:
+                updatedCoordinateList.append(c)
+
+        self.log.info('completed the ``_remove_previous_ned_queries`` method')
+        return updatedCoordinateList
 
     # use the tab-trigger below for new method
     # xt-class-method
