@@ -104,7 +104,7 @@ class crossmatcher():
                 # CURSOR UP ONE LINE AND CLEAR LINE
                 sys.stdout.write("\x1b[1A\x1b[2K")
             thisCount = thisIndex + 1
-            message = "Classifying object %(tId)s (%(tName)s) [%(thisCount)s/%(numberOfTransients)d]" % locals(
+            message = "Classifying object `%(tName)s` [%(thisCount)s/%(numberOfTransients)d]" % locals(
             )
             print message
             self.log.info('\n\n\nmessage: %(message)s' % locals())
@@ -212,8 +212,6 @@ class crossmatcher():
                         crossmatch["distance"] = row[1]["xmdistance"]
                         crossmatch["distanceModulus"] = row[
                             1]["xmdistanceModulus"]
-                        crossmatch["searchParametersId"] = self.settings[
-                            "search parameter id"]
                         crossmatch["association_type"] = thisObjectType
                         crossmatch["sourceType"] = row[1]["sourceType"]
                         crossmatch["sourceSubType"] = row[1]["sourceSubType"]
@@ -224,6 +222,12 @@ class crossmatcher():
                             1]["xmdirectdistanceModulus"]
                         crossmatch["xmdirectdistancescale"] = row[
                             1]["xmdirectdistancescale"]
+                        crossmatch["originalSearchRadius"] = row[
+                            1]["originalSearchRadius"]
+                        crossmatch["sourceRa"] = row[
+                            1]["sourceRa"]
+                        crossmatch["sourceDec"] = row[
+                            1]["sourceDec"]
                         crossmatch["xmmajoraxis"] = row[1]["xmmajoraxis"]
                         if crossmatch["sourceSubType"] == "null":
                             crossmatch["sourceSubType"] = None
@@ -250,7 +254,7 @@ class crossmatcher():
 
         from sherlock import conesearcher
 
-        # EXTRACT PARAMETERS
+        # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
         if "physical radius kpc" in searchPara:
             physicalSearch = True
             searchName = searchName + " physical"
@@ -275,7 +279,6 @@ class crossmatcher():
             faintLimit = False
 
         for row in objectList:
-
             cs = conesearcher(
                 log=self.log,
                 ra=row['ra'],
@@ -289,7 +292,6 @@ class crossmatcher():
                 physicalSearch=physicalSearch,
                 transType=searchPara["transient classification"]
             )
-
             message, xmObjects = cs.get()
 
             # DID WE SEARCH THE CATALOGUES CORRECTLY?
@@ -357,7 +359,7 @@ class crossmatcher():
                 # GRAB SOURCE TYPES
                 for xm in xmObjects:
                     subType = None
-                    # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
+                    # IF THERE'S A SUBTYPE - ADD IT
                     if self.colMaps[catalogueName]["subTypeColName"]:
                         # THE CATALOGUE HAS A REDSHIFT COLUMN
                         subType = xm[1][
@@ -369,6 +371,11 @@ class crossmatcher():
                     xm[1]['sourceType'] = self.colMaps[
                         catalogueName]["object_type"]
                     xm[1]["searchName"] = searchName
+                    xm[1]["sourceRa"] = xm[1][
+                        self.colMaps[catalogueName]["raColName"]]
+                    xm[1]["sourceDec"] = xm[1][
+                        self.colMaps[catalogueName]["decColName"]]
+                    xm[1]["originalSearchRadius"] = radius
 
                 matchedObjects.append(
                     [row, xmObjects, catalogueName, matchedType])
@@ -454,7 +461,9 @@ class crossmatcher():
         """ physical separation search
 
         **Key Arguments:**
-            # -
+            - ``objectRow`` -- transient to be crossmatched
+            - ``searchPara`` -- parameters of the search (from settings file)
+            - ``searchName`` -- the name of the search
 
         **Return:**
             - searchDone -- did search complete successfully
@@ -504,21 +513,28 @@ class crossmatcher():
                     physicalSeparation = row[1]["xmscale"] * row[0]
 
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
-                if row[1]["xmmajoraxis"] and row[0] < row[1]["xmmajoraxis"] * 1.5:
+                if row[1]["xmmajoraxis"] and row[0] < row[1]["xmmajoraxis"] * self.settings["galaxy radius stetch factor"]:
                     thisMatch = True
                     newSearchName = newSearchName + \
-                        " (within 1.5 * major axis)"
+                        " (within %s * major axis)" % (
+                            self.settings["galaxy radius stetch factor"],)
+                    newAngularSep = row[1][
+                        "xmmajoraxis"] * self.settings["galaxy radius stetch factor"]
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 elif row[1]["xmdirectdistancescale"] and physicalSeparation < physicalRadius:
                     thisMatch = True
                     newSearchName = newSearchName + " (direct distance)"
+                    newAngularSep = physicalRadius / \
+                        row[1]["xmdirectdistancescale"]
                 # NEW CHECK FOR A REDSHIFT DISTANCE
                 elif row[1]["xmscale"] and physicalSeparation < physicalRadius:
                     thisMatch = True
                     newSearchName = newSearchName + " (redshift distance)"
+                    newAngularSep = physicalRadius / row[1]["xmscale"]
 
                 if thisMatch == True:
                     row[1]["physical_separation_kpc"] = physicalSeparation
+                    row[1]["originalSearchRadius"] = newAngularSep
                     if physicalSeparation:
                         self.log.info(
                             "\t\tPhysical separation = %.2f kpc" % (physicalSeparation,))

@@ -1,2 +1,0 @@
-* 2015/09/18 16:26:14 - dryxPython.logs - ERROR (/Users/Dave/git_repos/neddy/neddy/_basesearch.py > _parse_the_ned_list_results > 355) - cound not strip ned key (None, ['109'])  
-* 2015/09/18 16:26:14 - dryxPython.logs - ERROR (/Users/Dave/git_repos/neddy/neddy/_basesearch.py > _parse_the_ned_list_results > 357) - could not strip ned key - failed with this error: 'NoneType' object has no attribute 'strip'   

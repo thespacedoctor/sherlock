@@ -52,6 +52,7 @@ class ned_conesearch(_base_importer):
         self.dbTableName = "tcs_cat_ned_stream"
 
         self._get_ned_names()
+        self._update_ned_query_history()
         self.databaseInsertbatchSize = 10000
         self.get_metadata_for_galaxies()
         self.add_htmids_to_database_table()
@@ -94,7 +95,7 @@ class ned_conesearch(_base_importer):
         tableName = self.dbTableName
 
         sqlQuery = u"""
-            select count(*) as count from %(tableName)s where raDeg is null and download_error != 1 
+            select count(*) as count from %(tableName)s where raDeg is null and download_error != 1
         """ % locals()
         rows = dms.execute_mysql_read_query(
             sqlQuery=sqlQuery,
@@ -216,7 +217,7 @@ class ned_conesearch(_base_importer):
         else:
             for thisId in self.theseIds:
                 sqlQuery = u"""
-                    update %(tableName)s set download_error = 1 where ned_name = "%(thisId)s" 
+                    update %(tableName)s set download_error = 1 where ned_name = "%(thisId)s"
                 """ % locals()
                 dms.execute_mysql_write_query(
                     sqlQuery=sqlQuery,
@@ -264,7 +265,7 @@ class ned_conesearch(_base_importer):
 
         names, searchParams = conesearch(
             log=self.log,
-            radiusArcsec=120,
+            radiusArcsec=self.settings["ned stream search radius arcec"],
             nearestOnly=False,
             unclassified=True,
             quiet=False,
@@ -287,6 +288,57 @@ class ned_conesearch(_base_importer):
             manyValueList=manyValueList)
 
         self.log.info('completed the ``_get_ned_names`` method')
+        return None
+
+    # use the tab-trigger below for new method
+    def _update_ned_query_history(
+            self):
+        """ update ned query history
+
+        **Key Arguments:**
+            - ``coordinateList`` - the coordinates that where queried
+
+        **Return:**
+            - None
+
+        **Todo**
+            - @review: when complete, clean _update_ned_query_history method
+            - @review: when complete add logging
+        """
+        self.log.info('starting the ``_update_ned_query_history`` method')
+
+        from dryxPython import mysql as dms
+
+        manyValueList = []
+        radius = self.settings["ned stream search radius arcec"]
+        from datetime import datetime, date, time
+        now = datetime.now()
+        now = now.strftime("%Y-%m-%d %H:%M:%S")
+
+        for i, coord in enumerate(self.coordinateList):
+            coord = coord.split(" ")
+            manyValueList.append((coord[0], coord[1], radius, now))
+
+        sqlQuery = u"""
+            insert into tcs_helper_ned_query_history (raDeg, decDeg, arcsecRadius, dateQueried) values (%s, %s, %s, %s)
+        """
+        dms.execute_mysql_write_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn,
+            log=self.log,
+            manyValueList=manyValueList
+        )
+
+        dms.add_HTMIds_to_mysql_tables.add_HTMIds_to_mysql_tables(
+            raColName="raDeg",
+            declColName="decDeg",
+            tableName="tcs_helper_ned_query_history",
+            dbConn=self.cataloguesDbConn,
+            log=self.log,
+            primaryIdColumnName="primaryId"
+        )
+
+        self.log.info('completed the ``_update_ned_query_history`` method')
         return None
 
     # use the tab-trigger below for new method
