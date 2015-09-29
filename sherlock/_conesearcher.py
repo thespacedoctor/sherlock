@@ -226,7 +226,7 @@ class conesearcher():
 
             # CALCULATE THE ANGULAR SEPARATION FOR EACH ROW
             for row in rows:
-                if self.tableName == 'tcs_guide_star_cat' or self.tableName == 'tcs_cat_v_guide_star_ps':
+                if "guide_star" in self.tableName:
                     # Guide star cat RA and DEC are in RADIANS
                     ra2 = math.degrees(
                         row[self.colMaps[self.tableName]["raColName"]])

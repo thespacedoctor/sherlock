@@ -1,0 +1,5 @@
+* 2015/09/22 13:03:56 - dryxPython.logs - ERROR (/Users/Dave/git_repos/dryxPython/dryxPython/mysql/__init__.py > execute_mysql_write_query > 162) - MySQL write command not executed for this query: << 
+                    update transientBucket  set sherlockClassification = "SN"
+                        where primaryKeyId  = 733230
+                 >>
+The error was: (1213, 'Deadlock found when trying to get lock; try restarting transaction')   
