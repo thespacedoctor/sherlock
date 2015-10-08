@@ -44,6 +44,7 @@ from sherlock.imports import milliquas as milliquasImporter
 from sherlock.imports import veron as veronImporter
 from sherlock.imports import tmp_sdss as sdssImporter
 from sherlock.imports import pessto_marshall_streams as pesstoImporter
+from sherlock.imports import ifs_galaxies as ifsImporter
 from sherlock.imports.ned_d import ned_d as nedImporter
 
 
@@ -158,9 +159,19 @@ def main(arguments=None):
                 catalogueName=cat_name
             )
             testObject.get()
+
     elif stream:
         if "pessto" in stream_name:
             testObject = pesstoImporter(
+                log=log,
+                settings=settings,
+                pathToDataFile=pathToDataFile,
+                version=cat_version,
+                catalogueName=cat_name
+            )
+            testObject.get()
+        if "ifs" in stream_name:
+            testObject = ifsImporter(
                 log=log,
                 settings=settings,
                 pathToDataFile=pathToDataFile,
