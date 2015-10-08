@@ -220,7 +220,7 @@ class update_wiki_pages():
         self.log.info('starting the ``_create_md_tables`` method')
 
         header = u"""
-| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Vizier</sub> | <sub>NED</sub> | <sub>Objects</sub> |
+| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Vizier</sub> | <sub>NED</sub> | <sub>Objects</sub> | <sub>Weight (1-10)</sub> |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |"""
 
         rows = u""
@@ -239,6 +239,7 @@ class update_wiki_pages():
             last_updated = ti["last_updated"]
             legacy_table = ti["legacy_table"]
             old_table_name = ti["old_table_name"]
+            weight = ti["object_type_accuracy"]
 
             number_of_rows = str(number_of_rows)
             thisLen = len(number_of_rows)
@@ -263,7 +264,7 @@ class update_wiki_pages():
                 in_ned = u""
 
             rows += u"""
-| <sub>%(table_name)s</sub> | <sub>[%(description)s](%(url)s)</sub> | <sub>[%(reference_text)s](%(reference_url)s)</sub> | <sub>%(newNumber)s</sub> | <sub>%(vizier_link)s</sub> | <sub>%(in_ned)s</sub> | <sub>%(object_types)s</sub> |""" % locals()
+| <sub>%(table_name)s</sub> | <sub>[%(description)s](%(url)s)</sub> | <sub>[%(reference_text)s](%(reference_url)s)</sub> | <sub>%(newNumber)s</sub> | <sub>%(vizier_link)s</sub> | <sub>%(in_ned)s</sub> | <sub>%(object_types)s</sub> | <sub>%(weight)s</sub> |""" % locals()
 
         self.mdTable = header + rows
 
