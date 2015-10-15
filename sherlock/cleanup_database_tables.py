@@ -200,6 +200,7 @@ class cleanup_database_tables():
         self._updated_row_counts_in_tcs_helper_catalogue_tables_info()
         self._clean_up_columns()
         self._update_tcs_helper_catalogue_views_info_with_new_views()
+        self._copy_helper_tables_to_transient_database()
 
         self.log.info('completed the ``get`` method')
         return cleanup_database_tables
@@ -506,6 +507,54 @@ class cleanup_database_tables():
 
         self.log.info(
             'completed the ``_update_tcs_helper_catalogue_views_info_with_new_views`` method')
+        return None
+
+    # use the tab-trigger below for new method
+    def _copy_helper_tables_to_transient_database(
+            self):
+        """ copy helper tables to transient database
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Todo**
+            - @review: when complete, clean _copy_helper_tables_to_transient_database method
+            - @review: when complete add logging
+        """
+        self.log.info(
+            'starting the ``_copy_helper_tables_to_transient_database`` method')
+
+        sqlQuery = u"""
+            DELETE FROM pessto_marshall.tcs_helper_catalogue_tables_info;
+            INSERT INTO pessto_marshall.tcs_helper_catalogue_tables_info SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info;
+        """ % locals()
+        dms.execute_mysql_write_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+            log=self.log,
+            quiet=False,
+            Force=False,  # do not exit code if error occurs
+            manyValueList=False  # a list of value tuples if executing more than one insert
+        )
+
+        sqlQuery = u"""
+            DELETE FROM pessto_marshall.tcs_helper_catalogue_views_info;
+            INSERT INTO pessto_marshall.tcs_helper_catalogue_views_info SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_views_info;
+        """ % locals()
+        dms.execute_mysql_write_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+            log=self.log,
+            quiet=False,
+            Force=False,  # do not exit code if error occurs
+            manyValueList=False  # a list of value tuples if executing more than one insert
+        )
+
+        self.log.info(
+            'completed the ``_copy_helper_tables_to_transient_database`` method')
         return None
 
     # use the tab-trigger below for new method

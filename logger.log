@@ -1,0 +1,20 @@
+* 2015/10/13 16:18:39 - py.warnings - WARNING (/Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py > wrap_socket > 100) - /Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py:100: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+  
+* 2015/10/13 20:03:20 - root - WARNING (/Users/Dave/git_repos/dryxPython/dryxPython/webcrawlers/__init__.py > _fetch > 64) - could not download https://thirdwaychurch.org/sermons/colossians-31-14/false.mp3 : HTTP Error 404: Not Found
+  
+* 2015/10/13 20:03:34 - py.warnings - WARNING (build/bdist.macosx-10.6-x86_64/egg/yaml/representer.py > represent_mapping > 120) - /Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/PyYAML-3.11-py2.7-macosx-10.6-x86_64.egg/yaml/representer.py:120: UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal
+  
+* 2015/10/13 20:10:19 - py.warnings - WARNING (/Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py > wrap_socket > 100) - /Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py:100: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+  
+* 2015/10/13 20:15:27 - py.warnings - WARNING (/Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py > wrap_socket > 100) - /Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py:100: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+  
+* 2015/10/13 20:18:53 - py.warnings - WARNING (/Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py > wrap_socket > 100) - /Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py:100: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+  
+* 2015/10/13 20:22:00 - dryxPython.logs - CRITICAL (/Users/Dave/git_repos/muppet/muppet/podcasts.py > download_new_videos > 441) - could not open the file /Users/Dave/Dropbox/IFTTT/vodcast-inbox/derren_brown_-_person_swap__october_5__2015_at_0929am.yaml.txt  
+* 2015/10/13 20:22:16 - py.warnings - WARNING (/Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py > wrap_socket > 100) - /Users/Dave/.virtualenvs/muppet/lib/python2.7/site-packages/urllib3/util/ssl_.py:100: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+  
