@@ -77,6 +77,7 @@ class classifier():
         return None
 
     # METHOD ATTRIBUTES
+
     def get(self):
         """perform the classifications
         """
@@ -239,6 +240,10 @@ class classifier():
                         crossmatch[k] = "null"
                 if "physical_separation_kpc" not in crossmatch.keys():
                     crossmatch["physical_separation_kpc"] = "null"
+                if "sourceFilter" not in crossmatch.keys():
+                    crossmatch["sourceFilter"] = "null"
+                if "sourceMagnitude" not in crossmatch.keys():
+                    crossmatch["sourceMagnitude"] = "null"
 
                 if crossmatch["sourceSubType"] and "null" not in str(crossmatch["sourceSubType"]):
                     crossmatch["sourceSubType"] = '"%s"' % (crossmatch[
@@ -251,8 +256,11 @@ class classifier():
                            transient_object_id,
                            catalogue_object_id,
                            catalogue_table_id,
+                           catalogue_view_id,
                            catalogue_object_ra,
                            catalogue_object_dec,
+                           catalogue_object_mag,
+                           catalogue_object_filter,
                            original_search_radius_arcsec,
                            separation,
                            z,
@@ -279,6 +287,9 @@ class classifier():
                            %s,
                            %s,
                            %s,
+                           "%s",
+                           %s,
+                           %s,
                            %s,
                            %s,
                            %s,
@@ -296,7 +307,7 @@ class classifier():
                            %s,
                            %s,
                            %s)
-                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
+                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["catalogueViewId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["sourceFilter"], crossmatch["sourceMagnitude"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
                 dms.execute_mysql_write_query(
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,
@@ -429,7 +440,7 @@ class classifier():
 
         # GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE
         sqlQuery = u"""
-            select view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id
+            select v.id as view_id, view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id
         """ % locals()
         rows = dms.execute_mysql_read_query(
             sqlQuery=sqlQuery,

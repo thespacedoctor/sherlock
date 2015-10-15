@@ -196,12 +196,15 @@ class crossmatcher():
                     thisObjectType = m[3]
                     catalogueTableId = self.colMaps[
                         catalogueTableName]["table_id"]
+                    catalogueViewId = self.colMaps[
+                        catalogueTableName]["view_id"]
                     for row in m[1]:
                         crossmatch = {}
                         crossmatch["transientObjectId"] = inputRow["id"]
                         crossmatch["catalogueObjectId"] = row[1][
                             self.colMaps[catalogueTableName]["objectNameColName"]]
                         crossmatch["catalogueTableId"] = catalogueTableId
+                        crossmatch["catalogueViewId"] = catalogueViewId
                         crossmatch["catalogueTableName"] = self.colMaps[
                             catalogueTableName]["table_name"]
                         crossmatch["catalogueViewName"] = self.colMaps[
@@ -272,11 +275,17 @@ class crossmatcher():
 
         # FAINT STAR EXTRAS
         try:
-            magColumn = searchPara["mag column"]
+            faintMagColumn = searchPara["faint mag column"]
             faintLimit = searchPara["faint limit"]
+            filterColumns = searchPara["filter names"]
+            magColumns = searchPara["mag columns"]
+            magErrColumns = searchPara["mag err columns"]
         except:
-            magColumn = False
+            faintMagColumn = False
             faintLimit = False
+            filterColumns = False
+            magColumns = False
+            magErrColumns = False
 
         for row in objectList:
             cs = conesearcher(
@@ -377,17 +386,31 @@ class crossmatcher():
                         self.colMaps[catalogueName]["decColName"]]
                     xm[1]["originalSearchRadius"] = radius
 
+                    if filterColumns:
+                        xm[1]["sourceFilter"] = filterColumns[0]
+                        xm[1]["sourceMagnitude"] = xm[1][magColumns[0]]
+                        error = 10.
+                        for f, m, e in zip(filterColumns, magColumns, magErrColumns):
+                            if xm[1][e] < error:
+                                error = xm[1][e]
+                                xm[1]["sourceFilter"] = f
+                                xm[1]["sourceMagnitude"] = xm[1][m]
+                    else:
+                        xm[1]["sourceFilter"] = None
+                        xm[1]["sourceMagnitude"] = None
+
                 matchedObjects.append(
                     [row, xmObjects, catalogueName, matchedType])
 
         # FAINT STAR CUTS
-        if searchDone and matchedObjects and magColumn:
+        if searchDone and matchedObjects and faintMagColumn:
             faintStarMatches = []
             matchSubset = []
             for row in matchedObjects[0][1]:
-                rMag = row[1][magColumn]
+                rMag = row[1][faintMagColumn]
                 if rMag and rMag > faintLimit:
                     matchSubset.append(row)
+
             if matchSubset:
                 faintStarMatches.append(
                     [matchedObjects[0][0], matchSubset, matchedObjects[0][2], matchedObjects[0][3]])
