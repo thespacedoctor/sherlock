@@ -53,6 +53,7 @@ class _base_importer():
         - ``version`` -- version of the _base_importer catalogue
         - ``catalogueName`` -- name of the catalogue
         - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
+        - ``cataloguesDbConn`` -- catalogues database connection (default false - will be setup here if false)
 
 
     **Todo**
@@ -71,7 +72,8 @@ class _base_importer():
             pathToDataFile=False,
             version=False,
             catalogueName="",
-            coordinateList=[]
+            coordinateList=[],
+            cataloguesDbConn=False
     ):
         self.log = log
         log.debug("instansiating a new '_base_importer' object")
@@ -80,16 +82,19 @@ class _base_importer():
         self.version = version
         self.catalogueName = catalogueName
         self.coordinateList = coordinateList
+        self.cataloguesDbConn = cataloguesDbConn
+
         # xt-self-arg-tmpx
 
         # INITIAL ACTIONS
         # SETUP DATABASE CONNECTIONS
-        from sherlock import database
-        db = database(
-            log=self.log,
-            settings=self.settings
-        )
-        self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
+        if cataloguesDbConn == False:
+            from sherlock import database
+            db = database(
+                log=self.log,
+                settings=self.settings
+            )
+            self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
 
         if pathToDataFile:
             pathToReadFile = pathToDataFile
