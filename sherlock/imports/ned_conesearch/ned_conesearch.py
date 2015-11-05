@@ -163,9 +163,6 @@ class ned_conesearch(_base_importer):
         from datetime import datetime, date, time
         tableName = self.dbTableName
 
-        print "HERE!"
-        sys.exit(0)
-
         # QUERY NED WITH BATCH
         totalCount = len(self.theseIds)
         print "requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals()
