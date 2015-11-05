@@ -30,6 +30,9 @@ from dryxPython import commonutils as dcu
 from dryxPython.projectsetup import setup_main_clutil
 from dryxPython import mysql as dms
 from sherlock.imports.ned_conesearch import ned_conesearch
+from HMpTy import htm
+import numpy as np
+from cStringIO import StringIO
 
 
 class update_ned_stream():
@@ -95,9 +98,14 @@ class update_ned_stream():
             thisList = str(i["ra"]) + " " + str(i["dec"])
             coordinateList.append(thisList)
 
+        initialListLen = len(coordinateList)
         coordinateList = self._remove_previous_ned_queries(
             coordinateList=coordinateList
         )
+        newListLen = len(coordinateList)
+        previousSearches = initialListLen - newListLen
+
+        print "%(newListLen)s/%(initialListLen)s coordinate sets need an inital NED conesearch to find matched source names (%(previousSearches)s coordinate sets found in search history)" % locals()
 
         this = ned_conesearch(
             log=self.log,
@@ -124,37 +132,51 @@ class update_ned_stream():
         self.log.info('starting the ``_remove_previous_ned_queries`` method')
 
         # IMPORTS
-        import htmCircle
         import math
         from dryxPython import astrotools as dat
         from datetime import datetime, date, time, timedelta
 
-        # 1 DEGREE QUERY RADIUS
-        radius = 60. * 60.
+        print "Removing transient/subdisk areas that have had previous searches performed"
+
+        # VARAIBLES
+        self.mesh16 = htm.HTM(16)
         updatedCoordinateList = []
 
-        # FOR EACH TRANSIENT IN COORDINATE LIST
+        #  FIND THE LARGE NED QUERY DONE SO FAR FROM DATABASE
+        sqlQuery = u"""
+            select arcsecRadius from tcs_helper_ned_query_history order by arcsecRadius desc limit 1
+        """ % locals()
+        rows = dms.execute_mysql_read_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn,
+            log=self.log
+        )
+        largestNedQueryDeg = rows[0]["arcsecRadius"] / 3600.
+
+        # FOR EACH TRANSIENT IN COORDINATE LIST ...
+        totalCount = len(coordinateList)
+        count = 0
         for c in coordinateList:
+            count += 1
+            if count > 1:
+                # Cursor up one line and clear line
+                sys.stdout.write("\x1b[1A\x1b[2K")
+            if count > totalCount:
+                count = totalCount
+            percent = (float(count) / float(totalCount)) * 100.
+            print "  %(count)s / %(totalCount)s (%(percent)1.1f%%) transients/subdisks checked" % locals()
             this = c.split(" ")
             raDeg = float(this[0])
             decDeg = float(this[1])
 
             # BUILD WHERE SECTION OF CLAUSE
-            htmWhereClause = htmCircle.htmCircleRegion(
-                16, raDeg, decDeg, float(radius))
-
-            # CONVERT RA AND DEC TO CARTESIAN COORDINATES
-            ra = math.radians(raDeg)
-            dec = math.radians(decDeg)
-            cos_dec = math.cos(dec)
-            cx = math.cos(ra) * cos_dec
-            cy = math.sin(ra) * cos_dec
-            cz = math.sin(dec)
-            cartesians = (cx, cy, cz)
-
-            # CREATE CARTESIAN SECTION OF QUERY
-            cartesianClause = 'and (cx * %.17f + cy * %.17f + cz * %.17f >= cos(%.17f))' % (
-                cartesians[0], cartesians[1], cartesians[2], math.radians(radius / 3600.0))
+            # CREATE AN ARRAY OF RELEVANT HTMIDS AND FIND MAX AND MIN
+            thisArray = self.mesh16.intersect(
+                raDeg, decDeg, largestNedQueryDeg, inclusive=True)
+            hmax = thisArray.max()
+            hmin = thisArray.min()
+            htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
+            )
 
             # CALCULATE THE OLDEST RESULTS LIMIT
             now = datetime.now()
@@ -163,8 +185,8 @@ class update_ned_stream():
             refreshLimit = now - td
             refreshLimit = refreshLimit.strftime("%Y-%m-%d %H:%M:%S")
 
-            # FINALLY BUILD THE FULL QUERY AND HIT DATABASE
-            sqlQuery = "select * from tcs_helper_ned_query_history %(htmWhereClause)s %(cartesianClause)s and dateQueried > '%(refreshLimit)s'" % locals(
+            # DO A LARGE FIRST SWEEP FOR PREVIOUS SEARCHES - BEFORE PINPOINTING
+            sqlQuery = "select * from tcs_helper_ned_query_history %(htmWhereClause)s and dateQueried > '%(refreshLimit)s'" % locals(
             )
             rows = dms.execute_mysql_read_query(
                 sqlQuery=sqlQuery,
@@ -172,21 +194,36 @@ class update_ned_stream():
                 log=self.log
             )
 
-            # DETERMINE WHICH COORDINATES REQUIRE A NED QUERY
-            match = False
+            nedRas = []
+            nedDecs = []
+            nedRadii = []
             for row in rows:
-                raStream = row["raDeg"]
-                decStream = row["decDeg"]
-                radiusStream = row["arcsecRadius"]
-                dateStream = row["dateQueried"]
-                angularSeparation, northSep, eastSep = dat.get_angular_separation(
-                    log=self.log,
-                    ra1=raDeg,
-                    dec1=decDeg,
-                    ra2=raStream,
-                    dec2=decStream
-                )
-                if angularSeparation + self.settings["first pass ned search radius arcec"] < radiusStream:
+                nedRas.append(row["raDeg"])
+                nedDecs.append(row["decDeg"])
+                nedRadii.append(row["arcsecRadius"])
+
+            # CREATE TWO ARRAYS OF RA,DEC (1. SUBDISKS & 2. NED PREVIOUS QUERY
+            # RETURNS)
+            tRa = np.array([raDeg])
+            tDec = np.array([decDeg])
+            raList = np.array(nedRas)
+            decList = np.array(nedDecs)
+
+            indexList1, indexList2, separation = self.mesh16.match(
+                tRa, tDec, raList, decList, largestNedQueryDeg, maxmatch=0)
+            match = False
+            for i in xrange(indexList1.size):
+                # print i
+                # print tRa[indexList1[i]]
+                # print tDec[indexList1[i]]
+                # print "    R: " + str(raList[indexList2[i]])
+                # print "    D: " + str(decList[indexList2[i]])
+                # print "    S: " + str(separation[i] * 3600.)
+                # print "    PREVIOUS NED RADIUS:" + str(nedRadii[indexList2[i]])
+                # print "    QUERIED NEW SEARCH RADIUS:" + str(self.settings["first pass ned search radius arcec"])
+                # print separation[i] * 3600. + self.settings["first pass ned
+                # search radius arcec"]
+                if separation[i] * 3600. + self.settings["first pass ned search radius arcec"] < nedRadii[indexList2[i]]:
                     match = True
 
             if match == False:

@@ -66,8 +66,10 @@ class ned_conesearch(_base_importer):
         """
         self.log.info('starting the ``get_metadata_for_galaxies`` method')
 
+        self.batchSize = 5000.
+
         total, batches = self._count_galaxies_requiring_metadata()
-        print "%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals()
+        print "%(total)s NED sources require metadata. Need to send %(batches)s batch requests to NED." % locals()
 
         totalBatches = self.batches
         thisCount = 0
@@ -75,9 +77,10 @@ class ned_conesearch(_base_importer):
         # FOR EACH BATCH, GET THE GALAXY IDs, QUERY NED AND UPDATE THE DATABASE
         while self.total:
             thisCount += 1
-            self._get_3000_galaxies_needing_metadata()
+            self._get_single_batch_of_galaxies_needing_metadata()
             self._query_ned_and_add_results_to_database(thisCount)
-            self._count_galaxies_requiring_metadata()
+            total, batches = self._count_galaxies_requiring_metadata()
+            print "%(total)s NED sources still require metadata." % locals()
 
         self.log.info('completed the ``get_metadata_for_galaxies`` method')
         return None
@@ -103,7 +106,7 @@ class ned_conesearch(_base_importer):
             log=self.log
         )
         self.total = rows[0]["count"]
-        self.batches = int(self.total / 3000.) + 1
+        self.batches = int(self.total / self.batchSize) + 1
 
         if self.total == 0:
             self.batches = 0
@@ -112,22 +115,26 @@ class ned_conesearch(_base_importer):
             'completed the ``_count_galaxies_requiring_metadata`` method')
         return self.total, self.batches
 
-    def _get_3000_galaxies_needing_metadata(
+    def _get_single_batch_of_galaxies_needing_metadata(
             self):
-        """ get 3000 galaxies needing metadata
+        """ get batch of galaxies needing metadata
 
         **Return:**
             - ``len(self.theseIds)`` -- the number of NED IDs returned
         """
         self.log.info(
-            'starting the ``_get_3000_galaxies_needing_metadata`` method')
+            'starting the ``_get_single_batch_of_galaxies_needing_metadata`` method')
 
+        bs = int(self.batchSize)
         tableName = self.dbTableName
+
+        print "Requesting the next %(bs)s sources requiring metadata from the %(tableName)s table" % locals()
 
         # SELECT THE DATA FROM NED TABLE
         self.theseIds = []
+
         sqlQuery = u"""
-            select ned_name from %(tableName)s where raDeg is null and download_error != 1 limit 3000;
+            select ned_name from %(tableName)s where raDeg is null and download_error != 1 limit %(bs)s;
         """ % locals()
         rows = dms.execute_mysql_read_query(
             sqlQuery=sqlQuery,
@@ -138,7 +145,7 @@ class ned_conesearch(_base_importer):
             self.theseIds.append(row["ned_name"])
 
         self.log.info(
-            'completed the ``_get_3000_galaxies_needing_metadata`` method')
+            'completed the ``_get_single_batch_of_galaxies_needing_metadata`` method')
 
         return len(self.theseIds)
 
@@ -153,7 +160,11 @@ class ned_conesearch(_base_importer):
         self.log.info(
             'starting the ``_query_ned_and_add_results_to_database`` method')
 
+        from datetime import datetime, date, time
         tableName = self.dbTableName
+
+        print "HERE!"
+        sys.exit(0)
 
         # QUERY NED WITH BATCH
         totalCount = len(self.theseIds)
@@ -164,7 +175,8 @@ class ned_conesearch(_base_importer):
             quiet=True
         )
         results = search.get()
-        print "results returned from ned -- starting to add to database" % locals()
+        numResults = len(results)
+        print "%(numResults)s results returned from ned -- starting to add to database ..." % locals()
 
         # CLEAN THE RETURNED DATA AND UPDATE DATABASE
         totalCount = len(results)
@@ -209,11 +221,20 @@ class ned_conesearch(_base_importer):
         sqlQuery = sqlQuery.replace('"null"', 'null')
 
         if len(sqlQuery) != 0:
+
+            startTime = dcu.get_now_sql_datetime()
+            print "Executing the sql query ..."
             rows = dms.execute_mysql_read_query(
                 sqlQuery=sqlQuery,
                 dbConn=self.cataloguesDbConn,
                 log=self.log
             )
+            endTime = dcu.get_now_sql_datetime()
+            runningTime = dcu.calculate_time_difference(startTime, endTime)
+            percent = (float(count) / float(totalCount)) * 100.
+            # sys.stdout.write("\x1b[1A")
+            print "%(count)s / %(totalCount)s (%(percent)1.1f%%) message" % locals()
+            print "... and finished (time taken: %(runningTime)s) " % locals()
         else:
             for thisId in self.theseIds:
                 sqlQuery = u"""
@@ -263,6 +284,10 @@ class ned_conesearch(_base_importer):
 
         tableName = self.dbTableName
 
+        numSearches = len(self.coordinateList)
+        if numSearches:
+            print "Requesting the names of the NED sources found within %(numSearches)s conesearch areas" % locals()
+
         names, searchParams = conesearch(
             log=self.log,
             radiusArcsec=self.settings["ned stream search radius arcec"],
@@ -277,6 +302,11 @@ class ned_conesearch(_base_importer):
         manyValueList = []
         for n in names:
             manyValueList.append((n,))
+
+        numResults = len(manyValueList)
+        if numSearches:
+            print "Inserting the names of the %(numResults)s matched NED sources into `tcs_cat_ned_stream` table" % locals()
+            print ""
 
         sqlQuery = u"""
             insert ignore into tcs_cat_ned_stream (ned_name, dateCreated) values (%s, now())
@@ -318,6 +348,10 @@ class ned_conesearch(_base_importer):
         for i, coord in enumerate(self.coordinateList):
             coord = coord.split(" ")
             manyValueList.append((coord[0], coord[1], radius, now))
+
+        num = len(self.coordinateList)
+        if num:
+            print "Updating the `tcs_helper_ned_query_history` for the %(num)s new initial conesearches just performed" % locals()
 
         sqlQuery = u"""
             insert into tcs_helper_ned_query_history (raDeg, decDeg, arcsecRadius, dateQueried) values (%s, %s, %s, %s)
