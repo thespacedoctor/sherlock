@@ -189,7 +189,7 @@ class classifier():
             try:
                 thisId = int(transientObjectId)
             except:
-                thisId = '"%(transientObjectId)s"' % locals()
+                thisId = transientObjectId
 
             sqlQuery = u"""
                   delete from tcs_cross_matches where transient_object_id = %(thisId)s
