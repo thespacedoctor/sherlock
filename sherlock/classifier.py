@@ -189,7 +189,7 @@ class classifier():
             try:
                 thisId = int(transientObjectId)
             except:
-                thisId = transientObjectId
+                thisId = '"%(transientObjectId)s"' % locals()
 
             sqlQuery = u"""
                   delete from tcs_cross_matches where transient_object_id = %(thisId)s
@@ -262,20 +262,19 @@ class classifier():
             for crossmatch in c["crossmatches"]:
                 for k, v in crossmatch.iteritems():
                     if v == None:
-                        crossmatch[k] = "null"
+                        crossmatch[k] = None
                 if "physical_separation_kpc" not in crossmatch.keys():
-                    crossmatch["physical_separation_kpc"] = "null"
+                    crossmatch["physical_separation_kpc"] = None
                 if "sourceFilter" not in crossmatch.keys():
-                    crossmatch["sourceFilter"] = "null"
+                    crossmatch["sourceFilter"] = None
                 if "sourceMagnitude" not in crossmatch.keys():
-                    crossmatch["sourceMagnitude"] = "null"
+                    crossmatch["sourceMagnitude"] = None
 
                 if crossmatch["sourceSubType"] and "null" not in str(crossmatch["sourceSubType"]):
-                    crossmatch["sourceSubType"] = '"%s"' % (crossmatch[
-                        "sourceSubType"],)
+                    pass
                 else:
-                    crossmatch["sourceSubType"] = "null"
-                theseValues = (thisId, crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["catalogueViewId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["sourceFilter"], crossmatch["sourceMagnitude"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch[
+                    crossmatch["sourceSubType"] = None
+                theseValues = (transientObjectId, crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["catalogueViewId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["sourceFilter"], crossmatch["sourceMagnitude"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch[
                                "distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
                 manyValueList.append(theseValues)
 
