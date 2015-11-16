@@ -111,6 +111,8 @@ class database():
                         self.log.error(
                             'cound not setup tunnel to remote datbase' % locals())
                         sys.exit(0)
+        else:
+            sshPort = 3306
 
         # SETUP A DATABASE CONNECTION FOR THE STATIC CATALOGUES
         host = self.settings["database settings"]["static catalogues"]["host"]
