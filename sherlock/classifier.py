@@ -186,8 +186,11 @@ class classifier():
             transientObjectId = c["id"]
 
             # DELETE PREVIOUS CROSSMATCHES
-            if not isinstance(transientObjectId, int):
+            try:
+                thisId = int(transientObjectId)
+            else:
                 thisId = '"%(transientObjectId)s"' % locals()
+
             sqlQuery = u"""
                   delete from tcs_cross_matches where transient_object_id = %(thisId)s
             """ % locals()
