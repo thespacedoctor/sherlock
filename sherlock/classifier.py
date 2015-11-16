@@ -188,7 +188,7 @@ class classifier():
             # DELETE PREVIOUS CROSSMATCHES
             try:
                 thisId = int(transientObjectId)
-            else:
+            except:
                 thisId = '"%(transientObjectId)s"' % locals()
 
             sqlQuery = u"""
