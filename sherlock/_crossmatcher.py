@@ -244,7 +244,7 @@ class crossmatcher():
                             crossmatch["physical_separation_kpc"] = "null"
                         crossmatches.append(crossmatch)
 
-            self.log.info('crossmatches: %(crossmatches)s' % locals())
+            self.log.debug('crossmatches: %(crossmatches)s' % locals())
 
             classification = {'id': transient['id'], 'object_classification_old': transient[
                 'object_classification'], 'object_classification_new': objectType, 'crossmatches': crossmatches}
