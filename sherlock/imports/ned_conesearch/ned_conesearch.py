@@ -306,7 +306,7 @@ class ned_conesearch(_base_importer):
             print ""
 
         sqlQuery = u"""
-            insert ignore into tcs_cat_ned_stream (ned_name, dateCreated) values (%s, now())
+            INSERT DELAYED ignore into tcs_cat_ned_stream (ned_name, dateCreated) values (%s, now())
         """
         dms.execute_mysql_write_query(
             sqlQuery=sqlQuery,
@@ -351,7 +351,7 @@ class ned_conesearch(_base_importer):
             print "Updating the `tcs_helper_ned_query_history` for the %(num)s new initial conesearches just performed" % locals()
 
         sqlQuery = u"""
-            insert into tcs_helper_ned_query_history (raDeg, decDeg, arcsecRadius, dateQueried) values (%s, %s, %s, %s)
+            INSERT DELAYED into tcs_helper_ned_query_history (raDeg, decDeg, arcsecRadius, dateQueried) values (%s, %s, %s, %s)
         """
         dms.execute_mysql_write_query(
             sqlQuery=sqlQuery,

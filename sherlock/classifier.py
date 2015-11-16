@@ -186,9 +186,11 @@ class classifier():
             transientObjectId = c["id"]
 
             # DELETE PREVIOUS CROSSMATCHES
+            if not isinstance(transientObjectId, int):
+                thisId = '"%(transientObjectId)s"' % locals()
             sqlQuery = u"""
-                    delete from tcs_cross_matches where transient_object_id = %(transientObjectId)s
-                """ % locals()
+                  delete from tcs_cross_matches where transient_object_id = %(thisId)s
+            """ % locals()
             dms.execute_mysql_write_query(
                 sqlQuery=sqlQuery,
                 dbConn=self.transientsDbConn,
@@ -196,25 +198,8 @@ class classifier():
             )
 
             # INSERT NEW CROSSMATCHES
-            for crossmatch in c["crossmatches"]:
-                for k, v in crossmatch.iteritems():
-                    if v == None:
-                        crossmatch[k] = "null"
-                if "physical_separation_kpc" not in crossmatch.keys():
-                    crossmatch["physical_separation_kpc"] = "null"
-                if "sourceFilter" not in crossmatch.keys():
-                    crossmatch["sourceFilter"] = "null"
-                if "sourceMagnitude" not in crossmatch.keys():
-                    crossmatch["sourceMagnitude"] = "null"
-
-                if crossmatch["sourceSubType"] and "null" not in str(crossmatch["sourceSubType"]):
-                    crossmatch["sourceSubType"] = '"%s"' % (crossmatch[
-                        "sourceSubType"],)
-                else:
-                    crossmatch["sourceSubType"] = "null"
-
-                sqlQuery = u"""
-                        insert into tcs_cross_matches (
+            sqlQuery = u"""
+                        INSERT DELAYED into tcs_cross_matches (
                            transient_object_id,
                            catalogue_object_id,
                            catalogue_table_id,
@@ -269,15 +254,39 @@ class classifier():
                            %s,
                            %s,
                            %s)
-                        """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["catalogueViewId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["sourceFilter"], crossmatch["sourceMagnitude"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
-                dms.execute_mysql_write_query(
-                    sqlQuery=sqlQuery,
-                    dbConn=self.transientsDbConn,
-                    log=self.log
-                )
+                        """
+            manyValueList = []
+            for crossmatch in c["crossmatches"]:
+                for k, v in crossmatch.iteritems():
+                    if v == None:
+                        crossmatch[k] = "null"
+                if "physical_separation_kpc" not in crossmatch.keys():
+                    crossmatch["physical_separation_kpc"] = "null"
+                if "sourceFilter" not in crossmatch.keys():
+                    crossmatch["sourceFilter"] = "null"
+                if "sourceMagnitude" not in crossmatch.keys():
+                    crossmatch["sourceMagnitude"] = "null"
+
+                if crossmatch["sourceSubType"] and "null" not in str(crossmatch["sourceSubType"]):
+                    crossmatch["sourceSubType"] = '"%s"' % (crossmatch[
+                        "sourceSubType"],)
+                else:
+                    crossmatch["sourceSubType"] = "null"
+                theseValues = (thisId, crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["catalogueViewId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["sourceFilter"], crossmatch["sourceMagnitude"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch[
+                               "distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
+                manyValueList.append(theseValues)
+
+            dms.execute_mysql_write_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.transientsDbConn,
+                log=self.log,
+                manyValueList=manyValueList
+            )
 
         for ob in self.transientsMetadataList:
             transId = ob["id"]
+            if not isinstance(transId, int):
+                transId = '"%(transId)s"' % locals()
             name = ob["name"]
 
             sqlQuery = u"""
@@ -393,34 +402,40 @@ class classifier():
 
         sqlQuery = u"""
             CREATE TABLE `tcs_cross_matches` (
-              `transient_object_id` bigint(20) unsigned NOT NULL,
-              `catalogue_object_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-              `catalogue_table_id` smallint(5) unsigned NOT NULL,
-              `separation` double DEFAULT NULL,
-              `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-              `z` double DEFAULT NULL,
-              `scale` double DEFAULT NULL,
-              `distance` double DEFAULT NULL,
-              `distance_modulus` double DEFAULT NULL,
-              `association_type` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `date_added` datetime DEFAULT NULL,
-              `physical_separation_kpc` double DEFAULT NULL,
-              `catalogue_object_type` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `catalogue_object_subtype` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `association_rank` int(11) DEFAULT NULL,
-              `catalogue_table_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `catalogue_view_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `rank` int(11) DEFAULT NULL,
-              `search_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `major_axis_arcsec` double DEFAULT NULL,
-              `direct_distance` double DEFAULT NULL,
-              `direct_distance_scale` double DEFAULT NULL,
-              `direct_distance_modulus` double DEFAULT NULL,
-              PRIMARY KEY (`id`),
-              KEY `key_transient_object_id` (`transient_object_id`),
-              KEY `key_catalogue_object_id` (`catalogue_object_id`),
-              KEY `idx_separation` (`separation`)
-            ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+                `transient_object_id` bigint(20) unsigned NOT NULL,
+                `catalogue_object_id` varchar(30) NOT NULL,
+                `catalogue_table_id` smallint(5) unsigned NOT NULL,
+                `separation` double DEFAULT NULL,
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `z` double DEFAULT NULL,
+                `scale` double DEFAULT NULL,
+                `distance` double DEFAULT NULL,
+                `distance_modulus` double DEFAULT NULL,
+                `association_type` varchar(45) DEFAULT NULL,
+                `date_added` datetime DEFAULT NULL,
+                `physical_separation_kpc` double DEFAULT NULL,
+                `catalogue_object_type` varchar(45) DEFAULT NULL,
+                `catalogue_object_subtype` varchar(45) DEFAULT NULL,
+                `association_rank` int(11) DEFAULT NULL,
+                `catalogue_table_name` varchar(100) DEFAULT NULL,
+                `catalogue_view_name` varchar(100) DEFAULT NULL,
+                `rank` int(11) DEFAULT NULL,
+                `search_name` varchar(100) DEFAULT NULL,
+                `major_axis_arcsec` double DEFAULT NULL,
+                `direct_distance` double DEFAULT NULL,
+                `direct_distance_scale` double DEFAULT NULL,
+                `direct_distance_modulus` double DEFAULT NULL,
+                `catalogue_object_ra` double DEFAULT NULL,
+                `catalogue_object_dec` double DEFAULT NULL,
+                `original_search_radius_arcsec` double DEFAULT NULL,
+                `catalogue_view_id` int(11) DEFAULT NULL,
+                `catalogue_object_mag` float DEFAULT NULL,
+                `catalogue_object_filter` varchar(10) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `key_transient_object_id` (`transient_object_id`),
+                KEY `key_catalogue_object_id` (`catalogue_object_id`),
+                KEY `idx_separation` (`separation`)
+              ) ENGINE=MyISAM AUTO_INCREMENT=419280 DEFAULT CHARSET=latin1;
         """ % locals()
         try:
             dms.execute_mysql_write_query(
