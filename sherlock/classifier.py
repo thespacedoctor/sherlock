@@ -199,7 +199,7 @@ class classifier():
 
             # INSERT NEW CROSSMATCHES
             sqlQuery = u"""
-                        INSERT DELAYED into tcs_cross_matches (
+                        INSERT into tcs_cross_matches (
                            transient_object_id,
                            catalogue_object_id,
                            catalogue_table_id,

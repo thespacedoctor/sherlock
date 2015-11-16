@@ -329,7 +329,7 @@ class cleanup_database_tables():
                 thisTableName = tb["TABLE_NAME"]
                 print "`%(thisTableName)s` added to `tcs_helper_catalogue_tables_info` database table" % locals()
                 sqlQuery = u"""
-                    INSERT DELAYED INTO tcs_helper_catalogue_tables_info (
+                    INSERT INTO tcs_helper_catalogue_tables_info (
                             id,
                             table_name
                         )
@@ -490,7 +490,7 @@ class cleanup_database_tables():
                 thisViewName = tb["TABLE_NAME"]
                 print "`%(thisViewName)s` added to `tcs_helper_catalogue_views_info` database table" % locals()
                 sqlQuery = u"""
-                    INSERT DELAYED INTO tcs_helper_catalogue_views_info (
+                    INSERT INTO tcs_helper_catalogue_views_info (
                             id,
                             view_name
                         )
@@ -529,7 +529,7 @@ class cleanup_database_tables():
 
         sqlQuery = u"""
             DELETE FROM pessto_marshall.tcs_helper_catalogue_tables_info;
-            INSERT DELAYED INTO pessto_marshall.tcs_helper_catalogue_tables_info SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info;
+            INSERT INTO pessto_marshall.tcs_helper_catalogue_tables_info SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info;
         """ % locals()
         dms.execute_mysql_write_query(
             sqlQuery=sqlQuery,
@@ -542,7 +542,7 @@ class cleanup_database_tables():
 
         sqlQuery = u"""
             DELETE FROM pessto_marshall.tcs_helper_catalogue_views_info;
-            INSERT DELAYED INTO pessto_marshall.tcs_helper_catalogue_views_info SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_views_info;
+            INSERT INTO pessto_marshall.tcs_helper_catalogue_views_info SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_views_info;
         """ % locals()
         dms.execute_mysql_write_query(
             sqlQuery=sqlQuery,
