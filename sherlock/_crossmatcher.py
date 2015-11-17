@@ -259,6 +259,10 @@ class crossmatcher():
 
         from sherlock import conesearcher
 
+        message = "  Starting `%(searchName)s` catalogue conesearch" % locals(
+        )
+        print message
+
         # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
         if "physical radius kpc" in searchPara:
             physicalSearch = True
@@ -289,7 +293,16 @@ class crossmatcher():
             magColumns = False
             magErrColumns = False
 
+        totalCount = len(objectList)
+        count = 0
         for row in objectList:
+            count += 1
+            if count > 1:
+                # Cursor up one line and clear line
+                sys.stdout.write("\x1b[1A\x1b[2K")
+            if count > totalCount:
+                count = totalCount
+            percent = (float(count) / float(totalCount)) * 100.
             cs = conesearcher(
                 log=self.log,
                 ra=row['ra'],
@@ -304,6 +317,8 @@ class crossmatcher():
                 transType=searchPara["transient classification"]
             )
             message, xmObjects = cs.get()
+            resultLen = len(xmObjects)
+            print "  %(count)s / %(totalCount)s (%(percent)1.1f%%) transients conesearched against with %(searchName)s - %(resultLen)s sources matched" % locals()
 
             # DID WE SEARCH THE CATALOGUES CORRECTLY?
             if message and (message.startswith('Error') or 'not recognised' in message):
@@ -442,6 +457,10 @@ class crossmatcher():
         if "match nearest source only" in searchPara and searchPara["match nearest source only"] == True and len(matchedObjects):
             matchedObjects = [[matchedObjects[0][0], [
                 matchedObjects[0][1][0]], matchedObjects[0][2], matchedObjects[0][3]]]
+
+        message = "  Finished `%(searchName)s` catalogue conesearch" % locals(
+        )
+        print message
 
         return searchDone, matchedObjects
 
