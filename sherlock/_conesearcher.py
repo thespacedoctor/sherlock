@@ -145,6 +145,8 @@ class conesearcher():
             )
             results += resultSet
             offset += returnLimit
+            returnLen = len(resultSet)
+            print """    %(resultLen)s/%(returnLen)s results matched""" % locals()
 
         # SORT BY SEPARATION
         from operator import itemgetter
@@ -168,7 +170,8 @@ class conesearcher():
         hmax = thisArray.max()
         hmin = thisArray.min()
         ratio = float(hmax - hmin + 1) / float(thisArray.size)
-        if ratio < 100 or thisArray.size > 2000:
+        # if ratio < 100 or thisArray.size > 2000:
+        if True == True:
             htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
             )
         else:
@@ -248,7 +251,6 @@ class conesearcher():
 
         results = []
         # print "START DB"
-        print self.sqlQuery + sqlQueryExtra
         rows = dms.execute_mysql_read_query(
             sqlQuery=self.sqlQuery + sqlQueryExtra,
             dbConn=self.dbConn,
@@ -287,8 +289,10 @@ class conesearcher():
             decList = np.array(decList)
             indexList1, indexList2, separation = self.mesh16.match(
                 tRa, tDec, raList, decList, self.radius / 3600., maxmatch=0)
-            for i in xrange(indexList1.size):
-                results.append([separation[i] * 3600., rows[i]])
+            for i in range(indexList1.size):
+                results.append([separation[i] * 3600., rows[indexList2[i]]])
+            # for i in xrange(raList.size):
+            #     results.append([0.1 * 3600., rows[i]])
 
             # IF NEAREST ONLY REQUESTED
             if self.nearestOnly == True:

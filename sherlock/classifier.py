@@ -302,7 +302,7 @@ class classifier():
 
             rankScores = []
             for row in rows:
-                if row["separation"] < 2. or (row["physical_separation_kpc"] != "null" and row["physical_separation_kpc"] < 20. and row["association_type"] == "SN") or (row["major_axis_arcsec"] != "null" and row["association_type"] == "SN"):
+                if row["separation"] < 2. or (row["physical_separation_kpc"] != None and row["physical_separation_kpc"] < 20. and row["association_type"] == "SN") or (row["major_axis_arcsec"] != "null" and row["association_type"] == "SN"):
                     # print row["separation"]
                     # print row["physical_separation_kpc"]
                     # print row["major_axis_arcsec"]

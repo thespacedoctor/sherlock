@@ -241,10 +241,10 @@ class crossmatcher():
                             crossmatch["physical_separation_kpc"] = row[
                                 1]["physical_separation_kpc"]
                         else:
-                            crossmatch["physical_separation_kpc"] = "null"
+                            crossmatch["physical_separation_kpc"] = None
                         crossmatches.append(crossmatch)
 
-            self.log.info('crossmatches: %(crossmatches)s' % locals())
+            # self.log.info('crossmatches: %(crossmatches)s' % locals())
 
             classification = {'id': transient['id'], 'object_classification_old': transient[
                 'object_classification'], 'object_classification_new': objectType, 'crossmatches': crossmatches}
