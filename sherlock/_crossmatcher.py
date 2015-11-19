@@ -261,7 +261,7 @@ class crossmatcher():
 
         message = "  Starting `%(searchName)s` catalogue conesearch" % locals(
         )
-        print message
+        # print message
 
         # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
         if "physical radius kpc" in searchPara:
@@ -318,7 +318,9 @@ class crossmatcher():
             )
             message, xmObjects = cs.get()
             resultLen = len(xmObjects)
-            print "  %(count)s / %(totalCount)s (%(percent)1.1f%%) transients conesearched against with %(searchName)s - %(resultLen)s sources matched" % locals()
+            # print "  %(count)s / %(totalCount)s (%(percent)1.1f%%) transients
+            # conesearched against with %(searchName)s - %(resultLen)s sources
+            # matched" % locals()
 
             # DID WE SEARCH THE CATALOGUES CORRECTLY?
             if message and (message.startswith('Error') or 'not recognised' in message):
@@ -460,7 +462,7 @@ class crossmatcher():
 
         message = "  Finished `%(searchName)s` catalogue conesearch" % locals(
         )
-        print message
+        # print message
 
         return searchDone, matchedObjects
 
