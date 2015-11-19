@@ -320,17 +320,22 @@ class classifier():
                 rankScores.append(rankScore)
 
             rank = 0
+            theseValues = []
             for rs, row in sorted(zip(rankScores, rows)):
                 rank += 1
                 primaryId = row["id"]
-                sqlQuery = u"""
-                    update tcs_cross_matches set rank = %(rank)s where id = %(primaryId)s
-                """ % locals()
-                rows = dms.execute_mysql_read_query(
-                    sqlQuery=sqlQuery,
-                    dbConn=self.transientsDbConn,
-                    log=self.log
-                )
+                theseValues.append("(%(primaryId)s,%(rank)s)" % locals())
+
+            theseValues = ",".join(theseValues)
+            sqlQuery = u"""
+                INSERT INTO tcs_cross_matches (id,rank) VALUES %(theseValues)s 
+                ON DUPLICATE KEY UPDATE rank=VALUES(rank);
+            """ % locals()
+            dms.execute_mysql_write_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.transientsDbConn,
+                log=self.log,
+            )
 
             sqlQuery = u"""
                select distinct association_type from (select association_type from tcs_cross_matches where transient_object_id = %(transId)s  order by rank) as alias;
