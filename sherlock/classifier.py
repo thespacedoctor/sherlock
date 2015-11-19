@@ -338,35 +338,35 @@ class classifier():
                     log=self.log,
                 )
 
-                sqlQuery = u"""
-                   select distinct association_type from (select association_type from tcs_cross_matches where transient_object_id = %(transId)s  order by rank) as alias;
+            sqlQuery = u"""
+               select distinct association_type from (select association_type from tcs_cross_matches where transient_object_id = %(transId)s  order by rank) as alias;
+            """ % locals()
+            rows = dms.execute_mysql_read_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.transientsDbConn,
+                log=self.log
+            )
+
+            classification = ""
+            for row in rows:
+                classification += row["association_type"] + "/"
+            classification = classification[:-1]
+
+            if len(classification) == 0:
+                classification = "ORPHAN"
+
+            sqlQuery = u"""
+                    update %(transientTable)s  set %(transientTableClassCol)s = "%(classification)s"
+                        where %(transientTableIdCol)s  = %(transId)s
                 """ % locals()
-                rows = dms.execute_mysql_read_query(
-                    sqlQuery=sqlQuery,
-                    dbConn=self.transientsDbConn,
-                    log=self.log
-                )
 
-                classification = ""
-                for row in rows:
-                    classification += row["association_type"] + "/"
-                classification = classification[:-1]
+            print """%(name)s: %(classification)s """ % locals()
 
-                if len(classification) == 0:
-                    classification = "ORPHAN"
-
-                sqlQuery = u"""
-                        update %(transientTable)s  set %(transientTableClassCol)s = "%(classification)s"
-                            where %(transientTableIdCol)s  = %(transId)s
-                    """ % locals()
-
-                print """%(name)s: %(classification)s """ % locals()
-
-                dms.execute_mysql_write_query(
-                    sqlQuery=sqlQuery,
-                    dbConn=self.transientsDbConn,
-                    log=self.log
-                )
+            dms.execute_mysql_write_query(
+                sqlQuery=sqlQuery,
+                dbConn=self.transientsDbConn,
+                log=self.log
+            )
 
         self.log.debug('completed the ``_update_transient_database`` method')
         return None
