@@ -63,8 +63,6 @@ class crossmatcher():
         self.colMaps = colMaps
         # xt-self-arg-tmpx
 
-        # VARIABLE DATA ATRRIBUTES
-        self.classifications = []
         return None
 
     # METHOD ATTRIBUTES
@@ -76,25 +74,29 @@ class crossmatcher():
         """
         self.log.debug('starting the ``get`` method')
 
-        self._crossmatch_transients_against_catalogues()
+        classifications = self._crossmatch_transients_against_catalogues()
 
         self.log.debug('completed the ``get`` method')
-        return self.classifications
+        return classifications
 
     def _crossmatch_transients_against_catalogues(
             self):
         """ crossmatch transients against catalogues
         """
 
+        classifications = []
+
         self.log.debug(
             'starting the ``_crossmatch_transients_against_catalogues`` method')
 
         # COUNT NUMBER OF TRANSIENT TO CROSSMATCH
+        classification = []
         numberOfTransients = len(self.transients)
         count = 0
 
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         for thisIndex, transient in enumerate(self.transients):
+
             tId = transient['id']
             tName = transient['name']
 
@@ -149,6 +151,7 @@ class crossmatcher():
                     # @action update objectType -- it gets overwritten with each subsequent search
                     objectType = searchPara["transient classification"]
                     allMatches = allMatches + matches
+                    del matches
 
                     if "stop algorithm on match" in searchPara and searchPara["stop algorithm on match"] == True:
                         self.stopAlgoritm = True
@@ -200,6 +203,7 @@ class crossmatcher():
                         catalogueTableName]["table_id"]
                     catalogueViewId = self.colMaps[
                         catalogueTableName]["view_id"]
+
                     for row in m[1]:
                         crossmatch = {}
                         crossmatch["transientObjectId"] = inputRow["id"]
@@ -248,11 +252,11 @@ class crossmatcher():
 
             classification = {'id': transient['id'], 'object_classification_old': transient[
                 'object_classification'], 'object_classification_new': objectType, 'crossmatches': crossmatches}
-            self.classifications.append(classification)
+            classifications.append(classification)
 
         self.log.debug(
             'completed the ``_crossmatch_transients_against_catalogues`` method')
-        return None
+        return classifications
 
     def searchCatalogue(self, objectList, searchPara={}, searchName=""):
         """Cone Search wrapper to make it a little more user friendly"""
@@ -317,6 +321,7 @@ class crossmatcher():
                 transType=searchPara["transient classification"]
             )
             message, xmObjects = cs.get()
+            del cs
             resultLen = len(xmObjects)
             # print "  %(count)s / %(totalCount)s (%(percent)1.1f%%) transients
             # conesearched against with %(searchName)s - %(resultLen)s sources

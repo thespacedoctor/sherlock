@@ -86,12 +86,14 @@ class classifier():
         # GRAB TRANSIENT METADATA BEFORE CLASSIFICATION
         self.transientsMetadataList = self._get_transient_metadata_from_sqlquery()
 
-        update_ned_stream(
+        updater = update_ned_stream(
             log=self.log,
             cataloguesDbConn=self.cataloguesDbConn,
             settings=self.settings,
             transientsMetadataList=self.transientsMetadataList
         ).get()
+        del updater
+
         self._crossmatch_transients_against_catalogues()
 
         if self.update:
@@ -147,6 +149,7 @@ class classifier():
             colMaps=self.colMaps
         )
         self.classifications = cm.get()
+        del cm
 
         self.log.debug(
             'completed the ``_crossmatch_transients_against_catalogues`` method')
