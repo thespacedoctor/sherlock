@@ -172,15 +172,33 @@ class conesearcher():
             self.ra, self.dec, self.radius / 3600., inclusive=True)
         hmax = thisArray.max()
         hmin = thisArray.min()
-        ratio = float(hmax - hmin + 1) / float(thisArray.size)
-        if ratio < 100 or thisArray.size > 2000:
-            htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
-            )
-        else:
-            s = StringIO()
-            np.savetxt(s, thisArray, fmt='%d', newline=",")
-            thesHtmIds = s.getvalue()[:-1]
-            htmWhereClause = "where htm16ID in (%(thesHtmIds)s)" % locals()
+
+        # # IF JUMP BETWEEN THIS HTMINDEX AND NEXT IS > 200 THEN CREATE A NEW
+        # # ARRAY (FOR BETWEEN STATEMENTS)
+        theseBetweens = np.split(thisArray, np.where(
+            np.diff(thisArray) > 200)[0] + 1)
+
+        htmWhereClause = []
+        for bet in theseBetweens:
+            bMin, bMax = bet.min(), bet.max()
+            htmWhereClause.append(
+                "(htm16ID between %(bMin)s and %(bMax)s)" % locals())
+
+        htmWhereClause = " OR ".join(htmWhereClause)
+        htmWhereClause = "where %(htmWhereClause)s" % locals()
+
+        # print len(theseArraies)
+        # sys.exit(0)
+
+        # ratio = float(hmax - hmin + 1) / float(thisArray.size)
+        # if ratio < 100 or thisArray.size > 2000:
+        #     htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
+        #     )
+        # else:
+        #     s = StringIO()
+        #     np.savetxt(s, thisArray, fmt='%d', newline=",")
+        #     thesHtmIds = s.getvalue()[:-1]
+        #     htmWhereClause = "where htm16ID in (%(thesHtmIds)s)" % locals()
 
         # hmax = thisArray.max()
         # hmin = thisArray.min()
