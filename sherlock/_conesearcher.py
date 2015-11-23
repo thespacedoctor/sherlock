@@ -134,11 +134,11 @@ class conesearcher():
         self._build_sql_query_from_htm()
 
         # RETURN RESULTS IN BATCHES TO AVOID MEMORY ISSUES
-        resultLen = 300000
+        returnLimit = 700000
         offset = 0
-        returnLimit = 300000
+        resultLen = returnLimit
         results = []
-        while resultLen == 300000:
+        while resultLen == returnLimit:
             resultSet, resultLen = self._grab_conesearch_results_from_db(
                 returnLimit=returnLimit,
                 offset=offset
