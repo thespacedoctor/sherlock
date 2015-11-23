@@ -173,16 +173,23 @@ class conesearcher():
         # # IF JUMP BETWEEN THIS HTMINDEX AND NEXT IS > 200 THEN CREATE A NEW
         # # ARRAY (FOR BETWEEN STATEMENTS)
         theseBetweens = np.split(thisArray, np.where(
-            np.diff(thisArray) > 200)[0] + 1)
+            np.diff(thisArray) > 1)[0] + 1)
 
         htmWhereClause = []
+        singleIds = []
         for bet in theseBetweens:
             bMin, bMax = bet.min(), bet.max()
-            htmWhereClause.append(
-                "(htm16ID between %(bMin)s and %(bMax)s)" % locals())
+            if bMin == bMax:
+                singleIds.append(str(bMin))
+            else:
+                htmWhereClause.append(
+                    "(htm16ID between %(bMin)s and %(bMax)s)" % locals())
 
         htmWhereClause = " OR ".join(htmWhereClause)
-        htmWhereClause = "where %(htmWhereClause)s" % locals()
+        singleIds = ",".join(singleIds)
+
+        htmWhereClause = "where %(htmWhereClause)s or htm16ID in (%(singleIds)s)" % locals(
+        )
 
         # print len(theseArraies)
         # sys.exit(0)
@@ -266,8 +273,6 @@ class conesearcher():
         else:
             sqlQueryExtra = ""
 
-        print sqlQueryExtra
-
         results = []
         # print "START DB"
         rows = dms.execute_mysql_read_query(
@@ -278,6 +283,7 @@ class conesearcher():
         # print "END DB"
 
         resultLen = len(rows)
+        print resultLen
 
         if len(rows):
             # IF ONLY A COUNT(*)
