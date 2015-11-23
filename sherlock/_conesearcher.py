@@ -134,22 +134,19 @@ class conesearcher():
         self._build_sql_query_from_htm()
 
         # RETURN RESULTS IN BATCHES TO AVOID MEMORY ISSUES
-        # resultLen = 100000
-        # offset = 0
-        # returnLimit = 100000
-        # results = []
-        # while resultLen == 100000:
-        #     resultSet, resultLen = self._grab_conesearch_results_from_db(
-        #         returnLimit=returnLimit,
-        #         offset=offset
-        #     )
-        #     results += resultSet
-        #     offset += returnLimit
-        #     returnLen = len(resultSet)
-        # print """    %(resultLen)s/%(returnLen)s results matched""" %
-        # locals()
-
-        results, resultLen = self._grab_conesearch_results_from_db()
+        resultLen = 300000
+        offset = 0
+        returnLimit = 300000
+        results = []
+        while resultLen == 300000:
+            resultSet, resultLen = self._grab_conesearch_results_from_db(
+                returnLimit=returnLimit,
+                offset=offset
+            )
+            results += resultSet
+            offset += returnLimit
+            returnLen = len(resultSet)
+            print """    %(returnLen)s/%(resultLen)s results matched""" % locals()
 
         # SORT BY SEPARATION
         from operator import itemgetter
@@ -268,6 +265,8 @@ class conesearcher():
             )
         else:
             sqlQueryExtra = ""
+
+        print sqlQueryExtra
 
         results = []
         # print "START DB"
