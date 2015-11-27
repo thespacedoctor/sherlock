@@ -146,7 +146,8 @@ class conesearcher():
             results += resultSet
             offset += returnLimit
             returnLen = len(resultSet)
-            print """    %(returnLen)s/%(resultLen)s results matched""" % locals()
+            # print """    %(returnLen)s/%(resultLen)s results matched""" %
+            # locals()
 
         # SORT BY SEPARATION
         from operator import itemgetter
@@ -285,7 +286,7 @@ class conesearcher():
         # print "END DB"
 
         resultLen = len(rows)
-        print resultLen
+        # print resultLen
 
         if len(rows):
             # IF ONLY A COUNT(*)
