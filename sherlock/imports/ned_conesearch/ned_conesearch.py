@@ -196,6 +196,13 @@ class ned_conesearch(_base_importer):
                 thisDict[
                     "decDeg"] = dat.declination_sexegesimal_to_decimal.declination_sexegesimal_to_decimal(thisDict["dec"])
 
+                if thisDict["major_diameter_arcmin"] != "null":
+                    try:
+                        float(thisDict["major_diameter_arcmin"])
+                    except:
+                        print "major_diameter_arcmin is " + thisDict["major_diameter_arcmin"] + ". Changing to null."
+                        thisDict["major_diameter_arcmin"] = "null"
+
                 sqlQuery += u"""
                     update %(tableName)s
                         set redshift_quality = "%(redshift_quality)s",
