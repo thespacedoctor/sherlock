@@ -31,7 +31,7 @@ from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
 from dryxPython import mysql as dms
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from sherlock.imports.ned_conesearch import ned_conesearch
 
 

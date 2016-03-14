@@ -28,7 +28,7 @@ os.environ['TERM'] = 'vt100'
 import codecs
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from dryxPython import webcrawlers as dwc
 from dryxPython import astrotools as dat
 from ._base_importer import _base_importer

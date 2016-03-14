@@ -16,7 +16,7 @@ _database.py
     - ``_someObject`` = a 'private' object that should only be changed for debugging
 
 :Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -31,7 +31,7 @@ from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
 from dryxPython import mysql as dms
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 
 
 class database():
@@ -118,12 +118,16 @@ class database():
         passwd = self.settings["database settings"][
             "static catalogues"]["password"]
         dbName = self.settings["database settings"]["static catalogues"]["db"]
+        if self.settings["database settings"]["static catalogues"]["sshPort"]:
+            thisPort = sshPort
+        else:
+            thisPort = False
         thisConn = ms.connect(
             host=host,
             user=user,
             passwd=passwd,
             db=dbName,
-            port=sshPort,
+            port=thisPort,
             use_unicode=True,
             charset='utf8'
         )
@@ -137,12 +141,16 @@ class database():
         passwd = self.settings["database settings"][
             "transients"]["password"]
         dbName = self.settings["database settings"]["transients"]["db"]
+        if self.settings["database settings"]["transients"]["sshPort"]:
+            thisPort = sshPort
+        else:
+            thisPort = False
         thisConn = ms.connect(
             host=host,
             user=user,
             passwd=passwd,
             db=dbName,
-            port=sshPort,
+            port=thisPort,
             use_unicode=True,
             charset='utf8'
         )
@@ -160,12 +168,16 @@ class database():
                 "pessto marshall"]["password"]
             dbName = self.settings["database settings"][
                 "pessto marshall"]["db"]
+            if self.settings["database settings"]["pessto marshall"]["sshPort"]:
+                thisPort = sshPort
+            else:
+                thisPort = False
             thisConn = ms.connect(
                 host=host,
                 user=user,
                 passwd=passwd,
                 db=dbName,
-                port=sshPort,
+                port=thisPort,
                 use_unicode=True,
                 charset='utf8'
             )

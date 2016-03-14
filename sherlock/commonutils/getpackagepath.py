@@ -16,7 +16,7 @@ getpackagepath.py
     - ``_someObject`` = a 'private' object that should only be changed for debugging
 
 :Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 
 :Tasks:
     - [ ] when complete pull all general functions and classes into dryxPython
@@ -35,9 +35,9 @@ from dryxPython import commonutils as dcu
 ###################################################################
 # PUBLIC FUNCTIONS                                                #
 ###################################################################
-## LAST MODIFIED : October 24, 2013
-## CREATED : October 24, 2013
-## AUTHOR : DRYX
+# LAST MODIFIED : October 24, 2013
+# CREATED : October 24, 2013
+# AUTHOR : DRYX
 
 # copy usage method(s) here and select the following snippet from the command palette:
 # x-setup-worker-function-parameters-from-usage-method

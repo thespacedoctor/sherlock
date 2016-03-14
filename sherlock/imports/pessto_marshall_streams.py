@@ -16,7 +16,7 @@ pessto_marshall_streams.py
     - ``_someObject`` = a 'private' object that should only be changed for debugging
 
 :Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 
 :Tasks:
     @review: when complete pull all general functions and classes into dryxPython
@@ -39,7 +39,7 @@ from docopt import docopt
 from dryxPython import mysql as dms
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from ._base_importer import _base_importer
 
 

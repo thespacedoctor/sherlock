@@ -16,7 +16,7 @@ ned_d.py
     - ``_someObject`` = a 'private' object that should only be changed for debugging
 
 :Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -33,7 +33,7 @@ from dryxPython import commonutils as dcu
 from dryxPython import mysql as dms
 from dryxPython import astrotools as dat
 from neddy import namesearch
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from .._base_importer import _base_importer
 from . import *
 
