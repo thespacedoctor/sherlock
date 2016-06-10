@@ -153,17 +153,17 @@
 <span class="kn">from</span> <span class="nn">sherlock</span> <span class="kn">import</span> <span class="n">classifier</span>
 <span class="kn">from</span> <span class="nn">sherlock.utKit</span> <span class="kn">import</span> <span class="n">utKit</span>
 
-<span class="c1"># load settings</span>
-<span class="n">stream</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="s2">&quot;/Users/Dave/git_repos/sherlock/example_settings.yaml&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
-<span class="n">settings</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
-<span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
 
 <span class="c1"># SETUP AND TEARDOWN FIXTURE FUNCTIONS FOR THE ENTIRE MODULE</span>
 <span class="n">moduleDirectory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 <span class="n">utKit</span> <span class="o">=</span> <span class="n">utKit</span><span class="p">(</span><span class="n">moduleDirectory</span><span class="p">)</span>
 <span class="n">log</span><span class="p">,</span> <span class="n">dbConn</span><span class="p">,</span> <span class="n">pathToInputDir</span><span class="p">,</span> <span class="n">pathToOutputDir</span> <span class="o">=</span> <span class="n">utKit</span><span class="o">.</span><span class="n">setupModule</span><span class="p">()</span>
 <span class="n">utKit</span><span class="o">.</span><span class="n">tearDownModule</span><span class="p">()</span>
+
+<span class="c1"># load settings</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">pathToInputDir</span> <span class="o">+</span> <span class="s2">&quot;/sherlock.yaml&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">settings</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+<span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
 <span class="c1"># xnose-class-to-test-main-command-line-function-of-module</span>

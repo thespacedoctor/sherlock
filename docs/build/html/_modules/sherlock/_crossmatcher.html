@@ -657,8 +657,6 @@
                 <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmscale&quot;</span><span class="p">]:</span>
                     <span class="n">physicalSeparation</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmscale&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-                <span class="k">print</span> <span class="s2">&quot;physicalSeparation: </span><span class="si">%(physicalSeparation)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
-
                 <span class="c1"># FIRST CHECK FOR MAJOR AXIS MEASUREMENT</span>
                 <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmmajoraxis&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmmajoraxis&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;galaxy radius stetch factor&quot;</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -696,8 +694,6 @@
                             <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">Physical separation = </span><span class="si">%.2f</span><span class="s2"> kpc&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">physicalSeparation</span><span class="p">,))</span>
                     <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;searchName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newSearchName</span>
                     <span class="n">matchSubset</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">physicalSeparation</span><span class="p">,</span> <span class="n">row</span><span class="p">])</span>
-
-        <span class="k">print</span> <span class="n">matchSubset</span>
 
         <span class="k">if</span> <span class="n">matchSubset</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
