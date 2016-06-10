@@ -124,7 +124,24 @@ class conesearcher():
         self.log.debug('starting the ``get`` method')
 
         self._build_sql_query_from_htm()
-        self._grab_conesearch_results_from_db()
+
+        # RETURN RESULTS IN BATCHES TO AVOID MEMORY ISSUES
+        resultLen = 5000
+        offset = 0
+        returnLimit = 5000
+        results = []
+        while resultLen == 5000:
+            resultSet = self._grab_conesearch_results_from_db(
+                returnLimit=returnLimit,
+                offset=offset
+            )
+            resultLen = len(resultSet)
+            results += resultSet
+            offset += returnLimit
+
+        # SORT BY SEPARATION
+        from operator import itemgetter
+        self.results = sorted(results, key=itemgetter(0))
 
         self.log.debug('completed the ``get`` method')
         return self.message, self.results
@@ -164,7 +181,10 @@ class conesearcher():
         elif self.queryType == 3:
             columns = ['count(*) number']
         else:
-            columns = ['*']
+            columns = []
+            for k, v in self.colMaps[self.tableName].iteritems():
+                if "colname" in k.lower() and v:
+                    columns.append(v)
 
         columns = ','.join(columns)
         tableName = self.tableName
@@ -177,7 +197,10 @@ class conesearcher():
         return None
 
     def _grab_conesearch_results_from_db(
-            self):
+            self,
+            returnLimit=None,
+            offset=None):
+        """ grab conesearch results from db
         """
         *grab conesearch results from db*
         """
@@ -212,10 +235,17 @@ class conesearcher():
                 where = " and (" + where[4:] + ")"
                 self.sqlQuery += where
 
-        self.results = []
+        # SETUP OFFSETS
+        if returnLimit != None and offset != None:
+            sqlQueryExtra = " limit %(returnLimit)s offset %(offset)s" % locals(
+            )
+        else:
+            sqlQueryExtra = ""
+
+        results = []
         # print "START DB"
         rows = dms.execute_mysql_read_query(
-            sqlQuery=self.sqlQuery,
+            sqlQuery=self.sqlQuery + sqlQueryExtra,
             dbConn=self.dbConn,
             log=self.log
         )
@@ -224,8 +254,8 @@ class conesearcher():
         if len(rows):
             # IF ONLY A COUNT(*)
             if self.queryType == 3:
-                self.results = [[0.0, rows[0]['number']]]
-                return "Count", self.results
+                results = [[0.0, rows[0]['number']]]
+                return "Count", results
 
             # CALCULATE THE ANGULAR SEPARATION FOR EACH ROW
             raList = []
@@ -251,22 +281,18 @@ class conesearcher():
             indexList1, indexList2, separation = self.mesh16.match(
                 tRa, tDec, raList, decList, self.radius / 3600., maxmatch=0)
             for i in xrange(indexList1.size):
-                self.results.append([separation[i] * 3600., rows[i]])
-
-            # SORT BY SEPARATION
-            from operator import itemgetter
-            self.results = sorted(self.results, key=itemgetter(0))
+                results.append([separation[i] * 3600., rows[i]])
 
             # IF NEAREST ONLY REQUESTED
             if self.nearestOnly == True:
-                self.results = [self.results[0]]
+                results = [results[0]]
         else:
             tableName = self.tableName
             self.message = "No matches from %(tableName)s." % locals()
 
         self.log.debug(
             'completed the ``_grab_conesearch_results_from_db`` method')
-        return None
+        return results
 
     # use the tab-trigger below for new method
     # xt-class-method
