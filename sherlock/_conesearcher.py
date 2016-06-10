@@ -20,7 +20,6 @@ import math
 from docopt import docopt
 from HMpTy import htm
 from cStringIO import StringIO
-import htmCircle
 import numpy as np
 from dryxPython import logs as dl
 from dryxPython import astrotools as dat
@@ -253,6 +252,9 @@ class conesearcher():
                 tRa, tDec, raList, decList, self.radius / 3600., maxmatch=0)
             for i in xrange(indexList1.size):
                 self.results.append([separation[i] * 3600., rows[i]])
+                print rows[i]
+                print "STOPING HERE -- COME FIND ME"
+                sys.exit(0)
 
             # SORT BY SEPARATION
             from operator import itemgetter
