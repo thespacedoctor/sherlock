@@ -174,12 +174,12 @@ class crossmatcher():
 
             # ADD DETAILS TO THE lOGS
             oldClass = transient['object_classification']
-            oldClass = self._lookup_classification_dict(
-                flag=transient['object_classification'])
-            newClass = self._lookup_classification_dict(
-                flag=objectType)
-            self.log.info(
-                """%(transient)s:  *** Object ID = %(tId)s (%(tName)s): CLASSIFICATION = %(newClass)s (PREVIOUSLY = %(oldClass)s)""" % locals())
+            # oldClass = self._lookup_classification_dict(
+            #     flag=transient['object_classification'])
+            # newClass = self._lookup_classification_dict(
+            #     flag=objectType)
+            # self.log.info(
+            #     """%(transient)s:  *** Object ID = %(tId)s (%(tName)s): CLASSIFICATION = %(newClass)s (PREVIOUSLY = %(oldClass)s)""" % locals())
 
             # BUILD THE LIST OF CROSSMATCH DICTIONARIES AND ADD THEM THE THE
             # LIST OF ALL SOURCE CLASSIFICATIONS
@@ -237,7 +237,7 @@ class crossmatcher():
                             crossmatch["physical_separation_kpc"] = "null"
                         crossmatches.append(crossmatch)
 
-            self.log.debug('crossmatches: %(crossmatches)s' % locals())
+            self.log.info('crossmatches: %(crossmatches)s' % locals())
 
             classification = {'id': transient['id'], 'object_classification_old': transient[
                 'object_classification'], 'object_classification_new': objectType, 'crossmatches': crossmatches}
