@@ -252,9 +252,6 @@ class conesearcher():
                 tRa, tDec, raList, decList, self.radius / 3600., maxmatch=0)
             for i in xrange(indexList1.size):
                 self.results.append([separation[i] * 3600., rows[i]])
-                print rows[i]
-                print "STOPING HERE -- COME FIND ME"
-                sys.exit(0)
 
             # SORT BY SEPARATION
             from operator import itemgetter

@@ -156,19 +156,21 @@ class crossmatcher():
                 objectType = "ORPHAN"
 
             # PERFORM ANY SUPPLIMENTARY SEARCHES
-            ss = self.settings["supplementary search"]
-            for searchName, searchPara in ss.iteritems():
-                self.log.info("""  searching: %(searchName)s""" % locals())
-                searchDone, supMatches = self.searchCatalogue(
-                    objectList=[transient],
-                    searchPara=searchPara,
-                    searchName=searchName
-                )
-                if searchDone and supMatches:
-                    self.log.info("     match found for %(tName)s" % locals())
-                    objectType = objectType + \
-                        searchPara["transient classification"]
-                    allMatches = allMatches + supMatches
+            if "supplementary search" in self.settings:
+                ss = self.settings["supplementary search"]
+                for searchName, searchPara in ss.iteritems():
+                    self.log.info("""  searching: %(searchName)s""" % locals())
+                    searchDone, supMatches = self.searchCatalogue(
+                        objectList=[transient],
+                        searchPara=searchPara,
+                        searchName=searchName
+                    )
+                    if searchDone and supMatches:
+                        self.log.info(
+                            "     match found for %(tName)s" % locals())
+                        objectType = objectType + \
+                            searchPara["transient classification"]
+                        allMatches = allMatches + supMatches
 
             # ADD DETAILS TO THE lOGS
             oldClass = transient['object_classification']
