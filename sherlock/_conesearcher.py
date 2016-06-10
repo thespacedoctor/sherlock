@@ -18,7 +18,10 @@ import glob
 import pickle
 import math
 from docopt import docopt
+from HMpTy import htm
+from cStringIO import StringIO
 import htmCircle
+import numpy as np
 from dryxPython import logs as dl
 from dryxPython import astrotools as dat
 from dryxPython import mysql as dms
@@ -78,6 +81,7 @@ class conesearcher():
         self.colMaps = colMaps
         self.physicalSearch = physicalSearch
         self.transType = transType
+        self.mesh16 = htm.HTM(16)
 
         # xt-self-arg-tmpx
 
@@ -135,21 +139,25 @@ class conesearcher():
 
         # BUILD WHERE SECTION OF CLAUSE
         self.radius = float(self.radius)
-        htmWhereClause = htmCircle.htmCircleRegion(
-            self.htmLevel, self.ra, self.dec, self.radius)
 
-        # CONVERT RA AND DEC TO CARTESIAN COORDINATES
-        ra = math.radians(self.ra)
-        dec = math.radians(self.dec)
-        cos_dec = math.cos(dec)
-        cx = math.cos(ra) * cos_dec
-        cy = math.sin(ra) * cos_dec
-        cz = math.sin(dec)
-        cartesians = (cx, cy, cz)
+        # CREATE AN ARRAY OF RELEVANT HTMIDS AND FIND MAX AND MIN
+        thisArray = self.mesh16.intersect(
+            self.ra, self.dec, self.radius / 3600., inclusive=True)
+        hmax = thisArray.max()
+        hmin = thisArray.min()
+        ratio = float(hmax - hmin + 1) / float(thisArray.size)
+        if ratio < 100:
+            htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
+            )
+        else:
+            s = StringIO()
+            np.savetxt(s, thisArray, fmt='%d', newline=",")
+            thesHtmIds = s.getvalue()[:-1]
+            htmWhereClause = "where htm16ID in (%(thesHtmIds)s)" % locals()
 
-        # CREATE CARTESIAN SECTION OF QUERY
-        cartesianClause = 'and (cx * %.17f + cy * %.17f + cz * %.17f >= cos(%.17f))' % (
-            cartesians[0], cartesians[1], cartesians[2], math.radians(self.radius / 3600.0))
+        # hmax = thisArray.max()
+        # hmin = thisArray.min()
+        #
 
         # DECIDE WHAT COLUMNS TO REQUEST
         if self.queryType == 1:
@@ -163,7 +171,7 @@ class conesearcher():
         tableName = self.tableName
 
         # FINALLY BUILD THE FULL QUERY
-        self.sqlQuery = "select %(columns)s from %(tableName)s %(htmWhereClause)s %(cartesianClause)s" % locals(
+        self.sqlQuery = "select %(columns)s from %(tableName)s %(htmWhereClause)s" % locals(
         )
 
         self.log.debug('completed the ``_build_sql_query_from_htm`` method')
@@ -206,11 +214,13 @@ class conesearcher():
                 self.sqlQuery += where
 
         self.results = []
+        # print "START DB"
         rows = dms.execute_mysql_read_query(
             sqlQuery=self.sqlQuery,
             dbConn=self.dbConn,
             log=self.log
         )
+        # print "END DB"
 
         if len(rows):
             # IF ONLY A COUNT(*)
@@ -219,6 +229,8 @@ class conesearcher():
                 return "Count", self.results
 
             # CALCULATE THE ANGULAR SEPARATION FOR EACH ROW
+            raList = []
+            decList = []
             for row in rows:
                 if "guide_star" in self.tableName:
                     # Guide star cat RA and DEC are in RADIANS
@@ -229,15 +241,18 @@ class conesearcher():
                 else:
                     ra2 = row[self.colMaps[self.tableName]["raColName"]]
                     dec2 = row[self.colMaps[self.tableName]["decColName"]]
+                raList.append(ra2)
+                decList.append(dec2)
 
-                separation, northSep, eastSep = dat.get_angular_separation(
-                    log=self.log,
-                    ra1=self.ra,
-                    dec1=self.dec,
-                    ra2=ra2,
-                    dec2=dec2
-                )
-                self.results.append([separation, row])
+            # CREATE TWO ARRAYS OF RA,DEC (1. TRANSIENT & 2. DATABASE RETURNS)
+            tRa = np.array([self.ra])
+            tDec = np.array([self.dec])
+            raList = np.array(raList)
+            decList = np.array(decList)
+            indexList1, indexList2, separation = self.mesh16.match(
+                tRa, tDec, raList, decList, self.radius / 3600., maxmatch=0)
+            for i in xrange(indexList1.size):
+                self.results.append([separation[i] * 3600., rows[i]])
 
             # SORT BY SEPARATION
             from operator import itemgetter
