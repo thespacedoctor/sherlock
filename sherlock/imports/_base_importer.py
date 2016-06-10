@@ -45,7 +45,7 @@ class _base_importer():
         - ``version`` -- version of the _base_importer catalogue
         - ``catalogueName`` -- name of the catalogue
         - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
-        - ``cataloguesDbConn`` -- if a catalogue database connection has already been setup then pass in here. Default *False*
+        - ``cataloguesDbConn`` -- catalogues database connection (default false - will be setup here if false)
 
 
     .. todo::
@@ -81,7 +81,7 @@ class _base_importer():
 
         # INITIAL ACTIONS
         # SETUP DATABASE CONNECTIONS
-        if not self.cataloguesDbConn:
+        if cataloguesDbConn == False:
             from sherlock import database
             db = database(
                 log=self.log,
