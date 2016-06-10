@@ -112,8 +112,7 @@ def main(arguments=None):
         sherlock = classifier(
             log=log,
             settings=settings,
-            update=updateFlag,
-            transientIdList=[]
+            update=updateFlag
         )
         sherlock.get()
     if clean:

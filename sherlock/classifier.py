@@ -26,7 +26,7 @@ from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
 from dryxPython import mysql as dms
 from fundamentals import tools, times
-from sherlock.imports.ned_conesearch import ned_conesearch
+from sherlock.update_ned_stream import update_ned_stream
 
 
 class classifier():
@@ -46,14 +46,12 @@ class classifier():
             self,
             log,
             settings=False,
-            update=False,
-            transientIdList=[]
+            update=False
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
         self.settings = settings
         self.update = update
-        self.transientIdList = transientIdList
         # xt-self-arg-tmpx
 
         # VARIABLE DATA ATRRIBUTES
@@ -81,12 +79,8 @@ class classifier():
         self._create_crossmatch_table_if_not_existing()
         self._grab_column_name_map_from_database()
 
-        # CHOOSE METHOD TO GRAB TRANSIENT METADATA BEFORE CLASSIFICATION
-        # EITHER LIST OF IDS, OR A STREAM FROM THE DATABASE
-        if len(self.transientIdList) > 0:
-            self._get_individual_transient_metadata()
-        else:
-            self._get_transient_metadata_from_database_list()
+        # GRAB TRANSIENT METADATA BEFORE CLASSIFICATION
+        self.transientsMetadataList = self._get_transient_metadata_from_sqlquery()
 
         update_ned_stream(
             log=self.log,
@@ -102,34 +96,24 @@ class classifier():
         self.log.debug('completed the ``get`` method')
         return None
 
-    def _get_individual_transient_metadata(
+    def _get_transient_metadata_from_sqlquery(
             self):
-        """
-        *get individual transient metadata from the transient database*
+        """ get transient metadata from a given workflow list in the transient database
         """
         self.log.debug(
-            'starting the ``_get_individual_transient_metadata`` method')
+            'starting the ``_get_transient_metadata_from_sqlquery`` method')
 
-        for tran in self.transientIdList:
-            sqlQuery = u"""
-                select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
-                from tcs_transient_objects
-                where id = %(tran)s
-            """ % locals()
-            rows = dms.execute_mysql_read_query(
-                sqlQuery=sqlQuery,
-                dbConn=self.transientsDbConn,
-                log=self.log
-            )
-            if len(rows):
-                self.transientsMetadataList.append(rows[0])
-            else:
-                log.warning(
-                    'could not find transient in database with id %(tran)s' % locals())
+        sqlQuery = self.settings["database settings"][
+            "transients"]["transient query"]
+        transientsMetadataList = dms.execute_mysql_read_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+            log=self.log
+        )
 
         self.log.debug(
-            'completed the ``_get_individual_transient_metadata`` method')
-        return None
+            'completed the ``_get_transient_metadata_from_sqlquery`` method')
+        return transientsMetadataList
 
     def _get_transient_metadata_from_database_list(
             self):
