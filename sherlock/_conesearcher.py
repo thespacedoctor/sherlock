@@ -200,10 +200,9 @@ class conesearcher():
             self,
             returnLimit=None,
             offset=None):
-        """ grab conesearch results from db
+        """*grab conesearch results from db*
         """
-        *grab conesearch results from db*
-        """
+
         self.log.debug(
             'starting the ``_grab_conesearch_results_from_db`` method')
 
