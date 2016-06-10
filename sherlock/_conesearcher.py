@@ -145,7 +145,7 @@ class conesearcher():
         hmax = thisArray.max()
         hmin = thisArray.min()
         ratio = float(hmax - hmin + 1) / float(thisArray.size)
-        if ratio < 100:
+        if ratio < 100 or thisArray.size > 2000:
             htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
             )
         else:
