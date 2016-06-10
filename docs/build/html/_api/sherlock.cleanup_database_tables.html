@@ -1,0 +1,283 @@
+
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>&lt;no title&gt; &mdash; sherlock 0.1.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="sherlock 0.1.1 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../_static/thespacedoctor_icon_white_circle.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">sherlock</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/_api/sherlock.cleanup_database_tables.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-sherlock.cleanup_database_tables"></span><p><em>Clean up the database tables used by sherlock - maintainance tools</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">August 20, 2015</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+</div>
+<p># xdocopt-usage-tempx</p>
+<dl class="class">
+<dt id="sherlock.cleanup_database_tables.cleanup_database_tables">
+<em class="property">class </em><code class="descclassname">sherlock.cleanup_database_tables.</code><code class="descname">cleanup_database_tables</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#cleanup_database_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.cleanup_database_tables" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>The worker class for the cleanup_database_tables module</em></p>
+<dl class="docutils">
+<dt><strong>Key Arguments:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">dbConn</span></code> &#8211; mysql database connection</li>
+<li><code class="docutils literal"><span class="pre">log</span></code> &#8211; logger</li>
+<li><code class="docutils literal"><span class="pre">settings</span></code> &#8211; the settings dictionary</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>&#64;review: when complete, clean cleanup_database_tables class</li>
+<li>&#64;review: when complete add logging</li>
+<li>&#64;review: when complete, decide whether to abstract class to another module</li>
+</ul>
+</div>
+<dl class="method">
+<dt id="sherlock.cleanup_database_tables.cleanup_database_tables.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#cleanup_database_tables.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.cleanup_database_tables.close" title="Permalink to this definition">  ∞</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sherlock.cleanup_database_tables.cleanup_database_tables.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#cleanup_database_tables.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.cleanup_database_tables.get" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>get the cleanup_database_tables object</em></p>
+<dl class="docutils">
+<dt><strong>Return:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">cleanup_database_tables</span></code></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>&#64;review: when complete, clean get method</li>
+<li>&#64;review: when complete add logging</li>
+</ul>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="sherlock.cleanup_database_tables.main">
+<code class="descclassname">sherlock.cleanup_database_tables.</code><code class="descname">main</code><span class="sig-paren">(</span><em>arguments=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.main" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command</em></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sherlock.cleanup_database_tables.tab_complete">
+<code class="descclassname">sherlock.cleanup_database_tables.</code><code class="descname">tab_complete</code><span class="sig-paren">(</span><em>text</em>, <em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#tab_complete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.tab_complete" title="Permalink to this definition">  ∞</a></dt>
+<dd></dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dave Young.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

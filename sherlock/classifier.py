@@ -1,19 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-classifier.py
-=============
-:Summary:
-    The classifier object for Sherlock
+*The classifier object for Sherlock*
 
 :Author:
     David Young
 
 :Date Created:
     June 29, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
 
 :Notes:
     - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
@@ -38,7 +32,7 @@ from sherlock.imports.ned_conesearch import ned_conesearch
 class classifier():
 
     """
-    The classifier object for Sherlock
+    *The classifier object for Sherlock*
 
     **Key Arguments:**
         - ``log`` -- logger
@@ -78,7 +72,8 @@ class classifier():
 
     # METHOD ATTRIBUTES
     def get(self):
-        """perform the classifications
+        """
+        *perform the classifications*
         """
         self.log.debug('starting the ``get`` method')
 
@@ -103,7 +98,8 @@ class classifier():
 
     def _get_individual_transient_metadata(
             self):
-        """ get individual transient metadata from the transient database
+        """
+        *get individual transient metadata from the transient database*
         """
         self.log.debug(
             'starting the ``_get_individual_transient_metadata`` method')
@@ -131,7 +127,8 @@ class classifier():
 
     def _get_transient_metadata_from_database_list(
             self):
-        """ get transient metadata from a given workflow list in the transient database
+        """
+        *get transient metadata from a given workflow list in the transient database*
         """
         self.log.debug(
             'starting the ``_get_transient_metadata_from_database_list`` method')
@@ -150,7 +147,8 @@ class classifier():
 
     def _crossmatch_transients_against_catalogues(
             self):
-        """ crossmatch transients against catalogue
+        """
+        *crossmatch transients against catalogue*
 
         **Key Arguments:**
             # -
@@ -158,7 +156,8 @@ class classifier():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _crossmatch_transients_against_catalogues method
             - @review: when complete add logging
         """
@@ -192,7 +191,8 @@ class classifier():
     # use the tab-trigger below for new method
     def _update_transient_database(
             self):
-        """ update transient database
+        """
+        *update transient database*
 
         **Key Arguments:**
             # -
@@ -200,7 +200,8 @@ class classifier():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_transient_database method
             - @review: when complete add logging
         """
@@ -358,11 +359,9 @@ class classifier():
             )
 
             classification = ""
-            for row in rows:
-                classification += row["association_type"] + "/"
-            classification = classification[:-1]
-
-            if len(classification) == 0:
+            if len(rows):
+                classification = rows[0]["association_type"]
+            else:
                 classification = "ORPHAN"
 
             sqlQuery = u"""
@@ -384,7 +383,8 @@ class classifier():
     # use the tab-trigger below for new method
     def _update_ned_stream(
             self):
-        """ update ned stream
+        """
+        *update ned stream*
 
         **Key Arguments:**
             # -
@@ -392,7 +392,8 @@ class classifier():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_ned_stream method
             - @review: when complete add logging
         """
@@ -419,7 +420,8 @@ class classifier():
 
     def _grab_column_name_map_from_database(
             self):
-        """ grab column name map from database
+        """
+        *grab column name map from database*
 
         **Return:**
             - None
@@ -446,7 +448,8 @@ class classifier():
 
     def _create_crossmatch_table_if_not_existing(
             self):
-        """ create crossmatch table if it does not yet exist in the transients database
+        """
+        *create crossmatch table if it does not yet exist in the transients database*
 
         **Return:**
             - None
@@ -502,7 +505,8 @@ class classifier():
     def _remove_previous_ned_queries(
             self,
             coordinateList):
-        """ remove previous ned queries
+        """
+        *remove previous ned queries*
 
         **Key Arguments:**
             # - ``coordinateList`` -- set of coordinate to check for previous queries

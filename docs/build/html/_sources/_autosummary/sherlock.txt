@@ -1,0 +1,6 @@
+sherlock
+========
+
+
+.. automodule:: sherlock
+    :members:

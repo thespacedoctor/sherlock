@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-veron.py
-============
-:Summary:
-    Import veron catagloue from plain text file
+*Import veron catagloue from plain text file*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ veron.py
 :Date Created:
     August 25, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 """
 ################# GLOBAL IMPORTS ####################
@@ -43,7 +35,7 @@ from ._base_importer import _base_importer
 class veron(_base_importer):
 
     """
-    The worker class for the veron module
+    *The worker class for the veron module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -53,7 +45,8 @@ class veron(_base_importer):
         - ``version`` -- version of the veron catalogue
         - ``catalogueName`` -- the name of the catalogue
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean veron class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -65,12 +58,14 @@ class veron(_base_importer):
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the veron object
+        """
+        *get the veron object*
 
         **Return:**
             - ``veron``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -85,7 +80,8 @@ class veron(_base_importer):
 
     def create_dictionary_of_veron(
             self):
-        """create dictionary of veron
+        """
+        *create dictionary of veron*
 
         **Key Arguments:**
             # -
@@ -93,7 +89,8 @@ class veron(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean create_dictionary_of_veron method
             - @review: when complete add logging
         """

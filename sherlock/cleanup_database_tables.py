@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-cleanup_database_tables.py
-==========================
-:Summary:
-    Clean up the database tables used by sherlock - maintainance tools
+*Clean up the database tables used by sherlock - maintainance tools*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ cleanup_database_tables.py
 :Date Created:
     August 20, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 
 # xdocopt-usage-tempx
@@ -44,7 +36,7 @@ def tab_complete(text, state):
 
 def main(arguments=None):
     """
-    The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command
+    *The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command*
     """
     # setup the command-line util settings
     su = tools(
@@ -134,7 +126,7 @@ def main(arguments=None):
 class cleanup_database_tables():
 
     """
-    The worker class for the cleanup_database_tables module
+    *The worker class for the cleanup_database_tables module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -142,7 +134,8 @@ class cleanup_database_tables():
         - ``settings`` -- the settings dictionary
 
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean cleanup_database_tables class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -185,12 +178,14 @@ class cleanup_database_tables():
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the cleanup_database_tables object
+        """
+        *get the cleanup_database_tables object*
 
         **Return:**
             - ``cleanup_database_tables``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -206,7 +201,8 @@ class cleanup_database_tables():
 
     def _updated_row_counts_in_tcs_helper_catalogue_tables_info(
             self):
-        """ updated row counts in tcs catalogue tables
+        """
+        *updated row counts in tcs catalogue tables*
 
         **Key Arguments:**
             # -
@@ -214,7 +210,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _updated_row_counts_in_tcs_helper_catalogue_tables_info method
             - @review: when complete add logging
         """
@@ -274,7 +271,8 @@ class cleanup_database_tables():
     # use the tab-trigger below for new method
     def _update_tcs_helper_catalogue_tables_info_with_new_tables(
             self):
-        """ update tcs helper catalogue tables info with new tables
+        """
+        *update tcs helper catalogue tables info with new tables*
 
         **Key Arguments:**
             # -
@@ -282,7 +280,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_tcs_helper_catalogue_tables_info_with_new_tables method
             - @review: when complete add logging
         """
@@ -350,7 +349,8 @@ class cleanup_database_tables():
     # use the tab-trigger below for new method
     def _clean_up_columns(
             self):
-        """clean up columns
+        """
+        *clean up columns*
 
         **Key Arguments:**
             # -
@@ -358,7 +358,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _clean_up_columns method
             - @review: when complete add logging
         """
@@ -435,7 +436,8 @@ class cleanup_database_tables():
     # use the tab-trigger below for new method
     def _update_tcs_helper_catalogue_views_info_with_new_views(
             self):
-        """ update tcs helper catalogue tables info with new tables
+        """
+        *update tcs helper catalogue tables info with new tables*
 
         **Key Arguments:**
             # -
@@ -443,7 +445,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_tcs_helper_catalogue_views_info_with_new_views method
             - @review: when complete add logging
         """

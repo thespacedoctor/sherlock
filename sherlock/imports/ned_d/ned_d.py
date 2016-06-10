@@ -1,22 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-ned_d.py
-========
-:Summary:
-    Build and import NED-D table in datasbe
+*Build and import NED-D table in datasbe*
 
 :Author:
     David Young
 
 :Date Created:
     September 7, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -41,11 +32,12 @@ from . import *
 class ned_d(_base_importer):
 
     """
-    The worker class for the ned_d importer module
+    *The worker class for the ned_d importer module*
     """
 
     def get(self):
-        """import the NED-D database into the database and do other cleanup tricks.
+        """
+        *import the NED-D database into the database and do other cleanup tricks.*
         """
         self.log.info('starting the ``get`` method')
 
@@ -65,7 +57,8 @@ class ned_d(_base_importer):
 
     def generate_the_database_table(
             self):
-        """generate the NED-D database table
+        """
+        *generate the NED-D database table*
         """
         self.log.info('starting the ``generate_the_database_table`` method')
 
@@ -127,7 +120,8 @@ class ned_d(_base_importer):
 
     def create_dictionary_of_nedd(
             self):
-        """create a list of dictionaries for the returned ned data
+        """
+        *create a list of dictionaries for the returned ned data*
         """
         self.log.info('starting the ``import_nedcsv_to_database`` method')
 
@@ -211,7 +205,8 @@ class ned_d(_base_importer):
 
     def clean_up_columns(
             self):
-        """clean up columns of the NED table
+        """
+        *clean up columns of the NED table*
         """
         self.log.info('starting the ``clean_up_columns`` method')
 
@@ -241,7 +236,8 @@ class ned_d(_base_importer):
 
     def create_the_master_view(
             self):
-        """create the master view
+        """
+        *create the master view*
         """
         self.log.info('starting the ``create_the_master_view`` method')
 
@@ -299,7 +295,8 @@ class ned_d(_base_importer):
 
     def get_metadata_for_galaxies(
             self):
-        """get metadata for galaxies
+        """
+        *get metadata for galaxies*
         """
         self.log.info('starting the ``get_metadata_for_galaxies`` method')
 
@@ -321,7 +318,8 @@ class ned_d(_base_importer):
 
     def _count_galaxies_requiring_metadata(
             self):
-        """ count galaxies requiring metadata
+        """
+        *count galaxies requiring metadata*
 
         **Return:**
             - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
@@ -351,7 +349,8 @@ class ned_d(_base_importer):
 
     def _get_3000_galaxies_needing_metadata(
             self):
-        """ get 3000 galaxies needing metadata
+        """
+        *get 3000 galaxies needing metadata*
 
         **Return:**
             - ``len(self.theseIds)`` -- the number of NED IDs returned
@@ -382,7 +381,8 @@ class ned_d(_base_importer):
     def _query_ned_and_add_results_to_database(
             self,
             batchCount):
-        """ query ned and add results to database
+        """
+        *query ned and add results to database*
 
         **Key Arguments:**
             - ``batchCount`` - the index number of the batch sent to NED
@@ -469,7 +469,8 @@ class ned_d(_base_importer):
 
     def _update_sdss_coverage(
             self):
-        """ update sdss coverage
+        """
+        *update sdss coverage*
         """
         self.log.info('starting the ``_update_sdss_coverage`` method')
 

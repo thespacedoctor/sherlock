@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-importers_clutils.py
-====================
-:Summary:
-    CL Utils for the Sherlock importers
+*CL Utils for the Sherlock importers*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ importers_clutils.py
 :Date Created:
     August 25, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 
 Usage:
@@ -54,7 +46,7 @@ def tab_complete(text, state):
 
 def main(arguments=None):
     """
-    The main function used when ``importers_clutils.py`` is run as a single script from the cl, or when installed as a cl command
+    *The main function used when ``importers_clutils.py`` is run as a single script from the cl, or when installed as a cl command*
     """
     # setup the command-line util settings
     su = tools(

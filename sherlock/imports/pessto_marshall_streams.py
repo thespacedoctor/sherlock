@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-pessto_marshall_streams.py
-============
-:Summary:
-    Import PESSTO Marshall tables into crossmatch catalogues
+*Import PESSTO Marshall tables into crossmatch catalogues*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ pessto_marshall_streams.py
 :Date Created:
     August 25, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 
 # xdocopt-usage-tempx
@@ -46,7 +38,7 @@ from ._base_importer import _base_importer
 class pessto_marshall_streams(_base_importer):
 
     """
-    The worker class for the pessto_marshall_streams module
+    *The worker class for the pessto_marshall_streams module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -56,7 +48,8 @@ class pessto_marshall_streams(_base_importer):
         - ``version`` -- version of the pessto_marshall_streams catalogue
 
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean pessto_marshall_streams class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -68,12 +61,14 @@ class pessto_marshall_streams(_base_importer):
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the pessto_marshall_streams object
+        """
+        *get the pessto_marshall_streams object*
 
         **Return:**
             - ``pessto_marshall_streams``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -104,7 +99,8 @@ class pessto_marshall_streams(_base_importer):
 
     def create_dictionary_of_pessto_marshall_streams(
             self):
-        """create dictionary of pessto_marshall_streams
+        """
+        *create dictionary of pessto_marshall_streams*
 
         **Key Arguments:**
             # -
@@ -112,7 +108,8 @@ class pessto_marshall_streams(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean create_dictionary_of_pessto_marshall_streams method
             - @review: when complete add logging
         """
@@ -146,7 +143,8 @@ class pessto_marshall_streams(_base_importer):
     # use the tab-trigger below for new method
     def _update_database_helper_table(
             self):
-        """ update dataasbe helper table
+        """
+        *update dataasbe helper table*
 
         **Key Arguments:**
             # -
@@ -154,7 +152,8 @@ class pessto_marshall_streams(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_database_helper_table method
             - @review: when complete add logging
         """

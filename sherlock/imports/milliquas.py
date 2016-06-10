@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-milliquas.py
-============
-:Summary:
-    Import Milliquas catagloue from plain text file
+*Import Milliquas catagloue from plain text file*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ milliquas.py
 :Date Created:
     August 25, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 
 # xdocopt-usage-tempx
@@ -45,7 +37,7 @@ from ._base_importer import _base_importer
 class milliquas(_base_importer):
 
     """
-    The worker class for the milliquas module
+    *The worker class for the milliquas module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -55,7 +47,8 @@ class milliquas(_base_importer):
         - ``version`` -- version of the milliquas catalogue
 
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean milliquas class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -67,12 +60,14 @@ class milliquas(_base_importer):
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the milliquas object
+        """
+        *get the milliquas object*
 
         **Return:**
             - ``milliquas``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -87,7 +82,8 @@ class milliquas(_base_importer):
 
     def create_dictionary_of_milliquas(
             self):
-        """create dictionary of milliquas
+        """
+        *create dictionary of milliquas*
 
         **Key Arguments:**
             # -
@@ -95,7 +91,8 @@ class milliquas(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean create_dictionary_of_milliquas method
             - @review: when complete add logging
         """

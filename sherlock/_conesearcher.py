@@ -1,22 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_conesearcher.py
-================
-:Summary:
-    The conesearch object for sherlock
+*The conesearch object for sherlock*
 
 :Author:
     David Young
 
 :Date Created:
     July 1, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -38,7 +29,7 @@ from fundamentals import tools, times
 class conesearcher():
 
     """
-    The worker class for the conesearcher module
+    *The worker class for the conesearcher module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -120,7 +111,8 @@ class conesearcher():
 
     # METHOD ATTRIBUTES
     def get(self):
-        """get the conesearcher object
+        """
+        *get the conesearcher object*
 
         **Return:**
             - ``message`` -- message of success/failure
@@ -136,7 +128,8 @@ class conesearcher():
 
     def _build_sql_query_from_htm(
             self):
-        """ build sql query from htm
+        """
+        *build sql query from htm*
         """
         self.log.debug('starting the ``_build_sql_query_from_htm`` method')
 
@@ -178,7 +171,8 @@ class conesearcher():
 
     def _grab_conesearch_results_from_db(
             self):
-        """ grab conesearch results from db
+        """
+        *grab conesearch results from db*
         """
         self.log.debug(
             'starting the ``_grab_conesearch_results_from_db`` method')

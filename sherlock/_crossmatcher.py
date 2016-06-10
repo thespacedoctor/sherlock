@@ -1,22 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_crossmatcher.py
-================
-:Summary:
-    The transient to catalogue sources crossmatcher for sherlock
+*The transient to catalogue sources crossmatcher for sherlock*
 
 :Author:
     David Young
 
 :Date Created:
     July 1, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -36,7 +27,7 @@ from fundamentals import tools, times
 class crossmatcher():
 
     """
-    The worker class for the crossmatcher module
+    *The worker class for the crossmatcher module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection for the catalogues
@@ -69,7 +60,8 @@ class crossmatcher():
 
     # METHOD ATTRIBUTES
     def get(self):
-        """get the crossmatcher object
+        """
+        *get the crossmatcher object*
 
         **Return:**
             - ``classifications`` - list of all classifications
@@ -83,7 +75,8 @@ class crossmatcher():
 
     def _crossmatch_transients_against_catalogues(
             self):
-        """ crossmatch transients against catalogues
+        """
+        *crossmatch transients against catalogues*
         """
 
         self.log.debug(
@@ -250,7 +243,7 @@ class crossmatcher():
         return None
 
     def searchCatalogue(self, objectList, searchPara={}, searchName=""):
-        """Cone Search wrapper to make it a little more user friendly"""
+        """*Cone Search wrapper to make it a little more user friendly*"""
 
         from sherlock import conesearcher
 
@@ -423,7 +416,8 @@ class crossmatcher():
     def _lookup_classification_dict(
             self,
             flag):
-        """ append reversed classification dictionary
+        """
+        *append reversed classification dictionary*
 
         **Key Arguments:**
             # -
@@ -458,7 +452,8 @@ class crossmatcher():
         return ' + '.join(flagTypes)
 
     def _physical_separation_search(self, objectRow, searchPara, searchName):
-        """ physical separation search
+        """
+        *physical separation search*
 
         **Key Arguments:**
             - ``objectRow`` -- transient to be crossmatched
@@ -500,7 +495,9 @@ class crossmatcher():
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
         # A PHYSICAL SEPARATION WITHIN THE PHYSICAL RADIUS.
         if searchDone and matches:
+            objectName = matches[0][0]["name"]
             for row in matches[0][1]:
+
                 thisMatch = False
                 physicalSeparation = None
                 newSearchName = searchName
@@ -514,6 +511,8 @@ class crossmatcher():
 
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
                 if row[1]["xmmajoraxis"] and row[0] < row[1]["xmmajoraxis"] * self.settings["galaxy radius stetch factor"]:
+                    self.log.info(
+                        '%(objectName)s is found within the major axis measurement of the source' % locals())
                     thisMatch = True
                     newSearchName = newSearchName + \
                         " (within %s * major axis)" % (
@@ -522,15 +521,22 @@ class crossmatcher():
                         "xmmajoraxis"] * self.settings["galaxy radius stetch factor"]
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 elif row[1]["xmdirectdistancescale"] and physicalSeparation < physicalRadius:
+                    self.log.info(
+                        '%(objectName)s is found within %(physicalSeparation)s Kpc of the source centre (direct distance measurement)' % locals())
                     thisMatch = True
                     newSearchName = newSearchName + " (direct distance)"
                     newAngularSep = physicalRadius / \
                         row[1]["xmdirectdistancescale"]
                 # NEW CHECK FOR A REDSHIFT DISTANCE
                 elif row[1]["xmscale"] and physicalSeparation < physicalRadius:
+                    self.log.info(
+                        '%(objectName)s is found within %(physicalSeparation)s Kpc of the source centre (redshift distance measurement)' % locals())
                     thisMatch = True
                     newSearchName = newSearchName + " (redshift distance)"
                     newAngularSep = physicalRadius / row[1]["xmscale"]
+                else:
+                    self.log.info(
+                        '%(objectName)s is not associated with the source (from inspecting the transient/source physical separation calculations)' % locals())
 
                 if thisMatch == True:
                     row[1]["physical_separation_kpc"] = physicalSeparation

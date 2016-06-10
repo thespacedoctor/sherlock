@@ -1,22 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_database.py
-============
-:Summary:
-    Class to setup database object for the sherlock
+*Class to setup database object for the sherlock*
 
 :Author:
     David Young
 
 :Date Created:
     July 1, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -37,7 +28,7 @@ from fundamentals import tools, times
 class database():
 
     """
-    The worker class for the database module
+    *The worker class for the database module*
 
     **Key Arguments:**
         - ``log`` -- logger
@@ -62,7 +53,8 @@ class database():
 
     # METHOD ATTRIBUTES
     def get(self):
-        """get the database object
+        """
+        *get the database object*
 
         **Return:**
             - ``self.transientsDbConn, self.cataloguesDbConn`` -- two database connections
@@ -74,7 +66,8 @@ class database():
 
     def _setup_database_connections(
             self):
-        """ setup database connections for transient and catalogue databases
+        """
+        *setup database connections for transient and catalogue databases*
         """
         self.log.debug('starting the ``_setup_database_connections`` method')
 
@@ -191,7 +184,8 @@ class database():
         return None
 
     def _checkServer(self, address, port):
-        """Check that the TCP Port we've decided to use for tunnelling is available
+        """
+        *Check that the TCP Port we've decided to use for tunnelling is available*
         """
         self.log.debug('starting the ``_checkServer`` method')
 

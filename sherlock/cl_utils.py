@@ -39,7 +39,7 @@ def tab_complete(text, state):
 
 def main(arguments=None):
     """
-    The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command
+    *The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command*
     """
     # setup the command-line util settings
     su = tools(
