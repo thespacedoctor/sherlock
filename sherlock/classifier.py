@@ -345,16 +345,22 @@ class classifier():
                 rankScores.append(rankScore)
 
             rank = 0
+            theseValues = []
             for rs, row in sorted(zip(rankScores, rows)):
                 rank += 1
                 primaryId = row["id"]
+                theseValues.append("(%(primaryId)s,%(rank)s)" % locals())
+
+            theseValues = ",".join(theseValues)
+            if len(theseValues):
                 sqlQuery = u"""
-                    update tcs_cross_matches set rank = %(rank)s where id = %(primaryId)s
+                    INSERT INTO tcs_cross_matches (id,rank) VALUES %(theseValues)s 
+                    ON DUPLICATE KEY UPDATE rank=VALUES(rank);
                 """ % locals()
-                rows = dms.execute_mysql_read_query(
+                dms.execute_mysql_write_query(
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,
-                    log=self.log
+                    log=self.log,
                 )
 
             sqlQuery = u"""
