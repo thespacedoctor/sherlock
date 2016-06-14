@@ -201,6 +201,13 @@ class ned_conesearch(_base_importer):
                         print "major_diameter_arcmin is " + thisDict["major_diameter_arcmin"] + ". Changing to null."
                         thisDict["major_diameter_arcmin"] = "null"
 
+                if thisDict["major_diameter_arcmin"] != "null":
+                    try:
+                        float(thisDict["major_diameter_arcmin"])
+                    except:
+                        print "major_diameter_arcmin is " + thisDict["major_diameter_arcmin"] + ". Changing to null."
+                        thisDict["major_diameter_arcmin"] = "null"
+
                 sqlQuery += u"""
                     update %(tableName)s
                         set redshift_quality = "%(redshift_quality)s",
