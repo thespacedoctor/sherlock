@@ -451,7 +451,6 @@ class crossmatcher():
         elif "tcs_view_star_sdss" in catalogueName:
             sdssStarMatches = []
             matchSubset = []
-            # print "matchedObjects: %(matchedObjects)s" % locals()  # XXX
 
             if searchDone and matchedObjects:
                 for row in matchedObjects[0][1]:

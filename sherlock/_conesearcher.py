@@ -126,16 +126,15 @@ class conesearcher():
         self._build_sql_query_from_htm()
 
         # RETURN RESULTS IN BATCHES TO AVOID MEMORY ISSUES
-        resultLen = 5000
+        resultLen = 100000
         offset = 0
-        returnLimit = 5000
+        returnLimit = 100000
         results = []
-        while resultLen == 5000:
-            resultSet = self._grab_conesearch_results_from_db(
+        while resultLen == 100000:
+            resultSet, resultLen = self._grab_conesearch_results_from_db(
                 returnLimit=returnLimit,
                 offset=offset
             )
-            resultLen = len(resultSet)
             results += resultSet
             offset += returnLimit
 
@@ -250,12 +249,15 @@ class conesearcher():
 
         results = []
         # print "START DB"
+
         rows = dms.execute_mysql_read_query(
             sqlQuery=self.sqlQuery + sqlQueryExtra,
             dbConn=self.dbConn,
             log=self.log
         )
         # print "END DB"
+
+        resultLen = len(rows)
 
         if len(rows):
             # IF ONLY A COUNT(*)
@@ -298,7 +300,7 @@ class conesearcher():
 
         self.log.debug(
             'completed the ``_grab_conesearch_results_from_db`` method')
-        return results
+        return results, resultLen
 
     # use the tab-trigger below for new method
     # xt-class-method

@@ -420,7 +420,7 @@ class cleanup_database_tables():
             table_name = ("_").join(table_name)
             table_name = "tcs_cat_%(table_name)s" % locals()
 
-            print table_name
+            # print table_name
 
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set table_id = (select id from tcs_helper_catalogue_tables_info where table_name = "%(table_name)s") where view_name = "%(view_name)s"
