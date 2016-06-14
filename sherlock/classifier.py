@@ -373,9 +373,11 @@ class classifier():
             )
 
             classification = ""
-            if len(rows):
-                classification = rows[0]["association_type"]
-            else:
+            for row in rows:
+                classification += row["association_type"] + "/"
+            classification = classification[:-1]
+
+            if len(classification) == 0:
                 classification = "ORPHAN"
 
             sqlQuery = u"""
