@@ -174,6 +174,7 @@ class crossmatcher():
                         objectType = objectType + \
                             searchPara["transient classification"]
                         allMatches = allMatches + supMatches
+                        del supMatches
 
             # ADD DETAILS TO THE lOGS
             oldClass = transient['object_classification']
