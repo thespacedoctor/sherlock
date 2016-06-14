@@ -401,7 +401,7 @@ class classifier():
 
         # GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE
         sqlQuery = u"""
-            select v.id as view_id, view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id
+            select v.id as view_id, view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy, filter1ColName, filterErr1ColName, filterName1ColName, filter2ColName, filterErr2ColName, filterName2ColName, filter3ColName, filterErr3ColName, filterName3ColName, filter4ColName, filterErr4ColName, filterName4ColName, filter5ColName, filterErr5ColName, filterName5ColName from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id
         """ % locals()
         rows = dms.execute_mysql_read_query(
             sqlQuery=sqlQuery,

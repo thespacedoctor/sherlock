@@ -184,7 +184,14 @@ class conesearcher():
             columns = []
             for k, v in self.colMaps[self.tableName].iteritems():
                 if "colname" in k.lower() and v:
-                    columns.append(v)
+                    if "filterName" in k:
+                        if "col_" in v:
+                            v = v.replace("col_", "")
+                            columns.append(v)
+                        else:
+                            columns.append("'%(v)s' as '%(k)s'" % locals())
+                    else:
+                        columns.append(v)
 
         columns = ','.join(columns)
         tableName = self.tableName

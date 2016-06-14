@@ -254,7 +254,7 @@ class crossmatcher():
 
         message = "  Starting `%(searchName)s` catalogue conesearch" % locals(
         )
-        print message
+        # print message
 
         # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
         if "physical radius kpc" in searchPara:
@@ -272,16 +272,18 @@ class crossmatcher():
         matchSubset = []
         searchDone = True
 
-        # FAINT STAR EXTRAS
+        # FAINT & BRIGHT STAR EXTRAS
         try:
             faintMagColumn = searchPara["faint mag column"]
             faintLimit = searchPara["faint limit"]
+        except:
+            faintMagColumn = False
+            faintLimit = False
+        try:
             filterColumns = searchPara["filter names"]
             magColumns = searchPara["mag columns"]
             magErrColumns = searchPara["mag err columns"]
         except:
-            faintMagColumn = False
-            faintLimit = False
             filterColumns = False
             magColumns = False
             magErrColumns = False
@@ -396,18 +398,38 @@ class crossmatcher():
                         self.colMaps[catalogueName]["decColName"]]
                     xm[1]["originalSearchRadius"] = radius
 
-                    if filterColumns:
-                        xm[1]["sourceFilter"] = filterColumns[0]
-                        xm[1]["sourceMagnitude"] = xm[1][magColumns[0]]
-                        error = 10.
-                        for f, m, e in zip(filterColumns, magColumns, magErrColumns):
-                            if xm[1][e] < error:
-                                error = xm[1][e]
-                                xm[1]["sourceFilter"] = f
-                                xm[1]["sourceMagnitude"] = xm[1][m]
+                    # SOURCE MAG AND FILTER - CHOOSE MAG WITH LOWEST ERROR
+
+                    xm[1]["sourceFilter"] = self.colMaps[
+                        catalogueName]["filterName1ColName"]
+
+                    xm[1]["sourceMagnitude"] = xm[1][
+                        self.colMaps[catalogueName]["filter1ColName"]]
+                    if self.colMaps[catalogueName]["filterErr1ColName"]:
+                        xm[1]["sourceMagnitudeErr"] = xm[1][
+                            self.colMaps[catalogueName]["filterErr1ColName"]]
                     else:
-                        xm[1]["sourceFilter"] = None
-                        xm[1]["sourceMagnitude"] = None
+                        xm[1]["sourceMagnitudeErr"] = None
+                    thisMagErr = xm[1]["sourceMagnitude"]
+                    index = 2
+                    while thisMagErr is not None and index < 6:
+                        if self.colMaps[catalogueName][
+                                "filterErr%(index)sColName" % locals()]:
+                            thisMagErr = xm[1][self.colMaps[catalogueName][
+                                "filterErr%(index)sColName" % locals()]]
+                        else:
+                            thisMagErr = None
+                        if thisMagErr is not None and thisMagErr < xm[1]["sourceMagnitudeErr"]:
+                            filterName = self.colMaps[
+                                catalogueName]["filterName%(index)sColName" % locals()][:4]
+                            if "col_" not in filterName:
+                                xm[1]["sourceFilter"] = filterName
+                            else:
+                                xm[1]["sourceFilter"] = xm[1][filterName]
+                            xm[1]["sourceMagnitude"] = xm[1][
+                                self.colMaps[catalogueName]["filter%(index)sColName" % locals()]]
+                            xm[1]["sourceMagnitudeErr"] = thisMagErr
+                        index += 1
 
                 matchedObjects.append(
                     [row, xmObjects, catalogueName, matchedType])
@@ -425,9 +447,12 @@ class crossmatcher():
                 faintStarMatches.append(
                     [matchedObjects[0][0], matchSubset, matchedObjects[0][2], matchedObjects[0][3]])
             matchedObjects = faintStarMatches
+        # BRIGHT STAR MATCH
         elif "tcs_view_star_sdss" in catalogueName:
             sdssStarMatches = []
             matchSubset = []
+            # print "matchedObjects: %(matchedObjects)s" % locals()  # XXX
+
             if searchDone and matchedObjects:
                 for row in matchedObjects[0][1]:
                     rMag = row[1]["petroMag_r"]
@@ -453,7 +478,7 @@ class crossmatcher():
 
         message = "  Finished `%(searchName)s` catalogue conesearch" % locals(
         )
-        print message
+        # print message
 
         return searchDone, matchedObjects
 
