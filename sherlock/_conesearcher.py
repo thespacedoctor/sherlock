@@ -1,22 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_conesearcher.py
-================
-:Summary:
-    The conesearch object for sherlock
+*The conesearch object for sherlock*
 
 :Author:
     David Young
 
 :Date Created:
     July 1, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -34,13 +25,13 @@ from dryxPython import logs as dl
 from dryxPython import astrotools as dat
 from dryxPython import mysql as dms
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 
 
 class conesearcher():
 
     """
-    The worker class for the conesearcher module
+    *The worker class for the conesearcher module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -123,7 +114,8 @@ class conesearcher():
 
     # METHOD ATTRIBUTES
     def get(self):
-        """get the conesearcher object
+        """
+        *get the conesearcher object*
 
         **Return:**
             - ``message`` -- message of success/failure
@@ -158,7 +150,8 @@ class conesearcher():
 
     def _build_sql_query_from_htm(
             self):
-        """ build sql query from htm
+        """
+        *build sql query from htm*
         """
         self.log.debug('starting the ``_build_sql_query_from_htm`` method')
 
@@ -186,14 +179,21 @@ class conesearcher():
         #         htmWhereClause.append(
         #             "(htm16ID between %(bMin)s and %(bMax)s)" % locals())
 
-        # htmWhereClause = " OR ".join(htmWhereClause)
+        # if len(htmWhereClause):
+        #     htmWhereClause = " OR ".join(htmWhereClause)
+        # else:
+        #     htmWhereClause = ""
         # singleIds = ",".join(singleIds)
+        # if len(singleIds):
+        #     singleIds = "htm16ID in (%(singleIds)s)" % locals()
+        # else:
+        #     singleIds = ""
 
-        # htmWhereClause = "where %(htmWhereClause)s or htm16ID in (%(singleIds)s)" % locals(
+        # if len(singleIds) and len(htmWhereClause):
+        #     htmWhereClause = htmWhereClause + " or "
+
+        # htmWhereClause = "where %(htmWhereClause)s %(singleIds)s" % locals(
         # )
-
-        # print len(theseArraies)
-        # sys.exit(0)
 
         ratio = float(hmax - hmin + 1) / float(thisArray.size)
         if ratio < 100 or thisArray.size > 2000:
@@ -205,10 +205,6 @@ class conesearcher():
             thesHtmIds = s.getvalue()[:-1]
             htmWhereClause = "where htm16ID in (%(thesHtmIds)s)" % locals()
 
-        # hmax = thisArray.max()
-        # hmin = thisArray.min()
-        #
-
         # DECIDE WHAT COLUMNS TO REQUEST
         if self.queryType == 1:
             columns = self.quickColumns
@@ -218,7 +214,14 @@ class conesearcher():
             columns = []
             for k, v in self.colMaps[self.tableName].iteritems():
                 if "colname" in k.lower() and v:
-                    columns.append(v)
+                    if "filterName" in k:
+                        if "col_" in v:
+                            v = v.replace("col_", "")
+                            columns.append(v)
+                        else:
+                            columns.append("'%(v)s' as '%(k)s'" % locals())
+                    else:
+                        columns.append(v)
 
         columns = ','.join(columns)
         tableName = self.tableName
@@ -227,8 +230,6 @@ class conesearcher():
         self.sqlQuery = "select %(columns)s from %(tableName)s %(htmWhereClause)s" % locals(
         )
 
-        # print self.sqlQuery
-
         self.log.debug('completed the ``_build_sql_query_from_htm`` method')
         return None
 
@@ -236,8 +237,9 @@ class conesearcher():
             self,
             returnLimit=None,
             offset=None):
-        """ grab conesearch results from db
+        """*grab conesearch results from db*
         """
+
         self.log.debug(
             'starting the ``_grab_conesearch_results_from_db`` method')
 

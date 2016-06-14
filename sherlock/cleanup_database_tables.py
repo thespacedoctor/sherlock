@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-cleanup_database_tables.py
-==========================
-:Summary:
-    Clean up the database tables used by sherlock - maintainance tools
+*Clean up the database tables used by sherlock - maintainance tools*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ cleanup_database_tables.py
 :Date Created:
     August 20, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 
 # xdocopt-usage-tempx
@@ -34,7 +26,7 @@ from dryxPython import mysql as dms
 from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 # from ..__init__ import *
 
 
@@ -44,10 +36,10 @@ def tab_complete(text, state):
 
 def main(arguments=None):
     """
-    The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command
+    *The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command*
     """
     # setup the command-line util settings
-    su = setup_main_clutil(
+    su = tools(
         arguments=arguments,
         docString=__doc__,
         logLevel="DEBUG",
@@ -76,7 +68,7 @@ def main(arguments=None):
         log.debug('%s = %s' % (varname, val,))
 
     ## START LOGGING ##
-    startTime = dcu.get_now_sql_datetime()
+    startTime = times.get_now_sql_datetime()
     log.info(
         '--- STARTING TO RUN THE cleanup_database_tables.py AT %s' %
         (startTime,))
@@ -120,8 +112,8 @@ def main(arguments=None):
         dbConn.commit()
         dbConn.close()
     ## FINISH LOGGING ##
-    endTime = dcu.get_now_sql_datetime()
-    runningTime = dcu.calculate_time_difference(startTime, endTime)
+    endTime = times.get_now_sql_datetime()
+    runningTime = times.calculate_time_difference(startTime, endTime)
     log.info('-- FINISHED ATTEMPT TO RUN THE cleanup_database_tables.py AT %s (RUNTIME: %s) --' %
              (endTime, runningTime, ))
 
@@ -134,7 +126,7 @@ def main(arguments=None):
 class cleanup_database_tables():
 
     """
-    The worker class for the cleanup_database_tables module
+    *The worker class for the cleanup_database_tables module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -142,7 +134,8 @@ class cleanup_database_tables():
         - ``settings`` -- the settings dictionary
 
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean cleanup_database_tables class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -185,12 +178,14 @@ class cleanup_database_tables():
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the cleanup_database_tables object
+        """
+        *get the cleanup_database_tables object*
 
         **Return:**
             - ``cleanup_database_tables``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -207,7 +202,8 @@ class cleanup_database_tables():
 
     def _updated_row_counts_in_tcs_helper_catalogue_tables_info(
             self):
-        """ updated row counts in tcs catalogue tables
+        """
+        *updated row counts in tcs catalogue tables*
 
         **Key Arguments:**
             # -
@@ -215,7 +211,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _updated_row_counts_in_tcs_helper_catalogue_tables_info method
             - @review: when complete add logging
         """
@@ -275,7 +272,8 @@ class cleanup_database_tables():
     # use the tab-trigger below for new method
     def _update_tcs_helper_catalogue_tables_info_with_new_tables(
             self):
-        """ update tcs helper catalogue tables info with new tables
+        """
+        *update tcs helper catalogue tables info with new tables*
 
         **Key Arguments:**
             # -
@@ -283,7 +281,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_tcs_helper_catalogue_tables_info_with_new_tables method
             - @review: when complete add logging
         """
@@ -351,7 +350,8 @@ class cleanup_database_tables():
     # use the tab-trigger below for new method
     def _clean_up_columns(
             self):
-        """clean up columns
+        """
+        *clean up columns*
 
         **Key Arguments:**
             # -
@@ -359,7 +359,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _clean_up_columns method
             - @review: when complete add logging
         """
@@ -419,7 +420,7 @@ class cleanup_database_tables():
             table_name = ("_").join(table_name)
             table_name = "tcs_cat_%(table_name)s" % locals()
 
-            print table_name
+            # print table_name
 
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set table_id = (select id from tcs_helper_catalogue_tables_info where table_name = "%(table_name)s") where view_name = "%(view_name)s"
@@ -436,7 +437,8 @@ class cleanup_database_tables():
     # use the tab-trigger below for new method
     def _update_tcs_helper_catalogue_views_info_with_new_views(
             self):
-        """ update tcs helper catalogue tables info with new tables
+        """
+        *update tcs helper catalogue tables info with new tables*
 
         **Key Arguments:**
             # -
@@ -444,7 +446,8 @@ class cleanup_database_tables():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_tcs_helper_catalogue_views_info_with_new_views method
             - @review: when complete add logging
         """
@@ -523,6 +526,10 @@ class cleanup_database_tables():
         **Todo**
             - @review: when complete, clean _copy_helper_tables_to_transient_database method
             - @review: when complete add logging
+
+        .. todo ::
+
+            - need to change pessto marshall database to database table from settings file
         """
         self.log.info(
             'starting the ``_copy_helper_tables_to_transient_database`` method')

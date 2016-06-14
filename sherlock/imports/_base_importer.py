@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_base_importer.py
-============
-:Summary:
-    The base importer for sherlock imports
+*The base importer for sherlock imports*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ _base_importer.py
 :Date Created:
     August 25, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 """
 ################# GLOBAL IMPORTS ####################
@@ -36,14 +28,14 @@ from docopt import docopt
 from dryxPython import mysql as dms
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 # from ..__init__ import *
 
 
 class _base_importer():
 
     """
-    The worker class for the _base_importer module
+    *The worker class for the _base_importer module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -56,7 +48,8 @@ class _base_importer():
         - ``cataloguesDbConn`` -- catalogues database connection (default false - will be setup here if false)
 
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean _base_importer class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -133,12 +126,14 @@ class _base_importer():
 
     # Method Attributes
     def get(self):
-        """get the _base_importer object
+        """
+        *get the _base_importer object*
 
         **Return:**
             - ``_base_importer``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -153,7 +148,8 @@ class _base_importer():
 
     def create_dictionary_of__base_importer(
             self):
-        """create dictionary of _base_importer
+        """
+        *create dictionary of _base_importer*
 
         **Key Arguments:**
             # -
@@ -161,7 +157,8 @@ class _base_importer():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean create_dictionary_of__base_importer method
             - @review: when complete add logging
         """
@@ -207,7 +204,8 @@ class _base_importer():
     # use the tab-trigger below for new method
     def add_data_to_database_table(
             self):
-        """add data to database table
+        """
+        *add data to database table*
 
         **Key Arguments:**
             # -
@@ -215,7 +213,8 @@ class _base_importer():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean add_data_to_database_table method
             - @review: when complete add logging
         """
@@ -236,7 +235,8 @@ class _base_importer():
     # use the tab-trigger below for new method
     def add_htmids_to_database_table(
             self):
-        """add htmids to database table
+        """
+        *add htmids to database table*
 
         **Key Arguments:**
             # -
@@ -244,7 +244,8 @@ class _base_importer():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean add_htmids_to_database_table method
             - @review: when complete add logging
         """
@@ -268,7 +269,8 @@ class _base_importer():
 
     def _update_database_helper_table(
             self):
-        """ update dataasbe helper table
+        """
+        *update dataasbe helper table*
 
         **Key Arguments:**
             # -
@@ -276,7 +278,8 @@ class _base_importer():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_database_helper_table method
             - @review: when complete add logging
         """

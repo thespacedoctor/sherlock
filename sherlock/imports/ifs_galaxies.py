@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-ifs_galaxies.py
-==================
-:Summary:
-    Import IFS galaxies from the IFS galaxy stream
+*Import IFS galaxies from the IFS galaxy stream*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ ifs_galaxies.py
 :Date Created:
     October  8, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 """
 ################# GLOBAL IMPORTS ####################
@@ -28,7 +20,7 @@ os.environ['TERM'] = 'vt100'
 import codecs
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from dryxPython import webcrawlers as dwc
 from dryxPython import astrotools as dat
 from ._base_importer import _base_importer
@@ -36,7 +28,7 @@ from ._base_importer import _base_importer
 
 class ifs_galaxies(_base_importer):
     """
-    The worker class for the ifs_galaxies module
+    *The worker class for the ifs_galaxies module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -45,7 +37,8 @@ class ifs_galaxies(_base_importer):
         - ``pathToDataFIle`` -- path to the pessto_marshall_streams data file
         - ``version`` -- version of the pessto_marshall_streams catalogue
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean ifs_galaxies class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -54,12 +47,14 @@ class ifs_galaxies(_base_importer):
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the ifs_galaxies object
+        """
+        *get the ifs_galaxies object*
 
         **Return:**
             - ``ifs_galaxies``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -81,7 +76,8 @@ class ifs_galaxies(_base_importer):
 
     def _download_and_parse_ifs_galaxy_csv(
             self):
-        """ download and parse ifs galaxy csv
+        """
+        *download and parse ifs galaxy csv*
 
         **Key Arguments:**
             # -
@@ -89,7 +85,8 @@ class ifs_galaxies(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _download_and_parse_ifs_galaxy_csv method
             - @review: when complete add logging
         """

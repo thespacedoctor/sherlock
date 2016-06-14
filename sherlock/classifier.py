@@ -1,19 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-classifier.py
-=============
-:Summary:
-    The classifier object for Sherlock
+*The classifier object for Sherlock*
 
 :Author:
     David Young
 
 :Date Created:
     June 29, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
 
 :Notes:
     - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
@@ -31,14 +25,14 @@ from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
 from dryxPython import mysql as dms
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from sherlock.update_ned_stream import update_ned_stream
 
 
 class classifier():
 
     """
-    The classifier object for Sherlock
+    *The classifier object for Sherlock*
 
     **Key Arguments:**
         - ``log`` -- logger
@@ -78,7 +72,8 @@ class classifier():
     # METHOD ATTRIBUTES
 
     def get(self):
-        """perform the classifications
+        """
+        *perform the classifications*
         """
         self.log.debug('starting the ``get`` method')
 
@@ -123,9 +118,30 @@ class classifier():
             'completed the ``_get_transient_metadata_from_sqlquery`` method')
         return transientsMetadataList
 
+    def _get_transient_metadata_from_database_list(
+            self):
+        """
+        *get transient metadata from a given workflow list in the transient database*
+        """
+        self.log.debug(
+            'starting the ``_get_transient_metadata_from_database_list`` method')
+
+        sqlQuery = self.settings["database settings"][
+            "transients"]["transient query"]
+        self.transientsMetadataList = dms.execute_mysql_read_query(
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+            log=self.log
+        )
+
+        self.log.debug(
+            'completed the ``_get_transient_metadata_from_database_list`` method')
+        return None
+
     def _crossmatch_transients_against_catalogues(
             self):
-        """ crossmatch transients against catalogue
+        """
+        *crossmatch transients against catalogue*
 
         **Key Arguments:**
             # -
@@ -133,7 +149,8 @@ class classifier():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _crossmatch_transients_against_catalogues method
             - @review: when complete add logging
         """
@@ -160,7 +177,8 @@ class classifier():
     # use the tab-trigger below for new method
     def _update_transient_database(
             self):
-        """ update transient database
+        """
+        *update transient database*
 
         **Key Arguments:**
             # -
@@ -168,7 +186,8 @@ class classifier():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_transient_database method
             - @review: when complete add logging
         """
@@ -240,7 +259,7 @@ class classifier():
                            )
                         values (
                            %s,
-                           %s,
+                           "%s",
                            %s,
                            %s,
                            %s,
@@ -279,10 +298,16 @@ class classifier():
                     crossmatch["sourceMagnitude"] = None
 
                 if crossmatch["sourceSubType"] and "null" not in str(crossmatch["sourceSubType"]):
-                    pass
+                    crossmatch["sourceSubType"] = '"%s"' % (crossmatch[
+                        "sourceSubType"],)
                 else:
                     crossmatch["sourceSubType"] = None
-                theseValues = (transientObjectId, crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["catalogueViewId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["sourceFilter"], crossmatch["sourceMagnitude"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch[
+
+                for k, v in crossmatch.iteritems():
+                    if v == "null":
+                        crossmatch[k] = None
+
+                theseValues = (thisId, crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["catalogueViewId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["sourceMagnitude"], crossmatch["sourceFilter"],  crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch[
                                "distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
                 manyValueList.append(theseValues)
 
@@ -334,8 +359,8 @@ class classifier():
                 primaryId = row["id"]
                 theseValues.append("(%(primaryId)s,%(rank)s)" % locals())
 
+            theseValues = ",".join(theseValues)
             if len(theseValues):
-                theseValues = ",".join(theseValues)
                 sqlQuery = u"""
                     INSERT INTO %(crossmatchTablename)s (id,rank) VALUES %(theseValues)s 
                     ON DUPLICATE KEY UPDATE rank=VALUES(rank);
@@ -381,7 +406,8 @@ class classifier():
 
     def _grab_column_name_map_from_database(
             self):
-        """ grab column name map from database
+        """
+        *grab column name map from database*
 
         **Return:**
             - None
@@ -391,7 +417,7 @@ class classifier():
 
         # GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE
         sqlQuery = u"""
-            select v.id as view_id, view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id
+            select v.id as view_id, view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy, filter1ColName, filterErr1ColName, filterName1ColName, filter2ColName, filterErr2ColName, filterName2ColName, filter3ColName, filterErr3ColName, filterName3ColName, filter4ColName, filterErr4ColName, filterName4ColName, filter5ColName, filterErr5ColName, filterName5ColName from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id
         """ % locals()
         rows = dms.execute_mysql_read_query(
             sqlQuery=sqlQuery,
@@ -408,7 +434,8 @@ class classifier():
 
     def _create_crossmatch_table_if_not_existing(
             self):
-        """ create crossmatch table if it does not yet exist in the transients database
+        """
+        *create crossmatch table if it does not yet exist in the transients database*
 
         **Return:**
             - None

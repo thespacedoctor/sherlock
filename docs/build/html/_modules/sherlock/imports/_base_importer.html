@@ -1,0 +1,514 @@
+
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sherlock.imports._base_importer &mdash; sherlock 0.1.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="sherlock 0.1.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../../../_static/thespacedoctor_icon_white_circle.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#tutorial">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#modules">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#functions">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">sherlock</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>sherlock.imports._base_importer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sherlock.imports._base_importer</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/local/bin/python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">*The base importer for sherlock imports*</span>
+
+<span class="sd">:Author:</span>
+<span class="sd">    David Young</span>
+
+<span class="sd">:Date Created:</span>
+<span class="sd">    August 25, 2015</span>
+
+<span class="sd">.. todo::</span>
+<span class="sd">    </span>
+<span class="sd">    @review: when complete pull all general functions and classes into dryxPython</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################# GLOBAL IMPORTS ####################</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vt100&#39;</span>
+<span class="kn">import</span> <span class="nn">readline</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
+<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
+<span class="c1"># from ..__init__ import *</span>
+
+
+<div class="viewcode-block" id="_base_importer"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports._base_importer.html#sherlock.imports._base_importer">[docs]</a><span class="k">class</span> <span class="nc">_base_importer</span><span class="p">():</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *The worker class for the _base_importer module*</span>
+
+<span class="sd">    **Key Arguments:**</span>
+<span class="sd">        - ``dbConn`` -- mysql database connection</span>
+<span class="sd">        - ``log`` -- logger</span>
+<span class="sd">        - ``settings`` -- the settings dictionary</span>
+<span class="sd">        - ``pathToDataFIle`` -- path to the _base_importer data file</span>
+<span class="sd">        - ``version`` -- version of the _base_importer catalogue</span>
+<span class="sd">        - ``catalogueName`` -- name of the catalogue</span>
+<span class="sd">        - ``coordinateList`` -- list of coordinates (needed for some streamed tables)</span>
+<span class="sd">        - ``cataloguesDbConn`` -- if a catalogue database connection has already been setup then pass in here. Default *False*</span>
+
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        - @review: when complete, clean _base_importer class</span>
+<span class="sd">        - @review: when complete add logging</span>
+<span class="sd">        - @review: when complete, decide whether to abstract class to another module</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialisation</span>
+    <span class="c1"># 1. @flagged: what are the unique attrributes for each object? Add them</span>
+    <span class="c1"># to __init__</span>
+
+<div class="viewcode-block" id="_base_importer.__init__"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports._base_importer.html#sherlock.imports._base_importer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">log</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">pathToDataFile</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">catalogueName</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">coordinateList</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">cataloguesDbConn</span><span class="o">=</span><span class="bp">False</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;instansiating a new &#39;_base_importer&#39; object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pathToDataFile</span> <span class="o">=</span> <span class="n">pathToDataFile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalogueName</span> <span class="o">=</span> <span class="n">catalogueName</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinateList</span> <span class="o">=</span> <span class="n">coordinateList</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span> <span class="o">=</span> <span class="n">cataloguesDbConn</span>
+
+        <span class="c1"># xt-self-arg-tmpx</span>
+
+        <span class="c1"># INITIAL ACTIONS</span>
+        <span class="c1"># SETUP DATABASE CONNECTIONS</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">sherlock</span> <span class="kn">import</span> <span class="n">database</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">database</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transientsDbConn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pmDbConn</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">pathToDataFile</span><span class="p">:</span>
+            <span class="n">pathToReadFile</span> <span class="o">=</span> <span class="n">pathToDataFile</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;attempting to open the file </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                               <span class="p">(</span><span class="n">pathToReadFile</span><span class="p">,))</span>
+                <span class="n">readFile</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pathToReadFile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">catData</span> <span class="o">=</span> <span class="n">readFile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">readFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">IOError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;could not open the file </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pathToReadFile</span><span class="p">,)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">readFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">catData</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># BUILD VERSION TEXT</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;_v&quot;</span> <span class="o">+</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                    <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+
+        <span class="c1"># BUILD THE DATABASE TABLE NAME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span> <span class="o">=</span> <span class="s2">&quot;tcs_cat_</span><span class="si">%(catalogueName)s%(version)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primaryIdColumnName</span> <span class="o">=</span> <span class="s2">&quot;primaryId&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">databaseInsertbatchSize</span> <span class="o">=</span> <span class="mi">2500</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raColName</span> <span class="o">=</span> <span class="s2">&quot;raDeg&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declColName</span> <span class="o">=</span> <span class="s2">&quot;decDeg&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uniqueKeyList</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">raColName</span><span class="p">,</span> <span class="s2">&quot;decDeg&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="c1"># Method Attributes</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get the _base_importer object*</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - ``_base_importer``</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean get method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``get`` method&#39;</span><span class="p">)</span>
+
+        <span class="c1"># self.dictList = self.create_dictionary_of__base_importer()</span>
+        <span class="c1"># self.add_data_to_database_table()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_htmids_to_database_table</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``get`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_base_importer</span>
+
+    <span class="k">def</span> <span class="nf">create_dictionary_of__base_importer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *create dictionary of _base_importer*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean create_dictionary_of__base_importer method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;starting the ``create_dictionary_of__base_importer`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">dictList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">catData</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">inserts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mi">11</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">134</span><span class="p">,</span> <span class="mi">158</span><span class="p">,</span> <span class="mi">181</span><span class="p">]</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;raDeg&quot;</span><span class="p">,</span> <span class="s2">&quot;decDeg&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span><span class="p">,</span> <span class="s2">&quot;rmag&quot;</span><span class="p">,</span> <span class="s2">&quot;bmag&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;r_psf_class&quot;</span><span class="p">,</span> <span class="s2">&quot;b_psf_class&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;src_cat_name&quot;</span><span class="p">,</span> <span class="s2">&quot;src_cat_z&quot;</span><span class="p">,</span> <span class="s2">&quot;qso_prob&quot;</span><span class="p">,</span> <span class="s2">&quot;x_name&quot;</span><span class="p">,</span> <span class="s2">&quot;r_name&quot;</span><span class="p">,</span> <span class="s2">&quot;alt_id1&quot;</span><span class="p">,</span> <span class="s2">&quot;alt_id2&quot;</span><span class="p">]</span>
+
+        <span class="n">totalCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Cursor up one line and clear line</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1A</span><span class="se">\x1b</span><span class="s2">[2K&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">totalCount</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">totalCount</span>
+            <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(count)s</span><span class="s2"> / </span><span class="si">%(totalCount)s</span><span class="s2"> _base_importer data added to memory&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+            <span class="n">thisDict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">insert</span> <span class="ow">in</span> <span class="n">inserts</span><span class="p">:</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;–&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">insert</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="n">insert</span><span class="p">:]</span>
+
+            <span class="n">theseValues</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">theseValues</span><span class="p">):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">thisDict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">dictList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thisDict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;completed the ``create_dictionary_of__base_importer`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dictList</span>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="k">def</span> <span class="nf">add_data_to_database_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *add data to database table*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean add_data_to_database_table method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``add_data_to_database_table`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">dms</span><span class="o">.</span><span class="n">insert_list_of_dictionaries_into_database</span><span class="p">(</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">dictList</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dictList</span><span class="p">,</span>
+            <span class="n">dbTableName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span><span class="p">,</span>
+            <span class="n">uniqueKeyList</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">uniqueKeyList</span><span class="p">,</span>
+            <span class="n">batchSize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">databaseInsertbatchSize</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``add_data_to_database_table`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="k">def</span> <span class="nf">add_htmids_to_database_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *add htmids to database table*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean add_htmids_to_database_table method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``add_htmids_to_database_table`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
+        <span class="k">print</span> <span class="s2">&quot;Adding HTMIds to </span><span class="si">%(tableName)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
+        <span class="n">dms</span><span class="o">.</span><span class="n">add_HTMIds_to_mysql_tables</span><span class="o">.</span><span class="n">add_HTMIds_to_mysql_tables</span><span class="p">(</span>
+            <span class="n">raColName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">raColName</span><span class="p">,</span>
+            <span class="n">declColName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">declColName</span><span class="p">,</span>
+            <span class="n">tableName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">primaryIdColumnName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">primaryIdColumnName</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``add_htmids_to_database_table`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_update_database_helper_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *update dataasbe helper table*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _update_database_helper_table method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_update_database_helper_table`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            update tcs_helper_catalogue_tables_info set last_updated = now() where table_name = &quot;</span><span class="si">%(tableName)s</span><span class="s2">&quot;;</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_write_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_update_database_helper_table`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="c1"># xt-class-method</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dave Young.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

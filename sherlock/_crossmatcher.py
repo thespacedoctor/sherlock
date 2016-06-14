@@ -1,22 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_crossmatcher.py
-================
-:Summary:
-    The transient to catalogue sources crossmatcher for sherlock
+*The transient to catalogue sources crossmatcher for sherlock*
 
 :Author:
     David Young
 
 :Date Created:
     July 1, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -30,13 +21,13 @@ from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import astrotools as dat
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 
 
 class crossmatcher():
 
     """
-    The worker class for the crossmatcher module
+    *The worker class for the crossmatcher module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection for the catalogues
@@ -67,7 +58,8 @@ class crossmatcher():
 
     # METHOD ATTRIBUTES
     def get(self):
-        """get the crossmatcher object
+        """
+        *get the crossmatcher object*
 
         **Return:**
             - ``classifications`` - list of all classifications
@@ -81,7 +73,8 @@ class crossmatcher():
 
     def _crossmatch_transients_against_catalogues(
             self):
-        """ crossmatch transients against catalogues
+        """
+        *crossmatch transients against catalogues*
         """
 
         classifications = []
@@ -260,7 +253,7 @@ class crossmatcher():
         return classifications
 
     def searchCatalogue(self, objectList, searchPara={}, searchName=""):
-        """Cone Search wrapper to make it a little more user friendly"""
+        """*Cone Search wrapper to make it a little more user friendly*"""
 
         from sherlock import conesearcher
 
@@ -284,16 +277,18 @@ class crossmatcher():
         matchSubset = []
         searchDone = True
 
-        # FAINT STAR EXTRAS
+        # FAINT & BRIGHT STAR EXTRAS
         try:
             faintMagColumn = searchPara["faint mag column"]
             faintLimit = searchPara["faint limit"]
+        except:
+            faintMagColumn = False
+            faintLimit = False
+        try:
             filterColumns = searchPara["filter names"]
             magColumns = searchPara["mag columns"]
             magErrColumns = searchPara["mag err columns"]
         except:
-            faintMagColumn = False
-            faintLimit = False
             filterColumns = False
             magColumns = False
             magErrColumns = False
@@ -324,9 +319,7 @@ class crossmatcher():
             message, xmObjects = cs.get()
             del cs
             resultLen = len(xmObjects)
-            # print "  %(count)s / %(totalCount)s (%(percent)1.1f%%) transients
-            # conesearched against with %(searchName)s - %(resultLen)s sources
-            # matched" % locals()
+            print "  %(count)s / %(totalCount)s (%(percent)1.1f%%) transients conesearched against with %(searchName)s - %(resultLen)s sources matched" % locals()
 
             # DID WE SEARCH THE CATALOGUES CORRECTLY?
             if message and (message.startswith('Error') or 'not recognised' in message):
@@ -411,18 +404,38 @@ class crossmatcher():
                         self.colMaps[catalogueName]["decColName"]]
                     xm[1]["originalSearchRadius"] = radius
 
-                    if filterColumns:
-                        xm[1]["sourceFilter"] = filterColumns[0]
-                        xm[1]["sourceMagnitude"] = xm[1][magColumns[0]]
-                        error = 10.
-                        for f, m, e in zip(filterColumns, magColumns, magErrColumns):
-                            if xm[1][e] < error:
-                                error = xm[1][e]
-                                xm[1]["sourceFilter"] = f
-                                xm[1]["sourceMagnitude"] = xm[1][m]
+                    # SOURCE MAG AND FILTER - CHOOSE MAG WITH LOWEST ERROR
+
+                    xm[1]["sourceFilter"] = self.colMaps[
+                        catalogueName]["filterName1ColName"]
+
+                    xm[1]["sourceMagnitude"] = xm[1][
+                        self.colMaps[catalogueName]["filter1ColName"]]
+                    if self.colMaps[catalogueName]["filterErr1ColName"]:
+                        xm[1]["sourceMagnitudeErr"] = xm[1][
+                            self.colMaps[catalogueName]["filterErr1ColName"]]
                     else:
-                        xm[1]["sourceFilter"] = None
-                        xm[1]["sourceMagnitude"] = None
+                        xm[1]["sourceMagnitudeErr"] = None
+                    thisMagErr = xm[1]["sourceMagnitude"]
+                    index = 2
+                    while thisMagErr is not None and index < 6:
+                        if self.colMaps[catalogueName][
+                                "filterErr%(index)sColName" % locals()]:
+                            thisMagErr = xm[1][self.colMaps[catalogueName][
+                                "filterErr%(index)sColName" % locals()]]
+                        else:
+                            thisMagErr = None
+                        if thisMagErr is not None and thisMagErr < xm[1]["sourceMagnitudeErr"]:
+                            filterName = self.colMaps[
+                                catalogueName]["filterName%(index)sColName" % locals()][:4]
+                            if "col_" not in filterName:
+                                xm[1]["sourceFilter"] = filterName
+                            else:
+                                xm[1]["sourceFilter"] = xm[1][filterName]
+                            xm[1]["sourceMagnitude"] = xm[1][
+                                self.colMaps[catalogueName]["filter%(index)sColName" % locals()]]
+                            xm[1]["sourceMagnitudeErr"] = thisMagErr
+                        index += 1
 
                 matchedObjects.append(
                     [row, xmObjects, catalogueName, matchedType])
@@ -440,9 +453,11 @@ class crossmatcher():
                 faintStarMatches.append(
                     [matchedObjects[0][0], matchSubset, matchedObjects[0][2], matchedObjects[0][3]])
             matchedObjects = faintStarMatches
+        # BRIGHT STAR MATCH
         elif "tcs_view_star_sdss" in catalogueName:
             sdssStarMatches = []
             matchSubset = []
+
             if searchDone and matchedObjects:
                 for row in matchedObjects[0][1]:
                     rMag = row[1]["petroMag_r"]
@@ -475,7 +490,8 @@ class crossmatcher():
     def _lookup_classification_dict(
             self,
             flag):
-        """ append reversed classification dictionary
+        """
+        *append reversed classification dictionary*
 
         **Key Arguments:**
             # -
@@ -510,7 +526,8 @@ class crossmatcher():
         return ' + '.join(flagTypes)
 
     def _physical_separation_search(self, objectRow, searchPara, searchName):
-        """ physical separation search
+        """
+        *physical separation search*
 
         **Key Arguments:**
             - ``objectRow`` -- transient to be crossmatched
@@ -552,7 +569,9 @@ class crossmatcher():
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
         # A PHYSICAL SEPARATION WITHIN THE PHYSICAL RADIUS.
         if searchDone and matches:
+            objectName = matches[0][0]["name"]
             for row in matches[0][1]:
+
                 thisMatch = False
                 physicalSeparation = None
                 newSearchName = searchName
@@ -566,6 +585,8 @@ class crossmatcher():
 
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
                 if row[1]["xmmajoraxis"] and row[0] < row[1]["xmmajoraxis"] * self.settings["galaxy radius stetch factor"]:
+                    self.log.info(
+                        '%(objectName)s is found within the major axis measurement of the source' % locals())
                     thisMatch = True
                     newSearchName = newSearchName + \
                         " (within %s * major axis)" % (
@@ -574,15 +595,22 @@ class crossmatcher():
                         "xmmajoraxis"] * self.settings["galaxy radius stetch factor"]
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 elif row[1]["xmdirectdistancescale"] and physicalSeparation < physicalRadius:
+                    self.log.info(
+                        '%(objectName)s is found within %(physicalSeparation)s Kpc of the source centre (direct distance measurement)' % locals())
                     thisMatch = True
                     newSearchName = newSearchName + " (direct distance)"
                     newAngularSep = physicalRadius / \
                         row[1]["xmdirectdistancescale"]
                 # NEW CHECK FOR A REDSHIFT DISTANCE
                 elif row[1]["xmscale"] and physicalSeparation < physicalRadius:
+                    self.log.info(
+                        '%(objectName)s is found within %(physicalSeparation)s Kpc of the source centre (redshift distance measurement)' % locals())
                     thisMatch = True
                     newSearchName = newSearchName + " (redshift distance)"
                     newAngularSep = physicalRadius / row[1]["xmscale"]
+                else:
+                    self.log.info(
+                        '%(objectName)s is not associated with the source (from inspecting the transient/source physical separation calculations)' % locals())
 
                 if thisMatch == True:
                     row[1]["physical_separation_kpc"] = physicalSeparation

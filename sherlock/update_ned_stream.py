@@ -27,7 +27,10 @@ import os
 os.environ['TERM'] = 'vt100'
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
+<<<<<<< HEAD
 from dryxPython.projectsetup import setup_main_clutil
+=======
+>>>>>>> working
 from dryxPython import mysql as dms
 from sherlock.imports.ned_conesearch import ned_conesearch
 from HMpTy import htm

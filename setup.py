@@ -21,6 +21,7 @@ setup(name='sherlock',
       author_email='davidrobertyoung@gmail.com',
       license='MIT',
       packages=['sherlock'],
+      include_package_data=True,
       install_requires=[
           'pyyaml',
       ],

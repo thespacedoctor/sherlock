@@ -1,0 +1,672 @@
+
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sherlock.commonutils.update_wiki_pages &mdash; sherlock 0.1.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="sherlock 0.1.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../../../_static/thespacedoctor_icon_white_circle.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#tutorial">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#modules">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#functions">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">sherlock</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>sherlock.commonutils.update_wiki_pages</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sherlock.commonutils.update_wiki_pages</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/local/bin/python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">*Update the Github wiki pages with useful info*</span>
+
+<span class="sd">:Author:</span>
+<span class="sd">    David Young</span>
+
+<span class="sd">:Date Created:</span>
+<span class="sd">    September 9, 2015</span>
+
+<span class="sd">.. todo::</span>
+<span class="sd">    </span>
+<span class="sd">    @review: when complete pull all general functions and classes into dryxPython</span>
+
+<span class="sd"># xdocopt-usage-tempx</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################# GLOBAL IMPORTS ####################</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vt100&#39;</span>
+<span class="kn">import</span> <span class="nn">readline</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
+<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
+<span class="c1"># from ..__init__ import *</span>
+
+
+<span class="c1">###################################################################</span>
+<span class="c1"># CLASSES                                                         #</span>
+<span class="c1">###################################################################</span>
+<div class="viewcode-block" id="update_wiki_pages"><a class="viewcode-back" href="../../../_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages">[docs]</a><span class="k">class</span> <span class="nc">update_wiki_pages</span><span class="p">():</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *The worker class for the update_wiki_pages module*</span>
+
+<span class="sd">    **Key Arguments:**</span>
+<span class="sd">        - ``log`` -- logger</span>
+<span class="sd">        - ``settings`` -- the settings dictionary</span>
+
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        - @review: when complete, clean update_wiki_pages class</span>
+<span class="sd">        - @review: when complete add logging</span>
+<span class="sd">        - @review: when complete, decide whether to abstract class to another module</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialisation</span>
+    <span class="c1"># 1. @flagged: what are the unique attrributes for each object? Add them</span>
+    <span class="c1"># to __init__</span>
+
+<div class="viewcode-block" id="update_wiki_pages.__init__"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">log</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;instansiating a new &#39;update_wiki_pages&#39; object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="c1"># xt-self-arg-tmpx</span>
+
+        <span class="c1"># 2. @flagged: what are the default attrributes each object could have? Add them to variable attribute set here</span>
+        <span class="c1"># Variable Data Atrributes</span>
+
+        <span class="c1"># 3. @flagged: what variable attrributes need overriden in any baseclass(es) used</span>
+        <span class="c1"># Override Variable Data Atrributes</span>
+
+        <span class="c1"># Initial Actions</span>
+        <span class="kn">from</span> <span class="nn">sherlock</span> <span class="kn">import</span> <span class="n">database</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">database</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transientsDbConn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pmDbConn</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="c1"># 4. @flagged: what actions does each object have to be able to perform? Add them here</span>
+    <span class="c1"># Method Attributes</span>
+<div class="viewcode-block" id="update_wiki_pages.get"><a class="viewcode-back" href="../../../_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get the update_wiki_pages object*</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - ``update_wiki_pages``</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean get method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``get`` method&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;sherlock wiki root&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;Sherlock wiki settings not found in settings file&quot;</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_table_infos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_view_infos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_stream_view_infos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_md_tables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_wiki_pages</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_github</span><span class="p">()</span>
+
+        <span class="c1"># RECODE INTO ASCII</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdTable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdTable</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``get`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">update_wiki_pages</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_table_infos</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get table infos*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _get_table_infos method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; order by number_of_rows desc;</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableInfo</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_get_view_infos</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get table infos*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _get_view_infos method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_views_info where legacy_view = 0 and view_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; order by number_of_rows desc;</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewInfo</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_get_stream_view_infos</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get table infos*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _get_view_infos method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot;  and table_name like &quot;</span><span class="si">%%</span><span class="s2">stream&quot; order by number_of_rows desc;</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streamInfo</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="k">def</span> <span class="nf">_create_md_tables</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *create md table*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _create_md_tables method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">| &lt;sub&gt;Table Name&lt;/sub&gt; | &lt;sub&gt;Description&lt;/sub&gt; | &lt;sub&gt;Reference&lt;/sub&gt; | &lt;sub&gt;Number Rows&lt;/sub&gt; | &lt;sub&gt;Vizier&lt;/sub&gt; | &lt;sub&gt;NED&lt;/sub&gt; | &lt;sub&gt;Objects&lt;/sub&gt; | &lt;sub&gt;Weight (1-10)&lt;/sub&gt; |</span>
+<span class="s2">| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |&quot;&quot;&quot;</span>
+
+        <span class="n">rows</span> <span class="o">=</span> <span class="s2">u&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ti</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tableInfo</span><span class="p">:</span>
+            <span class="n">table_name</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;table_name&quot;</span><span class="p">]</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+            <span class="n">number_of_rows</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;number_of_rows&quot;</span><span class="p">]</span>
+            <span class="n">reference_url</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;reference_url&quot;</span><span class="p">]</span>
+            <span class="n">reference_text</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;reference_text&quot;</span><span class="p">]</span>
+            <span class="n">notes</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;notes&quot;</span><span class="p">]</span>
+            <span class="n">vizier_link</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;vizier_link&quot;</span><span class="p">]</span>
+            <span class="n">in_ned</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;in_ned&quot;</span><span class="p">]</span>
+            <span class="n">object_types</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;object_types&quot;</span><span class="p">]</span>
+            <span class="n">version_number</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;version_number&quot;</span><span class="p">]</span>
+            <span class="n">last_updated</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;last_updated&quot;</span><span class="p">]</span>
+            <span class="n">legacy_table</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;legacy_table&quot;</span><span class="p">]</span>
+            <span class="n">old_table_name</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;old_table_name&quot;</span><span class="p">]</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;object_type_accuracy&quot;</span><span class="p">]</span>
+
+            <span class="n">number_of_rows</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">number_of_rows</span><span class="p">)</span>
+            <span class="n">thisLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">number_of_rows</span><span class="p">)</span>
+            <span class="n">newNumber</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">thisLen</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">newNumber</span> <span class="o">=</span> <span class="n">number_of_rows</span><span class="p">[</span><span class="o">-</span><span class="n">count</span><span class="p">]</span> <span class="o">+</span> <span class="n">newNumber</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">newNumber</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="n">newNumber</span>
+            <span class="k">if</span> <span class="n">newNumber</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span><span class="p">:</span>
+                <span class="n">newNumber</span> <span class="o">=</span> <span class="n">newNumber</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vizier_link</span><span class="p">)</span> <span class="ow">and</span> <span class="n">vizier_link</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">vizier_link</span> <span class="o">!=</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                <span class="n">vizier_link</span> <span class="o">=</span> <span class="s2">u&quot;[✓](</span><span class="si">%(vizier_link)s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vizier_link</span> <span class="o">=</span> <span class="s2">u&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="n">in_ned</span><span class="p">:</span>
+                <span class="n">in_ned</span> <span class="o">=</span> <span class="s2">u&quot;✓&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">in_ned</span> <span class="o">=</span> <span class="s2">u&quot;&quot;</span>
+
+            <span class="n">rows</span> <span class="o">+=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">| &lt;sub&gt;</span><span class="si">%(table_name)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(description)s</span><span class="s2">](</span><span class="si">%(url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(reference_text)s</span><span class="s2">](</span><span class="si">%(reference_url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(newNumber)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(vizier_link)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(in_ned)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(object_types)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(weight)s</span><span class="s2">&lt;/sub&gt; |&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdTable</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">| &lt;sub&gt;View Name&lt;/sub&gt; | &lt;sub&gt;Number Rows&lt;/sub&gt; | &lt;sub&gt;Object Type&lt;/sub&gt; |</span>
+<span class="s2">| :--- | :--- | :--- |&quot;&quot;&quot;</span>
+
+        <span class="n">rows</span> <span class="o">=</span> <span class="s2">u&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ti</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewInfo</span><span class="p">:</span>
+            <span class="n">view_name</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;view_name&quot;</span><span class="p">]</span>
+            <span class="n">number_of_rows</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;number_of_rows&quot;</span><span class="p">]</span>
+            <span class="n">object_type</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;object_type&quot;</span><span class="p">]</span>
+
+            <span class="n">number_of_rows</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">number_of_rows</span><span class="p">)</span>
+            <span class="n">thisLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">number_of_rows</span><span class="p">)</span>
+            <span class="n">newNumber</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">thisLen</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">newNumber</span> <span class="o">=</span> <span class="n">number_of_rows</span><span class="p">[</span><span class="o">-</span><span class="n">count</span><span class="p">]</span> <span class="o">+</span> <span class="n">newNumber</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">newNumber</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="n">newNumber</span>
+            <span class="k">if</span> <span class="n">newNumber</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span><span class="p">:</span>
+                <span class="n">newNumber</span> <span class="o">=</span> <span class="n">newNumber</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="n">rows</span> <span class="o">+=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">| &lt;sub&gt;</span><span class="si">%(view_name)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(newNumber)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(object_type)s</span><span class="s2">&lt;/sub&gt; |&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdView</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">| &lt;sub&gt;Table Name&lt;/sub&gt; | &lt;sub&gt;Description&lt;/sub&gt; | &lt;sub&gt;Reference&lt;/sub&gt; | &lt;sub&gt;Number Rows&lt;/sub&gt; | &lt;sub&gt;Objects&lt;/sub&gt; |</span>
+<span class="s2">| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |&quot;&quot;&quot;</span>
+
+        <span class="n">rows</span> <span class="o">=</span> <span class="s2">u&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ti</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">streamInfo</span><span class="p">:</span>
+            <span class="n">table_name</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;table_name&quot;</span><span class="p">]</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+            <span class="n">number_of_rows</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;number_of_rows&quot;</span><span class="p">]</span>
+            <span class="n">reference_url</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;reference_url&quot;</span><span class="p">]</span>
+            <span class="n">reference_text</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;reference_text&quot;</span><span class="p">]</span>
+            <span class="n">notes</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;notes&quot;</span><span class="p">]</span>
+            <span class="n">vizier_link</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;vizier_link&quot;</span><span class="p">]</span>
+            <span class="n">in_ned</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;in_ned&quot;</span><span class="p">]</span>
+            <span class="n">object_types</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;object_types&quot;</span><span class="p">]</span>
+            <span class="n">version_number</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;version_number&quot;</span><span class="p">]</span>
+            <span class="n">last_updated</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;last_updated&quot;</span><span class="p">]</span>
+            <span class="n">legacy_table</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;legacy_table&quot;</span><span class="p">]</span>
+            <span class="n">old_table_name</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[</span><span class="s2">&quot;old_table_name&quot;</span><span class="p">]</span>
+
+            <span class="n">number_of_rows</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">number_of_rows</span><span class="p">)</span>
+            <span class="n">thisLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">number_of_rows</span><span class="p">)</span>
+            <span class="n">newNumber</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">thisLen</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">newNumber</span> <span class="o">=</span> <span class="n">number_of_rows</span><span class="p">[</span><span class="o">-</span><span class="n">count</span><span class="p">]</span> <span class="o">+</span> <span class="n">newNumber</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">newNumber</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="n">newNumber</span>
+            <span class="k">if</span> <span class="n">newNumber</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span><span class="p">:</span>
+                <span class="n">newNumber</span> <span class="o">=</span> <span class="n">newNumber</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vizier_link</span><span class="p">)</span> <span class="ow">and</span> <span class="n">vizier_link</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">vizier_link</span> <span class="o">!=</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                <span class="n">vizier_link</span> <span class="o">=</span> <span class="s2">u&quot;[✓](</span><span class="si">%(vizier_link)s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vizier_link</span> <span class="o">=</span> <span class="s2">u&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="n">in_ned</span><span class="p">:</span>
+                <span class="n">in_ned</span> <span class="o">=</span> <span class="s2">u&quot;✓&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">in_ned</span> <span class="o">=</span> <span class="s2">u&quot;&quot;</span>
+
+            <span class="n">rows</span> <span class="o">+=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">| &lt;sub&gt;</span><span class="si">%(table_name)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(description)s</span><span class="s2">](</span><span class="si">%(url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(reference_text)s</span><span class="s2">](</span><span class="si">%(reference_url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(newNumber)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(object_types)s</span><span class="s2">&lt;/sub&gt; |&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdStream</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="k">def</span> <span class="nf">_write_wiki_pages</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *write wiki pages*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _write_wiki_pages method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>
+
+        <span class="kn">import</span> <span class="nn">codecs</span>
+        <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">time</span>
+        <span class="n">pathToWriteFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span>
+            <span class="s2">&quot;sherlock wiki root&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/Crossmatch-Catalogue Tables.md&quot;</span>
+        <span class="n">writeFile</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pathToWriteFile</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+        <span class="n">lastUpdated</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Last Updated </span><span class="si">%(now)s</span><span class="s2">  </span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdTable</span><span class="p">)</span>
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">pathToWriteFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span>
+            <span class="s2">&quot;sherlock wiki root&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/Crossmatch-Catalogue Views.md&quot;</span>
+        <span class="n">writeFile</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pathToWriteFile</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+        <span class="n">lastUpdated</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Last Updated </span><span class="si">%(now)s</span><span class="s2">  </span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdView</span><span class="p">)</span>
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">pathToWriteFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span>
+            <span class="s2">&quot;sherlock wiki root&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/Crossmatch-Catalogue Streams.md&quot;</span>
+        <span class="n">writeFile</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pathToWriteFile</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+        <span class="n">lastUpdated</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Last Updated </span><span class="si">%(now)s</span><span class="s2">  </span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdStream</span><span class="p">)</span>
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="k">def</span> <span class="nf">_update_github</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *update github*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _update_github method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_update_github`` method&#39;</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">STDOUT</span>
+        <span class="n">gdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;sherlock wiki root&quot;</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;cd </span><span class="si">%(gdir)s</span><span class="s2"> &amp;&amp; git pull origin master &amp;&amp; git add --all &amp;&amp; git commit -m &quot;x&quot; &amp;&amp; git push origin master&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">print</span> <span class="n">output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;output: </span><span class="si">%(output)s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_update_github`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="c1"># xt-class-method</span>
+
+    <span class="c1"># 5. @flagged: what actions of the base class(es) need ammending? ammend them here</span>
+    <span class="c1"># Override Method Attributes</span>
+    <span class="c1"># method-override-tmpx</span>
+
+<span class="c1"># xt-class-tmpx</span>
+
+
+<span class="c1">###################################################################</span>
+<span class="c1"># PUBLIC FUNCTIONS                                                #</span>
+<span class="c1">###################################################################</span>
+<span class="c1"># xt-worker-def</span>
+
+<span class="c1"># use the tab-trigger below for new function</span>
+<span class="c1"># xt-def-with-logger</span>
+
+<span class="c1">###################################################################</span>
+<span class="c1"># PRIVATE (HELPER) FUNCTIONS                                      #</span>
+<span class="c1">###################################################################</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dave Young.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

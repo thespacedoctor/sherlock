@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-update_wiki_pages.py
-====================
-:Summary:
-    Update the Github wiki pages with useful info
+*Update the Github wiki pages with useful info*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ update_wiki_pages.py
 :Date Created:
     September 9, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 
 # xdocopt-usage-tempx
@@ -34,7 +26,7 @@ from docopt import docopt
 from dryxPython import logs as dl
 from dryxPython import mysql as dms
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 # from ..__init__ import *
 
 
@@ -44,14 +36,15 @@ from dryxPython.projectsetup import setup_main_clutil
 class update_wiki_pages():
 
     """
-    The worker class for the update_wiki_pages module
+    *The worker class for the update_wiki_pages module*
 
     **Key Arguments:**
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
 
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean update_wiki_pages class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -90,12 +83,14 @@ class update_wiki_pages():
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the update_wiki_pages object
+        """
+        *get the update_wiki_pages object*
 
         **Return:**
             - ``update_wiki_pages``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -120,7 +115,8 @@ class update_wiki_pages():
 
     def _get_table_infos(
             self):
-        """ get table infos
+        """
+        *get table infos*
 
         **Key Arguments:**
             # -
@@ -128,7 +124,8 @@ class update_wiki_pages():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _get_table_infos method
             - @review: when complete add logging
         """
@@ -148,7 +145,8 @@ class update_wiki_pages():
 
     def _get_view_infos(
             self):
-        """ get table infos
+        """
+        *get table infos*
 
         **Key Arguments:**
             # -
@@ -156,7 +154,8 @@ class update_wiki_pages():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _get_view_infos method
             - @review: when complete add logging
         """
@@ -176,7 +175,8 @@ class update_wiki_pages():
 
     def _get_stream_view_infos(
             self):
-        """ get table infos
+        """
+        *get table infos*
 
         **Key Arguments:**
             # -
@@ -184,7 +184,8 @@ class update_wiki_pages():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _get_view_infos method
             - @review: when complete add logging
         """
@@ -205,7 +206,8 @@ class update_wiki_pages():
     # use the tab-trigger below for new method
     def _create_md_tables(
             self):
-        """ create md table
+        """
+        *create md table*
 
         **Key Arguments:**
             # -
@@ -213,7 +215,8 @@ class update_wiki_pages():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _create_md_tables method
             - @review: when complete add logging
         """
@@ -349,7 +352,8 @@ class update_wiki_pages():
     # use the tab-trigger below for new method
     def _write_wiki_pages(
             self):
-        """ write wiki pages
+        """
+        *write wiki pages*
 
         **Key Arguments:**
             # -
@@ -357,7 +361,8 @@ class update_wiki_pages():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _write_wiki_pages method
             - @review: when complete add logging
         """
@@ -404,7 +409,8 @@ class update_wiki_pages():
     # use the tab-trigger below for new method
     def _update_github(
             self):
-        """ update github
+        """
+        *update github*
 
         **Key Arguments:**
             # -
@@ -412,7 +418,8 @@ class update_wiki_pages():
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_github method
             - @review: when complete add logging
         """

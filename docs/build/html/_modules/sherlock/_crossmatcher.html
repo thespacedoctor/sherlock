@@ -1,0 +1,778 @@
+
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sherlock._crossmatcher &mdash; sherlock 0.1.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="sherlock 0.1.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../../_static/thespacedoctor_icon_white_circle.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#tutorial">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#modules">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#functions">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">sherlock</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>sherlock._crossmatcher</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sherlock._crossmatcher</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/local/bin/python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">*The transient to catalogue sources crossmatcher for sherlock*</span>
+
+<span class="sd">:Author:</span>
+<span class="sd">    David Young</span>
+
+<span class="sd">:Date Created:</span>
+<span class="sd">    July 1, 2015</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################# GLOBAL IMPORTS ####################</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vt100&#39;</span>
+<span class="kn">import</span> <span class="nn">readline</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">astrotools</span> <span class="k">as</span> <span class="n">dat</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
+<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
+
+
+<div class="viewcode-block" id="crossmatcher"><a class="viewcode-back" href="../../_autosummary/sherlock._crossmatcher.crossmatcher.html#sherlock._crossmatcher.crossmatcher">[docs]</a><span class="k">class</span> <span class="nc">crossmatcher</span><span class="p">():</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *The worker class for the crossmatcher module*</span>
+
+<span class="sd">    **Key Arguments:**</span>
+<span class="sd">        - ``dbConn`` -- mysql database connection for the catalogues</span>
+<span class="sd">        - ``log`` -- logger</span>
+<span class="sd">        - ``settings`` -- the settings dictionary</span>
+<span class="sd">        - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database</span>
+<span class="sd">        - ``transients`` -- the list of transients</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># INITIALISATION</span>
+
+<div class="viewcode-block" id="crossmatcher.__init__"><a class="viewcode-back" href="../../_autosummary/sherlock._crossmatcher.crossmatcher.html#sherlock._crossmatcher.crossmatcher.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">log</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">colMaps</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">transients</span><span class="o">=</span><span class="p">[]</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;instansiating a new &#39;_crossmatcher&#39; object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbConn</span> <span class="o">=</span> <span class="n">dbConn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transients</span> <span class="o">=</span> <span class="n">transients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span> <span class="o">=</span> <span class="n">colMaps</span>
+        <span class="c1"># xt-self-arg-tmpx</span>
+
+        <span class="c1"># VARIABLE DATA ATRRIBUTES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifications</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="c1"># METHOD ATTRIBUTES</span>
+<div class="viewcode-block" id="crossmatcher.get"><a class="viewcode-back" href="../../_autosummary/sherlock._crossmatcher.html#sherlock._crossmatcher.crossmatcher.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get the crossmatcher object*</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - ``classifications`` - list of all classifications</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``get`` method&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_crossmatch_transients_against_catalogues</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``get`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifications</span></div>
+
+    <span class="k">def</span> <span class="nf">_crossmatch_transients_against_catalogues</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *crossmatch transients against catalogues*</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;starting the ``_crossmatch_transients_against_catalogues`` method&#39;</span><span class="p">)</span>
+
+        <span class="c1"># COUNT NUMBER OF TRANSIENT TO CROSSMATCH</span>
+        <span class="n">numberOfTransients</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transients</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># FOR EACH TRANSIENT SOURCE IN THE LIST ...</span>
+        <span class="k">for</span> <span class="n">thisIndex</span><span class="p">,</span> <span class="n">transient</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transients</span><span class="p">):</span>
+            <span class="n">tId</span> <span class="o">=</span> <span class="n">transient</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">tName</span> <span class="o">=</span> <span class="n">transient</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+            <span class="c1"># PRINT A STATUS UPDATE</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># CURSOR UP ONE LINE AND CLEAR LINE</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1A</span><span class="se">\x1b</span><span class="s2">[2K&quot;</span><span class="p">)</span>
+            <span class="n">thisCount</span> <span class="o">=</span> <span class="n">thisIndex</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Classifying object `</span><span class="si">%(tName)s</span><span class="s2">` [</span><span class="si">%(thisCount)s</span><span class="s2">/</span><span class="si">%(numberOfTransients)d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">(</span>
+            <span class="p">)</span>
+            <span class="k">print</span> <span class="n">message</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n\n</span><span class="s1">message: </span><span class="si">%(message)s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+
+            <span class="c1"># RESET MATCH VALUES</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># SET TO TRUE WHENEVER A MATCH IS FIRST FOUND</span>
+            <span class="c1"># THE LIST OF OBJECTS FOUND ASSOCIATED WITH THE SOURCE</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">allMatches</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># SET TO TRUE WHENEVER WE WANT TO TERMINATE THE SEARCH</span>
+            <span class="n">searchDone</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stopAlgoritm</span> <span class="o">=</span> <span class="bp">False</span>
+
+            <span class="c1"># GRAB SEARCH ALGORITHM AND ITERATE THROUGH IT IN ORDER</span>
+            <span class="c1"># PRESENTED IN THE SETTINGS FILE</span>
+            <span class="n">sa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;search algorithm&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">searchName</span><span class="p">,</span> <span class="n">searchPara</span> <span class="ow">in</span> <span class="n">sa</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;  searching: </span><span class="si">%(searchName)s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                <span class="k">if</span> <span class="s2">&quot;physical radius kpc&quot;</span> <span class="ow">in</span> <span class="n">searchPara</span><span class="p">:</span>
+                    <span class="c1"># THE PHYSICAL SEPARATION SEARCHES</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;checking physical distance crossmatches in </span><span class="si">%(searchName)s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                    <span class="n">searchDone</span><span class="p">,</span> <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_physical_separation_search</span><span class="p">(</span>
+                        <span class="n">objectRow</span><span class="o">=</span><span class="n">transient</span><span class="p">,</span>
+                        <span class="n">searchPara</span><span class="o">=</span><span class="n">searchPara</span><span class="p">,</span>
+                        <span class="n">searchName</span><span class="o">=</span><span class="n">searchName</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># THE ANGULAR SEPARATION SEARCHES</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;Crossmatching against </span><span class="si">%(searchName)s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                    <span class="n">searchDone</span><span class="p">,</span> <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">searchCatalogue</span><span class="p">(</span>
+                        <span class="n">objectList</span><span class="o">=</span><span class="p">[</span><span class="n">transient</span><span class="p">],</span>
+                        <span class="n">searchPara</span><span class="o">=</span><span class="n">searchPara</span><span class="p">,</span>
+                        <span class="n">searchName</span><span class="o">=</span><span class="n">searchName</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># ADD CLASSIFICATION AND CROSSMATCHES IF FOUND</span>
+                <span class="k">if</span> <span class="n">searchDone</span> <span class="ow">and</span> <span class="n">matches</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;     match found for </span><span class="si">%(tName)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="c1"># @action update objectType -- it gets overwritten with each subsequent search</span>
+                    <span class="n">objectType</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;transient classification&quot;</span><span class="p">]</span>
+                    <span class="n">allMatches</span> <span class="o">=</span> <span class="n">allMatches</span> <span class="o">+</span> <span class="n">matches</span>
+
+                    <span class="k">if</span> <span class="s2">&quot;stop algorithm on match&quot;</span> <span class="ow">in</span> <span class="n">searchPara</span> <span class="ow">and</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;stop algorithm on match&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">stopAlgoritm</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                            <span class="s2">&quot;     stopping algorithm for </span><span class="si">%(tName)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                        <span class="k">break</span>
+
+            <span class="c1"># IF NO MATCH IS FOUND THEN WE HAVE AN &#39;ORPHAN&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;   </span><span class="si">%(tName)s</span><span class="s2"> classified as an orphan&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                <span class="n">objectType</span> <span class="o">=</span> <span class="s2">&quot;ORPHAN&quot;</span>
+
+            <span class="c1"># PERFORM ANY SUPPLIMENTARY SEARCHES</span>
+            <span class="n">ss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;supplementary search&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">searchName</span><span class="p">,</span> <span class="n">searchPara</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;  searching: </span><span class="si">%(searchName)s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                <span class="n">searchDone</span><span class="p">,</span> <span class="n">supMatches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">searchCatalogue</span><span class="p">(</span>
+                    <span class="n">objectList</span><span class="o">=</span><span class="p">[</span><span class="n">transient</span><span class="p">],</span>
+                    <span class="n">searchPara</span><span class="o">=</span><span class="n">searchPara</span><span class="p">,</span>
+                    <span class="n">searchName</span><span class="o">=</span><span class="n">searchName</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">searchDone</span> <span class="ow">and</span> <span class="n">supMatches</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;     match found for </span><span class="si">%(tName)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                    <span class="n">objectType</span> <span class="o">=</span> <span class="n">objectType</span> <span class="o">+</span> \
+                        <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;transient classification&quot;</span><span class="p">]</span>
+                    <span class="n">allMatches</span> <span class="o">=</span> <span class="n">allMatches</span> <span class="o">+</span> <span class="n">supMatches</span>
+
+            <span class="c1"># ADD DETAILS TO THE lOGS</span>
+            <span class="n">oldClass</span> <span class="o">=</span> <span class="n">transient</span><span class="p">[</span><span class="s1">&#39;object_classification&#39;</span><span class="p">]</span>
+            <span class="n">oldClass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_classification_dict</span><span class="p">(</span>
+                <span class="n">flag</span><span class="o">=</span><span class="n">transient</span><span class="p">[</span><span class="s1">&#39;object_classification&#39;</span><span class="p">])</span>
+            <span class="n">newClass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_classification_dict</span><span class="p">(</span>
+                <span class="n">flag</span><span class="o">=</span><span class="n">objectType</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sd">&quot;&quot;&quot;%(transient)s:  *** Object ID = %(tId)s (%(tName)s): CLASSIFICATION = %(newClass)s (PREVIOUSLY = %(oldClass)s)&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+
+            <span class="c1"># BUILD THE LIST OF CROSSMATCH DICTIONARIES AND ADD THEM THE THE</span>
+            <span class="c1"># LIST OF ALL SOURCE CLASSIFICATIONS</span>
+            <span class="n">crossmatches</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">allMatches</span><span class="p">:</span>
+                <span class="n">inputRow</span> <span class="o">=</span> <span class="n">allMatches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">allMatches</span><span class="p">:</span>
+                    <span class="n">catalogueTableName</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">thisObjectType</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="n">catalogueTableId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span>
+                        <span class="n">catalogueTableName</span><span class="p">][</span><span class="s2">&quot;table_id&quot;</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">crossmatch</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;transientObjectId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputRow</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;catalogueObjectId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueTableName</span><span class="p">][</span><span class="s2">&quot;objectNameColName&quot;</span><span class="p">]]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;catalogueTableId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">catalogueTableId</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;catalogueTableName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span>
+                            <span class="n">catalogueTableName</span><span class="p">][</span><span class="s2">&quot;table_name&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;catalogueViewName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span>
+                            <span class="n">catalogueTableName</span><span class="p">][</span><span class="s2">&quot;view_name&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;separation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmz&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmscale&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdistance&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;distanceModulus&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdistanceModulus&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;association_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thisObjectType</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;sourceType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sourceType&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;sourceSubType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sourceSubType&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;searchName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;searchName&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;xmdirectdistance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdirectdistance&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;xmdirectdistanceModulus&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdirectdistanceModulus&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;xmdirectdistancescale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdirectdistancescale&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;originalSearchRadius&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;originalSearchRadius&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;sourceRa&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sourceRa&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;sourceDec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sourceDec&quot;</span><span class="p">]</span>
+                        <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;xmmajoraxis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmmajoraxis&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;sourceSubType&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;null&quot;</span><span class="p">:</span>
+                            <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;sourceSubType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                        <span class="k">if</span> <span class="s2">&quot;physical_separation_kpc&quot;</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span>
+                                <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;physical_separation_kpc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span>
+                                <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;physical_separation_kpc&quot;</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">crossmatch</span><span class="p">[</span><span class="s2">&quot;physical_separation_kpc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="n">crossmatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crossmatch</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;crossmatches: </span><span class="si">%(crossmatches)s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+
+            <span class="n">classification</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">transient</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;object_classification_old&#39;</span><span class="p">:</span> <span class="n">transient</span><span class="p">[</span>
+                <span class="s1">&#39;object_classification&#39;</span><span class="p">],</span> <span class="s1">&#39;object_classification_new&#39;</span><span class="p">:</span> <span class="n">objectType</span><span class="p">,</span> <span class="s1">&#39;crossmatches&#39;</span><span class="p">:</span> <span class="n">crossmatches</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">classifications</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">classification</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;completed the ``_crossmatch_transients_against_catalogues`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="crossmatcher.searchCatalogue"><a class="viewcode-back" href="../../_autosummary/sherlock._crossmatcher.html#sherlock._crossmatcher.crossmatcher.searchCatalogue">[docs]</a>    <span class="k">def</span> <span class="nf">searchCatalogue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectList</span><span class="p">,</span> <span class="n">searchPara</span><span class="o">=</span><span class="p">{},</span> <span class="n">searchName</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*Cone Search wrapper to make it a little more user friendly*&quot;&quot;&quot;</span>
+
+        <span class="kn">from</span> <span class="nn">sherlock</span> <span class="kn">import</span> <span class="n">conesearcher</span>
+
+        <span class="c1"># EXTRACT PARAMETERS FROM ARGUMENTS &amp; SETTINGS FILE</span>
+        <span class="k">if</span> <span class="s2">&quot;physical radius kpc&quot;</span> <span class="ow">in</span> <span class="n">searchPara</span><span class="p">:</span>
+            <span class="n">physicalSearch</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">searchName</span> <span class="o">=</span> <span class="n">searchName</span> <span class="o">+</span> <span class="s2">&quot; physical&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">physicalSearch</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">searchName</span> <span class="o">=</span> <span class="n">searchName</span> <span class="o">+</span> <span class="s2">&quot; angular&quot;</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;angular radius arcsec&quot;</span><span class="p">]</span>
+        <span class="n">catalogueName</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;database table&quot;</span><span class="p">]</span>
+        <span class="n">matchedType</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;transient classification&quot;</span><span class="p">]</span>
+
+        <span class="c1"># VARIABLES</span>
+        <span class="n">matchedObjects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">matchSubset</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">searchDone</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="c1"># FAINT STAR EXTRAS</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">magColumn</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;mag column&quot;</span><span class="p">]</span>
+            <span class="n">faintLimit</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;faint limit&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">magColumn</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">faintLimit</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">objectList</span><span class="p">:</span>
+            <span class="n">cs</span> <span class="o">=</span> <span class="n">conesearcher</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+                <span class="n">ra</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ra&#39;</span><span class="p">],</span>
+                <span class="n">dec</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;dec&#39;</span><span class="p">],</span>
+                <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
+                <span class="n">colMaps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">,</span>
+                <span class="n">tableName</span><span class="o">=</span><span class="n">catalogueName</span><span class="p">,</span>
+                <span class="n">queryType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbConn</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+                <span class="n">physicalSearch</span><span class="o">=</span><span class="n">physicalSearch</span><span class="p">,</span>
+                <span class="n">transType</span><span class="o">=</span><span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;transient classification&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">message</span><span class="p">,</span> <span class="n">xmObjects</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+            <span class="c1"># DID WE SEARCH THE CATALOGUES CORRECTLY?</span>
+            <span class="k">if</span> <span class="n">message</span> <span class="ow">and</span> <span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;not recognised&#39;</span> <span class="ow">in</span> <span class="n">message</span><span class="p">):</span>
+                <span class="c1"># SUCCESSFUL CONE SEARCHES SHOULD NOT RETURN AN ERROR MESSAGE,</span>
+                <span class="c1"># OTHERWISE SOMETHING WENT WRONG.</span>
+                <span class="k">print</span> <span class="s2">&quot;Database error - cone search unsuccessful.  Message was:&quot;</span>
+                <span class="k">print</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span>
+                <span class="n">searchDone</span> <span class="o">=</span> <span class="bp">False</span>
+
+            <span class="k">if</span> <span class="n">xmObjects</span><span class="p">:</span>
+                <span class="n">numberOfMatches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xmObjects</span><span class="p">)</span>
+                <span class="n">nearestSep</span> <span class="o">=</span> <span class="n">xmObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">nearestCatRow</span> <span class="o">=</span> <span class="n">xmObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">nearestCatId</span> <span class="o">=</span> <span class="n">nearestCatRow</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;objectNameColName&quot;</span><span class="p">]]</span>
+
+                <span class="c1"># CALCULATE PHYSICAL PARAMETERS ... IF WE CAN</span>
+                <span class="k">for</span> <span class="n">xm</span> <span class="ow">in</span> <span class="n">xmObjects</span><span class="p">:</span>
+                    <span class="n">redshift</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmz</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmscale</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmdistance</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmdistanceModulus</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmmajoraxis</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmdirectdistance</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmdirectdistancescale</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">xmdirectdistanceModulus</span> <span class="o">=</span> <span class="bp">None</span>
+
+                    <span class="c1"># IF THERE&#39;S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;redshiftColName&quot;</span><span class="p">]:</span>
+                        <span class="c1"># THE CATALOGUE HAS A REDSHIFT COLUMN</span>
+                        <span class="n">redshift</span> <span class="o">=</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;redshiftColName&quot;</span><span class="p">]]</span>
+                    <span class="k">if</span> <span class="n">redshift</span> <span class="ow">and</span> <span class="n">redshift</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># CALCULATE DISTANCE MODULUS, ETC</span>
+                        <span class="n">redshiftInfo</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">convert_redshift_to_distance</span><span class="p">(</span>
+                            <span class="n">z</span><span class="o">=</span><span class="n">redshift</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">redshiftInfo</span><span class="p">:</span>
+                            <span class="n">xmz</span> <span class="o">=</span> <span class="n">redshiftInfo</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+                            <span class="n">xmscale</span> <span class="o">=</span> <span class="n">redshiftInfo</span><span class="p">[</span><span class="s1">&#39;da_scale&#39;</span><span class="p">]</span>
+                            <span class="n">xmdistance</span> <span class="o">=</span> <span class="n">redshiftInfo</span><span class="p">[</span><span class="s1">&#39;dl_mpc&#39;</span><span class="p">]</span>
+                            <span class="n">xmdistanceModulus</span> <span class="o">=</span> <span class="n">redshiftInfo</span><span class="p">[</span><span class="s1">&#39;dmod&#39;</span><span class="p">]</span>
+                    <span class="c1"># ADD MAJOR AXIS VALUE</span>
+                    <span class="k">if</span> <span class="s2">&quot;or within semi major axis&quot;</span> <span class="ow">in</span> <span class="n">searchPara</span> <span class="ow">and</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;or within semi major axis&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;semiMajorColName&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;semiMajorColName&quot;</span><span class="p">]]:</span>
+                        <span class="n">xmmajoraxis</span> <span class="o">=</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;semiMajorColName&quot;</span><span class="p">]]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;semiMajorToArcsec&quot;</span><span class="p">]</span>
+                    <span class="c1"># ADD DISTANCE VALUES</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;distanceColName&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;distanceColName&quot;</span><span class="p">]]:</span>
+                        <span class="n">xmdirectdistance</span> <span class="o">=</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;distanceColName&quot;</span><span class="p">]]</span>
+                        <span class="n">xmdirectdistancescale</span> <span class="o">=</span> <span class="n">xmdirectdistance</span> <span class="o">/</span> <span class="mf">206.264806</span>
+                        <span class="n">xmdirectdistanceModulus</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> \
+                            <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">xmdirectdistance</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span> <span class="o">-</span> <span class="mi">5</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmz</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmscale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmscale</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmdistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmdistance</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmdistanceModulus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmdistanceModulus</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmmajoraxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmmajoraxis</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmdirectdistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmdirectdistance</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmdirectdistancescale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmdirectdistancescale</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;xmdirectdistanceModulus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmdirectdistanceModulus</span>
+
+                <span class="c1"># GRAB SOURCE TYPES</span>
+                <span class="k">for</span> <span class="n">xm</span> <span class="ow">in</span> <span class="n">xmObjects</span><span class="p">:</span>
+                    <span class="n">subType</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="c1"># IF THERE&#39;S A SUBTYPE - ADD IT</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;subTypeColName&quot;</span><span class="p">]:</span>
+                        <span class="c1"># THE CATALOGUE HAS A REDSHIFT COLUMN</span>
+                        <span class="n">subType</span> <span class="o">=</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;subTypeColName&quot;</span><span class="p">]]</span>
+                        <span class="k">if</span> <span class="n">subType</span> <span class="o">==</span> <span class="s2">&quot;null&quot;</span><span class="p">:</span>
+                            <span class="n">subType</span> <span class="o">=</span> <span class="bp">None</span>
+
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;sourceSubType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">subType</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;sourceType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span>
+                        <span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;object_type&quot;</span><span class="p">]</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;searchName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">searchName</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sourceRa&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;raColName&quot;</span><span class="p">]]</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sourceDec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">catalogueName</span><span class="p">][</span><span class="s2">&quot;decColName&quot;</span><span class="p">]]</span>
+                    <span class="n">xm</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;originalSearchRadius&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radius</span>
+
+                <span class="n">matchedObjects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">xmObjects</span><span class="p">,</span> <span class="n">catalogueName</span><span class="p">,</span> <span class="n">matchedType</span><span class="p">])</span>
+
+        <span class="c1"># FAINT STAR CUTS</span>
+        <span class="k">if</span> <span class="n">searchDone</span> <span class="ow">and</span> <span class="n">matchedObjects</span> <span class="ow">and</span> <span class="n">magColumn</span><span class="p">:</span>
+            <span class="n">faintStarMatches</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">matchSubset</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">rMag</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">magColumn</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">rMag</span> <span class="ow">and</span> <span class="n">rMag</span> <span class="o">&gt;</span> <span class="n">faintLimit</span><span class="p">:</span>
+                    <span class="n">matchSubset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matchSubset</span><span class="p">:</span>
+                <span class="n">faintStarMatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">matchSubset</span><span class="p">,</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]])</span>
+            <span class="n">matchedObjects</span> <span class="o">=</span> <span class="n">faintStarMatches</span>
+        <span class="k">elif</span> <span class="s2">&quot;tcs_view_star_sdss&quot;</span> <span class="ow">in</span> <span class="n">catalogueName</span><span class="p">:</span>
+            <span class="n">sdssStarMatches</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">matchSubset</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">searchDone</span> <span class="ow">and</span> <span class="n">matchedObjects</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">rMag</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;petroMag_r&quot;</span><span class="p">]</span>
+                    <span class="n">separation</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c1"># Line passes through (x,y) = (2.5,18) and (19,13)</span>
+                    <span class="n">lineTwo</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="mi">18</span> <span class="o">-</span> <span class="mi">13</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">19</span> <span class="o">-</span> <span class="mf">2.5</span><span class="p">))</span> <span class="o">*</span> \
+                        <span class="n">separation</span> <span class="o">+</span> <span class="mi">13</span> <span class="o">+</span> <span class="mi">19</span> <span class="o">*</span> <span class="p">((</span><span class="mi">18</span> <span class="o">-</span> <span class="mi">13</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">19</span> <span class="o">-</span> <span class="mf">2.5</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">rMag</span> <span class="o">&lt;</span> <span class="mf">13.0</span><span class="p">:</span>
+                        <span class="n">matchSubset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">rMag</span> <span class="o">&gt;=</span> <span class="mf">13.0</span> <span class="ow">and</span> <span class="n">rMag</span> <span class="o">&lt;</span> <span class="mf">18.0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">rMag</span> <span class="o">&lt;</span> <span class="n">lineTwo</span><span class="p">:</span>
+                            <span class="n">matchSubset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">rMag</span> <span class="o">&gt;=</span> <span class="mf">18.0</span> <span class="ow">and</span> <span class="n">separation</span> <span class="o">&lt;</span> <span class="mf">2.5</span><span class="p">:</span>
+                        <span class="n">matchSubset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matchSubset</span><span class="p">:</span>
+                <span class="n">sdssStarMatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">matchSubset</span><span class="p">,</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]])</span>
+            <span class="n">matchedObjects</span> <span class="o">=</span> <span class="n">sdssStarMatches</span>
+
+        <span class="k">if</span> <span class="s2">&quot;match nearest source only&quot;</span> <span class="ow">in</span> <span class="n">searchPara</span> <span class="ow">and</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;match nearest source only&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">matchedObjects</span><span class="p">):</span>
+            <span class="n">matchedObjects</span> <span class="o">=</span> <span class="p">[[</span><span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span>
+                <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">matchedObjects</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]]]</span>
+
+        <span class="k">return</span> <span class="n">searchDone</span><span class="p">,</span> <span class="n">matchedObjects</span></div>
+
+    <span class="k">def</span> <span class="nf">_lookup_classification_dict</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">flag</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *append reversed classification dictionary*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - classifications</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;starting the ``_append_reversed_classification_dictionary`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">flagTypes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;unclassified&#39;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">i</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">flag</span> <span class="o">&amp;</span> <span class="n">mask</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;classifications&quot;</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;classifications&quot;</span><span class="p">][</span><span class="n">code</span><span class="p">][</span><span class="s2">&quot;flag&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">result</span><span class="p">:</span>
+                            <span class="n">flagTypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;classifications&quot;</span><span class="p">][</span><span class="n">code</span><span class="p">][</span><span class="s2">&quot;human&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="c1"># We got a None (i.e. NULL) valueflags</span>
+                <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;completed the ``_append_reversed_classification_dictionary`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39; + &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flagTypes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_physical_separation_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectRow</span><span class="p">,</span> <span class="n">searchPara</span><span class="p">,</span> <span class="n">searchName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *physical separation search*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            - ``objectRow`` -- transient to be crossmatched</span>
+<span class="sd">            - ``searchPara`` -- parameters of the search (from settings file)</span>
+<span class="sd">            - ``searchName`` -- the name of the search</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - searchDone -- did search complete successfully</span>
+<span class="sd">            - matchedObjects -- any sources matched against the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_physical_separation_search`` method&#39;</span><span class="p">)</span>
+
+        <span class="c1"># SETUP PARAMETERS</span>
+        <span class="n">tableName</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;database table&quot;</span><span class="p">]</span>
+        <span class="n">angularRadius</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;angular radius arcsec&quot;</span><span class="p">]</span>
+        <span class="n">matchedObjects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">matchSubset</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">physicalRadius</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;physical radius kpc&quot;</span><span class="p">]</span>
+        <span class="n">matchedType</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;transient classification&quot;</span><span class="p">]</span>
+
+        <span class="c1"># RETURN ALL ANGULAR MATCHES BEFORE RETURNING NEAREST PHYSICAL SEARCH</span>
+        <span class="n">nearestOnly</span> <span class="o">=</span> <span class="n">searchPara</span><span class="p">[</span><span class="s2">&quot;match nearest source only&quot;</span><span class="p">]</span>
+        <span class="n">tmpSearchPara</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">searchPara</span><span class="p">)</span>
+        <span class="n">tmpSearchPara</span><span class="p">[</span><span class="s2">&quot;match nearest source only&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="c1"># ANGULAR CONESEARCH ON CATALOGUE</span>
+        <span class="n">searchDone</span><span class="p">,</span> <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">searchCatalogue</span><span class="p">(</span>
+            <span class="n">objectList</span><span class="o">=</span><span class="p">[</span><span class="n">objectRow</span><span class="p">],</span>
+            <span class="n">searchPara</span><span class="o">=</span><span class="n">tmpSearchPara</span><span class="p">,</span>
+            <span class="n">searchName</span><span class="o">=</span><span class="n">searchName</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;physical radius kpc&quot;</span> <span class="ow">in</span> <span class="n">searchPara</span><span class="p">:</span>
+            <span class="n">physicalSearch</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">searchName</span> <span class="o">=</span> <span class="n">searchName</span> <span class="o">+</span> <span class="s2">&quot; physical&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">physicalSearch</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">searchName</span> <span class="o">=</span> <span class="n">searchName</span> <span class="o">+</span> <span class="s2">&quot; angular&quot;</span>
+
+        <span class="c1"># OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH</span>
+        <span class="c1"># A PHYSICAL SEPARATION WITHIN THE PHYSICAL RADIUS.</span>
+        <span class="k">if</span> <span class="n">searchDone</span> <span class="ow">and</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">objectName</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+
+                <span class="n">thisMatch</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">physicalSeparation</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">newSearchName</span> <span class="o">=</span> <span class="n">searchName</span>
+
+                <span class="c1"># CALCULATE MOST ACCURATE PHYSICAL SEPARATION</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdirectdistancescale&quot;</span><span class="p">]:</span>
+                    <span class="n">physicalSeparation</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                        <span class="s2">&quot;xmdirectdistancescale&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmscale&quot;</span><span class="p">]:</span>
+                    <span class="n">physicalSeparation</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmscale&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="c1"># FIRST CHECK FOR MAJOR AXIS MEASUREMENT</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmmajoraxis&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmmajoraxis&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;galaxy radius stetch factor&quot;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;</span><span class="si">%(objectName)s</span><span class="s1"> is found within the major axis measurement of the source&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                    <span class="n">thisMatch</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">newSearchName</span> <span class="o">=</span> <span class="n">newSearchName</span> <span class="o">+</span> \
+                        <span class="s2">&quot; (within </span><span class="si">%s</span><span class="s2"> * major axis)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;galaxy radius stetch factor&quot;</span><span class="p">],)</span>
+                    <span class="n">newAngularSep</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span>
+                        <span class="s2">&quot;xmmajoraxis&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;galaxy radius stetch factor&quot;</span><span class="p">]</span>
+                <span class="c1"># NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT</span>
+                <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdirectdistancescale&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">physicalSeparation</span> <span class="o">&lt;</span> <span class="n">physicalRadius</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;</span><span class="si">%(objectName)s</span><span class="s1"> is found within </span><span class="si">%(physicalSeparation)s</span><span class="s1"> Kpc of the source centre (direct distance measurement)&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                    <span class="n">thisMatch</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">newSearchName</span> <span class="o">=</span> <span class="n">newSearchName</span> <span class="o">+</span> <span class="s2">&quot; (direct distance)&quot;</span>
+                    <span class="n">newAngularSep</span> <span class="o">=</span> <span class="n">physicalRadius</span> <span class="o">/</span> \
+                        <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmdirectdistancescale&quot;</span><span class="p">]</span>
+                <span class="c1"># NEW CHECK FOR A REDSHIFT DISTANCE</span>
+                <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmscale&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">physicalSeparation</span> <span class="o">&lt;</span> <span class="n">physicalRadius</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;</span><span class="si">%(objectName)s</span><span class="s1"> is found within </span><span class="si">%(physicalSeparation)s</span><span class="s1"> Kpc of the source centre (redshift distance measurement)&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+                    <span class="n">thisMatch</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">newSearchName</span> <span class="o">=</span> <span class="n">newSearchName</span> <span class="o">+</span> <span class="s2">&quot; (redshift distance)&quot;</span>
+                    <span class="n">newAngularSep</span> <span class="o">=</span> <span class="n">physicalRadius</span> <span class="o">/</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;xmscale&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;</span><span class="si">%(objectName)s</span><span class="s1"> is not associated with the source (from inspecting the transient/source physical separation calculations)&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
+
+                <span class="k">if</span> <span class="n">thisMatch</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;physical_separation_kpc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">physicalSeparation</span>
+                    <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;originalSearchRadius&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newAngularSep</span>
+                    <span class="k">if</span> <span class="n">physicalSeparation</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                            <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">Physical separation = </span><span class="si">%.2f</span><span class="s2"> kpc&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">physicalSeparation</span><span class="p">,))</span>
+                    <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;searchName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newSearchName</span>
+                    <span class="n">matchSubset</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">physicalSeparation</span><span class="p">,</span> <span class="n">row</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">matchSubset</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+            <span class="n">matchSubset</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">matchSubset</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">nearestOnly</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">theseMatches</span> <span class="o">=</span> <span class="p">[</span><span class="n">matchSubset</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">theseMatches</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">matchSubset</span><span class="p">:</span>
+                    <span class="n">theseMatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">matchedObjects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">theseMatches</span><span class="p">,</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">matchedType</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_physical_separation_search`` method&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">searchDone</span><span class="p">,</span> <span class="n">matchedObjects</span></div>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="c1"># xt-class-method</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dave Young.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

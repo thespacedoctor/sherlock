@@ -1,22 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-ned_conesearch.py
-=================
-:Summary:
-    Build and import NED-D table in datasbe
+*Build and import NED-D table in datasbe*
 
 :Author:
     David Young
 
 :Date Created:
     September 7, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -33,7 +24,7 @@ from dryxPython import commonutils as dcu
 from dryxPython import mysql as dms
 from dryxPython import astrotools as dat
 from neddy import namesearch
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from .._base_importer import _base_importer
 from . import *
 
@@ -41,11 +32,12 @@ from . import *
 class ned_conesearch(_base_importer):
 
     """
-    The worker class for the ned_conesearch importer module
+    *The worker class for the ned_conesearch importer module*
     """
 
     def get(self):
-        """import the NED-D database into the database and do other cleanup tricks.
+        """
+        *import the NED-D database into the database and do other cleanup tricks.*
         """
         self.log.info('starting the ``get`` method')
 
@@ -62,7 +54,8 @@ class ned_conesearch(_base_importer):
 
     def get_metadata_for_galaxies(
             self):
-        """get metadata for galaxies
+        """
+        *get metadata for galaxies*
         """
         self.log.info('starting the ``get_metadata_for_galaxies`` method')
 
@@ -87,7 +80,8 @@ class ned_conesearch(_base_importer):
 
     def _count_galaxies_requiring_metadata(
             self):
-        """ count galaxies requiring metadata
+        """
+        *count galaxies requiring metadata*
 
         **Return:**
             - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
@@ -152,7 +146,8 @@ class ned_conesearch(_base_importer):
     def _query_ned_and_add_results_to_database(
             self,
             batchCount):
-        """ query ned and add results to database
+        """
+        *query ned and add results to database*
 
         **Key Arguments:**
             - ``batchCount`` - the index number of the batch sent to NED
@@ -191,10 +186,27 @@ class ned_conesearch(_base_importer):
                 if isinstance(v, str) and '"' in v:
                     thisDict[k] = v.replace('"', '\\"')
             if "Input name not" not in thisDict["input_note"] and "Same object as" not in thisDict["input_note"]:
-                thisDict[
-                    "raDeg"] = dat.ra_sexegesimal_to_decimal.ra_sexegesimal_to_decimal(thisDict["ra"])
-                thisDict[
-                    "decDeg"] = dat.declination_sexegesimal_to_decimal.declination_sexegesimal_to_decimal(thisDict["dec"])
+                try:
+                    thisDict[
+                        "raDeg"] = dat.ra_sexegesimal_to_decimal.ra_sexegesimal_to_decimal(thisDict["ra"])
+                    thisDict[
+                        "decDeg"] = dat.declination_sexegesimal_to_decimal.declination_sexegesimal_to_decimal(thisDict["dec"])
+                except:
+                    continue
+
+                if thisDict["major_diameter_arcmin"] != "null":
+                    try:
+                        float(thisDict["major_diameter_arcmin"])
+                    except:
+                        print "major_diameter_arcmin is " + thisDict["major_diameter_arcmin"] + ". Changing to null."
+                        thisDict["major_diameter_arcmin"] = "null"
+
+                if thisDict["major_diameter_arcmin"] != "null":
+                    try:
+                        float(thisDict["major_diameter_arcmin"])
+                    except:
+                        print "major_diameter_arcmin is " + thisDict["major_diameter_arcmin"] + ". Changing to null."
+                        thisDict["major_diameter_arcmin"] = "null"
 
                 if thisDict["major_diameter_arcmin"] != "null":
                     try:
@@ -270,7 +282,8 @@ class ned_conesearch(_base_importer):
 
     def _get_ned_names(
             self):
-        """ get ned names
+        """
+        *get ned names*
 
         **Key Arguments:**
             # -
@@ -278,7 +291,8 @@ class ned_conesearch(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _get_ned_names method
             - @review: when complete add logging
         """
@@ -327,7 +341,8 @@ class ned_conesearch(_base_importer):
     # use the tab-trigger below for new method
     def _update_ned_query_history(
             self):
-        """ update ned query history
+        """
+        *update ned query history*
 
         **Key Arguments:**
             - ``coordinateList`` - the coordinates that where queried
@@ -335,7 +350,8 @@ class ned_conesearch(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean _update_ned_query_history method
             - @review: when complete add logging
         """

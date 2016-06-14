@@ -1,10 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-tmp_sdss.py
-============
-:Summary:
-    Import tmp_sdss catagloue from plain text file
+*Import tmp_sdss catagloue from plain text file*
 
 :Author:
     David Young
@@ -12,13 +9,8 @@ tmp_sdss.py
 :Date Created:
     August 25, 2015
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
+.. todo::
+    
     @review: when complete pull all general functions and classes into dryxPython
 
 # xdocopt-usage-tempx
@@ -38,14 +30,14 @@ from docopt import docopt
 from dryxPython import mysql as dms
 from dryxPython import logs as dl
 from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from fundamentals import tools, times
 from ._base_importer import _base_importer
 
 
 class tmp_sdss(_base_importer):
 
     """
-    The worker class for the tmp_sdss module
+    *The worker class for the tmp_sdss module*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -55,7 +47,8 @@ class tmp_sdss(_base_importer):
         - ``version`` -- version of the tmp_sdss catalogue
 
 
-    **Todo**
+    .. todo::
+
         - @review: when complete, clean tmp_sdss class
         - @review: when complete add logging
         - @review: when complete, decide whether to abstract class to another module
@@ -67,12 +60,14 @@ class tmp_sdss(_base_importer):
     # 4. @flagged: what actions does each object have to be able to perform? Add them here
     # Method Attributes
     def get(self):
-        """get the tmp_sdss object
+        """
+        *get the tmp_sdss object*
 
         **Return:**
             - ``tmp_sdss``
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean get method
             - @review: when complete add logging
         """
@@ -95,7 +90,8 @@ class tmp_sdss(_base_importer):
 
     def create_master_id(
             self):
-        """create master id
+        """
+        *create master id*
 
         **Key Arguments:**
             # -
@@ -103,7 +99,8 @@ class tmp_sdss(_base_importer):
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean create_master_id method
             - @review: when complete add logging
         """
@@ -173,7 +170,8 @@ update %(t)s set qubMasterFlag = 0 where objId = %(objid)s  and qubMasterFlag !=
     # use the tab-trigger below for new method
     def set_master_obj_types(
             self):
-        """set master obj types
+        """
+        *set master obj types*
 
         **Key Arguments:**
             # -
@@ -181,7 +179,8 @@ update %(t)s set qubMasterFlag = 0 where objId = %(objid)s  and qubMasterFlag !=
         **Return:**
             - None
 
-        **Todo**
+        .. todo::
+
             - @review: when complete, clean set_master_obj_types method
             - @review: when complete add logging
         """
