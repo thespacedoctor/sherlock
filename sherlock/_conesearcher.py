@@ -138,7 +138,8 @@ class conesearcher():
             results += resultSet
             offset += returnLimit
             returnLen = len(resultSet)
-            print """    %(returnLen)s/%(resultLen)s results matched""" % locals()
+            # print """    %(returnLen)s/%(resultLen)s results matched""" %
+            # locals()
 
         # SORT BY SEPARATION
         from operator import itemgetter
@@ -165,51 +166,44 @@ class conesearcher():
 
         # # IF JUMP BETWEEN THIS HTMINDEX AND NEXT IS > 200 THEN CREATE A NEW
         # # ARRAY (FOR BETWEEN STATEMENTS)
-        theseBetweens = np.split(thisArray, np.where(
-            np.diff(thisArray) > 1)[0] + 1)
+        # theseBetweens = np.split(thisArray, np.where(
+        #     np.diff(thisArray) > 1)[0] + 1)
 
-        htmWhereClause = []
-        singleIds = []
-        for bet in theseBetweens:
-            bMin, bMax = bet.min(), bet.max()
-            if bMin == bMax:
-                singleIds.append(str(bMin))
-            else:
-                htmWhereClause.append(
-                    "(htm16ID between %(bMin)s and %(bMax)s)" % locals())
+        # htmWhereClause = []
+        # singleIds = []
+        # for bet in theseBetweens:
+        #     bMin, bMax = bet.min(), bet.max()
+        #     if bMin == bMax:
+        #         singleIds.append(str(bMin))
+        #     else:
+        #         htmWhereClause.append(
+        #             "(htm16ID between %(bMin)s and %(bMax)s)" % locals())
 
-        if len(htmWhereClause):
-            htmWhereClause = " OR ".join(htmWhereClause)
-        else:
-            htmWhereClause = ""
-        singleIds = ",".join(singleIds)
-        if len(singleIds):
-            singleIds = "htm16ID in (%(singleIds)s)" % locals()
-        else:
-            singleIds = ""
-
-        if len(singleIds) and len(htmWhereClause):
-            htmWhereClause = htmWhereClause + " or "
-
-        htmWhereClause = "where %(htmWhereClause)s %(singleIds)s" % locals(
-        )
-
-        # print len(theseArraies)
-        # sys.exit(0)
-
-        # ratio = float(hmax - hmin + 1) / float(thisArray.size)
-        # if ratio < 100 or thisArray.size > 2000:
-        #     htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
-        #     )
+        # if len(htmWhereClause):
+        #     htmWhereClause = " OR ".join(htmWhereClause)
         # else:
-        #     s = StringIO()
-        #     np.savetxt(s, thisArray, fmt='%d', newline=",")
-        #     thesHtmIds = s.getvalue()[:-1]
-        #     htmWhereClause = "where htm16ID in (%(thesHtmIds)s)" % locals()
+        #     htmWhereClause = ""
+        # singleIds = ",".join(singleIds)
+        # if len(singleIds):
+        #     singleIds = "htm16ID in (%(singleIds)s)" % locals()
+        # else:
+        #     singleIds = ""
 
-        # hmax = thisArray.max()
-        # hmin = thisArray.min()
-        #
+        # if len(singleIds) and len(htmWhereClause):
+        #     htmWhereClause = htmWhereClause + " or "
+
+        # htmWhereClause = "where %(htmWhereClause)s %(singleIds)s" % locals(
+        # )
+
+        ratio = float(hmax - hmin + 1) / float(thisArray.size)
+        if ratio < 100 or thisArray.size > 2000:
+            htmWhereClause = "where htm16ID between %(hmin)s and %(hmax)s" % locals(
+            )
+        else:
+            s = StringIO()
+            np.savetxt(s, thisArray, fmt='%d', newline=",")
+            thesHtmIds = s.getvalue()[:-1]
+            htmWhereClause = "where htm16ID in (%(thesHtmIds)s)" % locals()
 
         # DECIDE WHAT COLUMNS TO REQUEST
         if self.queryType == 1:
@@ -294,7 +288,7 @@ class conesearcher():
         # print "END DB"
 
         resultLen = len(rows)
-        print resultLen
+        # print resultLen
 
         if len(rows):
             # IF ONLY A COUNT(*)

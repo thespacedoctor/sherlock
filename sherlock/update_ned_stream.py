@@ -68,11 +68,11 @@ class update_ned_stream():
 
         # xt-self-arg-tmpx
 
-        # 2. @flagged: what are the default attrributes each object could have? Add them to variable attribute set here
-        # Variable Data Atrributes
-
-        # 3. @flagged: what variable attrributes need overriden in any baseclass(es) used
-        # Override Variable Data Atrributes
+        # CHECK SETTINGS FOR NED SEARCH - EXIT IF NONE FOUND
+        self.update = False
+        for search in self.settings["search algorithm"]:
+            if "ned" in self.settings["search algorithm"][search]["database table"]:
+                self.update = True
 
         # Initial Actions
 
@@ -91,6 +91,9 @@ class update_ned_stream():
             - @review: when complete add logging
         """
         self.log.info('starting the ``get`` method')
+
+        if self.update == False:
+            return None
 
         coordinateList = []
         for i in self.transientsMetadataList:

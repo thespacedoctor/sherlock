@@ -64,6 +64,8 @@ class classifier():
             settings=self.settings
         )
         self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
+        self.crossmatchTablename = self.settings[
+            "database settings"]["transients"]["crossmatchTable"]
 
         return None
 
@@ -191,6 +193,8 @@ class classifier():
         """
         self.log.debug('starting the ``_update_transient_database`` method')
 
+        crossmatchTablename = self.crossmatchTablename
+
         from datetime import datetime, date, time
         now = datetime.now()
         now = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -214,7 +218,7 @@ class classifier():
                 thisId = '"%(transientObjectId)s"' % locals()
 
             sqlQuery = u"""
-                  delete from tcs_cross_matches where transient_object_id = %(thisId)s
+                  delete from %(crossmatchTablename)s  where transient_object_id = %(thisId)s
             """ % locals()
             dms.execute_mysql_write_query(
                 sqlQuery=sqlQuery,
@@ -223,8 +227,9 @@ class classifier():
             )
 
             # INSERT NEW CROSSMATCHES
-            sqlQuery = u"""
-                        INSERT ignore into tcs_cross_matches (
+            sqlQuery = u"""INSERT ignore into %(crossmatchTablename)s""" % locals(
+            )
+            sqlQuery += u""" (
                            transient_object_id,
                            catalogue_object_id,
                            catalogue_table_id,
@@ -320,7 +325,7 @@ class classifier():
             name = ob["name"]
 
             sqlQuery = u"""
-                select id, separation, catalogue_view_name, association_type, physical_separation_kpc, major_axis_arcsec from tcs_cross_matches where transient_object_id = %(transId)s order by separation
+                select id, separation, catalogue_view_name, association_type, physical_separation_kpc, major_axis_arcsec from %(crossmatchTablename)s  where transient_object_id = %(transId)s order by separation
             """ % locals()
             rows = dms.execute_mysql_read_query(
                 sqlQuery=sqlQuery,
@@ -357,7 +362,7 @@ class classifier():
             theseValues = ",".join(theseValues)
             if len(theseValues):
                 sqlQuery = u"""
-                    INSERT INTO tcs_cross_matches (id,rank) VALUES %(theseValues)s 
+                    INSERT INTO %(crossmatchTablename)s (id,rank) VALUES %(theseValues)s 
                     ON DUPLICATE KEY UPDATE rank=VALUES(rank);
                 """ % locals()
                 dms.execute_mysql_write_query(
@@ -367,7 +372,7 @@ class classifier():
                 )
 
             sqlQuery = u"""
-               select distinct association_type from (select association_type from tcs_cross_matches where transient_object_id = %(transId)s  order by rank) as alias;
+               select distinct association_type from (select association_type from %(crossmatchTablename)s  where transient_object_id = %(transId)s  order by rank) as alias;
             """ % locals()
             rows = dms.execute_mysql_read_query(
                 sqlQuery=sqlQuery,
@@ -438,42 +443,46 @@ class classifier():
         self.log.info(
             'starting the ``_create_crossmatch_table_if_not_existing`` method')
 
+        crossmatchTablename = self.crossmatchTablename
+
         sqlQuery = u"""
-            CREATE TABLE `tcs_cross_matches` (
-                `transient_object_id` bigint(20) unsigned NOT NULL,
-                `catalogue_object_id` varchar(30) NOT NULL,
-                `catalogue_table_id` smallint(5) unsigned NOT NULL,
-                `separation` double DEFAULT NULL,
-                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-                `z` double DEFAULT NULL,
-                `scale` double DEFAULT NULL,
-                `distance` double DEFAULT NULL,
-                `distance_modulus` double DEFAULT NULL,
-                `association_type` varchar(45) DEFAULT NULL,
-                `date_added` datetime DEFAULT NULL,
-                `physical_separation_kpc` double DEFAULT NULL,
-                `catalogue_object_type` varchar(45) DEFAULT NULL,
-                `catalogue_object_subtype` varchar(45) DEFAULT NULL,
-                `association_rank` int(11) DEFAULT NULL,
-                `catalogue_table_name` varchar(100) DEFAULT NULL,
-                `catalogue_view_name` varchar(100) DEFAULT NULL,
-                `rank` int(11) DEFAULT NULL,
-                `search_name` varchar(100) DEFAULT NULL,
-                `major_axis_arcsec` double DEFAULT NULL,
-                `direct_distance` double DEFAULT NULL,
-                `direct_distance_scale` double DEFAULT NULL,
-                `direct_distance_modulus` double DEFAULT NULL,
-                `catalogue_object_ra` double DEFAULT NULL,
-                `catalogue_object_dec` double DEFAULT NULL,
-                `original_search_radius_arcsec` double DEFAULT NULL,
-                `catalogue_view_id` int(11) DEFAULT NULL,
-                `catalogue_object_mag` float DEFAULT NULL,
-                `catalogue_object_filter` varchar(10) DEFAULT NULL,
-                PRIMARY KEY (`id`),
-                KEY `key_transient_object_id` (`transient_object_id`),
-                KEY `key_catalogue_object_id` (`catalogue_object_id`),
-                KEY `idx_separation` (`separation`)
-              ) ENGINE=MyISAM AUTO_INCREMENT=419280 DEFAULT CHARSET=latin1;
+            CREATE TABLE `%(crossmatchTablename)s` (
+              `transient_object_id` varchar(50) NOT NULL DEFAULT '---',
+              `catalogue_object_id` varchar(30) NOT NULL DEFAULT '---',
+              `catalogue_table_id` smallint(5) unsigned NOT NULL DEFAULT '0',
+              `separation` double DEFAULT NULL,
+              `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+              `z` double DEFAULT NULL,
+              `scale` double DEFAULT NULL,
+              `distance` double DEFAULT NULL,
+              `distance_modulus` double DEFAULT NULL,
+              `association_type` varchar(45) DEFAULT NULL,
+              `date_added` datetime DEFAULT NULL,
+              `physical_separation_kpc` double DEFAULT NULL,
+              `catalogue_object_type` varchar(45) DEFAULT NULL,
+              `catalogue_object_subtype` varchar(45) DEFAULT NULL,
+              `association_rank` int(11) DEFAULT NULL,
+              `catalogue_table_name` varchar(100) DEFAULT NULL,
+              `catalogue_view_name` varchar(100) DEFAULT NULL,
+              `rank` int(11) DEFAULT NULL,
+              `search_name` varchar(100) DEFAULT NULL,
+              `major_axis_arcsec` double DEFAULT NULL,
+              `direct_distance` double DEFAULT NULL,
+              `direct_distance_scale` double DEFAULT NULL,
+              `direct_distance_modulus` double DEFAULT NULL,
+              `catalogue_object_ra` double DEFAULT NULL,
+              `catalogue_object_dec` double DEFAULT NULL,
+              `original_search_radius_arcsec` double DEFAULT NULL,
+              `catalogue_view_id` int(11) DEFAULT NULL,
+              `catalogue_object_mag` float DEFAULT NULL,
+              `catalogue_object_filter` varchar(10) DEFAULT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `transId_cata_obj_id` (`transient_object_id`,`catalogue_object_id`),
+              UNIQUE KEY `catid_search_name` (`catalogue_object_id`,`catalogue_table_id`,`search_name`),
+              KEY `key_transient_object_id` (`transient_object_id`),
+              KEY `key_catalogue_object_id` (`catalogue_object_id`),
+              KEY `idx_separation` (`separation`)
+            ) ENGINE=MyISAM AUTO_INCREMENT=15168904 DEFAULT CHARSET=latin1 DELAY_KEY_WRITE=1;
         """ % locals()
         try:
             dms.execute_mysql_write_query(
