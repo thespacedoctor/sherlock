@@ -32,3 +32,5 @@ test_database.sql
 /logs/log.html
 
 path_to_settings.yaml
+logger.log
+logger.log.1
