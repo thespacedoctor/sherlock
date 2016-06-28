@@ -13,7 +13,6 @@ Subpackages
 
     sherlock.imports.ned_conesearch
     sherlock.imports.ned_d
-    sherlock.imports.tests
 
 Submodules
 ----------

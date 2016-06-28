@@ -6,13 +6,6 @@ sherlock.imports.ned_conesearch package
     :undoc-members:
     :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-
-    sherlock.imports.ned_conesearch.tests
-
 Submodules
 ----------
 

@@ -13,7 +13,6 @@ Subpackages
 
     sherlock.commonutils
     sherlock.imports
-    sherlock.tests
 
 Submodules
 ----------
