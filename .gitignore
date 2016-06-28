@@ -34,3 +34,4 @@ test_database.sql
 path_to_settings.yaml
 logger.log
 logger.log.1
+example_settings.yaml
