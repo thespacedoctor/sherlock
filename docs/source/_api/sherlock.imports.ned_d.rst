@@ -6,13 +6,6 @@ sherlock.imports.ned_d package
     :undoc-members:
     :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-
-    sherlock.imports.ned_d.tests
-
 Submodules
 ----------
 

@@ -6,13 +6,6 @@ sherlock.commonutils package
     :undoc-members:
     :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-
-    sherlock.commonutils.tests
-
 Submodules
 ----------
 

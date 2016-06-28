@@ -153,7 +153,7 @@ doctest:
 	      "results in $(BUILDDIR)/doctest/output.txt."
 
 buildapi:
-	sphinx-apidoc -fMeET --full -o source/_api ../ ../setup.py ../sherlock/__version__.py
+	sphinx-apidoc -fMeET --full -o source/_api ../ ../setup.py ../sherlock/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
 	@echo "Auto-generation of API documentation finished. " \
 		"The generated files are in '_api/'"
 
