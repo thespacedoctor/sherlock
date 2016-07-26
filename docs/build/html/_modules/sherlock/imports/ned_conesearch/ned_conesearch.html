@@ -1,0 +1,612 @@
+
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sherlock.imports.ned_conesearch.ned_conesearch &mdash; sherlock 0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../../../_static/dryx.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="sherlock 0.1 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../../../../_static/thespacedoctor_icon_white_circle.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_includes/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_includes/index.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_includes/index.html#tutorial">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autosummary.html">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autosummary.html#modules">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autosummary.html#functions">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">sherlock</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>sherlock.imports.ned_conesearch.ned_conesearch</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sherlock.imports.ned_conesearch.ned_conesearch</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/local/bin/python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">*Build and import NED-D table in datasbe*</span>
+
+<span class="sd">:Author:</span>
+<span class="sd">    David Young</span>
+
+<span class="sd">:Date Created:</span>
+<span class="sd">    September 7, 2015</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################# GLOBAL IMPORTS ####################</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vt100&#39;</span>
+<span class="kn">import</span> <span class="nn">readline</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">astrotools</span> <span class="k">as</span> <span class="n">dat</span>
+<span class="kn">from</span> <span class="nn">neddy</span> <span class="kn">import</span> <span class="n">namesearch</span>
+<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
+<span class="kn">from</span> <span class="nn">.._base_importer</span> <span class="kn">import</span> <span class="n">_base_importer</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="ned_conesearch"><a class="viewcode-back" href="../../../../_autosummary/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch">[docs]</a><span class="k">class</span> <span class="nc">ned_conesearch</span><span class="p">(</span><span class="n">_base_importer</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *The worker class for the ned_conesearch importer module*</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ned_conesearch.get"><a class="viewcode-back" href="../../../../_api/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *import the NED-D database into the database and do other cleanup tricks.*</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``get`` method&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span> <span class="o">=</span> <span class="s2">&quot;tcs_cat_ned_stream&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_ned_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_ned_query_history</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">databaseInsertbatchSize</span> <span class="o">=</span> <span class="mi">10000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_metadata_for_galaxies</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_htmids_to_database_table</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``get`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ned_conesearch</span></div>
+
+<div class="viewcode-block" id="ned_conesearch.get_metadata_for_galaxies"><a class="viewcode-back" href="../../../../_api/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get_metadata_for_galaxies">[docs]</a>    <span class="k">def</span> <span class="nf">get_metadata_for_galaxies</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get metadata for galaxies*</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``get_metadata_for_galaxies`` method&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">batchSize</span> <span class="o">=</span> <span class="mf">5000.</span>
+
+        <span class="n">total</span><span class="p">,</span> <span class="n">batches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_galaxies_requiring_metadata</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(total)s</span><span class="s2"> NED sources require metadata. Need to send </span><span class="si">%(batches)s</span><span class="s2"> batch requests to NED.&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">totalBatches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batches</span>
+        <span class="n">thisCount</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># FOR EACH BATCH, GET THE GALAXY IDs, QUERY NED AND UPDATE THE DATABASE</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">:</span>
+            <span class="n">thisCount</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_single_batch_of_galaxies_needing_metadata</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_query_ned_and_add_results_to_database</span><span class="p">(</span><span class="n">thisCount</span><span class="p">)</span>
+            <span class="n">total</span><span class="p">,</span> <span class="n">batches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_galaxies_requiring_metadata</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(total)s</span><span class="s2"> NED sources still require metadata.&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``get_metadata_for_galaxies`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_count_galaxies_requiring_metadata</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *count galaxies requiring metadata*</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata &amp; the number of batches required to be sent to NED</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;starting the ``_count_galaxies_requiring_metadata`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            select count(*) as count from </span><span class="si">%(tableName)s</span><span class="s2"> where raDeg is null and download_error != 1</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;count&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">batchSize</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">batches</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;completed the ``_count_galaxies_requiring_metadata`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batches</span>
+
+    <span class="k">def</span> <span class="nf">_get_single_batch_of_galaxies_needing_metadata</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get batch of galaxies needing metadata</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - ``len(self.theseIds)`` -- the number of NED IDs returned</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;starting the ``_get_single_batch_of_galaxies_needing_metadata`` method&#39;</span><span class="p">)</span>
+
+        <span class="n">bs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batchSize</span><span class="p">)</span>
+        <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
+
+        <span class="k">print</span> <span class="s2">&quot;Requesting the next </span><span class="si">%(bs)s</span><span class="s2"> sources requiring metadata from the </span><span class="si">%(tableName)s</span><span class="s2"> table&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="c1"># SELECT THE DATA FROM NED TABLE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theseIds</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            select ned_name from </span><span class="si">%(tableName)s</span><span class="s2"> where raDeg is null and download_error != 1 limit </span><span class="si">%(bs)s</span><span class="s2">;</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theseIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ned_name&quot;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;completed the ``_get_single_batch_of_galaxies_needing_metadata`` method&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theseIds</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_query_ned_and_add_results_to_database</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">batchCount</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *query ned and add results to database*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            - ``batchCount`` - the index number of the batch sent to NED</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;starting the ``_query_ned_and_add_results_to_database`` method&#39;</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">time</span>
+        <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
+
+        <span class="c1"># QUERY NED WITH BATCH</span>
+        <span class="n">totalCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theseIds</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s2">&quot;requesting metadata from NED for </span><span class="si">%(totalCount)s</span><span class="s2"> galaxies (batch </span><span class="si">%(batchCount)s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="n">namesearch</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">theseIds</span><span class="p">,</span>
+            <span class="n">quiet</span><span class="o">=</span><span class="bp">True</span>
+        <span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="n">numResults</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(numResults)s</span><span class="s2"> results returned from ned -- starting to add to database ...&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="c1"># CLEAN THE RETURNED DATA AND UPDATE DATABASE</span>
+        <span class="n">totalCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">thisDict</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;tableName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tableName</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">thisDict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">thisDict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;null&quot;</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">,</span> <span class="s2">&quot;minor_diameter_arcmin&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">v</span> <span class="ow">or</span> <span class="s2">&quot;?&quot;</span> <span class="ow">in</span> <span class="n">v</span> <span class="ow">or</span> <span class="s2">&quot;&lt;&quot;</span> <span class="ow">in</span> <span class="n">v</span><span class="p">):</span>
+                    <span class="n">thisDict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                        <span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;&quot;&#39;</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                    <span class="n">thisDict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;Input name not&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;input_note&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;Same object as&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;input_note&quot;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">thisDict</span><span class="p">[</span>
+                        <span class="s2">&quot;raDeg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">ra_sexegesimal_to_decimal</span><span class="o">.</span><span class="n">ra_sexegesimal_to_decimal</span><span class="p">(</span><span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;ra&quot;</span><span class="p">])</span>
+                    <span class="n">thisDict</span><span class="p">[</span>
+                        <span class="s2">&quot;decDeg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">declination_sexegesimal_to_decimal</span><span class="o">.</span><span class="n">declination_sexegesimal_to_decimal</span><span class="p">(</span><span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;dec&quot;</span><span class="p">])</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;null&quot;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">])</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s2">&quot;major_diameter_arcmin is &quot;</span> <span class="o">+</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;. Changing to null.&quot;</span>
+                        <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;null&quot;</span>
+
+                <span class="k">if</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;null&quot;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">])</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s2">&quot;major_diameter_arcmin is &quot;</span> <span class="o">+</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;. Changing to null.&quot;</span>
+                        <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;null&quot;</span>
+
+                <span class="k">if</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;null&quot;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">])</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s2">&quot;major_diameter_arcmin is &quot;</span> <span class="o">+</span> <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;. Changing to null.&quot;</span>
+                        <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;major_diameter_arcmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;null&quot;</span>
+
+                <span class="n">sqlQuery</span> <span class="o">+=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">                    update </span><span class="si">%(tableName)s</span><span class="s2"></span>
+<span class="s2">                        set redshift_quality = &quot;</span><span class="si">%(redshift_quality)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        redshift = </span><span class="si">%(redshift)s</span><span class="s2">,</span>
+<span class="s2">                        hierarchy = &quot;</span><span class="si">%(hierarchy)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        object_type = &quot;</span><span class="si">%(object_type)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        major_diameter_arcmin = </span><span class="si">%(major_diameter_arcmin)s</span><span class="s2">,</span>
+<span class="s2">                        morphology = &quot;</span><span class="si">%(morphology)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        magnitude_filter = &quot;</span><span class="si">%(magnitude_filter)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        ned_notes = &quot;</span><span class="si">%(ned_notes)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        eb_v = %(eb-v)s,</span>
+<span class="s2">                        raDeg = </span><span class="si">%(raDeg)s</span><span class="s2">,</span>
+<span class="s2">                        radio_morphology = &quot;</span><span class="si">%(radio_morphology)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        activity_type = &quot;</span><span class="si">%(activity_type)s</span><span class="s2">&quot;,</span>
+<span class="s2">                        minor_diameter_arcmin = </span><span class="si">%(minor_diameter_arcmin)s</span><span class="s2">,</span>
+<span class="s2">                        decDeg = </span><span class="si">%(decDeg)s</span><span class="s2">,</span>
+<span class="s2">                        redshift_err = </span><span class="si">%(redshift_err)s</span><span class="s2"></span>
+<span class="s2">                    where ned_name = &quot;</span><span class="si">%(input_name)s</span><span class="s2">&quot;;</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">                &quot;&quot;&quot;</span> <span class="o">%</span> <span class="n">thisDict</span>
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="n">sqlQuery</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;null&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;null&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sqlQuery</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">startTime</span> <span class="o">=</span> <span class="n">dcu</span><span class="o">.</span><span class="n">get_now_sql_datetime</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s2">&quot;Executing the sql query ...&quot;</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+                <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+                <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+                <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+            <span class="p">)</span>
+            <span class="n">endTime</span> <span class="o">=</span> <span class="n">dcu</span><span class="o">.</span><span class="n">get_now_sql_datetime</span><span class="p">()</span>
+            <span class="n">runningTime</span> <span class="o">=</span> <span class="n">dcu</span><span class="o">.</span><span class="n">calculate_time_difference</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">)</span>
+            <span class="n">percent</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">totalCount</span><span class="p">))</span> <span class="o">*</span> <span class="mf">100.</span>
+            <span class="c1"># sys.stdout.write(&quot;\x1b[1A&quot;)</span>
+            <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(count)s</span><span class="s2"> / </span><span class="si">%(totalCount)s</span><span class="s2"> (</span><span class="si">%(percent)1.1f%%</span><span class="s2">) message&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s2">&quot;... and finished (time taken: </span><span class="si">%(runningTime)s</span><span class="s2">) &quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">thisId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theseIds</span><span class="p">:</span>
+                <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">                    update </span><span class="si">%(tableName)s</span><span class="s2"> set download_error = 1 where ned_name = &quot;</span><span class="si">%(thisId)s</span><span class="s2">&quot;</span>
+<span class="s2">                &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+                <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_write_query</span><span class="p">(</span>
+                    <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+                    <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+                    <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+                <span class="p">)</span>
+
+        <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(count)s</span><span class="s2">/</span><span class="si">%(totalCount)s</span><span class="s2"> galaxy metadata batch entries added to database&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">totalCount</span><span class="p">:</span>
+            <span class="c1"># Cursor up one line and clear line</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1A</span><span class="se">\x1b</span><span class="s2">[2K&quot;</span><span class="p">)</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            update tcs_helper_catalogue_tables_info set last_updated = now() where table_name = &quot;</span><span class="si">%(tableName)s</span><span class="s2">&quot;</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_write_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;completed the ``_query_ned_and_add_results_to_database`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_get_ned_names</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *get ned names*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # -</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _get_ned_names method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_ned_names`` method&#39;</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">neddy</span> <span class="kn">import</span> <span class="n">conesearch</span>
+
+        <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
+
+        <span class="n">numSearches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinateList</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">numSearches</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;Requesting the names of the NED sources found within </span><span class="si">%(numSearches)s</span><span class="s2"> conesearch areas&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">names</span><span class="p">,</span> <span class="n">searchParams</span> <span class="o">=</span> <span class="n">conesearch</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">radiusArcsec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;ned stream search radius arcec&quot;</span><span class="p">],</span>
+            <span class="n">nearestOnly</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">unclassified</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">quiet</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">listOfCoordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinateList</span><span class="p">,</span>
+            <span class="n">outputFilePath</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">get_crossmatch_names</span><span class="p">()</span>
+
+        <span class="n">manyValueList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">manyValueList</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">n</span><span class="p">,))</span>
+
+        <span class="n">numResults</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">manyValueList</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">numSearches</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;Inserting the names of the </span><span class="si">%(numResults)s</span><span class="s2"> matched NED sources into `tcs_cat_ned_stream` table&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            INSERT ignore into tcs_cat_ned_stream (ned_name, dateCreated) values (</span><span class="si">%s</span><span class="s2">, now())</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_write_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">manyValueList</span><span class="o">=</span><span class="n">manyValueList</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_ned_names`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="k">def</span> <span class="nf">_update_ned_query_history</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *update ned query history*</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            - ``coordinateList`` - the coordinates that where queried</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - None</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            - @review: when complete, clean _update_ned_query_history method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_update_ned_query_history`` method&#39;</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
+
+        <span class="n">manyValueList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;ned stream search radius arcec&quot;</span><span class="p">]</span>
+        <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">time</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinateList</span><span class="p">):</span>
+            <span class="n">coord</span> <span class="o">=</span> <span class="n">coord</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">manyValueList</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">radius</span><span class="p">,</span> <span class="n">now</span><span class="p">))</span>
+
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinateList</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;Updating the `tcs_helper_ned_query_history` for the </span><span class="si">%(num)s</span><span class="s2"> new initial conesearches just performed&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            INSERT into tcs_helper_ned_query_history (raDeg, decDeg, arcsecRadius, dateQueried) values (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_write_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">manyValueList</span><span class="o">=</span><span class="n">manyValueList</span>
+        <span class="p">)</span>
+
+        <span class="n">dms</span><span class="o">.</span><span class="n">add_HTMIds_to_mysql_tables</span><span class="o">.</span><span class="n">add_HTMIds_to_mysql_tables</span><span class="p">(</span>
+            <span class="n">raColName</span><span class="o">=</span><span class="s2">&quot;raDeg&quot;</span><span class="p">,</span>
+            <span class="n">declColName</span><span class="o">=</span><span class="s2">&quot;decDeg&quot;</span><span class="p">,</span>
+            <span class="n">tableName</span><span class="o">=</span><span class="s2">&quot;tcs_helper_ned_query_history&quot;</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">primaryIdColumnName</span><span class="o">=</span><span class="s2">&quot;primaryId&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_update_ned_query_history`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="c1"># use the tab-trigger below for new method</span>
+    <span class="c1"># xt-class-method</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dave Young.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
