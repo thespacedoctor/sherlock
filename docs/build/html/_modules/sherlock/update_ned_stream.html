@@ -1,0 +1,456 @@
+
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sherlock.update_ned_stream &mdash; sherlock 0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../_static/dryx.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="sherlock 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../../_static/thespacedoctor_icon_white_circle.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#tutorial">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#modules">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#functions">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">sherlock</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>sherlock.update_ned_stream</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sherlock.update_ned_stream</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/local/bin/python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">update_ned_stream.py</span>
+<span class="sd">==================</span>
+<span class="sd">:Summary:</span>
+<span class="sd">    Update the NED stream by querying NED with an area larger than required for the transients listed</span>
+
+<span class="sd">:Author:</span>
+<span class="sd">    David Young</span>
+
+<span class="sd">:Date Created:</span>
+<span class="sd">    November  2, 2015</span>
+
+<span class="sd">:dryx syntax:</span>
+<span class="sd">    - ``_someObject`` = a &#39;private&#39; object that should only be changed for debugging</span>
+
+<span class="sd">:Notes:</span>
+<span class="sd">    - If you have any questions requiring this script/module please email me: davidrobertyoung@gmail.com</span>
+
+<span class="sd">:Tasks:</span>
+<span class="sd">    @review: when complete pull all general functions and classes into dryxPython</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">################# GLOBAL IMPORTS ####################</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vt100&#39;</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
+<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports.ned_conesearch</span> <span class="kn">import</span> <span class="n">ned_conesearch</span>
+<span class="kn">from</span> <span class="nn">HMpTy</span> <span class="kn">import</span> <span class="n">htm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">cStringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+
+<div class="viewcode-block" id="update_ned_stream"><a class="viewcode-back" href="../../_autosummary/sherlock.update_ned_stream.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream">[docs]</a><span class="k">class</span> <span class="nc">update_ned_stream</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The worker class for the update_ned_stream module</span>
+
+<span class="sd">    **Key Arguments:**</span>
+<span class="sd">        - ``log`` -- logger</span>
+<span class="sd">        - ``settings`` -- the settings dictionary</span>
+<span class="sd">        - ``transientsMetadataList`` -- the metadata for the transients (list of dictionaries, must contain keys &#39;ra&#39; and &#39;dec&#39;)</span>
+<span class="sd">        - ``cataloguesDbConn`` -- database connection for the catalogue database</span>
+
+<span class="sd">    **Todo**</span>
+<span class="sd">        - @review: when complete, clean update_ned_stream class</span>
+<span class="sd">        - @review: when complete add logging</span>
+<span class="sd">        - @review: when complete, decide whether to abstract class to another module</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialisation</span>
+    <span class="c1"># 1. @flagged: what are the unique attrributes for each object? Add them</span>
+    <span class="c1"># to __init__</span>
+
+<div class="viewcode-block" id="update_ned_stream.__init__"><a class="viewcode-back" href="../../_autosummary/sherlock.update_ned_stream.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">log</span><span class="p">,</span>
+        <span class="n">cataloguesDbConn</span><span class="p">,</span>
+        <span class="n">settings</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">transientsMetadataList</span><span class="o">=</span><span class="p">[]</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;instansiating a new &#39;update_ned_stream&#39; object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transientsMetadataList</span> <span class="o">=</span> <span class="n">transientsMetadataList</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span> <span class="o">=</span> <span class="n">cataloguesDbConn</span>
+
+        <span class="c1"># xt-self-arg-tmpx</span>
+
+        <span class="c1"># CHECK SETTINGS FOR NED SEARCH - EXIT IF NONE FOUND</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="n">search</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;search algorithm&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;ned&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;search algorithm&quot;</span><span class="p">][</span><span class="n">search</span><span class="p">][</span><span class="s2">&quot;database table&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="c1"># Initial Actions</span>
+
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+    <span class="c1"># 4. @flagged: what actions does each object have to be able to perform? Add them here</span>
+    <span class="c1"># Method Attributes</span>
+<div class="viewcode-block" id="update_ned_stream.get"><a class="viewcode-back" href="../../_autosummary/sherlock.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;get the update_ned_stream object</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - ``update_ned_stream``</span>
+
+<span class="sd">        **Todo**</span>
+<span class="sd">            - @review: when complete, clean get method</span>
+<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``get`` method&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">coordinateList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transientsMetadataList</span><span class="p">:</span>
+            <span class="n">thisList</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;ra&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;dec&quot;</span><span class="p">])</span>
+            <span class="n">coordinateList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thisList</span><span class="p">)</span>
+
+        <span class="n">initialListLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coordinateList</span><span class="p">)</span>
+        <span class="n">coordinateList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remove_previous_ned_queries</span><span class="p">(</span>
+            <span class="n">coordinateList</span><span class="o">=</span><span class="n">coordinateList</span>
+        <span class="p">)</span>
+        <span class="n">newListLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coordinateList</span><span class="p">)</span>
+        <span class="n">previousSearches</span> <span class="o">=</span> <span class="n">initialListLen</span> <span class="o">-</span> <span class="n">newListLen</span>
+
+        <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(newListLen)s</span><span class="s2">/</span><span class="si">%(initialListLen)s</span><span class="s2"> coordinate sets need an inital NED conesearch to find matched source names (</span><span class="si">%(previousSearches)s</span><span class="s2"> coordinate sets found in search history)&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="n">this</span> <span class="o">=</span> <span class="n">ned_conesearch</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+            <span class="n">coordinateList</span><span class="o">=</span><span class="n">coordinateList</span><span class="p">,</span>
+            <span class="n">cataloguesDbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span>
+        <span class="p">)</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``get`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">update_ned_stream</span></div>
+
+    <span class="k">def</span> <span class="nf">_remove_previous_ned_queries</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">coordinateList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; remove previous ned queries</span>
+
+<span class="sd">        **Key Arguments:**</span>
+<span class="sd">            # - ``coordinateList`` -- set of coordinate to check for previous queries</span>
+
+<span class="sd">        **Return:**</span>
+<span class="sd">            - ``updatedCoordinateList`` -- coordinate list with previous queries removed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_remove_previous_ned_queries`` method&#39;</span><span class="p">)</span>
+
+        <span class="c1"># IMPORTS</span>
+        <span class="kn">import</span> <span class="nn">math</span>
+        <span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">astrotools</span> <span class="k">as</span> <span class="n">dat</span>
+        <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">timedelta</span>
+
+        <span class="k">print</span> <span class="s2">&quot;Removing transient/subdisk areas that have had previous searches performed&quot;</span>
+
+        <span class="c1"># VARAIBLES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh16</span> <span class="o">=</span> <span class="n">htm</span><span class="o">.</span><span class="n">HTM</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+        <span class="n">updatedCoordinateList</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1">#  FIND THE LARGE NED QUERY DONE SO FAR FROM DATABASE</span>
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
+<span class="s2">            select arcsecRadius from tcs_helper_ned_query_history order by arcsecRadius desc limit 1</span>
+<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+        <span class="n">largestNedQueryDeg</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;arcsecRadius&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">3600.</span>
+
+        <span class="c1"># CALCULATE THE OLDEST RESULTS LIMIT</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">td</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span>
+            <span class="n">days</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;ned stream refresh rate in days&quot;</span><span class="p">])</span>
+        <span class="n">refreshLimit</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">td</span>
+        <span class="n">refreshLimit</span> <span class="o">=</span> <span class="n">refreshLimit</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+        <span class="c1"># FOR EACH TRANSIENT IN COORDINATE LIST ...</span>
+        <span class="n">totalCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coordinateList</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">htmWhereClauses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">transRas</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">transDecs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coordinateList</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Cursor up one line and clear line</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1A</span><span class="se">\x1b</span><span class="s2">[2K&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">totalCount</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">totalCount</span>
+            <span class="n">percent</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">totalCount</span><span class="p">))</span> <span class="o">*</span> <span class="mf">100.</span>
+            <span class="k">print</span> <span class="s2">&quot;  </span><span class="si">%(count)s</span><span class="s2"> / </span><span class="si">%(totalCount)s</span><span class="s2"> (</span><span class="si">%(percent)1.1f%%</span><span class="s2">) transients/subdisks checked&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="n">this</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">raDeg</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">this</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">decDeg</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">this</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">transRas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">raDeg</span><span class="p">)</span>
+            <span class="n">transDecs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decDeg</span><span class="p">)</span>
+
+            <span class="c1"># BUILD WHERE SECTION OF CLAUSE</span>
+            <span class="c1"># CREATE AN ARRAY OF RELEVANT HTMIDS AND FIND MAX AND MIN</span>
+            <span class="n">thisArray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh16</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span>
+                <span class="n">raDeg</span><span class="p">,</span> <span class="n">decDeg</span><span class="p">,</span> <span class="n">largestNedQueryDeg</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">hmax</span> <span class="o">=</span> <span class="n">thisArray</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">hmin</span> <span class="o">=</span> <span class="n">thisArray</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="n">htmWhereClause</span> <span class="o">=</span> <span class="s2">&quot;(htm16ID between </span><span class="si">%(hmin)s</span><span class="s2"> and </span><span class="si">%(hmax)s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">(</span>
+            <span class="p">)</span>
+            <span class="n">htmWhereClauses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">htmWhereClause</span><span class="p">)</span>
+
+        <span class="n">htmWhereClauses</span> <span class="o">=</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">htmWhereClauses</span><span class="p">)</span>
+
+        <span class="c1"># DO A LARGE FIRST SWEEP FOR PREVIOUS SEARCHES - BEFORE PINPOINTING</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">htmWhereClauses</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">&quot;select * from tcs_helper_ned_query_history where (</span><span class="si">%(htmWhereClauses)s</span><span class="s2">) and dateQueried &gt; &#39;</span><span class="si">%(refreshLimit)s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">(</span>
+        <span class="p">)</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+        <span class="p">)</span>
+
+        <span class="n">nedRas</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nedDecs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nedRadii</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="n">nedRas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;raDeg&quot;</span><span class="p">])</span>
+            <span class="n">nedDecs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;decDeg&quot;</span><span class="p">])</span>
+            <span class="n">nedRadii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;arcsecRadius&quot;</span><span class="p">])</span>
+
+        <span class="c1"># CREATE TWO ARRAYS OF RA,DEC (1. SUBDISKS &amp; 2. NED PREVIOUS QUERY</span>
+        <span class="c1"># RETURNS)</span>
+        <span class="n">tRa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">transRas</span><span class="p">)</span>
+        <span class="n">tDec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">transDecs</span><span class="p">)</span>
+        <span class="n">raList</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nedRas</span><span class="p">)</span>
+        <span class="n">decList</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nedDecs</span><span class="p">)</span>
+
+        <span class="n">indexList1</span><span class="p">,</span> <span class="n">indexList2</span><span class="p">,</span> <span class="n">separation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh16</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+            <span class="n">tRa</span><span class="p">,</span> <span class="n">tDec</span><span class="p">,</span> <span class="n">raList</span><span class="p">,</span> <span class="n">decList</span><span class="p">,</span> <span class="n">largestNedQueryDeg</span><span class="p">,</span> <span class="n">maxmatch</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">matchList</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">transRas</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">indexList1</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">separation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">3600.</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;first pass ned search radius arcec&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nedRadii</span><span class="p">[</span><span class="n">indexList2</span><span class="p">[</span><span class="n">i</span><span class="p">]]:</span>
+                <span class="n">matchList</span><span class="p">[</span><span class="n">indexList1</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">matchList</span><span class="p">,</span> <span class="n">coordinateList</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="n">updatedCoordinateList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_remove_previous_ned_queries`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">updatedCoordinateList</span></div>
+
+    <span class="c1"># xt-class-method</span>
+
+    <span class="c1"># 5. @flagged: what actions of the base class(es) need ammending? ammend them here</span>
+    <span class="c1"># Override Method Attributes</span>
+    <span class="c1"># method-override-tmpx</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dave Young.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
