@@ -182,10 +182,16 @@ class ned_conesearch(_base_importer):
                 if isinstance(v, str) and '"' in v:
                     thisDict[k] = v.replace('"', '\\"')
             if "Input name not" not in thisDict["input_note"] and "Same object as" not in thisDict["input_note"]:
-                thisDict[
-                    "raDeg"] = dat.ra_sexegesimal_to_decimal.ra_sexegesimal_to_decimal(thisDict["ra"])
-                thisDict[
-                    "decDeg"] = dat.declination_sexegesimal_to_decimal.declination_sexegesimal_to_decimal(thisDict["dec"])
+		try:
+                    thisDict[
+                        "raDeg"] = dat.ra_sexegesimal_to_decimal.ra_sexegesimal_to_decimal(thisDict["ra"])
+                    thisDict[
+                        "decDeg"] = dat.declination_sexegesimal_to_decimal.declination_sexegesimal_to_decimal(thisDict["dec"])
+                except:
+                    thisName = thisDict["input_name"]
+                    self.log.warning(
+                        "Could not convert RA or DEC for NED object %(thisName)s" % locals())
+                    continue
 
                 sqlQuery += u"""
                     update %(tableName)s
