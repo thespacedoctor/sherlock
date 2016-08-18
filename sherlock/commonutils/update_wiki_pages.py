@@ -253,7 +253,7 @@ class update_wiki_pages():
             if newNumber[0] == ",":
                 newNumber = newNumber[1:]
 
-            if len(vizier_link) and vizier_link != 0 and vizier_link != "0":
+            if vizier_link and len(vizier_link) and vizier_link != 0 and vizier_link != "0":
                 vizier_link = u"[✓](%(vizier_link)s)" % locals()
             else:
                 vizier_link = u""
