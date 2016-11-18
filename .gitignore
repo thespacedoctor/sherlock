@@ -31,4 +31,5 @@ test_database.sql
 /logs/log.html
 
 path_to_settings.yaml
-/build
+blog-post.md
+blog-post.rst/build

@@ -18,7 +18,6 @@ database settings:
 # Note only one tunnel is setup - may need to change this to 2 tunnels in the future if 
 # code, static catalogue database and transient database are all on seperate machines.
 ssh tunnel:
-    use tunnel: True   # True | False
     remote user: dry
     remote ip: starbase.mp.qub.ac.uk
     remote datbase host: pesstovm02
