@@ -1,22 +1,17 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-classifier.py
-=============
-:Summary:
-    The classifier object for Sherlock
+*The classifier object for Sherlock*
 
 :Author:
     David Young
 
 :Date Created:
-    June 29, 2015
+    November 18, 2016
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
+.. todo ::
 
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+    - document this module
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -26,13 +21,13 @@ import readline
 import glob
 import pickle
 import time
+import math
+from datetime import datetime, date, time, timedelta
 import MySQLdb as ms
 from docopt import docopt
-from dryxPython import logs as dl
-from dryxPython import commonutils as dcu
-from dryxPython import mysql as dms
-from dryxPython.projectsetup import setup_main_clutil
-from sherlock.imports.ned_conesearch import ned_conesearch
+from astrocalc.coords import separations
+from sherlock.imports import ned
+from sherlock.commonutils import get_crossmatch_catalogues_column_map
 
 
 class classifier():
@@ -67,12 +62,16 @@ class classifier():
 
         # INITIAL ACTIONS
         # SETUP DATABASE CONNECTIONS
+        # SETUP ALL DATABASE CONNECTIONS
         from sherlock import database
         db = database(
             log=self.log,
             settings=self.settings
         )
-        self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
+        dbConns = db.connect()
+        self.transientsDbConn = dbConns["transients"]
+        self.cataloguesDbConn = dbConns["catalogues"]
+        self.pmDbConn = dbConns["marshall"]
 
         return None
 
@@ -83,7 +82,10 @@ class classifier():
         self.log.debug('starting the ``get`` method')
 
         self._create_crossmatch_table_if_not_existing()
-        self._grab_column_name_map_from_database()
+        self.colMaps = get_crossmatch_catalogues_column_map(
+            log=self.log,
+            dbConn=self.cataloguesDbConn
+        )
 
         # CHOOSE METHOD TO GRAB TRANSIENT METADATA BEFORE CLASSIFICATION
         # EITHER LIST OF IDS, OR A STREAM FROM THE DATABASE
@@ -112,13 +114,15 @@ class classifier():
             sqlQuery = u"""
                 select id, followup_id, ra_psf 'ra', dec_psf 'dec', local_designation 'name', ps1_designation, object_classification, local_comments, detection_list_id
                 from tcs_transient_objects
-                where id = %(tran)s
+                where id = %(tran)s and ra_psf > 0.
             """ % locals()
-            rows = dms.execute_mysql_read_query(
+            rows = readquery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.transientsDbConn,
-                log=self.log
+                quiet=False
             )
+
             if len(rows):
                 self.transientsMetadataList.append(rows[0])
             else:
@@ -138,10 +142,11 @@ class classifier():
 
         sqlQuery = self.settings["database settings"][
             "transients"]["transient query"]
-        self.transientsMetadataList = dms.execute_mysql_read_query(
+        self.transientsMetadataList = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
-            log=self.log
+            quiet=False
         )
 
         self.log.debug(
@@ -226,10 +231,10 @@ class classifier():
             sqlQuery = u"""
                     delete from tcs_cross_matches where transient_object_id = %(transientObjectId)s
                 """ % locals()
-            dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.transientsDbConn,
-                log=self.log
             )
 
             # INSERT NEW CROSSMATCHES
@@ -297,10 +302,10 @@ class classifier():
                            %s,
                            %s)
                         """ % (crossmatch["transientObjectId"], crossmatch["catalogueObjectId"], crossmatch["catalogueTableId"], crossmatch["sourceRa"], crossmatch["sourceDec"], crossmatch["originalSearchRadius"], crossmatch["separation"], crossmatch["z"], crossmatch["scale"], crossmatch["distance"], crossmatch["distanceModulus"], now, crossmatch["association_type"], crossmatch["physical_separation_kpc"], crossmatch["sourceType"], crossmatch["sourceSubType"], crossmatch["catalogueTableName"], crossmatch["catalogueViewName"], crossmatch["searchName"], crossmatch["xmmajoraxis"], crossmatch["xmdirectdistance"], crossmatch["xmdirectdistancescale"], crossmatch["xmdirectdistanceModulus"])
-                dms.execute_mysql_write_query(
+                writequery(
+                    log=self.log,
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,
-                    log=self.log
                 )
 
         for ob in self.transientsMetadataList:
@@ -310,10 +315,11 @@ class classifier():
             sqlQuery = u"""
                 select id, separation, catalogue_view_name, association_type, physical_separation_kpc, major_axis_arcsec from tcs_cross_matches where transient_object_id = %(transId)s order by separation
             """ % locals()
-            rows = dms.execute_mysql_read_query(
+            rows = readquery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.transientsDbConn,
-                log=self.log
+                quiet=False
             )
 
             rankScores = []
@@ -342,19 +348,21 @@ class classifier():
                 sqlQuery = u"""
                     update tcs_cross_matches set rank = %(rank)s where id = %(primaryId)s
                 """ % locals()
-                rows = dms.execute_mysql_read_query(
+                rows = readquery(
+                    log=self.log,
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,
-                    log=self.log
+                    quiet=False
                 )
 
             sqlQuery = u"""
                select distinct association_type from (select association_type from tcs_cross_matches where transient_object_id = %(transId)s  order by rank) as alias;
             """ % locals()
-            rows = dms.execute_mysql_read_query(
+            rows = readquery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.transientsDbConn,
-                log=self.log
+                quiet=False
             )
 
             classification = ""
@@ -372,16 +380,15 @@ class classifier():
 
             print """%(name)s: %(classification)s """ % locals()
 
-            dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.transientsDbConn,
-                log=self.log
             )
 
         self.log.debug('completed the ``_update_transient_database`` method')
         return None
 
-    # use the tab-trigger below for new method
     def _update_ned_stream(
             self):
         """ update ned stream
@@ -407,41 +414,15 @@ class classifier():
             coordinateList=coordinateList
         )
 
-        this = ned_conesearch(
+        stream = ned(
             log=self.log,
             settings=self.settings,
-            coordinateList=coordinateList
+            coordinateList=coordinateList,
+            radiusArcsec=self.settings["ned stream search radius arcec"]
         )
-        this.get()
+        stream.ingest()
 
         self.log.info('completed the ``_update_ned_stream`` method')
-        return None
-
-    def _grab_column_name_map_from_database(
-            self):
-        """ grab column name map from database
-
-        **Return:**
-            - None
-        """
-        self.log.info(
-            'starting the ``_grab_column_name_map_from_database`` method')
-
-        # GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE
-        sqlQuery = u"""
-            select view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id
-        """ % locals()
-        rows = dms.execute_mysql_read_query(
-            sqlQuery=sqlQuery,
-            dbConn=self.cataloguesDbConn,
-            log=self.log
-        )
-        self.colMaps = {}
-        for row in rows:
-            self.colMaps[row["view_name"]] = row
-
-        self.log.info(
-            'completed the ``_grab_column_name_map_from_database`` method')
         return None
 
     def _create_crossmatch_table_if_not_existing(
@@ -486,10 +467,10 @@ class classifier():
             ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
         """ % locals()
         try:
-            dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.transientsDbConn,
-                log=self.log
             )
         except:
             pass
@@ -511,12 +492,6 @@ class classifier():
             - ``updatedCoordinateList`` -- coordinate list with previous queries removed
         """
         self.log.info('starting the ``_remove_previous_ned_queries`` method')
-
-        # IMPORTS
-        import htmCircle
-        import math
-        from dryxPython import astrotools as dat
-        from datetime import datetime, date, time, timedelta
 
         # 1 DEGREE QUERY RADIUS
         radius = 60. * 60.
@@ -555,10 +530,11 @@ class classifier():
             # FINALLY BUILD THE FULL QUERY AND HIT DATABASE
             sqlQuery = "select * from tcs_helper_ned_query_history %(htmWhereClause)s %(cartesianClause)s and dateQueried > '%(refreshLimit)s'" % locals(
             )
-            rows = dms.execute_mysql_read_query(
+            rows = readquery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.cataloguesDbConn,
-                log=self.log
+                quiet=False
             )
 
             # DETERMINE WHICH COORDINATES REQUIRE A NED QUERY
@@ -568,13 +544,17 @@ class classifier():
                 decStream = row["decDeg"]
                 radiusStream = row["arcsecRadius"]
                 dateStream = row["dateQueried"]
-                angularSeparation, northSep, eastSep = dat.get_angular_separation(
+                # CALCULATE SEPARATION IN ARCSEC
+
+                calculator = separations(
                     log=self.log,
                     ra1=raDeg,
                     dec1=decDeg,
                     ra2=raStream,
                     dec2=decStream
                 )
+                angularSeparation, northSep, eastSep = calculator.get()
+
                 if angularSeparation + self.settings["first pass ned search radius arcec"] < radiusStream:
                     match = True
 

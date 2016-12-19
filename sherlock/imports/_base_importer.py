@@ -1,25 +1,17 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_base_importer.py
-============
-:Summary:
-    The base importer for sherlock imports
+*The base importer for sherlock imports*
 
 :Author:
     David Young
 
 :Date Created:
-    August 25, 2015
+    November 18, 2016
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
+.. todo ::
 
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
-    @review: when complete pull all general functions and classes into dryxPython
+    - document this module
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -29,40 +21,30 @@ import readline
 import glob
 import pickle
 import codecs
-import string
-
 import re
+import string
+from datetime import datetime, date, time
 from docopt import docopt
-from dryxPython import mysql as dms
-from dryxPython import logs as dl
-from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
-# from ..__init__ import *
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, directory_script_runner, writequery
+from fundamentals.renderer import list_of_dictionaries
+from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 
 
 class _base_importer():
 
     """
-    The worker class for the _base_importer module
+    The base importer object used to import new catalgues into sherlock's crossmatch catalogues database
 
     **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
         - ``pathToDataFIle`` -- path to the _base_importer data file
         - ``version`` -- version of the _base_importer catalogue
         - ``catalogueName`` -- name of the catalogue
         - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
-
-
-    **Todo**
-        - @review: when complete, clean _base_importer class
-        - @review: when complete add logging
-        - @review: when complete, decide whether to abstract class to another module
+        - ``radiusArcsec`` - - the radius in arcsec with which to perform the initial NED conesearch. Default * False*
     """
-    # Initialisation
-    # 1. @flagged: what are the unique attrributes for each object? Add them
-    # to __init__
+    # INITIALISATION
 
     def __init__(
             self,
@@ -71,7 +53,8 @@ class _base_importer():
             pathToDataFile=False,
             version=False,
             catalogueName="",
-            coordinateList=[]
+            coordinateList=[],
+            radiusArcsec=False
     ):
         self.log = log
         log.debug("instansiating a new '_base_importer' object")
@@ -80,17 +63,23 @@ class _base_importer():
         self.version = version
         self.catalogueName = catalogueName
         self.coordinateList = coordinateList
+        self.radiusArcsec = radiusArcsec
         # xt-self-arg-tmpx
 
         # INITIAL ACTIONS
         # SETUP DATABASE CONNECTIONS
+        # SETUP ALL DATABASE CONNECTIONS
         from sherlock import database
         db = database(
             log=self.log,
             settings=self.settings
         )
-        self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
+        dbConns = db.connect()
+        self.transientsDbConn = dbConns["transients"]
+        self.cataloguesDbConn = dbConns["catalogues"]
+        self.pmDbConn = dbConns["marshall"]
 
+        # OPEN THE FILE TO IMPORT THE DATA FROM
         if pathToDataFile:
             pathToReadFile = pathToDataFile
             try:
@@ -107,7 +96,8 @@ class _base_importer():
         else:
             self.catData = None
 
-        # BUILD VERSION TEXT
+        # GET THE VERSION TO APPEND TO THE DATABASE TABLE NAME FOR THE
+        # CATALOGUE
         if self.version:
             self.version = "_v" + \
                 self.version.replace(" ", "").replace(
@@ -118,6 +108,8 @@ class _base_importer():
 
         # BUILD THE DATABASE TABLE NAME
         self.dbTableName = "tcs_cat_%(catalogueName)s%(version)s" % locals()
+
+        # SOME DEFAULT OBJECT ATTRIBUTES THAT CAN BE SUPERSEDED
         self.primaryIdColumnName = "primaryId"
         self.databaseInsertbatchSize = 2500
         self.raColName = "raDeg"
@@ -126,130 +118,67 @@ class _base_importer():
 
         return None
 
-    # Method Attributes
-    def get(self):
-        """get the _base_importer object
-
-        **Return:**
-            - ``_base_importer``
-
-        **Todo**
-            - @review: when complete, clean get method
-            - @review: when complete add logging
-        """
-        self.log.info('starting the ``get`` method')
-
-        # self.dictList = self.create_dictionary_of__base_importer()
-        # self.add_data_to_database_table()
-        self.add_htmids_to_database_table()
-
-        self.log.info('completed the ``get`` method')
-        return _base_importer
-
-    def create_dictionary_of__base_importer(
-            self):
-        """create dictionary of _base_importer
+    def _add_data_to_database_table(
+            self,
+            dictList,
+            createStatement=False):
+        """use the mysql sucker built into fundamentals package to import data into the crsossmatch catalogues mysql database (via insert scripts)
 
         **Key Arguments:**
-            # -
+            - ``dictList`` - a list of dictionaries containing all the rows in the milliquas catalogue
+            - ``createStatement`` - the table's mysql create statement (used to generate table if it does not yet exist in database)
 
-        **Return:**
-            - None
+        **Usage:**
 
-        **Todo**
-            - @review: when complete, clean create_dictionary_of__base_importer method
-            - @review: when complete add logging
+            .. code-block:: python 
+
+                self._add_data_to_database_table(
+                    dictList=dictList,
+                    createStatement=createStatement
+                )
         """
-        self.log.info(
-            'starting the ``create_dictionary_of__base_importer`` method')
+        self.log.info('starting the ``_add_data_to_database_table`` method')
 
-        dictList = []
-        lines = string.split(self.catData, '\n')
-        inserts = [
-            11, 25, 51, 57, 64, 71, 75, 78, 81, 89, 97, 106, 110, 134, 158, 181]
-        keys = ["raDeg", "decDeg", "name", "descrip", "rmag", "bmag", "comment", "r_psf_class", "b_psf_class", "z",
-                "src_cat_name", "src_cat_z", "qso_prob", "x_name", "r_name", "alt_id1", "alt_id2"]
-
-        totalCount = len(lines)
-        count = 0
-
-        for line in lines:
-            count += 1
-            if count > 1:
-                # Cursor up one line and clear line
-                sys.stdout.write("\x1b[1A\x1b[2K")
-            if count > totalCount:
-                count = totalCount
-            print "%(count)s / %(totalCount)s _base_importer data added to memory" % locals()
-
-            thisDict = {}
-            for insert in inserts:
-                line.replace("–", "-")
-                line = line[:insert] + "|" + line[insert:]
-
-            theseValues = string.split(line, '|')
-            for k, v in zip(keys, theseValues):
-                v = v.strip()
-                if len(v) == 0 or v == "-":
-                    v = None
-                thisDict[k] = v
-            dictList.append(thisDict)
-
-        self.log.info(
-            'completed the ``create_dictionary_of__base_importer`` method')
-        return dictList
-
-    # use the tab-trigger below for new method
-    def add_data_to_database_table(
-            self):
-        """add data to database table
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean add_data_to_database_table method
-            - @review: when complete add logging
-        """
-        self.log.info('starting the ``add_data_to_database_table`` method')
-
-        dms.insert_list_of_dictionaries_into_database(
-            dbConn=self.cataloguesDbConn,
+        # RECURSIVELY CREATE MISSING DIRECTORIES
+        if not os.path.exists("/tmp/myinserts/"):
+            os.makedirs("/tmp/myinserts/")
+        dataSet = list_of_dictionaries(
             log=self.log,
-            dictList=self.dictList,
-            dbTableName=self.dbTableName,
-            uniqueKeyList=self.uniqueKeyList,
-            batchSize=self.databaseInsertbatchSize
+            listOfDictionaries=dictList
+        )
+        now = datetime.now()
+        now = now.strftime("%Y%m%dt%H%M%S")
+        filepath = "/tmp/myinserts/" + self.dbTableName + "-" + now + ".sql"
+        mysqlData = dataSet.mysql(
+            tableName=self.dbTableName, filepath=filepath, createStatement=createStatement)
+
+        directory_script_runner(
+            log=self.log,
+            pathToScriptDirectory="/tmp/myinserts/",
+            databaseName=self.settings["database settings"][
+                "static catalogues"]["db"],
+            loginPath=self.settings["database settings"][
+                "static catalogues"]["loginPath"],
+            successRule="success",
+            failureRule="failed"
         )
 
-        self.log.info('completed the ``add_data_to_database_table`` method')
+        self._add_htmids_to_database_table()
+        self._update_database_helper_table()
+
+        self.log.info('completed the ``_add_data_to_database_table`` method')
         return None
 
-    # use the tab-trigger below for new method
-    def add_htmids_to_database_table(
+    def _add_htmids_to_database_table(
             self):
-        """add htmids to database table
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean add_htmids_to_database_table method
-            - @review: when complete add logging
+        """add htmids to database table once all the data has been imported
         """
         self.log.info('starting the ``add_htmids_to_database_table`` method')
 
         tableName = self.dbTableName
         print "Adding HTMIds to %(tableName)s" % locals()
 
-        from dryxPython import mysql as dms
-        dms.add_HTMIds_to_mysql_tables.add_HTMIds_to_mysql_tables(
+        add_htm_ids_to_mysql_database_table(
             raColName=self.raColName,
             declColName=self.declColName,
             tableName=self.dbTableName,
@@ -263,17 +192,7 @@ class _base_importer():
 
     def _update_database_helper_table(
             self):
-        """ update dataasbe helper table
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean _update_database_helper_table method
-            - @review: when complete add logging
+        """ update database helper table
         """
         self.log.info('starting the ``_update_database_helper_table`` method')
 
@@ -283,10 +202,10 @@ class _base_importer():
             update tcs_helper_catalogue_tables_info set last_updated = now() where table_name = "%(tableName)s";
         """ % locals()
 
-        dms.execute_mysql_write_query(
+        writequery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
         )
 
         self.log.info('completed the ``_update_database_helper_table`` method')

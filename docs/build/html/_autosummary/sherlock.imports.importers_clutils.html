@@ -38,10 +38,13 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
-        <link rel="next" title="sherlock.classifier (class)" href="sherlock.classifier.html"/>
-        <link rel="prev" title="sherlock.utKit (module)" href="sherlock.utKit.html"/> 
+        <link rel="next" title="sherlock.imports.pessto_marshall_streams (module)" href="sherlock.imports.pessto_marshall_streams.html"/>
+        <link rel="prev" title="sherlock.imports.ifs_galaxies (module)" href="sherlock.imports.ifs_galaxies.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -96,18 +99,23 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#modules">Modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="sherlock.cl_utils.html">sherlock.cl_utils (<em>module</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.update_ned_stream.html">sherlock.update_ned_stream (<em>module</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.html">sherlock.utKit (<em>module</em>)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">sherlock.imports.importers_clutils (<em>module</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs_galaxies.html">sherlock.imports.ifs_galaxies (<em>module</em>)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.imports.importers_clutils (<em>module</em>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#importers-clutils-py">importers_clutils.py</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.pessto_marshall_streams.html">sherlock.imports.pessto_marshall_streams (<em>module</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.tmp_sdss.html">sherlock.imports.tmp_sdss (<em>module</em>)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
@@ -160,20 +168,41 @@
             
   <div class="section" id="sherlock-imports-importers-clutils-module">
 <h1>sherlock.imports.importers_clutils (<em>module</em>)<a class="headerlink" href="#sherlock-imports-importers-clutils-module" title="Permalink to this headline">  ∞</a></h1>
-<span class="target" id="module-sherlock.imports.importers_clutils"></span><p><em>CL Utils for the Sherlock importers</em></p>
+<span class="target" id="module-sherlock.imports.importers_clutils"></span><div class="section" id="importers-clutils-py">
+<h2>importers_clutils.py<a class="headerlink" href="#importers-clutils-py" title="Permalink to this headline">  ∞</a></h2>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
+<tr class="field-odd field"><th class="field-name">Summary:</th><td class="field-body"><p class="first">CL Utils for the Sherlock importers</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">August 25, 2015</td>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body"><p class="first">David Young</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date Created:</th><td class="field-body"><p class="first">August 25, 2015</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">dryx syntax:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal"><span class="pre">_someObject</span></code> = a &#8216;private&#8217; object that should only be changed for debugging</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Notes:</th><td class="field-body"><ul class="first simple">
+<li>If you have any questions requiring this script/module please email me: <a class="reference external" href="mailto:d&#46;r&#46;young&#37;&#52;&#48;qub&#46;ac&#46;uk">d<span>&#46;</span>r<span>&#46;</span>young<span>&#64;</span>qub<span>&#46;</span>ac<span>&#46;</span>uk</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Tasks:</th><td class="field-body"><p class="first last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
-<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+<ul class="last simple">
+<li>docuument importers_clutils module</li>
+</ul>
 </div>
 <dl class="docutils">
 <dt>Usage:</dt>
@@ -199,9 +228,10 @@ sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</p
 <dl class="function">
 <dt id="sherlock.imports.importers_clutils.main">
 <code class="descclassname">sherlock.imports.importers_clutils.</code><code class="descname">main</code><span class="sig-paren">(</span><em>arguments=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/importers_clutils.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.importers_clutils.main" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>The main function used when ``importers_clutils.py`` is run as a single script from the cl, or when installed as a cl command</em></p>
+<dd><p>The main function used when <code class="docutils literal"><span class="pre">importers_clutils.py</span></code> is run as a single script from the cl, or when installed as a cl command</p>
 </dd></dl>
 
+</div>
 </div>
 
 
@@ -211,10 +241,10 @@ sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</p
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.classifier.html" class="btn btn-neutral float-right" title="sherlock.classifier (class)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.imports.pessto_marshall_streams.html" class="btn btn-neutral float-right" title="sherlock.imports.pessto_marshall_streams (module)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sherlock.utKit.html" class="btn btn-neutral" title="sherlock.utKit (module)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sherlock.imports.ifs_galaxies.html" class="btn btn-neutral" title="sherlock.imports.ifs_galaxies (module)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

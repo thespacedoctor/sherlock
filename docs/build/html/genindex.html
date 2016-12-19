@@ -39,6 +39,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="#"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="index.html"/> 
 
   
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html#modules">Modules</a></li>
@@ -152,11 +155,11 @@
 <div class="genindex-jumpbox">
  <a href="#_"><strong>_</strong></a>
  | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
- | <a href="#P"><strong>P</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
@@ -180,7 +183,19 @@
   </dt>
 
         
-  <dt><a href="_autosummary/sherlock.imports.ifs_galaxies.html#sherlock.imports.ifs_galaxies.__init__">(sherlock.imports.ifs_galaxies method)</a>
+  <dt><a href="_autosummary/sherlock.conesearch.html#sherlock.conesearch.__init__">(sherlock.conesearch method)</a>
+  </dt>
+
+        
+  <dt><a href="_autosummary/sherlock.database.html#sherlock.database.__init__">(sherlock.database method)</a>
+  </dt>
+
+        
+  <dt><a href="_autosummary/sherlock.imports.ifs.html#sherlock.imports.ifs.__init__">(sherlock.imports.ifs method)</a>
+  </dt>
+
+        
+  <dt><a href="_autosummary/sherlock.imports.marshall.html#sherlock.imports.marshall.__init__">(sherlock.imports.marshall method)</a>
   </dt>
 
         
@@ -188,27 +203,15 @@
   </dt>
 
         
-  <dt><a href="_autosummary/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.__init__">(sherlock.imports.ned_conesearch.ned_conesearch method)</a>
+  <dt><a href="_autosummary/sherlock.imports.ned.html#sherlock.imports.ned.__init__">(sherlock.imports.ned method)</a>
   </dt>
 
         
-  <dt><a href="_autosummary/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.__init__">(sherlock.imports.ned_d.ned_d method)</a>
-  </dt>
-
-        
-  <dt><a href="_autosummary/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams.__init__">(sherlock.imports.pessto_marshall_streams method)</a>
-  </dt>
-
-        
-  <dt><a href="_autosummary/sherlock.imports.tmp_sdss.html#sherlock.imports.tmp_sdss.__init__">(sherlock.imports.tmp_sdss method)</a>
+  <dt><a href="_autosummary/sherlock.imports.ned_d.html#sherlock.imports.ned_d.__init__">(sherlock.imports.ned_d method)</a>
   </dt>
 
         
   <dt><a href="_autosummary/sherlock.imports.veron.html#sherlock.imports.veron.__init__">(sherlock.imports.veron method)</a>
-  </dt>
-
-        
-  <dt><a href="_autosummary/sherlock.update_ned_stream.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream.__init__">(sherlock.update_ned_stream.update_ned_stream method)</a>
   </dt>
 
         
@@ -233,10 +236,6 @@
 
       </dl></dd>
       
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.ned_d.clean_up_columns">clean_up_columns() (sherlock.imports.ned_d.ned_d.ned_d method)</a>
-  </dt>
-
-      
   <dt><a href="_autosummary/sherlock.cleanup_database_tables.html#sherlock.cleanup_database_tables">cleanup_database_tables (class in sherlock)</a>
   </dt>
 
@@ -246,46 +245,48 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="_api/sherlock.cleanup_database_tables.html#sherlock.cleanup_database_tables.cleanup_database_tables.close">close() (sherlock.cleanup_database_tables.cleanup_database_tables method)</a>
   </dt>
 
       
-  <dt><a href="_api/sherlock.imports.milliquas.html#sherlock.imports.milliquas.milliquas.create_dictionary_of_milliquas">create_dictionary_of_milliquas() (sherlock.imports.milliquas.milliquas method)</a>
+  <dt><a href="_autosummary/sherlock.conesearch.html#sherlock.conesearch">conesearch (class in sherlock)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="_api/sherlock.conesearch.html#sherlock.conesearch.conesearch">(class in sherlock.conesearch)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="_api/sherlock.database.html#sherlock.database.database.connect">connect() (sherlock.database.database method)</a>
   </dt>
 
   </dl></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.ned_d.create_dictionary_of_nedd">create_dictionary_of_nedd() (sherlock.imports.ned_d.ned_d.ned_d method)</a>
+  <dt><a href="_autosummary/sherlock.database.html#sherlock.database">database (class in sherlock)</a>
   </dt>
 
-      
-  <dt><a href="_api/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.create_dictionary_of_pessto_marshall_streams">create_dictionary_of_pessto_marshall_streams() (sherlock.imports.pessto_marshall_streams.pessto_marshall_streams method)</a>
+      <dd><dl>
+        
+  <dt><a href="_api/sherlock.database.html#sherlock.database.database">(class in sherlock.database)</a>
   </dt>
 
-      
-  <dt><a href="_api/sherlock.imports.veron.html#sherlock.imports.veron.veron.create_dictionary_of_veron">create_dictionary_of_veron() (sherlock.imports.veron.veron method)</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.tmp_sdss.html#sherlock.imports.tmp_sdss.tmp_sdss.create_master_id">create_master_id() (sherlock.imports.tmp_sdss.tmp_sdss method)</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.ned_d.create_the_master_view">create_the_master_view() (sherlock.imports.ned_d.ned_d.ned_d method)</a>
-  </dt>
-
+      </dl></dd>
   </dl></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.ned_d.generate_the_database_table">generate_the_database_table() (sherlock.imports.ned_d.ned_d.ned_d method)</a>
-  </dt>
-
       
   <dt><a href="_api/sherlock.classifier.html#sherlock.classifier.classifier.get">get() (sherlock.classifier.classifier method)</a>
   </dt>
@@ -295,52 +296,16 @@
   <dt><a href="_api/sherlock.cleanup_database_tables.html#sherlock.cleanup_database_tables.cleanup_database_tables.get">(sherlock.cleanup_database_tables.cleanup_database_tables method)</a>
   </dt>
 
-        
-  <dt><a href="_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.get">(sherlock.commonutils.update_wiki_pages.update_wiki_pages method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.ifs_galaxies.html#sherlock.imports.ifs_galaxies.ifs_galaxies.get">(sherlock.imports.ifs_galaxies.ifs_galaxies method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.milliquas.html#sherlock.imports.milliquas.milliquas.get">(sherlock.imports.milliquas.milliquas method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get">(sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.ned_d.get">(sherlock.imports.ned_d.ned_d.ned_d method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.get">(sherlock.imports.pessto_marshall_streams.pessto_marshall_streams method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.tmp_sdss.html#sherlock.imports.tmp_sdss.tmp_sdss.get">(sherlock.imports.tmp_sdss.tmp_sdss method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.veron.html#sherlock.imports.veron.veron.get">(sherlock.imports.veron.veron method)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream.get">(sherlock.update_ned_stream.update_ned_stream method)</a>, <a href="_autosummary/sherlock.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream.get">[1]</a>
-  </dt>
-
       </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="_api/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get_metadata_for_galaxies">get_metadata_for_galaxies() (sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch method)</a>
+  <dt><a href="_autosummary/sherlock.commonutils.get_crossmatch_catalogues_column_map.html#sherlock.commonutils.get_crossmatch_catalogues_column_map">get_crossmatch_catalogues_column_map() (in module sherlock.commonutils)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.ned_d.get_metadata_for_galaxies">(sherlock.imports.ned_d.ned_d.ned_d method)</a>
+  <dt><a href="_api/sherlock.commonutils.get_crossmatch_catalogues_column_map.html#sherlock.commonutils.get_crossmatch_catalogues_column_map.get_crossmatch_catalogues_column_map">(in module sherlock.commonutils.get_crossmatch_catalogues_column_map)</a>
   </dt>
 
       </dl></dd>
@@ -355,12 +320,38 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="_autosummary/sherlock.imports.ifs_galaxies.html#sherlock.imports.ifs_galaxies">ifs_galaxies (class in sherlock.imports)</a>
+  <dt><a href="_autosummary/sherlock.imports.ifs.html#sherlock.imports.ifs">ifs (class in sherlock.imports)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="_api/sherlock.imports.ifs_galaxies.html#sherlock.imports.ifs_galaxies.ifs_galaxies">(class in sherlock.imports.ifs_galaxies)</a>
+  <dt><a href="_api/sherlock.imports.ifs.html#sherlock.imports.ifs.ifs">(class in sherlock.imports.ifs)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="_api/sherlock.imports.ifs.html#sherlock.imports.ifs.ifs.ingest">ingest() (sherlock.imports.ifs.ifs method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="_api/sherlock.imports.marshall.html#sherlock.imports.marshall.marshall.ingest">(sherlock.imports.marshall.marshall method)</a>
+  </dt>
+
+        
+  <dt><a href="_api/sherlock.imports.milliquas.html#sherlock.imports.milliquas.milliquas.ingest">(sherlock.imports.milliquas.milliquas method)</a>
+  </dt>
+
+        
+  <dt><a href="_api/sherlock.imports.ned.html#sherlock.imports.ned.ned.ingest">(sherlock.imports.ned.ned method)</a>
+  </dt>
+
+        
+  <dt><a href="_api/sherlock.imports.ned_d.html#sherlock.imports.ned_d.ned_d.ingest">(sherlock.imports.ned_d.ned_d method)</a>
+  </dt>
+
+        
+  <dt><a href="_api/sherlock.imports.veron.html#sherlock.imports.veron.veron.ingest">(sherlock.imports.veron.veron method)</a>
   </dt>
 
       </dl></dd>
@@ -379,13 +370,23 @@
   <dt><a href="_api/sherlock.cleanup_database_tables.html#sherlock.cleanup_database_tables.main">(in module sherlock.cleanup_database_tables)</a>
   </dt>
 
+      </dl></dd>
+      
+  <dt><a href="_autosummary/sherlock.imports.marshall.html#sherlock.imports.marshall">marshall (class in sherlock.imports)</a>
+  </dt>
+
+      <dd><dl>
         
-  <dt><a href="_api/sherlock.imports.importers_clutils.html#sherlock.imports.importers_clutils.main">(in module sherlock.imports.importers_clutils)</a>, <a href="_autosummary/sherlock.imports.importers_clutils.html#sherlock.imports.importers_clutils.main">[1]</a>
+  <dt><a href="_api/sherlock.imports.marshall.html#sherlock.imports.marshall.marshall">(class in sherlock.imports.marshall)</a>
   </dt>
 
       </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="_api/sherlock.conesearch.html#sherlock.conesearch.conesearch.match">match() (sherlock.conesearch.conesearch method)</a>
+  </dt>
+
       
   <dt><a href="_autosummary/sherlock.imports.milliquas.html#sherlock.imports.milliquas">milliquas (class in sherlock.imports)</a>
   </dt>
@@ -403,40 +404,24 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="_autosummary/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch">ned_conesearch (class in sherlock.imports.ned_conesearch)</a>
+  <dt><a href="_autosummary/sherlock.imports.ned.html#sherlock.imports.ned">ned (class in sherlock.imports)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="_api/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch">(class in sherlock.imports.ned_conesearch.ned_conesearch)</a>
+  <dt><a href="_api/sherlock.imports.ned.html#sherlock.imports.ned.ned">(class in sherlock.imports.ned)</a>
   </dt>
 
       </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="_autosummary/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d">ned_d (class in sherlock.imports.ned_d)</a>
+  <dt><a href="_autosummary/sherlock.imports.ned_d.html#sherlock.imports.ned_d">ned_d (class in sherlock.imports)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#sherlock.imports.ned_d.ned_d.ned_d">(class in sherlock.imports.ned_d.ned_d)</a>
-  </dt>
-
-      </dl></dd>
-  </dl></td>
-</tr></table>
-
-<h2 id="P">P</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="_autosummary/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams">pessto_marshall_streams (class in sherlock.imports)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="_api/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams">(class in sherlock.imports.pessto_marshall_streams)</a>
+  <dt><a href="_api/sherlock.imports.ned_d.html#sherlock.imports.ned_d.ned_d">(class in sherlock.imports.ned_d)</a>
   </dt>
 
       </dl></dd>
@@ -446,10 +431,6 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="_api/sherlock.imports.tmp_sdss.html#sherlock.imports.tmp_sdss.tmp_sdss.set_master_obj_types">set_master_obj_types() (sherlock.imports.tmp_sdss.tmp_sdss method)</a>
-  </dt>
-
       
   <dt><a href="_api/sherlock.html#module-sherlock">sherlock (module)</a>, <a href="_autosummary/sherlock.html#module-sherlock">[1]</a>
   </dt>
@@ -471,6 +452,10 @@
   </dt>
 
       
+  <dt><a href="_api/sherlock.commonutils.get_crossmatch_catalogues_column_map.html#module-sherlock.commonutils.get_crossmatch_catalogues_column_map">sherlock.commonutils.get_crossmatch_catalogues_column_map (module)</a>
+  </dt>
+
+      
   <dt><a href="_api/sherlock.commonutils.getpackagepath.html#module-sherlock.commonutils.getpackagepath">sherlock.commonutils.getpackagepath (module)</a>
   </dt>
 
@@ -479,53 +464,41 @@
   </dt>
 
       
-  <dt><a href="_api/sherlock.imports.html#module-sherlock.imports">sherlock.imports (module)</a>, <a href="_autosummary/sherlock.imports.html#module-sherlock.imports">[1]</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.ifs_galaxies.html#module-sherlock.imports.ifs_galaxies">sherlock.imports.ifs_galaxies (module)</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.importers_clutils.html#module-sherlock.imports.importers_clutils">sherlock.imports.importers_clutils (module)</a>, <a href="_autosummary/sherlock.imports.importers_clutils.html#module-sherlock.imports.importers_clutils">[1]</a>
+  <dt><a href="_api/sherlock.conesearch.html#module-sherlock.conesearch">sherlock.conesearch (module)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="_api/sherlock.database.html#module-sherlock.database">sherlock.database (module)</a>
+  </dt>
+
+      
+  <dt><a href="_api/sherlock.imports.html#module-sherlock.imports">sherlock.imports (module)</a>, <a href="_autosummary/sherlock.imports.html#module-sherlock.imports">[1]</a>
+  </dt>
+
+      
+  <dt><a href="_api/sherlock.imports.ifs.html#module-sherlock.imports.ifs">sherlock.imports.ifs (module)</a>
+  </dt>
+
+      
+  <dt><a href="_api/sherlock.imports.marshall.html#module-sherlock.imports.marshall">sherlock.imports.marshall (module)</a>
+  </dt>
+
+      
   <dt><a href="_api/sherlock.imports.milliquas.html#module-sherlock.imports.milliquas">sherlock.imports.milliquas (module)</a>
   </dt>
 
       
-  <dt><a href="_api/sherlock.imports.ned_conesearch.html#module-sherlock.imports.ned_conesearch">sherlock.imports.ned_conesearch (module)</a>, <a href="_autosummary/sherlock.imports.ned_conesearch.html#module-sherlock.imports.ned_conesearch">[1]</a>
+  <dt><a href="_api/sherlock.imports.ned.html#module-sherlock.imports.ned">sherlock.imports.ned (module)</a>
   </dt>
 
       
-  <dt><a href="_api/sherlock.imports.ned_conesearch.ned_conesearch.html#module-sherlock.imports.ned_conesearch.ned_conesearch">sherlock.imports.ned_conesearch.ned_conesearch (module)</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.ned_d.html#module-sherlock.imports.ned_d">sherlock.imports.ned_d (module)</a>, <a href="_autosummary/sherlock.imports.ned_d.html#module-sherlock.imports.ned_d">[1]</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.ned_d.ned_d.html#module-sherlock.imports.ned_d.ned_d">sherlock.imports.ned_d.ned_d (module)</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.pessto_marshall_streams.html#module-sherlock.imports.pessto_marshall_streams">sherlock.imports.pessto_marshall_streams (module)</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.imports.tmp_sdss.html#module-sherlock.imports.tmp_sdss">sherlock.imports.tmp_sdss (module)</a>
+  <dt><a href="_api/sherlock.imports.ned_d.html#module-sherlock.imports.ned_d">sherlock.imports.ned_d (module)</a>
   </dt>
 
       
   <dt><a href="_api/sherlock.imports.veron.html#module-sherlock.imports.veron">sherlock.imports.veron (module)</a>
-  </dt>
-
-      
-  <dt><a href="_api/sherlock.update_ned_stream.html#module-sherlock.update_ned_stream">sherlock.update_ned_stream (module)</a>, <a href="_autosummary/sherlock.update_ned_stream.html#module-sherlock.update_ned_stream">[1]</a>
   </dt>
 
       
@@ -539,31 +512,9 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="_api/sherlock.cl_utils.html#sherlock.cl_utils.tab_complete">tab_complete() (in module sherlock.cl_utils)</a>, <a href="_autosummary/sherlock.cl_utils.tab_complete.html#sherlock.cl_utils.tab_complete">[1]</a>
+  <dt><a href="_api/sherlock.cleanup_database_tables.html#sherlock.cleanup_database_tables.tab_complete">tab_complete() (in module sherlock.cleanup_database_tables)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="_api/sherlock.cleanup_database_tables.html#sherlock.cleanup_database_tables.tab_complete">(in module sherlock.cleanup_database_tables)</a>
-  </dt>
-
-        
-  <dt><a href="_api/sherlock.imports.importers_clutils.html#sherlock.imports.importers_clutils.tab_complete">(in module sherlock.imports.importers_clutils)</a>, <a href="_autosummary/sherlock.imports.importers_clutils.tab_complete.html#sherlock.imports.importers_clutils.tab_complete">[1]</a>
-  </dt>
-
-      </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="_autosummary/sherlock.imports.tmp_sdss.html#sherlock.imports.tmp_sdss">tmp_sdss (class in sherlock.imports)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="_api/sherlock.imports.tmp_sdss.html#sherlock.imports.tmp_sdss.tmp_sdss">(class in sherlock.imports.tmp_sdss)</a>
-  </dt>
-
-      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -571,7 +522,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="_api/sherlock.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream">update_ned_stream (class in sherlock.update_ned_stream)</a>, <a href="_autosummary/sherlock.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream">[1]</a>, <a href="_autosummary/sherlock.update_ned_stream.update_ned_stream.html#sherlock.update_ned_stream.update_ned_stream">[2]</a>
+  <dt><a href="_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.update">update() (sherlock.commonutils.update_wiki_pages.update_wiki_pages method)</a>
   </dt>
 
       

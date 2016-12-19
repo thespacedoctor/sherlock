@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
 
   
@@ -93,11 +96,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -154,19 +157,21 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">October  8, 2015</td>
+<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">November 18, 2016</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
-<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+<ul class="last simple">
+<li>document this module</li>
+</ul>
 </div>
 <dl class="class">
 <dt id="sherlock.imports.ifs_galaxies.ifs_galaxies">
-<em class="property">class </em><code class="descclassname">sherlock.imports.ifs_galaxies.</code><code class="descname">ifs_galaxies</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>cataloguesDbConn=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ifs_galaxies.html#ifs_galaxies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ifs_galaxies.ifs_galaxies" title="Permalink to this definition">  ∞</a></dt>
+<em class="property">class </em><code class="descclassname">sherlock.imports.ifs_galaxies.</code><code class="descname">ifs_galaxies</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ifs_galaxies.html#ifs_galaxies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ifs_galaxies.ifs_galaxies" title="Permalink to this definition">  ∞</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></p>
-<p><em>The worker class for the ifs_galaxies module</em></p>
+<p>The worker class for the ifs_galaxies module</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
@@ -177,33 +182,31 @@
 <li><code class="docutils literal"><span class="pre">version</span></code> &#8211; version of the pessto_marshall_streams catalogue</li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean ifs_galaxies class</li>
 <li>&#64;review: when complete add logging</li>
 <li>&#64;review: when complete, decide whether to abstract class to another module</li>
 </ul>
-</div>
+</dd>
+</dl>
 <dl class="method">
 <dt id="sherlock.imports.ifs_galaxies.ifs_galaxies.get">
 <code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ifs_galaxies.html#ifs_galaxies.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ifs_galaxies.ifs_galaxies.get" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>get the ifs_galaxies object</em></p>
+<dd><p>get the ifs_galaxies object</p>
 <dl class="docutils">
 <dt><strong>Return:</strong></dt>
 <dd><ul class="first last simple">
 <li><code class="docutils literal"><span class="pre">ifs_galaxies</span></code></li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean get method</li>
 <li>&#64;review: when complete add logging</li>
 </ul>
-</div>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

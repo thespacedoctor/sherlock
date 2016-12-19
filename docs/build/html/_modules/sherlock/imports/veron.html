@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#modules">Modules</a></li>
@@ -152,17 +155,13 @@
 <span></span><span class="ch">#!/usr/local/bin/python</span>
 <span class="c1"># encoding: utf-8</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">*Import veron catagloue from plain text file*</span>
+<span class="sd">*import veron catalogue into sherlock&#39;s crossmatch catalogues database*</span>
 
 <span class="sd">:Author:</span>
 <span class="sd">    David Young</span>
 
 <span class="sd">:Date Created:</span>
-<span class="sd">    August 25, 2015</span>
-
-<span class="sd">.. todo::</span>
-<span class="sd">    </span>
-<span class="sd">    @review: when complete pull all general functions and classes into dryxPython</span>
+<span class="sd">    December 12, 2016</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">################# GLOBAL IMPORTS ####################</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -173,20 +172,15 @@
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">string</span>
-
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
-<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
-<span class="kn">from</span> <span class="nn">._base_importer</span> <span class="kn">import</span> <span class="n">_base_importer</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">._base_importer</span> <span class="k">import</span> <span class="n">_base_importer</span>
 
 
 <div class="viewcode-block" id="veron"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports.veron.html#sherlock.imports.veron.veron">[docs]</a><span class="k">class</span> <span class="nc">veron</span><span class="p">(</span><span class="n">_base_importer</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *The worker class for the veron module*</span>
+<span class="sd">    *importer object for the* `VERON AGN catalogue &lt;http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258&gt;`_</span>
 
 <span class="sd">    **Key Arguments:**</span>
 <span class="sd">        - ``dbConn`` -- mysql database connection</span>
@@ -194,58 +188,89 @@
 <span class="sd">        - ``settings`` -- the settings dictionary</span>
 <span class="sd">        - ``pathToDataFIle`` -- path to the veron data file</span>
 <span class="sd">        - ``version`` -- version of the veron catalogue</span>
-<span class="sd">        - ``catalogueName`` -- the name of the catalogue</span>
 
-<span class="sd">    .. todo::</span>
+<span class="sd">    **Usage:**</span>
 
-<span class="sd">        - @review: when complete, clean veron class</span>
-<span class="sd">        - @review: when complete add logging</span>
-<span class="sd">        - @review: when complete, decide whether to abstract class to another module</span>
+<span class="sd">      To import the veron catalogue catalogue, run the following:</span>
+
+<span class="sd">      .. code-block:: python </span>
+
+<span class="sd">        from sherlock.imports import veron</span>
+<span class="sd">        catalogue = veron(</span>
+<span class="sd">            log=log,</span>
+<span class="sd">            settings=settings,</span>
+<span class="sd">            pathToDataFile=&quot;/path/to/veron.txt&quot;,</span>
+<span class="sd">            version=&quot;1.0&quot;,</span>
+<span class="sd">            catalogueName=&quot;veron&quot;</span>
+<span class="sd">        )</span>
+<span class="sd">        catalogue.ingest()</span>
+
+<span class="sd">    Whenever downloading a version of the Veron catalogue from Vizier use the following column selection:</span>
+
+<span class="sd">    .. image:: https://i.imgur.com/4k7MJuw.png</span>
+<span class="sd">        :width: 800px</span>
+<span class="sd">        :alt: Veron column selection in Vizier</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Initialisation</span>
-    <span class="c1"># 1. @flagged: what are the unique attrributes for each object? Add them</span>
-    <span class="c1"># to __init__</span>
+    <span class="c1"># INITIALISATION</span>
 
-    <span class="c1"># 4. @flagged: what actions does each object have to be able to perform? Add them here</span>
-    <span class="c1"># Method Attributes</span>
-<div class="viewcode-block" id="veron.get"><a class="viewcode-back" href="../../../_api/sherlock.imports.veron.html#sherlock.imports.veron.veron.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        *get the veron object*</span>
+<div class="viewcode-block" id="veron.ingest"><a class="viewcode-back" href="../../../_api/sherlock.imports.veron.html#sherlock.imports.veron.veron.ingest">[docs]</a>    <span class="k">def</span> <span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ingest the veron catalogue into the catalogues database</span>
 
-<span class="sd">        **Return:**</span>
-<span class="sd">            - ``veron``</span>
-
-<span class="sd">        .. todo::</span>
-
-<span class="sd">            - @review: when complete, clean get method</span>
-<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">        See class docstring for usage.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``get`` method&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dictList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_dictionary_of_veron</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_data_to_database_table</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_htmids_to_database_table</span><span class="p">()</span>
+        <span class="n">dictList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dictionary_of_veron</span><span class="p">()</span>
+
+        <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
+        <span class="n">createStatement</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    CREATE TABLE `</span><span class="si">%(tableName)s</span><span class="s2">` (</span>
+<span class="s2">      `primaryId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT &#39;An internal counter&#39;,</span>
+<span class="s2">      `B_V` float DEFAULT NULL,</span>
+<span class="s2">      `U_B` float DEFAULT NULL,</span>
+<span class="s2">      `abs_magnitude` float DEFAULT NULL,</span>
+<span class="s2">      `dateCreated` datetime DEFAULT  CURRENT_TIMESTAMP,</span>
+<span class="s2">      `decDeg` double DEFAULT NULL,</span>
+<span class="s2">      `magnitude` float DEFAULT NULL,</span>
+<span class="s2">      `raDeg` double DEFAULT NULL,</span>
+<span class="s2">      `class` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,</span>
+<span class="s2">      `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,</span>
+<span class="s2">      `redshift` float DEFAULT NULL,</span>
+<span class="s2">      `not_radio` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,</span>
+<span class="s2">      `magnitude_filter` varchar(10) COLLATE utf8_unicode_ci DEFAULT &#39;V&#39;,</span>
+<span class="s2">      `htm16ID` bigint(20) DEFAULT NULL,</span>
+<span class="s2">      `redshift_flag` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,</span>
+<span class="s2">      `spectral_classification` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,</span>
+<span class="s2">      `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,</span>
+<span class="s2">      `updated` varchar(45) DEFAULT &#39;0&#39;,</span>
+<span class="s2">      `htm10ID` bigint(20) DEFAULT NULL,</span>
+<span class="s2">      `htm13ID` bigint(20) DEFAULT NULL,</span>
+<span class="s2">      PRIMARY KEY (`primaryId`),</span>
+<span class="s2">      UNIQUE KEY `radeg_decdeg` (`raDeg`,`decDeg`),</span>
+<span class="s2">      KEY `idx_htm16ID` (`htm16ID`),</span>
+<span class="s2">      KEY `idx_htm10ID` (`htm10ID`),</span>
+<span class="s2">      KEY `idx_htm13ID` (`htm13ID`)</span>
+<span class="s2">    ) ENGINE=MyISAM AUTO_INCREMENT=168945 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;</span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_data_to_database_table</span><span class="p">(</span>
+            <span class="n">dictList</span><span class="o">=</span><span class="n">dictList</span><span class="p">,</span>
+            <span class="n">createStatement</span><span class="o">=</span><span class="n">createStatement</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``get`` method&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">veron</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="veron.create_dictionary_of_veron"><a class="viewcode-back" href="../../../_api/sherlock.imports.veron.html#sherlock.imports.veron.veron.create_dictionary_of_veron">[docs]</a>    <span class="k">def</span> <span class="nf">create_dictionary_of_veron</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">_create_dictionary_of_veron</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        *create dictionary of veron*</span>
-
-<span class="sd">        **Key Arguments:**</span>
-<span class="sd">            # -</span>
+        <span class="sd">&quot;&quot;&quot;create a list of dictionaries containing all the rows in the veron catalogue</span>
 
 <span class="sd">        **Return:**</span>
-<span class="sd">            - None</span>
-
-<span class="sd">        .. todo::</span>
-
-<span class="sd">            - @review: when complete, clean create_dictionary_of_veron method</span>
-<span class="sd">            - @review: when complete add logging</span>
+<span class="sd">            - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``create_dictionary_of_veron`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;starting the ``_create_dictionary_of_veron`` method&#39;</span><span class="p">)</span>
 
         <span class="n">dictList</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">catData</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -262,7 +287,7 @@
             <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># Cursor up one line and clear line</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1A</span><span class="se">\x1b</span><span class="s2">[2K&quot;</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(count)s</span><span class="s2"> / </span><span class="si">%(totalCount)s</span><span class="s2"> veron data added to memory&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="nb">print</span> <span class="s2">&quot;</span><span class="si">%(count)s</span><span class="s2"> / </span><span class="si">%(totalCount)s</span><span class="s2"> veron data added to memory&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">theseKeys</span> <span class="o">=</span> <span class="p">[]</span>
@@ -306,38 +331,16 @@
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">theseKeys</span><span class="p">,</span> <span class="n">theseValues</span><span class="p">):</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
-                    <span class="n">v</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">thisDict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
             <span class="n">dictList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thisDict</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s1">&#39;completed the ``create_dictionary_of_veron`` method&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">dictList</span></div></div>
+            <span class="s1">&#39;completed the ``_create_dictionary_of_veron`` method&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dictList</span></div>
 
     <span class="c1"># use the tab-trigger below for new method</span>
     <span class="c1"># xt-class-method</span>
-
-    <span class="c1"># 5. @flagged: what actions of the base class(es) need ammending? ammend them here</span>
-    <span class="c1"># Override Method Attributes</span>
-    <span class="c1"># method-override-tmpx</span>
-
-<span class="c1"># xt-class-tmpx</span>
-
-
-<span class="c1">###################################################################</span>
-<span class="c1"># PUBLIC FUNCTIONS                                                #</span>
-<span class="c1">###################################################################</span>
-<span class="c1"># xt-worker-def</span>
-
-<span class="c1"># use the tab-trigger below for new function</span>
-<span class="c1"># xt-def-with-logger</span>
-
-<span class="c1">###################################################################</span>
-<span class="c1"># PRIVATE (HELPER) FUNCTIONS                                      #</span>
-<span class="c1">###################################################################</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
            </div>

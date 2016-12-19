@@ -1,22 +1,17 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_conesearcher.py
-================
-:Summary:
-    The conesearch object for sherlock
+*The conesearch object for sherlock*
 
 :Author:
     David Young
 
 :Date Created:
-    July 1, 2015
+    November 18, 2016
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
+.. todo ::
 
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+    - document this module
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -27,12 +22,8 @@ import glob
 import pickle
 import math
 from docopt import docopt
-import htmCircle
-from dryxPython import logs as dl
-from dryxPython import astrotools as dat
-from dryxPython import mysql as dms
-from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from astrocalc.coords import unit_conversion, separations
+from fundamentals.mysql import readquery
 
 
 class conesearcher():
@@ -77,8 +68,6 @@ class conesearcher():
         log.debug("instansiating a new '_conesearcher' object")
         self.dbConn = dbConn
         self.settings = settings
-        self.ra = ra
-        self.dec = dec
         self.htmLevel = htmLevel
         self.queryType = queryType
         self.radius = radius
@@ -105,16 +94,15 @@ class conesearcher():
             return "Must be HTM level 16 or 20", []
 
         # CONVERT RA AND DEC TO DEGREES
-        try:
-            self.ra = dat.ra_sexegesimal_to_decimal.ra_sexegesimal_to_decimal(
-                self.ra)
-        except:
-            pass
-        try:
-            self.dec = dat.declination_sexegesimal_to_decimal.declination_sexegesimal_to_decimal(
-                self.dec)
-        except:
-            pass
+        converter = unit_conversion(
+            log=self.log
+        )
+        self.ra = converter.ra_sexegesimal_to_decimal(
+            ra=self.ra
+        )
+        self.dec = converter.dec_sexegesimal_to_decimal(
+            dec=self.dec
+        )
 
         return None
 
@@ -134,47 +122,48 @@ class conesearcher():
         self.log.debug('completed the ``get`` method')
         return self.message, self.results
 
-    def _build_sql_query_from_htm(
-            self):
-        """ build sql query from htm
-        """
-        self.log.debug('starting the ``_build_sql_query_from_htm`` method')
+    # def _build_sql_query_from_htm(
+    #         self):
+    #     """ build sql query from htm
+    #     """
+    #     self.log.debug('starting the ``_build_sql_query_from_htm`` method')
 
-        # BUILD WHERE SECTION OF CLAUSE
-        self.radius = float(self.radius)
-        htmWhereClause = htmCircle.htmCircleRegion(
-            self.htmLevel, self.ra, self.dec, self.radius)
+    #     # BUILD WHERE SECTION OF CLAUSE
+    #     self.radius = float(self.radius)
+    #     htmWhereClause = htmCircle.htmCircleRegion(
+    #         self.htmLevel, self.ra, self.dec, self.radius)
 
-        # CONVERT RA AND DEC TO CARTESIAN COORDINATES
-        ra = math.radians(self.ra)
-        dec = math.radians(self.dec)
-        cos_dec = math.cos(dec)
-        cx = math.cos(ra) * cos_dec
-        cy = math.sin(ra) * cos_dec
-        cz = math.sin(dec)
-        cartesians = (cx, cy, cz)
+    #     # CONVERT RA AND DEC TO CARTESIAN COORDINATES
+    #     ra = math.radians(self.ra)
+    #     dec = math.radians(self.dec)
+    #     cos_dec = math.cos(dec)
+    #     cx = math.cos(ra) * cos_dec
+    #     cy = math.sin(ra) * cos_dec
+    #     cz = math.sin(dec)
+    #     cartesians = (cx, cy, cz)
 
-        # CREATE CARTESIAN SECTION OF QUERY
-        cartesianClause = 'and (cx * %.17f + cy * %.17f + cz * %.17f >= cos(%.17f))' % (
-            cartesians[0], cartesians[1], cartesians[2], math.radians(self.radius / 3600.0))
+    #     # CREATE CARTESIAN SECTION OF QUERY
+    #     cartesianClause = 'and (cx * %.17f + cy * %.17f + cz * %.17f >= cos(%.17f))' % (
+    # cartesians[0], cartesians[1], cartesians[2], math.radians(self.radius /
+    # 3600.0))
 
-        # DECIDE WHAT COLUMNS TO REQUEST
-        if self.queryType == 1:
-            columns = self.quickColumns
-        elif self.queryType == 3:
-            columns = ['count(*) number']
-        else:
-            columns = ['*']
+    #     # DECIDE WHAT COLUMNS TO REQUEST
+    #     if self.queryType == 1:
+    #         columns = self.quickColumns
+    #     elif self.queryType == 3:
+    #         columns = ['count(*) number']
+    #     else:
+    #         columns = ['*']
 
-        columns = ','.join(columns)
-        tableName = self.tableName
+    #     columns = ','.join(columns)
+    #     tableName = self.tableName
 
-        # FINALLY BUILD THE FULL QUERY
-        self.sqlQuery = "select %(columns)s from %(tableName)s %(htmWhereClause)s %(cartesianClause)s" % locals(
-        )
+    #     # FINALLY BUILD THE FULL QUERY
+    #     self.sqlQuery = "select %(columns)s from %(tableName)s %(htmWhereClause)s %(cartesianClause)s" % locals(
+    #     )
 
-        self.log.debug('completed the ``_build_sql_query_from_htm`` method')
-        return None
+    #     self.log.debug('completed the ``_build_sql_query_from_htm`` method')
+    #     return None
 
     def _grab_conesearch_results_from_db(
             self):
@@ -212,10 +201,12 @@ class conesearcher():
                 self.sqlQuery += where
 
         self.results = []
-        rows = dms.execute_mysql_read_query(
+
+        rows = readquery(
+            log=self.log,
             sqlQuery=self.sqlQuery,
             dbConn=self.dbConn,
-            log=self.log
+            quiet=False
         )
 
         if len(rows):
@@ -236,13 +227,15 @@ class conesearcher():
                     ra2 = row[self.colMaps[self.tableName]["raColName"]]
                     dec2 = row[self.colMaps[self.tableName]["decColName"]]
 
-                separation, northSep, eastSep = dat.get_angular_separation(
+                # CALCULATE SEPARATION IN ARCSEC
+                calculator = separations(
                     log=self.log,
                     ra1=self.ra,
                     dec1=self.dec,
                     ra2=ra2,
                     dec2=dec2
                 )
+                separation, northSep, eastSep = calculator.get()
                 self.results.append([separation, row])
 
             # SORT BY SEPARATION

@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tutorial &mdash; sherlock 0.1 documentation</title>
+  <title>Command-Line Tutorial &mdash; sherlock 0.1 documentation</title>
   
 
   
@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
 
   
@@ -93,11 +96,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -133,7 +136,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Tutorial</li>
+    <li>Command-Line Tutorial</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -147,13 +150,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">  ∞</a></h1>
+  <div class="section" id="command-line-tutorial">
+<h1>Command-Line Tutorial<a class="headerlink" href="#command-line-tutorial" title="Permalink to this headline">  ∞</a></h1>
+<p>Before you begin using sherlock you will need to populate some custom settings within the sherlock settings file.</p>
+<p>To setup the default settings file at <code class="docutils literal"><span class="pre">~/.config/sherlock/sherlock.yaml</span></code> run the command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock init
+</pre></div>
+</div>
+<p>This should create and open the settings file; follow the instructions in the file to populate the missing settings values (usually given an <code class="docutils literal"><span class="pre">XXX</span></code> placeholder).</p>
+<div class="section" id="the-settings-file">
+<h2>The Settings File<a class="headerlink" href="#the-settings-file" title="Permalink to this headline">  ∞</a></h2>
+<p>Before you begin you will need to run the following code once to set a login-path for each of your mysql servers:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mysql_config_editor <span class="nb">set</span> --login-path<span class="o">=</span>&lt;uniqueLoginName&gt; --host<span class="o">=</span>localhost --user<span class="o">=</span>&lt;myUsername&gt; --password --port<span class="o">=</span>&lt;port&gt;
+</pre></div>
+</div>
+<p>This stores your credentials in an encrypted file located at &#8216;~/.mylogin.cnf&#8217;.
+Use <code class="xref py py-obj docutils literal"><span class="pre">mysql_config_editor</span> <span class="pre">print</span> <span class="pre">--all</span></code> to see all of the login-paths set.</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
 <li>add tutorial</li>
 </ul>
+</div>
 </div>
 </div>
 

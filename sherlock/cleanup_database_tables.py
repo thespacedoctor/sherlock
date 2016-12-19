@@ -1,27 +1,17 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-cleanup_database_tables.py
-==========================
-:Summary:
-    Clean up the database tables used by sherlock - maintainance tools
+*Clean up the database tables used by sherlock - maintainance tools*
 
 :Author:
     David Young
 
 :Date Created:
-    August 20, 2015
+    November 18, 2016
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
+.. todo ::
 
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
-    @review: when complete pull all general functions and classes into dryxPython
-
-# xdocopt-usage-tempx
+    - document this module
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -30,11 +20,8 @@ os.environ['TERM'] = 'vt100'
 import readline
 import glob
 import pickle
-from dryxPython import mysql as dms
+from fundamentals import tools, times
 from docopt import docopt
-from dryxPython import logs as dl
-from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
 # from ..__init__ import *
 
 
@@ -47,7 +34,7 @@ def main(arguments=None):
     The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command
     """
     # setup the command-line util settings
-    su = setup_main_clutil(
+    su = tools(
         arguments=arguments,
         docString=__doc__,
         logLevel="DEBUG",
@@ -76,7 +63,7 @@ def main(arguments=None):
         log.debug('%s = %s' % (varname, val,))
 
     ## START LOGGING ##
-    startTime = dcu.get_now_sql_datetime()
+    startTime = times.get_now_sql_datetime()
     log.info(
         '--- STARTING TO RUN THE cleanup_database_tables.py AT %s' %
         (startTime,))
@@ -120,8 +107,8 @@ def main(arguments=None):
         dbConn.commit()
         dbConn.close()
     ## FINISH LOGGING ##
-    endTime = dcu.get_now_sql_datetime()
-    runningTime = dcu.calculate_time_difference(startTime, endTime)
+    endTime = times.get_now_sql_datetime()
+    runningTime = times.calculate_time_difference(startTime, endTime)
     log.info('-- FINISHED ATTEMPT TO RUN THE cleanup_database_tables.py AT %s (RUNTIME: %s) --' %
              (endTime, runningTime, ))
 
@@ -169,12 +156,17 @@ class cleanup_database_tables():
         # Override Variable Data Atrributes
 
         # Initial Actions
+        # SETUP ALL DATABASE CONNECTIONS
+        # SETUP ALL DATABASE CONNECTIONS
         from sherlock import database
         db = database(
             log=self.log,
             settings=self.settings
         )
-        self.transientsDbConn, self.cataloguesDbConn, self.pmDbConn = db.get()
+        dbConns = db.connect()
+        self.transientsDbConn = dbConns["transients"]
+        self.cataloguesDbConn = dbConns["catalogues"]
+        self.pmDbConn = dbConns["marshall"]
 
         return None
 
@@ -224,10 +216,11 @@ class cleanup_database_tables():
         sqlQuery = u"""
             select * from tcs_helper_catalogue_tables_info where table_name like "%%stream" or number_of_rows is null and legacy_table = 0
         """ % locals()
-        rows = dms.execute_mysql_read_query(
+        rows = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
 
         for row in rows:
@@ -236,11 +229,10 @@ class cleanup_database_tables():
             sqlQuery = u"""
                 update tcs_helper_catalogue_tables_info set number_of_rows = (select count(*) as count from %(tbName)s) where table_name = "%(tbName)s"
             """ % locals()
-            count = dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.cataloguesDbConn,
-                log=self.log,
-                quiet=True
             )
 
         print "Row counts updated in `tcs_helper_catalogue_tables_info` database table"
@@ -248,10 +240,11 @@ class cleanup_database_tables():
         sqlQuery = u"""
             select * from tcs_helper_catalogue_views_info where view_name like "%%stream" or number_of_rows is null and legacy_view = 0
         """ % locals()
-        rows = dms.execute_mysql_read_query(
+        rows = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
 
         for row in rows:
@@ -260,11 +253,10 @@ class cleanup_database_tables():
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set number_of_rows = (select count(*) as count from %(tbName)s) where view_name = "%(tbName)s"
             """ % locals()
-            count = dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.cataloguesDbConn,
-                log=self.log,
-                quiet=True
             )
 
         self.log.info(
@@ -292,10 +284,11 @@ class cleanup_database_tables():
         sqlQuery = u"""
             SELECT max(id) as thisId FROM tcs_helper_catalogue_tables_info;
         """ % locals()
-        thisId = dms.execute_mysql_read_query(
+        thisId = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
         try:
             highestId = thisId[0]["thisId"] + 1
@@ -305,19 +298,21 @@ class cleanup_database_tables():
         sqlQuery = u"""
             SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='crossmatch_catalogues' and TABLE_NAME like "tcs_cat%%";
         """ % locals()
-        tablesInDatabase = dms.execute_mysql_read_query(
+        tablesInDatabase = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
 
         sqlQuery = u"""
             SELECT table_name FROM tcs_helper_catalogue_tables_info;
         """ % locals()
-        tableList = dms.execute_mysql_read_query(
+        tableList = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
         tbList = []
         for tb in tableList:
@@ -336,10 +331,10 @@ class cleanup_database_tables():
                             %(highestId)s,
                             "%(thisTableName)s"
                     )""" % locals()
-                dms.execute_mysql_write_query(
+                writequery(
+                    log=self.log,
                     sqlQuery=sqlQuery,
                     dbConn=self.cataloguesDbConn,
-                    log=self.log
                 )
                 highestId += 1
 
@@ -373,20 +368,21 @@ class cleanup_database_tables():
         ]
 
         for sqlQuery in sqlQueries:
-            dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.cataloguesDbConn,
-                log=self.log
             )
 
         # VIEW OBJECT TYPES
         sqlQuery = u"""
             SELECT view_name FROM crossmatch_catalogues.tcs_helper_catalogue_views_info where legacy_view = 0 and object_type is null;
         """ % locals()
-        rows = dms.execute_mysql_read_query(
+        rows = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
 
         for row in rows:
@@ -396,20 +392,21 @@ class cleanup_database_tables():
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set object_type = "%(object_type)s" where view_name = "%(view_name)s"
             """ % locals()
-            dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.cataloguesDbConn,
-                log=self.log
             )
 
         # MASTER TABLE ID FOR VIEWS
         sqlQuery = u"""
             SELECT view_name FROM crossmatch_catalogues.tcs_helper_catalogue_views_info where legacy_view = 0 and table_id is null;
         """ % locals()
-        rows = dms.execute_mysql_read_query(
+        rows = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
 
         for row in rows:
@@ -423,10 +420,10 @@ class cleanup_database_tables():
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set table_id = (select id from tcs_helper_catalogue_tables_info where table_name = "%(table_name)s") where view_name = "%(view_name)s"
             """ % locals()
-            dms.execute_mysql_write_query(
+            writequery(
+                log=self.log,
                 sqlQuery=sqlQuery,
                 dbConn=self.cataloguesDbConn,
-                log=self.log
             )
 
         self.log.info('completed the ``_clean_up_columns`` method')
@@ -453,10 +450,11 @@ class cleanup_database_tables():
         sqlQuery = u"""
             SELECT max(id) as thisId FROM tcs_helper_catalogue_views_info;
         """ % locals()
-        thisId = dms.execute_mysql_read_query(
+        thisId = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
         try:
             highestId = thisId[0]["thisId"] + 1
@@ -466,19 +464,21 @@ class cleanup_database_tables():
         sqlQuery = u"""
             SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='VIEW' AND TABLE_SCHEMA='crossmatch_catalogues' and TABLE_NAME like "tcs_view%%" and TABLE_NAME not like "%%helper%%";
         """ % locals()
-        tablesInDatabase = dms.execute_mysql_read_query(
+        tablesInDatabase = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
 
         sqlQuery = u"""
             SELECT view_name FROM tcs_helper_catalogue_views_info;
         """ % locals()
-        tableList = dms.execute_mysql_read_query(
+        tableList = readquery(
+            log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
-            log=self.log
+            quiet=False
         )
         tbList = []
         for tb in tableList:
@@ -497,10 +497,10 @@ class cleanup_database_tables():
                             %(highestId)s,
                             "%(thisViewName)s"
                     )""" % locals()
-                dms.execute_mysql_write_query(
+                writequery(
+                    log=self.log,
                     sqlQuery=sqlQuery,
                     dbConn=self.cataloguesDbConn,
-                    log=self.log
                 )
                 highestId += 1
 

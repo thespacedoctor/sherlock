@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#modules">Modules</a></li>
@@ -158,13 +161,11 @@
 <span class="sd">    David Young</span>
 
 <span class="sd">:Date Created:</span>
-<span class="sd">    August 25, 2015</span>
+<span class="sd">    November 18, 2016</span>
 
-<span class="sd">.. todo::</span>
-<span class="sd">    </span>
-<span class="sd">    @review: when complete pull all general functions and classes into dryxPython</span>
+<span class="sd">.. todo ::</span>
 
-<span class="sd"># xdocopt-usage-tempx</span>
+<span class="sd">    - document this module</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">################# GLOBAL IMPORTS ####################</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -178,18 +179,14 @@
 <span class="kn">import</span> <span class="nn">yaml</span>
 
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">mysql</span> <span class="k">as</span> <span class="n">dms</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
-<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
-<span class="kn">from</span> <span class="nn">._base_importer</span> <span class="kn">import</span> <span class="n">_base_importer</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">._base_importer</span> <span class="k">import</span> <span class="n">_base_importer</span>
 
 
 <div class="viewcode-block" id="pessto_marshall_streams"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams">[docs]</a><span class="k">class</span> <span class="nc">pessto_marshall_streams</span><span class="p">(</span><span class="n">_base_importer</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *The worker class for the pessto_marshall_streams module*</span>
+<span class="sd">    The worker class for the pessto_marshall_streams module</span>
 
 <span class="sd">    **Key Arguments:**</span>
 <span class="sd">        - ``dbConn`` -- mysql database connection</span>
@@ -199,8 +196,7 @@
 <span class="sd">        - ``version`` -- version of the pessto_marshall_streams catalogue</span>
 
 
-<span class="sd">    .. todo::</span>
-
+<span class="sd">    **Todo**</span>
 <span class="sd">        - @review: when complete, clean pessto_marshall_streams class</span>
 <span class="sd">        - @review: when complete add logging</span>
 <span class="sd">        - @review: when complete, decide whether to abstract class to another module</span>
@@ -212,14 +208,12 @@
     <span class="c1"># 4. @flagged: what actions does each object have to be able to perform? Add them here</span>
     <span class="c1"># Method Attributes</span>
 <div class="viewcode-block" id="pessto_marshall_streams.get"><a class="viewcode-back" href="../../../_api/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        *get the pessto_marshall_streams object*</span>
+        <span class="sd">&quot;&quot;&quot;get the pessto_marshall_streams object</span>
 
 <span class="sd">        **Return:**</span>
 <span class="sd">            - ``pessto_marshall_streams``</span>
 
-<span class="sd">        .. todo::</span>
-
+<span class="sd">        **Todo**</span>
 <span class="sd">            - @review: when complete, clean get method</span>
 <span class="sd">            - @review: when complete add logging</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -228,7 +222,7 @@
         <span class="n">yamlFilePath</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">__file__</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
                                 <span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;/resources/pessto_marshall_table_selects.yaml&quot;</span>
 
-        <span class="n">stream</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">yamlFilePath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">file</span><span class="p">(</span><span class="n">yamlFilePath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
         <span class="n">pesstoQueries</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
         <span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -250,8 +244,7 @@
 
 <div class="viewcode-block" id="pessto_marshall_streams.create_dictionary_of_pessto_marshall_streams"><a class="viewcode-back" href="../../../_api/sherlock.imports.pessto_marshall_streams.html#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.create_dictionary_of_pessto_marshall_streams">[docs]</a>    <span class="k">def</span> <span class="nf">create_dictionary_of_pessto_marshall_streams</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        *create dictionary of pessto_marshall_streams*</span>
+        <span class="sd">&quot;&quot;&quot;create dictionary of pessto_marshall_streams</span>
 
 <span class="sd">        **Key Arguments:**</span>
 <span class="sd">            # -</span>
@@ -259,8 +252,7 @@
 <span class="sd">        **Return:**</span>
 <span class="sd">            - None</span>
 
-<span class="sd">        .. todo::</span>
-
+<span class="sd">        **Todo**</span>
 <span class="sd">            - @review: when complete, clean create_dictionary_of_pessto_marshall_streams method</span>
 <span class="sd">            - @review: when complete add logging</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -270,10 +262,11 @@
         <span class="n">dictList</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
 
-        <span class="n">rows</span> <span class="o">=</span> <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_read_query</span><span class="p">(</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">readquery</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
             <span class="n">sqlQuery</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">marshallQuery</span><span class="p">,</span>
             <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pmDbConn</span><span class="p">,</span>
-            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+            <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
 
         <span class="n">totalCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
@@ -284,7 +277,7 @@
             <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># Cursor up one line and clear line</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1A</span><span class="se">\x1b</span><span class="s2">[2K&quot;</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s2">&quot;</span><span class="si">%(count)s</span><span class="s2"> / </span><span class="si">%(totalCount)s</span><span class="s2"> `</span><span class="si">%(tableName)s</span><span class="s2">` data added to memory&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="nb">print</span> <span class="s2">&quot;</span><span class="si">%(count)s</span><span class="s2"> / </span><span class="si">%(totalCount)s</span><span class="s2"> `</span><span class="si">%(tableName)s</span><span class="s2">` data added to memory&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
             <span class="n">dictList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -294,8 +287,7 @@
     <span class="c1"># use the tab-trigger below for new method</span>
     <span class="k">def</span> <span class="nf">_update_database_helper_table</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        *update dataasbe helper table*</span>
+        <span class="sd">&quot;&quot;&quot; update dataasbe helper table</span>
 
 <span class="sd">        **Key Arguments:**</span>
 <span class="sd">            # -</span>
@@ -303,8 +295,7 @@
 <span class="sd">        **Return:**</span>
 <span class="sd">            - None</span>
 
-<span class="sd">        .. todo::</span>
-
+<span class="sd">        **Todo**</span>
 <span class="sd">            - @review: when complete, clean _update_database_helper_table method</span>
 <span class="sd">            - @review: when complete add logging</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -316,14 +307,14 @@
 <span class="s2">            update tcs_helper_catalogue_tables_info set last_updated = now() where table_name = &quot;</span><span class="si">%(tableName)s</span><span class="s2">&quot;;</span>
 <span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
-        <span class="n">dms</span><span class="o">.</span><span class="n">execute_mysql_write_query</span><span class="p">(</span>
+        <span class="n">writequery</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
             <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
             <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
-            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_update_database_helper_table`` method&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">None</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
     <span class="c1"># use the tab-trigger below for new method</span>
     <span class="c1"># xt-class-method</span>

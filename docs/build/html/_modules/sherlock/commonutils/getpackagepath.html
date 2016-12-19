@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#modules">Modules</a></li>
@@ -158,72 +161,21 @@
 <span class="sd">    David Young</span>
 
 <span class="sd">:Date Created:</span>
-<span class="sd">    October 24, 2013</span>
-
-<span class="sd">.. todo::</span>
-<span class="sd">    </span>
-<span class="sd">    - [ ] when complete pull all general functions and classes into dryxPython</span>
+<span class="sd">    November 18, 2016</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c1">################# GLOBAL IMPORTS ####################</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
-
-<span class="c1">###################################################################</span>
-<span class="c1"># CLASSES                                                         #</span>
-<span class="c1">###################################################################</span>
-
-<span class="c1">###################################################################</span>
-<span class="c1"># PUBLIC FUNCTIONS                                                #</span>
-<span class="c1">###################################################################</span>
-<span class="c1"># LAST MODIFIED : October 24, 2013</span>
-<span class="c1"># CREATED : October 24, 2013</span>
-<span class="c1"># AUTHOR : DRYX</span>
-
-<span class="c1"># copy usage method(s) here and select the following snippet from the command palette:</span>
-<span class="c1"># x-setup-worker-function-parameters-from-usage-method</span>
 
 
 <div class="viewcode-block" id="getpackagepath"><a class="viewcode-back" href="../../../_api/sherlock.commonutils.getpackagepath.html#sherlock.commonutils.getpackagepath.getpackagepath">[docs]</a><span class="k">def</span> <span class="nf">getpackagepath</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *getpackagepath*</span>
+<span class="sd">     *Get the root path for this python package*</span>
 
-<span class="sd">    **Key Arguments:**</span>
-<span class="sd">        - None</span>
-
-<span class="sd">    **Return:**</span>
-<span class="sd">        - ``packagePath`` -- path to the host package</span>
-
-<span class="sd">    .. todo::</span>
-
-<span class="sd">        - when complete, clean worker function and add comments</span>
-<span class="sd">        - when complete add logging</span>
+<span class="sd">    *Used in unit testing code*</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1">################ &gt; IMPORTS ################</span>
-    <span class="c1">## STANDARD LIB ##</span>
-    <span class="c1">## THIRD PARTY ##</span>
-    <span class="c1">## LOCAL APPLICATION ##</span>
-
     <span class="n">moduleDirectory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
     <span class="n">packagePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/../&quot;</span>
 
     <span class="k">return</span> <span class="n">packagePath</span></div>
-<span class="c1">###################################################################</span>
-<span class="c1"># PRIVATE (HELPER) FUNCTIONS                                      #</span>
-<span class="c1">###################################################################</span>
-
-<span class="c1">############################################</span>
-<span class="c1"># CODE TO BE DEPECIATED                    #</span>
-<span class="c1">############################################</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-
-<span class="c1">###################################################################</span>
-<span class="c1"># TEMPLATE FUNCTIONS                                              #</span>
-<span class="c1">###################################################################</span>
 </pre></div>
 
            </div>

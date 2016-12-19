@@ -1,26 +1,7 @@
-sherlock.imports.ifs_galaxies (*class*)
+sherlock.imports.ifs_galaxies (*module*)
 =============================
 
-.. currentmodule:: sherlock.imports
 
-.. autoclass:: ifs_galaxies
+.. automodule:: sherlock.imports.ifs_galaxies
+    :members:
 
-   
-   .. automethod:: __init__
-
-   
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-      ~ifs_galaxies.__init__
-      ~ifs_galaxies.add_data_to_database_table
-      ~ifs_galaxies.add_htmids_to_database_table
-      ~ifs_galaxies.create_dictionary_of__base_importer
-      ~ifs_galaxies.get
-   
-   
-
-   
-   
-   

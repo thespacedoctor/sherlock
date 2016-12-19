@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.imports.tmp_sdss module &mdash; sherlock 0.1 documentation</title>
   
 
   
@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
 
   
@@ -93,11 +96,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -133,7 +136,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>&lt;no title&gt;</li>
+    <li>sherlock.imports.tmp_sdss module</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -147,27 +150,50 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-sherlock.imports.tmp_sdss"></span><p><em>Import tmp_sdss catagloue from plain text file</em></p>
+  <div class="section" id="module-sherlock.imports.tmp_sdss">
+<span id="sherlock-imports-tmp-sdss-module"></span><h1>sherlock.imports.tmp_sdss module<a class="headerlink" href="#module-sherlock.imports.tmp_sdss" title="Permalink to this headline">  ∞</a></h1>
+<div class="section" id="tmp-sdss-py">
+<h2>tmp_sdss.py<a class="headerlink" href="#tmp-sdss-py" title="Permalink to this headline">  ∞</a></h2>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
+<tr class="field-odd field"><th class="field-name">Summary:</th><td class="field-body"><p class="first">Import tmp_sdss catagloue from plain text file</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">August 25, 2015</td>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body"><p class="first">David Young</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date Created:</th><td class="field-body"><p class="first">August 25, 2015</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">dryx syntax:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal"><span class="pre">_someObject</span></code> = a &#8216;private&#8217; object that should only be changed for debugging</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Notes:</th><td class="field-body"><ul class="first simple">
+<li>If you have any questions requiring this script/module please email me: <a class="reference external" href="mailto:d&#46;r&#46;young&#37;&#52;&#48;qub&#46;ac&#46;uk">d<span>&#46;</span>r<span>&#46;</span>young<span>&#64;</span>qub<span>&#46;</span>ac<span>&#46;</span>uk</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Tasks:</th><td class="field-body"><p class="first last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
-<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+<ul class="last simple">
+<li>docuument tmp_sdss module</li>
+</ul>
 </div>
 <p># xdocopt-usage-tempx</p>
 <dl class="class">
 <dt id="sherlock.imports.tmp_sdss.tmp_sdss">
-<em class="property">class </em><code class="descclassname">sherlock.imports.tmp_sdss.</code><code class="descname">tmp_sdss</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>cataloguesDbConn=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/tmp_sdss.html#tmp_sdss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.tmp_sdss.tmp_sdss" title="Permalink to this definition">  ∞</a></dt>
+<em class="property">class </em><code class="descclassname">sherlock.imports.tmp_sdss.</code><code class="descname">tmp_sdss</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/tmp_sdss.html#tmp_sdss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.tmp_sdss.tmp_sdss" title="Permalink to this definition">  ∞</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></p>
-<p><em>The worker class for the tmp_sdss module</em></p>
+<p>The worker class for the tmp_sdss module</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
@@ -178,19 +204,18 @@
 <li><code class="docutils literal"><span class="pre">version</span></code> &#8211; version of the tmp_sdss catalogue</li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean tmp_sdss class</li>
 <li>&#64;review: when complete add logging</li>
 <li>&#64;review: when complete, decide whether to abstract class to another module</li>
 </ul>
-</div>
+</dd>
+</dl>
 <dl class="method">
 <dt id="sherlock.imports.tmp_sdss.tmp_sdss.create_master_id">
 <code class="descname">create_master_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/tmp_sdss.html#tmp_sdss.create_master_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.tmp_sdss.tmp_sdss.create_master_id" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>create master id</em></p>
+<dd><p>create master id</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd># -</dd>
@@ -199,40 +224,38 @@
 <li>None</li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean create_master_id method</li>
 <li>&#64;review: when complete add logging</li>
 </ul>
-</div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sherlock.imports.tmp_sdss.tmp_sdss.get">
 <code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/tmp_sdss.html#tmp_sdss.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.tmp_sdss.tmp_sdss.get" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>get the tmp_sdss object</em></p>
+<dd><p>get the tmp_sdss object</p>
 <dl class="docutils">
 <dt><strong>Return:</strong></dt>
 <dd><ul class="first last simple">
 <li><code class="docutils literal"><span class="pre">tmp_sdss</span></code></li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-3">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean get method</li>
 <li>&#64;review: when complete add logging</li>
 </ul>
-</div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sherlock.imports.tmp_sdss.tmp_sdss.set_master_obj_types">
 <code class="descname">set_master_obj_types</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/tmp_sdss.html#tmp_sdss.set_master_obj_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.tmp_sdss.tmp_sdss.set_master_obj_types" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>set master obj types</em></p>
+<dd><p>set master obj types</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd># -</dd>
@@ -241,18 +264,19 @@
 <li>None</li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-4">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean set_master_obj_types method</li>
 <li>&#64;review: when complete add logging</li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-</dd></dl>
-
-</dd></dl>
-
+</div>
 
 
            </div>

@@ -1,22 +1,17 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-_crossmatcher.py
-================
-:Summary:
-    The transient to catalogue sources crossmatcher for sherlock
+* The transient to catalogue sources crossmatcher for sherlock*
 
 :Author:
     David Young
 
 :Date Created:
-    July 1, 2015
+    November 18, 2016
 
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
+.. todo ::
 
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
+    - document this module
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -27,10 +22,8 @@ import glob
 import pickle
 import math
 from docopt import docopt
-from dryxPython import logs as dl
-from dryxPython import astrotools as dat
-from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
+from astrocalc.distances import converter
+from sherlock import conesearch
 
 
 class crossmatcher():
@@ -252,8 +245,6 @@ class crossmatcher():
     def searchCatalogue(self, objectList, searchPara={}, searchName=""):
         """Cone Search wrapper to make it a little more user friendly"""
 
-        from sherlock import conesearcher
-
         # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
         if "physical radius kpc" in searchPara:
             physicalSearch = True
@@ -279,7 +270,8 @@ class crossmatcher():
             faintLimit = False
 
         for row in objectList:
-            cs = conesearcher(
+
+            cs = conesearch(
                 log=self.log,
                 ra=row['ra'],
                 dec=row['dec'],
@@ -289,18 +281,12 @@ class crossmatcher():
                 queryType=2,
                 dbConn=self.dbConn,
                 settings=self.settings,
+                nearestOnly=False,
                 physicalSearch=physicalSearch,
                 transType=searchPara["transient classification"]
             )
-            message, xmObjects = cs.get()
 
-            # DID WE SEARCH THE CATALOGUES CORRECTLY?
-            if message and (message.startswith('Error') or 'not recognised' in message):
-                # SUCCESSFUL CONE SEARCHES SHOULD NOT RETURN AN ERROR MESSAGE,
-                # OTHERWISE SOMETHING WENT WRONG.
-                print "Database error - cone search unsuccessful.  Message was:"
-                print "\t%s" % message
-                searchDone = False
+            indices, xmObjects = cs.match()
 
             if xmObjects:
                 numberOfMatches = len(xmObjects)
@@ -328,14 +314,19 @@ class crossmatcher():
                             self.colMaps[catalogueName]["redshiftColName"]]
                     if redshift and redshift > 0.0:
                         # CALCULATE DISTANCE MODULUS, ETC
-                        redshiftInfo = dat.convert_redshift_to_distance(
-                            z=redshift
+                        c = converter(log=self.log)
+                        dists = c.redshift_to_distance(
+                            z=redshift,
+                            WM=0.3,
+                            WV=0.7,
+                            H0=70.0
                         )
-                        if redshiftInfo:
-                            xmz = redshiftInfo['z']
-                            xmscale = redshiftInfo['da_scale']
-                            xmdistance = redshiftInfo['dl_mpc']
-                            xmdistanceModulus = redshiftInfo['dmod']
+
+                        if dists:
+                            xmz = dists['z']
+                            xmscale = dists["da_scale"]
+                            xmdistance = dists["dl_mpc"]
+                            xmdistanceModulus = dists["dmod"]
                     # ADD MAJOR AXIS VALUE
                     if "or within semi major axis" in searchPara and searchPara["or within semi major axis"] == True and self.colMaps[catalogueName]["semiMajorColName"] and xm[1][self.colMaps[catalogueName]["semiMajorColName"]]:
                         xmmajoraxis = xm[1][

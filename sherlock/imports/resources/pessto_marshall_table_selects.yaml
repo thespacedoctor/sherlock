@@ -1,18 +1,48 @@
 version: 1
 
 pessto queries:
-    tcs_cat_asassn_supernova_survey_stream: "select `Classification_Age`,`Date`,`Disc_Age`,`Galaxy_name`,`ID`,`No`,`Offset`,`RA` as raDeg,`Redshift`,`Type`,`V_abs`,`V_disc`, `decl` as decDeg,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy`,`surveyUrl` from `fs_asassn_sne` where summaryRow = 1;"
-    tcs_cat_asassn_transients_survey_stream: "select `Vmag`,`comment`, `decDeg`,`discDate`,`name`,`raDeg`,`specClass`,`commentAdded`,`surveyUrl`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy` from `fs_asassn_transients` where summaryRow = 1;"
-    tcs_cat_atel_coordinates_stream: "select `primaryId`,`atelNumber`,`raDeg`,`decDeg`,`crossMatchDate`,`singleClassification`,`supernovaTag`,`atelName`,`atelUrl`, `htm16ID`,`cz`,`cx`,`htm20ID`,`cy`,`survey`,`titleToComment` from `atel_coordinates` where summaryRow = 1;"
-    tcs_cat_bright_sn_list_stream: "select  `decDeg`,`discoveryMag`,`discoveryMjd`,`imageUrl`,`name`,`objectUrl`,`raDeg`,`survey`,`type`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy` from `fs_brightsnlist_discoveries` where summaryRow = 1;"
-    tcs_cat_chase_survey_stream: "select `candidateID`,`ra`,`decl`,`mag`,`magErr`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`lastNonDetection`,`tripletImageURL`,`objectURL`,`ra_deg` as raDeg,`dec_deg` as decDeg, `htm20ID`,`htm16ID`,`cx`,`cy`,`cz` from `fs_chase` where summaryRow = 1;"
-    tcs_cat_crts_css_survey_stream: "select `circularUrl`,`comment`,`commentIngested`, `decDeg`,`filter`,`finderChartUrl`,`finderChartWebpage`,`imagesUrl`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`survey`,`surveyObjectUrl`,`targetImageUrl`,`transientTypePrediction`,`uniqueId`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy`,`magErr`,`lastNonDetectionDate`,`lastNonDetectionMJD` from `fs_crts_css` where summaryRow = 1;"
-    tcs_cat_crts_mls_survey_stream: "select `circularUrl`,`comment`,`commentIngested`, `decDeg`,`filter`,`finderChartUrl`,`finderChartWebpage`,`imagesUrl`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`survey`,`surveyObjectUrl`,`targetImageUrl`,`transientTypePrediction`,`uniqueId`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy`,`magErr`,`lastNonDetectionDate`,`lastNonDetectionMJD` from `fs_crts_mls` where summaryRow = 1;"
-    tcs_cat_crts_sss_survey_stream: "select `circularUrl`,`comment`,`commentIngested`, `decDeg`,`filter`,`finderChartUrl`,`finderChartWebpage`,`imagesUrl`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`survey`,`surveyObjectUrl`,`targetImageUrl`,`transientTypePrediction`,`uniqueId`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy`,`magErr`,`lastNonDetectionDate`,`lastNonDetectionMJD` from `fs_crts_sss` where summaryRow = 1;"
-    tcs_cat_lsq_survey_stream: "select `candidateID`,`catalogType`, `dec_deg` as decDeg,`decl`,`discDate`,`discMag`,`discPhase`,`historyURL`,`hostZ`,`isFollowed`,`lastNonDetection`,`mag`,`minObsDate`,`numPhoto`,`numSpectra`,`obsDate`,`observationMJD`,`ra`, `ra_deg` as raDeg,`specType`,`status`,`subtractedLightcurveURL`,`suggestedType`,`tripletImageURL`,`transientBucketId`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy`,`survey`,`transientHistoryLogAdded` from `fs_lsq_discoveries` where summaryRow = 1;"
-    tcs_cat_master_survey_stream: "select `comment`, `imageUrl`,`magnitude`,`masterInt`,`name`,`telescope`,`type`,`survey`,`discoveryMjd`,`decDeg`,`raDeg`,`filter`,`candidateUrl`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy` from `fs_master` where summaryRow = 1;"
-    tcs_cat_ogle_survey_stream: "select  `decDeg`,`filter`,`lastNonDetectionDate`,`lastNonDetectionMJD`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`referenceFitsUrl`,`referenceImageUrl`,`subtractedFitsUrl`,`subtractedImageUrl`,`survey`,`surveyObjectUrl`,`targetFitsUrl`,`targetImageUrl`,`transientTypePrediction`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy`,`seeing`,`background`,`magErr`,`limitingMag` from `fs_ogle` where summaryRow = 1;"
-    tcs_cat_panstarrs_survey_stream: "select `candidateID`,`ra_deg` as raDeg,`dec_deg` as decDeg,`mag`,`magErr`,`filter`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`targetImageURL`,`refImageURL`,`diffImageURL`,`objectURL`, `htm20ID`,`htm16ID`,`cx`,`cy`,`cz`,`survey`,`dateCreated` from `fs_panstarrs` where summaryRow = 1;"
-    tcs_cat_skymapper_survey_stream: "select `DECL` as decDeg,`RA` as raDeg,`bestType`,`candidateID`,`candidateURL`,`comment`, `diffThumbURL`,`discFilt`,`discMJD`,`discMag`,`filt`,`mag`,`magerr`,`mjd`,`newThumbURL`,`noneFilt`,`noneMJD`,`noneMag`,`numDet`,`refThumbURL`,`status`,`htm20ID`,`htm16ID`,`cx`,`cy`,`cz`,`survey`,`finderURL` from `fs_skymapper` where summaryRow = 1;"
-    tcs_cat_tocp_pages_stream: "select  `decDeg`,`discoveryMjd`,`filter`,`magnitude`,`name`,`raDeg`,`surveyObjectUrl`,`type`,`survey`,`htm16ID`,`cz`,`cx`,`htm20ID`,`cy` from `fs_tocp` where summaryRow = 1 and length(name) < 40;"
-    tcs_cat_pessto_marshall_user_added_stream: "select `candidateID`,`ra_deg` as raDeg,`dec_deg` as decDeg,`mag`,`magErr`,`filter`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`targetImageURL`,`objectURL`,`htm20ID`,`htm16ID`,`cx`,`cy`,`cz`,`survey`,`author`, `dateLastModified`,`suggestedClassification` from `fs_user_added` where summaryRow = 1;"
+    tcs_cat_asassn_supernova_survey_stream: 
+        marshallTable: fs_asassn_sne
+        query: "select `Classification_Age`,`Date`,`Disc_Age`,`Galaxy_name`,`ID`,`No`,`Offset`,`RA` as raDeg,`Redshift`,`Type`,`V_abs`,`V_disc`, `decl` as decDeg,`htm16ID`,`surveyUrl` from `fs_asassn_sne` where summaryRow = 1;"
+    tcs_cat_asassn_transients_survey_stream: 
+        marshallTable: fs_asassn_transients
+        query: "select `Vmag`,`comment`, `decDeg`,`discDate`,`name`,`raDeg`,`specClass`,`commentAdded`,`surveyUrl`,`htm16ID` from `fs_asassn_transients` where summaryRow = 1;"
+    tcs_cat_atel_coordinates_stream: 
+        marshallTable: atel_coordinates
+        query: "select `primaryId`,`atelNumber`,`raDeg`,`decDeg`,`crossMatchDate`,`singleClassification`,`supernovaTag`,`atelName`,`atelUrl`, `htm16ID`,`survey`,`titleToComment` from `atel_coordinates` where summaryRow = 1;"
+    tcs_cat_bright_sn_list_stream: 
+        marshallTable: fs_brightsnlist_discoveries
+        query: "select  `decDeg`,`discoveryMag`,`discoveryMjd`,`imageUrl`,`name`,`objectUrl`,`raDeg`,`survey`,`type`,`htm16ID` from `fs_brightsnlist_discoveries` where summaryRow = 1;"
+    tcs_cat_chase_survey_stream: 
+        marshallTable: fs_chase
+        query: "select `candidateID`,`ra`,`decl`,`mag`,`magErr`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`lastNonDetection`,`tripletImageURL`,`objectURL`,`ra_deg` as raDeg,`dec_deg` as decDeg,`htm16ID` from `fs_chase` where summaryRow = 1;"
+    tcs_cat_crts_css_survey_stream: 
+        marshallTable: fs_crts_css
+        query: "select `circularUrl`,`comment`,`commentIngested`, `decDeg`,`filter`,`finderChartUrl`,`finderChartWebpage`,`imagesUrl`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`survey`,`surveyObjectUrl`,`targetImageUrl`,`transientTypePrediction`,`uniqueId`,`htm16ID`,`magErr`,`lastNonDetectionDate`,`lastNonDetectionMJD` from `fs_crts_css` where summaryRow = 1;"
+    tcs_cat_crts_mls_survey_stream: 
+        marshallTable: fs_crts_mls
+        query: "select `circularUrl`,`comment`,`commentIngested`, `decDeg`,`filter`,`finderChartUrl`,`finderChartWebpage`,`imagesUrl`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`survey`,`surveyObjectUrl`,`targetImageUrl`,`transientTypePrediction`,`uniqueId`,`htm16ID`,`magErr`,`lastNonDetectionDate`,`lastNonDetectionMJD` from `fs_crts_mls` where summaryRow = 1;"
+    tcs_cat_crts_sss_survey_stream: 
+        marshallTable: fs_crts_sss
+        query: "select `circularUrl`,`comment`,`commentIngested`, `decDeg`,`filter`,`finderChartUrl`,`finderChartWebpage`,`imagesUrl`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`survey`,`surveyObjectUrl`,`targetImageUrl`,`transientTypePrediction`,`uniqueId`,`htm16ID`,`magErr`,`lastNonDetectionDate`,`lastNonDetectionMJD` from `fs_crts_sss` where summaryRow = 1;"
+    tcs_cat_lsq_survey_stream: 
+        marshallTable: fs_lsq_discoveries
+        query: "select `candidateID`,`catalogType`, `dec_deg` as decDeg,`decl`,`discDate`,`discMag`,`discPhase`,`historyURL`,`hostZ`,`isFollowed`,`lastNonDetection`,`mag`,`minObsDate`,`numPhoto`,`numSpectra`,`obsDate`,`observationMJD`,`ra`, `ra_deg` as raDeg,`specType`,`status`,`subtractedLightcurveURL`,`suggestedType`,`tripletImageURL`,`transientBucketId`,`htm16ID`,`survey`,`transientHistoryLogAdded` from `fs_lsq_discoveries` where summaryRow = 1;"
+    tcs_cat_master_survey_stream: 
+        marshallTable: fs_master
+        query: "select `comment`, `imageUrl`,`magnitude`,`masterInt`,`name`,`telescope`,`type`,`survey`,`discoveryMjd`,`decDeg`,`raDeg`,`filter`,`candidateUrl`,`htm16ID` from `fs_master` where summaryRow = 1;"
+    tcs_cat_ogle_survey_stream: 
+        marshallTable: fs_ogle
+        query: "select  `decDeg`,`filter`,`lastNonDetectionDate`,`lastNonDetectionMJD`,`lightcurveUrl`,`mag`,`name`,`observationDate`,`observationMJD`,`raDeg`,`referenceFitsUrl`,`referenceImageUrl`,`subtractedFitsUrl`,`subtractedImageUrl`,`survey`,`surveyObjectUrl`,`targetFitsUrl`,`targetImageUrl`,`transientTypePrediction`,`htm16ID`,`seeing`,`background`,`magErr`,`limitingMag` from `fs_ogle` where summaryRow = 1;"
+    tcs_cat_panstarrs_survey_stream: 
+        marshallTable: fs_panstarrs
+        query: "select `candidateID`,`ra_deg` as raDeg,`dec_deg` as decDeg,`mag`,`magErr`,`filter`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`targetImageURL`,`refImageURL`,`diffImageURL`,`objectURL`,`htm16ID`,`survey`,`dateCreated` from `fs_panstarrs` where summaryRow = 1;"
+    tcs_cat_skymapper_survey_stream: 
+        marshallTable: fs_skymapper
+        query: "select `DECL` as decDeg,`RA` as raDeg,`bestType`,`candidateID`,`candidateURL`,`comment`, `diffThumbURL`,`discFilt`,`discMJD`,`discMag`,`filt`,`mag`,`magerr`,`mjd`,`newThumbURL`,`noneFilt`,`noneMJD`,`noneMag`,`numDet`,`refThumbURL`,`status`,`htm16ID`,`survey`,`finderURL` from `fs_skymapper` where summaryRow = 1;"
+    tcs_cat_tocp_pages_stream: 
+        marshallTable: fs_tocp
+        query: "select  `decDeg`,`discoveryMjd`,`filter`,`magnitude`,`name`,`raDeg`,`surveyObjectUrl`,`type`,`survey`,`htm16ID` from `fs_tocp` where summaryRow = 1 and length(name) < 40;"
+    tcs_cat_pessto_marshall_user_added_stream: 
+        marshallTable: fs_user_added
+        query: "select `candidateID`,`ra_deg` as raDeg,`dec_deg` as decDeg,`mag`,`magErr`,`filter`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`targetImageURL`,`objectURL`,`htm16ID`,`survey`,`author`, `dateLastModified`,`suggestedClassification` from `fs_user_added` where summaryRow = 1;"

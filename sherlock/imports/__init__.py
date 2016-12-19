@@ -1,10 +1,7 @@
 from milliquas import milliquas
+from ifs import ifs
 from veron import veron
-from tmp_sdss import tmp_sdss
-from pessto_marshall_streams import pessto_marshall_streams
-from ifs_galaxies import ifs_galaxies
-import importers_clutils
+from marshall import marshall
 from _base_importer import _base_importer
-
-import ned_d
-import ned_conesearch
+from ned import ned
+from ned_d import ned_d

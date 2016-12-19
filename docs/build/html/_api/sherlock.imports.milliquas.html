@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.imports.milliquas module &mdash; sherlock 0.1 documentation</title>
   
 
   
@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
 
   
@@ -93,11 +96,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -133,7 +136,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>&lt;no title&gt;</li>
+    <li>sherlock.imports.milliquas module</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -147,27 +150,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-sherlock.imports.milliquas"></span><p><em>Import Milliquas catagloue from plain text file</em></p>
+  <div class="section" id="module-sherlock.imports.milliquas">
+<span id="sherlock-imports-milliquas-module"></span><h1>sherlock.imports.milliquas module<a class="headerlink" href="#module-sherlock.imports.milliquas" title="Permalink to this headline">  ∞</a></h1>
+<p><em>Import Milliquas (Million Quasars Catalog) catagloue from plain text file</em></p>
+<p><a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">August 25, 2015</td>
+<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">November 18, 2016</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
-</div>
-<p># xdocopt-usage-tempx</p>
 <dl class="class">
 <dt id="sherlock.imports.milliquas.milliquas">
-<em class="property">class </em><code class="descclassname">sherlock.imports.milliquas.</code><code class="descname">milliquas</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>cataloguesDbConn=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/milliquas.html#milliquas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.milliquas.milliquas" title="Permalink to this definition">  ∞</a></dt>
+<em class="property">class </em><code class="descclassname">sherlock.imports.milliquas.</code><code class="descname">milliquas</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/milliquas.html#milliquas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.milliquas.milliquas" title="Permalink to this definition">  ∞</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></p>
-<p><em>The worker class for the milliquas module</em></p>
+<p><em>importer object for the</em> <a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">Milliquas (Million Quasars Catalog)</a> <em>catagloue</em></p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
@@ -179,58 +180,31 @@
 </ul>
 </dd>
 </dl>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>&#64;review: when complete, clean milliquas class</li>
-<li>&#64;review: when complete add logging</li>
-<li>&#64;review: when complete, decide whether to abstract class to another module</li>
-</ul>
+<p><strong>Usage:</strong></p>
+<blockquote>
+<div><p>To import the plain text milliquas catalogue, run the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">milliquas</span>
+<span class="n">catalogue</span> <span class="o">=</span> <span class="n">milliquas</span><span class="p">(</span>
+    <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+    <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+    <span class="n">pathToDataFile</span><span class="o">=</span><span class="s2">&quot;/path/to/milliquas.txt&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+    <span class="n">catalogueName</span><span class="o">=</span><span class="s2">&quot;milliquas&quot;</span>
+<span class="p">)</span>
+<span class="n">catalogue</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+</pre></div>
 </div>
+</div></blockquote>
 <dl class="method">
-<dt id="sherlock.imports.milliquas.milliquas.create_dictionary_of_milliquas">
-<code class="descname">create_dictionary_of_milliquas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/milliquas.html#milliquas.create_dictionary_of_milliquas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.milliquas.milliquas.create_dictionary_of_milliquas" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>create dictionary of milliquas</em></p>
-<dl class="docutils">
-<dt><strong>Key Arguments:</strong></dt>
-<dd># -</dd>
-<dt><strong>Return:</strong></dt>
-<dd><ul class="first last simple">
-<li>None</li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>&#64;review: when complete, clean create_dictionary_of_milliquas method</li>
-<li>&#64;review: when complete add logging</li>
-</ul>
+<dt id="sherlock.imports.milliquas.milliquas.ingest">
+<code class="descname">ingest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/milliquas.html#milliquas.ingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.milliquas.milliquas.ingest" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>ingest the milliquas catalogue into the catalogues database</p>
+<p>The method first generates a list of python dictionaries from the milliquas datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="sherlock.imports.milliquas.milliquas.get">
-<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/milliquas.html#milliquas.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.milliquas.milliquas.get" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>get the milliquas object</em></p>
-<dl class="docutils">
-<dt><strong>Return:</strong></dt>
-<dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">milliquas</span></code></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-todo admonition" id="index-3">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>&#64;review: when complete, clean get method</li>
-<li>&#64;review: when complete add logging</li>
-</ul>
-</div>
-</dd></dl>
-
-</dd></dl>
-
 
 
            </div>

@@ -1,5 +1,7 @@
-from dryxPython.utKit import utKit
-import sys
+"""
+*Unit testing tools*
+"""
+from fundamentals import utKit
 
 # OVERRIDES
 
@@ -7,7 +9,7 @@ import sys
 class utKit(utKit):
 
     """
-    Override dryx utKit
+    *Override dryx utKit*
     """
     # Variable Data Atrributes
 
@@ -29,22 +31,22 @@ class utKit(utKit):
         version: 1
         formatters:
             file_style:
-                format: '* %(asctime)s - %(name)s - %(levelname)s (%(pathname)s > %(funcName)s > %(lineno)d) - %(message)s  '
+                format: '* %(asctime)s - %(name)s - %(levelname)s (%(filename)s > %(funcName)s > %(lineno)d) - %(message)s  '
                 datefmt: '%Y/%m/%d %H:%M:%S'
             console_style:
-                format: '* %(asctime)s - %(levelname)s: %(pathname)s:%(funcName)s:%(lineno)d > %(message)s'
+                format: '* %(asctime)s - %(levelname)s: %(filename)s:%(funcName)s:%(lineno)d > %(message)s'
                 datefmt: '%H:%M:%S'
             html_style:
-                format: '<div id="row" class="%(levelname)s"><span class="date">%(asctime)s</span>   <span class="label">file:</span><span class="filename">%(pathname)s</span>   <span class="label">method:</span><span class="funcName">%(funcName)s</span>   <span class="label">line#:</span><span class="lineno">%(lineno)d</span> <span class="pathname">%(pathname)s</span>  <div class="right"><span class="message">%(message)s</span><span class="levelname">%(levelname)s</span></div></div>'
+                format: '<div id="row" class="%(levelname)s"><span class="date">%(asctime)s</span>   <span class="label">file:</span><span class="filename">%(filename)s</span>   <span class="label">method:</span><span class="funcName">%(funcName)s</span>   <span class="label">line#:</span><span class="lineno">%(lineno)d</span> <span class="pathname">%(pathname)s</span>  <div class="right"><span class="message">%(message)s</span><span class="levelname">%(levelname)s</span></div></div>'
                 datefmt: '%Y-%m-%d <span class= "time">%H:%M <span class= "seconds">%Ss</span></span>'
         handlers:
             console:
                 class: logging.StreamHandler
-                level: WARNING
+                level: DEBUG
                 formatter: console_style
                 stream: ext://sys.stdout
         root:
-            level: WARNING
+            level: DEBUG
             handlers: [console]"""
 
         # Override Variable Data Atrributes

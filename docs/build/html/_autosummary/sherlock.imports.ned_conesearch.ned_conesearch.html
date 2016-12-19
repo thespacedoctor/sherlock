@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
         <link rel="next" title="sherlock.imports.ned_d.ned_d (class)" href="sherlock.imports.ned_d.ned_d.html"/>
@@ -96,11 +99,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -113,9 +116,8 @@
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.pessto_marshall_streams.html">sherlock.imports.pessto_marshall_streams (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.tmp_sdss.html">sherlock.imports.tmp_sdss (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.veron.html">sherlock.imports.veron (<em>class</em>)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">sherlock.imports.ned_conesearch.ned_conesearch (<em>class</em>)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.imports.ned_conesearch.ned_conesearch (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_d.ned_d.html">sherlock.imports.ned_d.ned_d (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.update_ned_stream.update_ned_stream.html">sherlock.update_ned_stream.update_ned_stream (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.utKit.html">sherlock.utKit.utKit (<em>class</em>)</a></li>
 </ul>
 </li>
@@ -170,11 +172,11 @@
 <h1>sherlock.imports.ned_conesearch.ned_conesearch (<em>class</em>)<a class="headerlink" href="#sherlock-imports-ned-conesearch-ned-conesearch-class" title="Permalink to this headline">  ∞</a></h1>
 <dl class="class">
 <dt id="sherlock.imports.ned_conesearch.ned_conesearch">
-<em class="property">class </em><code class="descclassname">sherlock.imports.ned_conesearch.</code><code class="descname">ned_conesearch</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>cataloguesDbConn=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_conesearch/ned_conesearch.html#ned_conesearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_conesearch.ned_conesearch" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>The worker class for the ned_conesearch importer module</em></p>
+<em class="property">class </em><code class="descclassname">sherlock.imports.ned_conesearch.</code><code class="descname">ned_conesearch</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_conesearch/ned_conesearch.html#ned_conesearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_conesearch.ned_conesearch" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>The worker class for the ned_conesearch importer module</p>
 <dl class="method">
 <dt id="sherlock.imports.ned_conesearch.ned_conesearch.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>cataloguesDbConn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.imports.ned_conesearch.ned_conesearch.__init__" title="Permalink to this definition">  ∞</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.imports.ned_conesearch.ned_conesearch.__init__" title="Permalink to this definition">  ∞</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -188,19 +190,19 @@
 <td></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_data_to_database_table</span></code>()</td>
-<td><em>add data to database table</em></td>
+<td>add data to database table</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_htmids_to_database_table</span></code>()</td>
-<td><em>add htmids to database table</em></td>
+<td>add htmids to database table</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">create_dictionary_of__base_importer</span></code>()</td>
-<td><em>create dictionary of _base_importer</em></td>
+<td>create dictionary of _base_importer</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../_api/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get" title="sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get"><code class="xref py py-obj docutils literal"><span class="pre">get</span></code></a>()</td>
-<td><em>import the NED-D database into the database and do other cleanup tricks.</em></td>
+<td>import the NED-D database into the database and do other cleanup tricks.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../_api/sherlock.imports.ned_conesearch.ned_conesearch.html#sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get_metadata_for_galaxies" title="sherlock.imports.ned_conesearch.ned_conesearch.ned_conesearch.get_metadata_for_galaxies"><code class="xref py py-obj docutils literal"><span class="pre">get_metadata_for_galaxies</span></code></a>()</td>
-<td><em>get metadata for galaxies</em></td>
+<td>get metadata for galaxies</td>
 </tr>
 </tbody>
 </table>

@@ -38,10 +38,13 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
-        <link rel="next" title="sherlock.update_ned_stream (module)" href="sherlock.update_ned_stream.html"/>
-        <link rel="prev" title="sherlock.imports.ned_d (subpackage)" href="sherlock.imports.ned_d.html"/> 
+        <link rel="next" title="sherlock.utKit (module)" href="sherlock.utKit.html"/>
+        <link rel="prev" title="sherlock.imports (subpackage)" href="sherlock.imports.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -96,18 +99,16 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#modules">Modules</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">sherlock.cl_utils (<em>module</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.update_ned_stream.html">sherlock.update_ned_stream (<em>module</em>)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.cl_utils (<em>module</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.html">sherlock.utKit (<em>module</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.importers_clutils.html">sherlock.imports.importers_clutils (<em>module</em>)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
@@ -163,11 +164,70 @@
 <span class="target" id="module-sherlock.cl_utils"></span><p># SHERLOCK #
 : INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
 =============================================================================================</p>
+<p>Documentation for sherlock can be found here: <a class="reference external" href="http://sherlock.readthedocs.org/en/stable">http://sherlock.readthedocs.org/en/stable</a></p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>docuument cl_utils module</li>
+<li>tidy usage text</li>
+</ul>
+</div>
 <dl class="docutils">
 <dt>Usage:</dt>
-<dd><p class="first">sherlock match [&#8211;update] [-s &lt;pathToSettingsFile&gt;]
+<dd>sherlock init
+sherlock match [&#8211;update] [-s &lt;pathToSettingsFile&gt;]
 sherlock clean [-s &lt;pathToSettingsFile&gt;]
-sherlock wiki [-s &lt;pathToSettingsFile&gt;]</p>
+sherlock wiki [-s &lt;pathToSettingsFile&gt;]
+sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]
+sherlock import cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]
+sherlock import stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</dd>
+<dt>Options:</dt>
+<dd><p class="first">init                    setup the sherlock settings file for the first time
+match                   XXXX
+clean                   XXXX
+wiki                    XXXX
+import                  XXXX
+ned                     use the online NED database as the source catalogue
+cat                     import a static catalogue into the crossmatch catalogues database
+stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database</p>
+<p>ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
+dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
+radiusArcsec            radius in arcsec of the footprint to download from the online NED database
+cat_name                name of the catalogue being imported. The following catalogues can be imported:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">veron</span></code>: Veron AGN/QSO catalogue</dt>
+<dd><p class="first last"><a class="reference external" href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258">http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258</a></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">milliquas</span></code>: Million Quasars Catalog</dt>
+<dd><p class="first last"><a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html</a></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">ned_d</span></code>: NED&#8217;s Master List of Redshift-Independent Extragalactic Distances</dt>
+<dd><p class="first last"><a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">https://ned.ipac.caltech.edu/Library/Distances/</a></p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">ifs</span></code>: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)</dt>
+<dd><p class="first last"><a class="reference external" href="http://www.das.uchile.cl/~lgalbany/LG/research.html">http://www.das.uchile.cl/~lgalbany/LG/research.html</a></p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
 <table class="last docutils option-list" frame="void" rules="none">
 <col class="option" />
 <col class="description" />
@@ -192,10 +252,16 @@ sherlock wiki [-s &lt;pathToSettingsFile&gt;]</p>
 </table>
 </dd>
 </dl>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>document this module</li>
+</ul>
+</div>
 <dl class="function">
 <dt id="sherlock.cl_utils.main">
 <code class="descclassname">sherlock.cl_utils.</code><code class="descname">main</code><span class="sig-paren">(</span><em>arguments=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cl_utils.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cl_utils.main" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command</em></p>
+<dd><p>The main function used when <code class="docutils literal"><span class="pre">cl_utils.py</span></code> is run as a single script from the cl, or when installed as a cl command</p>
 </dd></dl>
 
 </div>
@@ -207,10 +273,10 @@ sherlock wiki [-s &lt;pathToSettingsFile&gt;]</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.update_ned_stream.html" class="btn btn-neutral float-right" title="sherlock.update_ned_stream (module)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.utKit.html" class="btn btn-neutral float-right" title="sherlock.utKit (module)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sherlock.imports.ned_d.html" class="btn btn-neutral" title="sherlock.imports.ned_d (subpackage)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sherlock.imports.html" class="btn btn-neutral" title="sherlock.imports (subpackage)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

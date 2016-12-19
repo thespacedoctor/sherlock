@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#modules">Modules</a></li>
@@ -156,16 +159,58 @@
 <span class="sd">: INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :</span>
 <span class="sd">=============================================================================================</span>
 
+<span class="sd">Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en/stable</span>
+
+<span class="sd">.. todo ::</span>
+
+<span class="sd">    - docuument cl_utils module</span>
+<span class="sd">    - tidy usage text</span>
+
 <span class="sd">Usage:</span>
+<span class="sd">    sherlock init</span>
 <span class="sd">    sherlock match [--update] [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock clean [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock wiki [-s &lt;pathToSettingsFile&gt;]</span>
+<span class="sd">    sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]</span>
+<span class="sd">    sherlock import cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]</span>
+<span class="sd">    sherlock import stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</span>
 
-<span class="sd">    -h, --help            show this help message</span>
-<span class="sd">    -v, --version         show version</span>
-<span class="sd">    -s, --settings        the settings file</span>
-<span class="sd">    -l, --transientlistId          the id of the transient list to classify</span>
-<span class="sd">    -u, --update          update the transient database with new classifications and crossmatches</span>
+<span class="sd">Options:</span>
+<span class="sd">    init                    setup the sherlock settings file for the first time</span>
+<span class="sd">    match                   XXXX</span>
+<span class="sd">    clean                   XXXX</span>
+<span class="sd">    wiki                    XXXX</span>
+<span class="sd">    import                  XXXX</span>
+<span class="sd">    ned                     use the online NED database as the source catalogue</span>
+<span class="sd">    cat                     import a static catalogue into the crossmatch catalogues database</span>
+<span class="sd">    stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database</span>
+
+
+<span class="sd">    ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)</span>
+<span class="sd">    dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)</span>
+<span class="sd">    radiusArcsec            radius in arcsec of the footprint to download from the online NED database</span>
+<span class="sd">    cat_name                name of the catalogue being imported. The following catalogues can be imported:</span>
+<span class="sd">                                * ``veron``: Veron AGN/QSO catalogue</span>
+<span class="sd">                                    http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258</span>
+<span class="sd">                                * ``milliquas``: Million Quasars Catalog</span>
+<span class="sd">                                    http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html</span>
+<span class="sd">                                * ``ned_d``: NED&#39;s Master List of Redshift-Independent Extragalactic Distances</span>
+<span class="sd">                                    https://ned.ipac.caltech.edu/Library/Distances/</span>
+<span class="sd">    stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:</span>
+<span class="sd">                                * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)</span>
+<span class="sd">                                    http://www.das.uchile.cl/~lgalbany/LG/research.html</span>
+
+<span class="sd">    -h, --help              show this help message</span>
+<span class="sd">    -v, --version           show version</span>
+<span class="sd">    -s, --settings          the settings file</span>
+<span class="sd">    -l, --transientlistId   the id of the transient list to classify</span>
+<span class="sd">    -u, --update            update the transient database with new classifications and crossmatches</span>
+
+
+<span class="sd">.. todo ::</span>
+
+<span class="sd">    - document this module</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">################# GLOBAL IMPORTS ####################</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -174,38 +219,34 @@
 <span class="kn">import</span> <span class="nn">readline</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
-<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
-<span class="kn">from</span> <span class="nn">classifier</span> <span class="kn">import</span> <span class="n">classifier</span>
-<span class="kn">from</span> <span class="nn">cleanup_database_tables</span> <span class="kn">import</span> <span class="n">cleanup_database_tables</span>
-<span class="kn">from</span> <span class="nn">commonutils</span> <span class="kn">import</span> <span class="n">update_wiki_pages</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="k">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
+<span class="kn">from</span> <span class="nn">classifier</span> <span class="k">import</span> <span class="n">classifier</span>
+<span class="kn">from</span> <span class="nn">cleanup_database_tables</span> <span class="k">import</span> <span class="n">cleanup_database_tables</span>
+<span class="kn">from</span> <span class="nn">commonutils</span> <span class="k">import</span> <span class="n">update_wiki_pages</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">STDOUT</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">milliquas</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">veron</span> <span class="k">as</span> <span class="n">veronImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">marshall</span> <span class="k">as</span> <span class="n">marshallImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ifs</span> <span class="k">as</span> <span class="n">ifsImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ned_d</span> <span class="k">as</span> <span class="n">nedImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ned</span> <span class="k">as</span> <span class="n">nedStreamImporter</span>
 <span class="c1"># from ..__init__ import *</span>
 
 
-<div class="viewcode-block" id="tab_complete"><a class="viewcode-back" href="../../_autosummary/sherlock.cl_utils.tab_complete.html#sherlock.cl_utils.tab_complete">[docs]</a><span class="k">def</span> <span class="nf">tab_complete</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="bp">None</span><span class="p">])[</span><span class="n">state</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../_autosummary/sherlock.cl_utils.html#sherlock.cl_utils.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../_autosummary/sherlock.cl_utils.html#sherlock.cl_utils.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command*</span>
+<span class="sd">    The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># setup the command-line util settings</span>
     <span class="n">su</span> <span class="o">=</span> <span class="n">tools</span><span class="p">(</span>
         <span class="n">arguments</span><span class="o">=</span><span class="n">arguments</span><span class="p">,</span>
         <span class="n">docString</span><span class="o">=</span><span class="n">__doc__</span><span class="p">,</span>
         <span class="n">logLevel</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
-        <span class="n">options_first</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">options_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">projectName</span><span class="o">=</span><span class="s2">&quot;sherlock&quot;</span>
     <span class="p">)</span>
     <span class="n">arguments</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">dbConn</span> <span class="o">=</span> <span class="n">su</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
-
-    <span class="c1"># tab completion for raw_input</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">set_completer_delims</span><span class="p">(</span><span class="s1">&#39; </span><span class="se">\t\n</span><span class="s1">;&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&quot;tab: complete&quot;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">set_completer</span><span class="p">(</span><span class="n">tab_complete</span><span class="p">)</span>
 
     <span class="c1"># unpack remaining cl arguments using `exec` to setup the variable names</span>
     <span class="c1"># automatically</span>
@@ -214,56 +255,45 @@
             <span class="n">varname</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Flag&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">varname</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
-            <span class="k">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="n">varname</span> <span class="o">==</span> <span class="s2">&quot;import&quot;</span><span class="p">:</span>
+                <span class="n">varname</span> <span class="o">=</span> <span class="s2">&quot;iimport&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">unicode</span><span class="p">):</span>
+            <span class="n">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
+            <span class="n">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
         <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="s2">&quot;--dbConn&quot;</span><span class="p">:</span>
             <span class="n">dbConn</span> <span class="o">=</span> <span class="n">val</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">varname</span><span class="p">,</span> <span class="n">val</span><span class="p">,))</span>
 
     <span class="c1">## START LOGGING ##</span>
-    <span class="n">startTime</span> <span class="o">=</span> <span class="n">dcu</span><span class="o">.</span><span class="n">get_now_sql_datetime</span><span class="p">()</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">get_now_sql_datetime</span><span class="p">()</span>
     <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s1">&#39;--- STARTING TO RUN THE cl_utils.py AT </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
         <span class="p">(</span><span class="n">startTime</span><span class="p">,))</span>
 
-    <span class="c1"># set options interactively if user requests</span>
-    <span class="k">if</span> <span class="s2">&quot;interactiveFlag&quot;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="ow">and</span> <span class="n">interactiveFlag</span><span class="p">:</span>
-
-        <span class="c1"># load previous settings</span>
-        <span class="n">moduleDirectory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/resources&quot;</span>
-        <span class="n">pathToPickleFile</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(moduleDirectory)s</span><span class="s2">/previousSettings.p&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pathToPickleFile</span><span class="p">):</span>
-                <span class="k">pass</span>
-            <span class="n">previousSettingsExist</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">previousSettingsExist</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="n">previousSettings</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">previousSettingsExist</span><span class="p">:</span>
-            <span class="n">previousSettings</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">pathToPickleFile</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
-
-        <span class="c1"># x-raw-input</span>
-        <span class="c1"># x-boolean-raw-input</span>
-        <span class="c1"># x-raw-input-with-default-value-from-previous-settings</span>
-
-        <span class="c1"># save the most recently used requests</span>
-        <span class="n">pickleMeObjects</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">pickleMe</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">theseLocals</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pickleMeObjects</span><span class="p">:</span>
-            <span class="n">pickleMe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">theseLocals</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">pickleMe</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pathToPickleFile</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-
     <span class="c1"># call the worker function</span>
     <span class="c1"># x-if-settings-or-database-credientials</span>
+    <span class="k">if</span> <span class="n">init</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">expanduser</span>
+        <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.config/sherlock/sherlock.yaml&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;open </span><span class="si">%(filepath)s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;start </span><span class="si">%(filepath)s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
 
     <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
         <span class="n">sherlock</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">(</span>
             <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
             <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
-            <span class="n">update</span><span class="o">=</span><span class="n">updateFlag</span>
+            <span class="n">update</span><span class="o">=</span><span class="n">updateFlag</span><span class="p">,</span>
+            <span class="n">transientIdList</span><span class="o">=</span><span class="p">[]</span>
         <span class="p">)</span>
         <span class="n">sherlock</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
@@ -279,12 +309,63 @@
         <span class="p">)</span>
         <span class="n">updateWiki</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
+    <span class="k">if</span> <span class="n">iimport</span> <span class="ow">and</span> <span class="n">ned</span><span class="p">:</span>
+        <span class="n">ned</span> <span class="o">=</span> <span class="n">nedStreamImporter</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+            <span class="n">coordinateList</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%(ra)s</span><span class="s2"> </span><span class="si">%(dec)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()],</span>
+            <span class="n">radiusArcsec</span><span class="o">=</span><span class="n">radiusArcsec</span>
+        <span class="p">)</span>
+        <span class="n">ned</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">iimport</span> <span class="ow">and</span> <span class="n">cat</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cat_name</span> <span class="o">==</span> <span class="s2">&quot;milliquas&quot;</span><span class="p">:</span>
+            <span class="n">catalogue</span> <span class="o">=</span> <span class="n">milliquas</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                <span class="n">pathToDataFile</span><span class="o">=</span><span class="n">pathToDataFile</span><span class="p">,</span>
+                <span class="n">version</span><span class="o">=</span><span class="n">cat_version</span><span class="p">,</span>
+                <span class="n">catalogueName</span><span class="o">=</span><span class="n">cat_name</span>
+            <span class="p">)</span>
+            <span class="n">catalogue</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">cat_name</span> <span class="o">==</span> <span class="s2">&quot;veron&quot;</span><span class="p">:</span>
+            <span class="n">catalogue</span> <span class="o">=</span> <span class="n">veronImporter</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                <span class="n">pathToDataFile</span><span class="o">=</span><span class="n">pathToDataFile</span><span class="p">,</span>
+                <span class="n">version</span><span class="o">=</span><span class="n">cat_version</span><span class="p">,</span>
+                <span class="n">catalogueName</span><span class="o">=</span><span class="n">cat_name</span>
+            <span class="p">)</span>
+            <span class="n">catalogue</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s2">&quot;ned_d&quot;</span> <span class="ow">in</span> <span class="n">cat_name</span><span class="p">:</span>
+            <span class="n">catalogue</span> <span class="o">=</span> <span class="n">nedImporter</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                <span class="n">pathToDataFile</span><span class="o">=</span><span class="n">pathToDataFile</span><span class="p">,</span>
+                <span class="n">version</span><span class="o">=</span><span class="n">cat_version</span><span class="p">,</span>
+                <span class="n">catalogueName</span><span class="o">=</span><span class="n">cat_name</span>
+            <span class="p">)</span>
+            <span class="n">catalogue</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">iimport</span> <span class="ow">and</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;marshall&quot;</span> <span class="ow">in</span> <span class="n">stream_name</span><span class="p">:</span>
+            <span class="n">stream</span> <span class="o">=</span> <span class="n">marshallImporter</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;ifs&quot;</span> <span class="ow">in</span> <span class="n">stream_name</span><span class="p">:</span>
+            <span class="n">stream</span> <span class="o">=</span> <span class="n">ifsImporter</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="n">settings</span>
+            <span class="p">)</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="s2">&quot;dbConn&quot;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="ow">and</span> <span class="n">dbConn</span><span class="p">:</span>
         <span class="n">dbConn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="n">dbConn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="c1">## FINISH LOGGING ##</span>
-    <span class="n">endTime</span> <span class="o">=</span> <span class="n">dcu</span><span class="o">.</span><span class="n">get_now_sql_datetime</span><span class="p">()</span>
-    <span class="n">runningTime</span> <span class="o">=</span> <span class="n">dcu</span><span class="o">.</span><span class="n">calculate_time_difference</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">)</span>
+    <span class="n">endTime</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">get_now_sql_datetime</span><span class="p">()</span>
+    <span class="n">runningTime</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">calculate_time_difference</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">)</span>
     <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;-- FINISHED ATTEMPT TO RUN THE cl_utils.py AT </span><span class="si">%s</span><span class="s1"> (RUNTIME: </span><span class="si">%s</span><span class="s1">) --&#39;</span> <span class="o">%</span>
               <span class="p">(</span><span class="n">endTime</span><span class="p">,</span> <span class="n">runningTime</span><span class="p">,</span> <span class="p">))</span>
 
