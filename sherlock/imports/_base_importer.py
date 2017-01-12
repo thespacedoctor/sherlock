@@ -139,6 +139,9 @@ class _base_importer():
         """
         self.log.info('starting the ``_add_data_to_database_table`` method')
 
+        if len(dictList) == 0:
+            return
+
         # RECURSIVELY CREATE MISSING DIRECTORIES
         if not os.path.exists("/tmp/myinserts/"):
             os.makedirs("/tmp/myinserts/")
@@ -146,6 +149,7 @@ class _base_importer():
             log=self.log,
             listOfDictionaries=dictList
         )
+
         now = datetime.now()
         now = now.strftime("%Y%m%dt%H%M%S")
         filepath = "/tmp/myinserts/" + self.dbTableName + "-" + now + ".sql"
@@ -159,7 +163,7 @@ class _base_importer():
                 "static catalogues"]["db"],
             loginPath=self.settings["database settings"][
                 "static catalogues"]["loginPath"],
-            successRule="success",
+            successRule="delete",
             failureRule="failed"
         )
 
@@ -176,7 +180,8 @@ class _base_importer():
         self.log.info('starting the ``add_htmids_to_database_table`` method')
 
         tableName = self.dbTableName
-        print "Adding HTMIds to %(tableName)s" % locals()
+
+        self.log.info("Adding HTMIds to %(tableName)s" % locals())
 
         add_htm_ids_to_mysql_database_table(
             raColName=self.raColName,

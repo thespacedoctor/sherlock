@@ -18,7 +18,7 @@ from astrocalc.coords import unit_conversion
 from HMpTy.mysql import conesearch as hmptyConesearch
 
 
-class conesearch():
+class catalogue_conesearch():
     """
     *The worker class for the conesearch module*
 
@@ -52,8 +52,6 @@ class conesearch():
             usage code   
     """
     # Initialisation
-    # 1. @flagged: what are the unique attrributes for each object? Add them
-    # to __init__
 
     def __init__(
             self,
@@ -95,7 +93,7 @@ class conesearch():
 
         return None
 
-    def match(self):
+    def search(self):
         """
         *match the conesearch object*
 
@@ -113,41 +111,44 @@ class conesearch():
 
             usage code 
         """
-        self.log.info('starting the ``match`` method')
+        self.log.info('starting the ``search`` method')
 
         # ACCOUNT FOR TYPE OF SEARCH
         sqlWhere = False
+        disCols = ["zColName",
+                   "distanceColName", "semiMajorColName"]
+        sqlWhere = ""
         if self.physicalSearch == False and self.transType == "SN":
-            sqlWhere = ""
-            if self.colMaps[self.tableName]["redshiftColName"]:
-                sqlWhere += " and %s is null" % (
-                    self.colMaps[self.tableName]["redshiftColName"],)
-            if self.colMaps[self.tableName]["distanceColName"]:
-                sqlWhere += " and %s is null" % (
-                    self.colMaps[self.tableName]["distanceColName"],)
-            if self.colMaps[self.tableName]["semiMajorColName"]:
-                sqlWhere += " and %s is null" % (
-                    self.colMaps[self.tableName]["semiMajorColName"],)
+            for d in disCols:
+                colName = self.colMaps[self.tableName][d]
+                if colName:
+                    sqlWhere += " and `%(colName)s` is null" % locals()
 
         elif self.physicalSearch == True:
-            sqlWhere = ""
-            if self.colMaps[self.tableName]["redshiftColName"]:
-                sqlWhere += " or %s is not null" % (
-                    self.colMaps[self.tableName]["redshiftColName"],)
-            if self.colMaps[self.tableName]["distanceColName"]:
-                sqlWhere += " or %s is not null" % (
-                    self.colMaps[self.tableName]["distanceColName"],)
-            if self.colMaps[self.tableName]["semiMajorColName"]:
-                sqlWhere += " or %s is not null" % (
-                    self.colMaps[self.tableName]["semiMajorColName"],)
+            for d in disCols:
+                colName = self.colMaps[self.tableName][d]
+                if colName:
+                    sqlWhere += " or `%(colName)s` is not null" % locals()
             if len(sqlWhere):
                 sqlWhere = " and (" + sqlWhere[4:] + ")"
+
+        if sqlWhere and " and" == sqlWhere[0:4]:
+            sqlWhere = sqlWhere[5:]
+
+        # THE COLUMN MAP LIFTED FROM ``tcs_helper_catalogue_tables_info` TABLE
+        # IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')
+        columns = {}
+        for k, v in self.colMaps[self.tableName].iteritems():
+            name = k.replace("ColName", "")
+            if "colname" in k.lower() and v:
+                columns[k] = "`%(v)s` as `%(name)s`" % locals()
+        columns = ", ".join(columns.values())
 
         cs = hmptyConesearch(
             log=self.log,
             dbConn=self.dbConn,
             tableName=self.tableName,
-            columns="*",
+            columns=columns,
             ra=self.ra,
             dec=self.dec,
             radiusArcsec=self.radius,
@@ -155,18 +156,12 @@ class conesearch():
             distinct=False,
             sqlWhere=sqlWhere,
             closest=self.nearestOnly,
-            raCol=self.colMaps[self.tableName]["raColName"],
-            decCol=self.colMaps[self.tableName]["decColName"],
+            raCol="ra",
+            decCol="dec",
         )
         matchIndies, matches = cs.search()
 
-        print matchIndies, matches.list
-
-        self.log.info('completed the ``match`` method')
+        self.log.info('completed the ``search`` method')
         return matchIndies, matches
 
     # xt-class-method
-
-    # 5. @flagged: what actions of the base class(es) need ammending? ammend them here
-    # Override Method Attributes
-    # method-override-tmpx

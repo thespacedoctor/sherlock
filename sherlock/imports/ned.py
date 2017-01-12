@@ -168,6 +168,11 @@ class ned(_base_importer):
         """
         self.log.info('starting the ``_update_ned_query_history`` method')
 
+        # ASTROCALC UNIT CONVERTER OBJECT
+        converter = unit_conversion(
+            log=self.log
+        )
+
         createStatement = """CREATE TABLE IF NOT EXISTS `tcs_helper_ned_query_history` (
   `primaryId` bigint(20) NOT NULL AUTO_INCREMENT,
   `raDeg` double DEFAULT NULL,
@@ -199,11 +204,22 @@ class ned(_base_importer):
             elif isinstance(coord, tuple) or isinstance(coord, list):
                 ra = coord[0]
                 dec = coord[1]
+
+            ra = converter.ra_sexegesimal_to_decimal(
+                ra=ra
+            )
+            dec = converter.dec_sexegesimal_to_decimal(
+                dec=dec
+            )
+
             dataList.append(
                 {"raDeg": ra,
                  "decDeg": dec,
                  "arcsecRadius": self.radiusArcsec}
             )
+
+        if len(dataList) == 0:
+            return None
 
         dataSet = list_of_dictionaries(
             log=self.log,
@@ -248,7 +264,9 @@ class ned(_base_importer):
         self.log.info('starting the ``_download_ned_source_metadata`` method')
 
         total, batches = self._count_ned_sources_in_database_requiring_metadata()
-        print "%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals()
+
+        self.log.info(
+            "%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals())
 
         totalBatches = self.batches
         thisCount = 0

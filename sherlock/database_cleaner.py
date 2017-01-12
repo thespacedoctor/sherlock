@@ -8,10 +8,6 @@
 
 :Date Created:
     November 18, 2016
-
-.. todo ::
-
-    - document this module
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -22,121 +18,24 @@ import glob
 import pickle
 from fundamentals import tools, times
 from docopt import docopt
-# from ..__init__ import *
+from fundamentals.mysql import readquery, writequery
 
 
-def tab_complete(text, state):
-    return (glob.glob(text + '*') + [None])[state]
+class database_cleaner():
 
-
-def main(arguments=None):
-    """
-    The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command
-    """
-    # setup the command-line util settings
-    su = tools(
-        arguments=arguments,
-        docString=__doc__,
-        logLevel="DEBUG",
-        options_first=False
-    )
-    arguments, settings, log, dbConn = su.setup()
-
-    # tab completion for raw_input
-    readline.set_completer_delims(' \t\n;')
-    readline.parse_and_bind("tab: complete")
-    readline.set_completer(tab_complete)
-
-    # unpack remaining cl arguments using `exec` to setup the variable names
-    # automatically
-    for arg, val in arguments.iteritems():
-        if arg[0] == "-":
-            varname = arg.replace("-", "") + "Flag"
-        else:
-            varname = arg.replace("<", "").replace(">", "")
-        if isinstance(val, str) or isinstance(val, unicode):
-            exec(varname + " = '%s'" % (val,))
-        else:
-            exec(varname + " = %s" % (val,))
-        if arg == "--dbConn":
-            dbConn = val
-        log.debug('%s = %s' % (varname, val,))
-
-    ## START LOGGING ##
-    startTime = times.get_now_sql_datetime()
-    log.info(
-        '--- STARTING TO RUN THE cleanup_database_tables.py AT %s' %
-        (startTime,))
-
-    # set options interactively if user requests
-    if "interactiveFlag" in locals() and interactiveFlag:
-
-        # load previous settings
-        moduleDirectory = os.path.dirname(__file__) + "/resources"
-        pathToPickleFile = "%(moduleDirectory)s/previousSettings.p" % locals()
-        try:
-            with open(pathToPickleFile):
-                pass
-            previousSettingsExist = True
-        except:
-            previousSettingsExist = False
-        previousSettings = {}
-        if previousSettingsExist:
-            previousSettings = pickle.load(open(pathToPickleFile, "rb"))
-
-        # x-raw-input
-        # x-boolean-raw-input
-        # x-raw-input-with-default-value-from-previous-settings
-
-        # save the most recently used requests
-        pickleMeObjects = []
-        pickleMe = {}
-        theseLocals = locals()
-        for k in pickleMeObjects:
-            pickleMe[k] = theseLocals[k]
-        pickle.dump(pickleMe, open(pathToPickleFile, "wb"))
-
-    # call the worker function
-    # x-if-settings-or-database-credientials
-    cleanup_database_tables(
-        log=log,
-        settings=settings
-    )
-
-    if "dbConn" in locals() and dbConn:
-        dbConn.commit()
-        dbConn.close()
-    ## FINISH LOGGING ##
-    endTime = times.get_now_sql_datetime()
-    runningTime = times.calculate_time_difference(startTime, endTime)
-    log.info('-- FINISHED ATTEMPT TO RUN THE cleanup_database_tables.py AT %s (RUNTIME: %s) --' %
-             (endTime, runningTime, ))
-
-    return
-
-
-###################################################################
-# CLASSES                                                         #
-###################################################################
-class cleanup_database_tables():
-
-    """
-    The worker class for the cleanup_database_tables module
+    """*Clean and maintain the database helper tables used by sherlock*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
 
+    .. todo::
 
-    **Todo**
-        - @review: when complete, clean cleanup_database_tables class
-        - @review: when complete add logging
-        - @review: when complete, decide whether to abstract class to another module
+        - add snippets
+        - add usage
     """
     # Initialisation
-    # 1. @flagged: what are the unique attrributes for each object? Add them
-    # to __init__
 
     def __init__(
             self,
@@ -145,18 +44,11 @@ class cleanup_database_tables():
 
     ):
         self.log = log
-        log.debug("instansiating a new 'cleanup_database_tables' object")
+        log.debug("instansiating a new 'database_cleaner' object")
         self.settings = settings
         # xt-self-arg-tmpx
 
-        # 2. @flagged: what are the default attrributes each object could have? Add them to variable attribute set here
-        # Variable Data Atrributes
-
-        # 3. @flagged: what variable attrributes need overriden in any baseclass(es) used
-        # Override Variable Data Atrributes
-
-        # Initial Actions
-        # SETUP ALL DATABASE CONNECTIONS
+        # INITIAL ACTIONS# Initial Actions
         # SETUP ALL DATABASE CONNECTIONS
         from sherlock import database
         db = database(
@@ -170,21 +62,8 @@ class cleanup_database_tables():
 
         return None
 
-    def close(self):
-        del self
-        return None
-
-    # 4. @flagged: what actions does each object have to be able to perform? Add them here
-    # Method Attributes
-    def get(self):
-        """get the cleanup_database_tables object
-
-        **Return:**
-            - ``cleanup_database_tables``
-
-        **Todo**
-            - @review: when complete, clean get method
-            - @review: when complete add logging
+    def clean(self):
+        """*clean up and run some maintance tasks on the crossmatch catalogue helper tables
         """
         self.log.info('starting the ``get`` method')
 
@@ -194,21 +73,11 @@ class cleanup_database_tables():
         self._update_tcs_helper_catalogue_views_info_with_new_views()
 
         self.log.info('completed the ``get`` method')
-        return cleanup_database_tables
+        return None
 
     def _updated_row_counts_in_tcs_helper_catalogue_tables_info(
             self):
         """ updated row counts in tcs catalogue tables
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean _updated_row_counts_in_tcs_helper_catalogue_tables_info method
-            - @review: when complete add logging
         """
         self.log.info(
             'starting the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
@@ -263,20 +132,9 @@ class cleanup_database_tables():
             'completed the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
         return None
 
-    # use the tab-trigger below for new method
     def _update_tcs_helper_catalogue_tables_info_with_new_tables(
             self):
-        """ update tcs helper catalogue tables info with new tables
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean _update_tcs_helper_catalogue_tables_info_with_new_tables method
-            - @review: when complete add logging
+        """update tcs helper catalogue tables info with new tables
         """
         self.log.info(
             'starting the ``_update_tcs_helper_catalogue_tables_info_with_new_tables`` method')
@@ -342,20 +200,9 @@ class cleanup_database_tables():
             'completed the ``_update_tcs_helper_catalogue_tables_info_with_new_tables`` method')
         return None
 
-    # use the tab-trigger below for new method
     def _clean_up_columns(
             self):
         """clean up columns
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean _clean_up_columns method
-            - @review: when complete add logging
         """
         self.log.info('starting the ``_clean_up_columns`` method')
 
@@ -415,8 +262,6 @@ class cleanup_database_tables():
             table_name = ("_").join(table_name)
             table_name = "tcs_cat_%(table_name)s" % locals()
 
-            print table_name
-
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set table_id = (select id from tcs_helper_catalogue_tables_info where table_name = "%(table_name)s") where view_name = "%(view_name)s"
             """ % locals()
@@ -429,20 +274,9 @@ class cleanup_database_tables():
         self.log.info('completed the ``_clean_up_columns`` method')
         return None
 
-    # use the tab-trigger below for new method
     def _update_tcs_helper_catalogue_views_info_with_new_views(
             self):
         """ update tcs helper catalogue tables info with new tables
-
-        **Key Arguments:**
-            # -
-
-        **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean _update_tcs_helper_catalogue_views_info_with_new_views method
-            - @review: when complete add logging
         """
         self.log.info(
             'starting the ``_update_tcs_helper_catalogue_views_info_with_new_views`` method')
@@ -510,25 +344,3 @@ class cleanup_database_tables():
 
     # use the tab-trigger below for new method
     # xt-class-method
-
-    # 5. @flagged: what actions of the base class(es) need ammending? ammend them here
-    # Override Method Attributes
-    # method-override-tmpx
-
-# xt-class-tmpx
-
-
-###################################################################
-# PUBLIC FUNCTIONS                                                #
-###################################################################
-# xt-worker-def
-
-# use the tab-trigger below for new function
-# xt-def-with-logger
-
-###################################################################
-# PRIVATE (HELPER) FUNCTIONS                                      #
-###################################################################
-
-if __name__ == '__main__':
-    main()

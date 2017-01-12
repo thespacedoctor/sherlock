@@ -49,19 +49,7 @@ def get_crossmatch_catalogues_column_map(
     # GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE
     sqlQuery = u"""
         SELECT 
-            view_name,
-            raColName,
-            decColName,
-            object_type,
-            subTypeColName,
-            objectNameColName,
-            redshiftColName,
-            distanceColName,
-            semiMajorColName,
-            semiMajorToArcsec,
-            table_id,
-            table_name,
-            object_type_accuracy
+            *
         FROM
             tcs_helper_catalogue_views_info v,
             tcs_helper_catalogue_tables_info t

@@ -1,7 +1,7 @@
 import utKit
 import cl_utils
-from classifier import classifier
 from database import database
-from _crossmatcher import crossmatcher
-from cleanup_database_tables import cleanup_database_tables
-from conesearch import conesearch
+from database_cleaner import database_cleaner
+from catalogue_conesearch import catalogue_conesearch
+from transient_catalogue_crossmatch import transient_catalogue_crossmatch
+from transient_classifier import transient_classifier

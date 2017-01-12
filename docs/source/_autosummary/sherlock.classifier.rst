@@ -1,23 +1,7 @@
-sherlock.classifier (*class*)
+sherlock.classifier (*module*)
 ===================
 
-.. currentmodule:: sherlock
 
-.. autoclass:: classifier
+.. automodule:: sherlock.classifier
+    :members:
 
-   
-   .. automethod:: __init__
-
-   
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-      ~classifier.__init__
-      ~classifier.get
-   
-   
-
-   
-   
-   

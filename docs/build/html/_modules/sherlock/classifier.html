@@ -181,6 +181,7 @@
 <span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
 <span class="kn">from</span> <span class="nn">astrocalc.coords</span> <span class="k">import</span> <span class="n">separations</span>
 <span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ned</span>
+<span class="kn">from</span> <span class="nn">sherlock.commonutils</span> <span class="k">import</span> <span class="n">get_crossmatch_catalogues_column_map</span>
 
 
 <div class="viewcode-block" id="classifier"><a class="viewcode-back" href="../../_autosummary/sherlock.classifier.html#sherlock.classifier.classifier">[docs]</a><span class="k">class</span> <span class="nc">classifier</span><span class="p">():</span>
@@ -235,7 +236,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``get`` method&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_crossmatch_table_if_not_existing</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_grab_column_name_map_from_database</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span> <span class="o">=</span> <span class="n">get_crossmatch_catalogues_column_map</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span>
+        <span class="p">)</span>
 
         <span class="c1"># CHOOSE METHOD TO GRAB TRANSIENT METADATA BEFORE CLASSIFICATION</span>
         <span class="c1"># EITHER LIST OF IDS, OR A STREAM FROM THE DATABASE</span>
@@ -575,34 +579,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_update_ned_stream`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_grab_column_name_map_from_database</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; grab column name map from database</span>
-
-<span class="sd">        **Return:**</span>
-<span class="sd">            - None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s1">&#39;starting the ``_grab_column_name_map_from_database`` method&#39;</span><span class="p">)</span>
-
-        <span class="c1"># GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE</span>
-        <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
-<span class="s2">            select view_name, raColName, decColName, object_type, subTypeColName, objectNameColName, redshiftColName, distanceColName, semiMajorColName, semiMajorToArcsec, table_id, table_name, object_type_accuracy from tcs_helper_catalogue_views_info v, tcs_helper_catalogue_tables_info t where v.table_id = t.id</span>
-<span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
-        <span class="n">rows</span> <span class="o">=</span> <span class="n">readquery</span><span class="p">(</span>
-            <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
-            <span class="n">sqlQuery</span><span class="o">=</span><span class="n">sqlQuery</span><span class="p">,</span>
-            <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
-            <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">colMaps</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;view_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">row</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s1">&#39;completed the ``_grab_column_name_map_from_database`` method&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span>
-
     <span class="k">def</span> <span class="nf">_create_crossmatch_table_if_not_existing</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create crossmatch table if it does not yet exist in the transients database</span>
@@ -759,7 +735,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Dave Young.
+        &copy; Copyright 2017, Dave Young.
 
     </p>
   </div>

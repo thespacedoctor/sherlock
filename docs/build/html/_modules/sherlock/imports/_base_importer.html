@@ -293,6 +293,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_add_data_to_database_table`` method&#39;</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dictList</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
         <span class="c1"># RECURSIVELY CREATE MISSING DIRECTORIES</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/tmp/myinserts/&quot;</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;/tmp/myinserts/&quot;</span><span class="p">)</span>
@@ -300,6 +303,7 @@
             <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
             <span class="n">listOfDictionaries</span><span class="o">=</span><span class="n">dictList</span>
         <span class="p">)</span>
+
         <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">t%H%M%S&quot;</span><span class="p">)</span>
         <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;/tmp/myinserts/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">now</span> <span class="o">+</span> <span class="s2">&quot;.sql&quot;</span>
@@ -330,7 +334,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``add_htmids_to_database_table`` method&#39;</span><span class="p">)</span>
 
         <span class="n">tableName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbTableName</span>
-        <span class="nb">print</span> <span class="s2">&quot;Adding HTMIds to </span><span class="si">%(tableName)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding HTMIds to </span><span class="si">%(tableName)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
 
         <span class="n">add_htm_ids_to_mysql_database_table</span><span class="p">(</span>
             <span class="n">raColName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">raColName</span><span class="p">,</span>
@@ -378,7 +383,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Dave Young.
+        &copy; Copyright 2017, Dave Young.
 
     </p>
   </div>

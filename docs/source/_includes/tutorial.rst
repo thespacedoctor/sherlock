@@ -27,3 +27,17 @@ Use `mysql_config_editor print --all` to see all of the login-paths set.
 .. todo::
 
     - add tutorial
+
+
+Adding a New Catalogue to the Sherlock Crossmatch Catalogues Database
+---------------------------------------------------------------------
+
+.. todo::
+
+    - add steps for adding a catalogue to the database and the search algorithm
+
+
+Column Maps
+^^^^^^^^^^^
+
+THE COLUMN MAP LIFTED FROM ``tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')

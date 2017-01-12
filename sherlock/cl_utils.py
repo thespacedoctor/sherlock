@@ -14,6 +14,7 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 
 Usage:
     sherlock init
+    sherlock <ra> <dec> [-s <pathToSettingsFile>]
     sherlock match [--update] [-s <pathToSettingsFile>]
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
@@ -68,7 +69,7 @@ import pickle
 from docopt import docopt
 from fundamentals import tools, times
 from classifier import classifier
-from cleanup_database_tables import cleanup_database_tables
+from database_cleaner import database_cleaner
 from commonutils import update_wiki_pages
 from subprocess import Popen, PIPE, STDOUT
 from sherlock.imports import milliquas
@@ -77,6 +78,7 @@ from sherlock.imports import marshall as marshallImporter
 from sherlock.imports import ifs as ifsImporter
 from sherlock.imports import ned_d as nedImporter
 from sherlock.imports import ned as nedStreamImporter
+from sherlock import transient_classifier
 # from ..__init__ import *
 
 
@@ -89,7 +91,7 @@ def main(arguments=None):
         arguments=arguments,
         docString=__doc__,
         logLevel="DEBUG",
-        options_first=True,
+        options_first=False,
         projectName="sherlock"
     )
     arguments, settings, log, dbConn = su.setup()
@@ -135,15 +137,15 @@ def main(arguments=None):
             pass
 
     if match:
-        sherlock = classifier(
+        classifier = transient_classifier(
             log=log,
             settings=settings,
-            update=updateFlag,
-            transientIdList=[]
+            update=updateFlag
         )
-        sherlock.get()
+        classifier.classify()
+
     if clean:
-        cleaner = cleanup_database_tables(
+        cleaner = database_cleaner(
             log=log,
             settings=settings
         )
@@ -205,6 +207,16 @@ def main(arguments=None):
                 settings=settings
             )
             stream.ingest()
+    if not init and not match and not clean and not wiki and not iimport:
+
+        classifier = transient_classifier.transient_classifier(
+            log=log,
+            settings=settings,
+            ra=ra,
+            dec=dec,
+            name="PS17gx"
+        )
+        classifier.classify()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()

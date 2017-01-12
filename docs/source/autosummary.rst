@@ -19,6 +19,7 @@ Modules
    :nosignatures:
 
    sherlock.cl_utils
+   sherlock.classifier
    sherlock.utKit 
 
 Classes
@@ -28,10 +29,11 @@ Classes
    :toctree: _autosummary
    :nosignatures:
 
-   sherlock.classifier
-   sherlock.cleanup_database_tables
-   sherlock.conesearch
+   sherlock.catalogue_conesearch
    sherlock.database
+   sherlock.database_cleaner
+   sherlock.transient_catalogue_crossmatch
+   sherlock.transient_classifier
    sherlock.commonutils.update_wiki_pages
    sherlock.imports.ifs
    sherlock.imports.marshall
@@ -39,6 +41,7 @@ Classes
    sherlock.imports.ned
    sherlock.imports.ned_d
    sherlock.imports.veron
+   sherlock.classifier.classifier
    sherlock.utKit.utKit 
 
 Functions

@@ -57,7 +57,6 @@ class test_get_crossmatch_catalogues_column_map():
             log=log,
             dbConn=dbConn
         )
-        print colMaps
 
     def test_get_crossmatch_catalogues_column_map_function_exception(self):
 

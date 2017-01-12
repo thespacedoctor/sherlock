@@ -17,6 +17,7 @@ Command-Line Usage
     
     Usage:
         sherlock init
+        sherlock <ra> <dec> [-s <pathToSettingsFile>]
         sherlock match [--update] [-s <pathToSettingsFile>]
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]

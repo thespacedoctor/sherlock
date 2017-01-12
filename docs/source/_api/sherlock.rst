@@ -19,10 +19,11 @@ Submodules
 
 .. toctree::
 
+   sherlock.catalogue_conesearch
    sherlock.cl_utils
-   sherlock.classifier
-   sherlock.cleanup_database_tables
-   sherlock.conesearch
    sherlock.database
+   sherlock.database_cleaner
+   sherlock.transient_catalogue_crossmatch
+   sherlock.transient_classifier
    sherlock.utKit
 
