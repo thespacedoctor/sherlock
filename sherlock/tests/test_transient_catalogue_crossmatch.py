@@ -130,30 +130,30 @@ class test_transient_catalogue_crossmatch():
         )
         search_name = "ned_d spec sn"
         searchPara = sa[search_name]
-        searchDone, matchedObjects = this.angular_crossmatch_against_catalogue(
+        matchedObjects = this.angular_crossmatch_against_catalogue(
             objectList=transients,
             searchPara=searchPara,
             search_name=search_name
         )
-        print searchDone, matchedObjects
+        print matchedObjects
 
         search_name = "ned phot sn"
         searchPara = sa[search_name]
-        searchDone, matchedObjects = this.angular_crossmatch_against_catalogue(
+        matchedObjects = this.angular_crossmatch_against_catalogue(
             objectList=transients,
             searchPara=searchPara,
             search_name=search_name
         )
-        print searchDone, matchedObjects
+        print matchedObjects
 
         search_name = "ned phot other"
         searchPara = sa[search_name]
-        searchDone, matchedObjects = this.angular_crossmatch_against_catalogue(
+        matchedObjects = this.angular_crossmatch_against_catalogue(
             objectList=transients,
             searchPara=searchPara,
             search_name=search_name
         )
-        print searchDone, matchedObjects
+        print matchedObjects
 
     def test_transient_catalogue_phyiscal_crossmatch_search_catalogue_function(self):
 
@@ -167,21 +167,21 @@ class test_transient_catalogue_crossmatch():
         )
         search_name = "ned spec sn"
         searchPara = sa[search_name]
-        searchDone, matchedObjects = this.physical_separation_crossmatch_against_catalogue(
+        matchedObjects = this.physical_separation_crossmatch_against_catalogue(
             objectList=transients,
             searchPara=searchPara,
             search_name=search_name
         )
-        print searchDone, matchedObjects
+        print matchedObjects
 
         search_name = "sdss spec sn"
         searchPara = sa[search_name]
-        searchDone, matchedObjects = this.physical_separation_crossmatch_against_catalogue(
+        matchedObjects = this.physical_separation_crossmatch_against_catalogue(
             objectList=transients,
             searchPara=searchPara,
             search_name=search_name
         )
-        print searchDone, matchedObjects
+        print matchedObjects
 
     def test_transient_catalogue_crossmatch_function_exception(self):
 

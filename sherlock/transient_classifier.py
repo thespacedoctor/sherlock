@@ -147,28 +147,43 @@ class transient_classifier():
             transientsMetadataList=transientsMetadataList
         )
 
-        # RUN THE CROSSMATCH CLASSIFIER FOR ALL TRANSIENTS
-        # BULKER1 - could split transients into lists of 50, should first order
-        # by ra. A database write should be fired with every batch
-        classifications = self._crossmatch_transients_against_catalogues(
-            colMaps=colMaps,
-            transientsMetadataList=transientsMetadataList
-        )
+        batchSize = 10
+        total = len(transientsMetadataList[1:])
+        batches = int(total / batchSize)
 
-        # for c in classifications[0]["crossmatches"]:
-        #     for k, v in c.iteritems():
-        #         print k, v
-        #     print
+        start = 0
+        end = 0
+        theseBatches = []
+        for i in range(batches + 1):
+            end = end + batchSize
+            start = i * batchSize
+            thisBatch = transientsMetadataList[start:end]
+            theseBatches.append(thisBatch)
 
-        # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
-        # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
-        # TABLE)
-        if self.update:
-            self._update_transient_database(
-                classifications=classifications,
-                transientsMetadataList=transientsMetadataList,
-                colMaps=colMaps
+        count = 1
+        for batch in theseBatches:
+            print "BATCH %(count)s " % locals()
+            count += 1
+            # RUN THE CROSSMATCH CLASSIFIER FOR ALL TRANSIENTS
+            classifications = self._crossmatch_transients_against_catalogues(
+                colMaps=colMaps,
+                transientsMetadataList=batch
             )
+
+            # for c in classifications[0]["crossmatches"]:
+            #     for k, v in c.iteritems():
+            #         print k, v
+            #     print
+
+            # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
+            # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
+            # TABLE)
+            if self.update:
+                self._update_transient_database(
+                    classifications=classifications,
+                    transientsMetadataList=batch,
+                    colMaps=colMaps
+                )
 
         self.log.info('completed the ``classify`` method')
         return None

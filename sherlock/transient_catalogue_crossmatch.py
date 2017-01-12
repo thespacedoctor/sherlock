@@ -100,102 +100,48 @@ class transient_catalogue_crossmatch():
 
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         allCatalogueMatches = []
-        # BULKER2 - I could remove this loop of transients are throw them
-        # directly at physical_separation_crossmatch_against_catalogue anf
-        # angular_crossmatch_against_catalogue
-        for thisIndex, transientMetaDict in enumerate(self.transients):
 
-            tId = transientMetaDict['id']
-            tName = transientMetaDict['name']
-
-            # RESET MATCH VALUES
-            match = False  # SET TO TRUE WHENEVER A MATCH IS FIRST FOUND
-            # THE LIST OF OBJECTS FOUND ASSOCIATED WITH THE SOURCE
-            matches = []
-
-            # SET TO TRUE WHENEVER WE WANT TO TERMINATE THE SEARCH
-            searchDone = False
-            self.stopAlgoritm = False
-
-            # PRINT A STATUS UPDATE
-            count += 1
-            if count > 1:
-                # CURSOR UP ONE LINE AND CLEAR LINE
-                sys.stdout.write("\x1b[1A\x1b[2K")
-            thisCount = thisIndex + 1
-            message = "Classifying object `%(tName)s` [%(thisCount)s/%(numberOfTransients)d]" % locals(
-            )
-            print message
-            self.log.info('\n\n\nmessage: %(message)s' % locals())
-
-            # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
-            # PRESENTED IN THE SETTINGS FILE
-            # BULKER3 - send batch of transients to algorithm, searchDone may
-            # have to become a list
-            for search_name, searchPara in sa.iteritems():
-                self.log.info("""  searching: %(search_name)s""" % locals())
-                if "physical radius kpc" in searchPara:
-                    search_name = search_name + " physical"
-                    # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.info(
-                        'checking physical distance crossmatches in %(search_name)s' % locals())
-                    searchDone, catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
-                        objectList=[transientMetaDict],
-                        searchPara=searchPara,
-                        search_name=search_name
-                    )
-                else:
-                    # THE ANGULAR SEPARATION SEARCHES
-                    self.log.info(
-                        'Crossmatching against %(search_name)s' % locals())
-                    search_name = search_name + " angular"
-                    # RENAMED from searchCatalogue
-                    searchDone, catalogueMatches = self.angular_crossmatch_against_catalogue(
-                        objectList=[transientMetaDict],
-                        searchPara=searchPara,
-                        search_name=search_name
-                    )
-
-                # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
-                if searchDone and catalogueMatches:
-                    self.log.info("     match found for %(tName)s" % locals())
-                    match = True
-                    # @action update objectType -- it gets overwritten with each subsequent search
-                    objectType = searchPara["transient classification"]
-                    allCatalogueMatches = allCatalogueMatches + catalogueMatches
-
-                    if "stop algorithm on match" in searchPara and searchPara["stop algorithm on match"] == True:
-                        self.stopAlgoritm = True
-                        self.log.info(
-                            "     stopping algorithm for %(tName)s" % locals())
-                        break
-
-            # IF NO MATCH IS FOUND THEN WE HAVE AN 'ORPHAN'
-            if not match:
+        # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
+        # PRESENTED IN THE SETTINGS FILE
+        for search_name, searchPara in sa.iteritems():
+            self.log.info("""  searching: %(search_name)s""" % locals())
+            if "physical radius kpc" in searchPara:
+                search_name = search_name + " physical"
+                # THE PHYSICAL SEPARATION SEARCHES
                 self.log.info(
-                    "   %(tName)s classified as an orphan" % locals())
-                objectType = "ORPHAN"
-
-            # PERFORM ANY SUPPLIMENTARY SEARCHES
-            ss = self.settings["supplementary search"]
-            for search_name, searchPara in ss.iteritems():
-                self.log.info("""  searching: %(search_name)s""" % locals())
-                searchDone, supMatches = self.angular_crossmatch_against_catalogue(
-                    objectList=[transientMetaDict],
+                    'checking physical distance crossmatches in %(search_name)s' % locals())
+                catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
+                    objectList=self.transients,
                     searchPara=searchPara,
                     search_name=search_name
                 )
-                if searchDone and supMatches:
-                    self.log.info("     match found for %(tName)s" % locals())
-                    objectType = objectType + \
-                        searchPara["transient classification"]
-                    allCatalogueMatches = allCatalogueMatches + supMatches
+            else:
+                # THE ANGULAR SEPARATION SEARCHES
+                self.log.info(
+                    'Crossmatching against %(search_name)s' % locals())
+                search_name = search_name + " angular"
+                # RENAMED from searchCatalogue
+                catalogueMatches = self.angular_crossmatch_against_catalogue(
+                    objectList=self.transients,
+                    searchPara=searchPara,
+                    search_name=search_name
+                )
 
-            # ADD DETAILS TO THE lOGS
-            oldClass = transientMetaDict['object_classification']
-            newClass = objectType
-            self.log.info(
-                """%(transientMetaDict)s:  *** Object ID = %(tId)s (%(tName)s): CLASSIFICATION = %(newClass)s (PREVIOUSLY = %(oldClass)s)""" % locals())
+            # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
+            if catalogueMatches:
+                allCatalogueMatches = allCatalogueMatches + catalogueMatches
+
+        # PERFORM ANY SUPPLIMENTARY SEARCHES
+        ss = self.settings["supplementary search"]
+        for search_name, searchPara in ss.iteritems():
+            self.log.info("""  searching: %(search_name)s""" % locals())
+            supMatches = self.angular_crossmatch_against_catalogue(
+                objectList=self.transients,
+                searchPara=searchPara,
+                search_name=search_name
+            )
+            if supMatches:
+                allCatalogueMatches = allCatalogueMatches + supMatches
 
         self.log.info('completed the ``match`` method')
         return allCatalogueMatches
@@ -216,7 +162,6 @@ class transient_catalogue_crossmatch():
             - ``physicalSearch`` -- is this angular search a sub-part of a physical separation search
 
          **Return:**
-            - searchDone -- did search complete successfully
             - matchedObjects -- any sources matched against the object
 
         **Usage:**
@@ -268,7 +213,7 @@ class transient_catalogue_crossmatch():
                 # ANGULAR CONESEARCH ON CATALOGUE
                 search_name = "ned_d spec sn"
                 searchPara = self.settings["search algorithm"][search_name]
-                searchDone, matchedObjects = xmatcher.angular_crossmatch_against_catalogue(
+                matchedObjects = xmatcher.angular_crossmatch_against_catalogue(
                     objectList=transients,
                     searchPara=searchPara,
                     search_name=search_name
@@ -286,73 +231,74 @@ class transient_catalogue_crossmatch():
         # VARIABLES
         matchedObjects = []
         matchSubset = []
-        searchDone = True
 
-        # FOR EACH TRANSIENT IN THE LIST, DO A CROSSMATCH AGAINST THIS DATABASE
-        # VIEW/TABLE
-        """
-        .. todo::
+        transRAs = []
+        transRAs[:] = [t['ra'] for t in objectList]
+        transDecs = []
+        transDecs[:] = [t['dec'] for t in objectList]
 
-            - the catalogue_conesearch method can take a list of coordinates not just single coordinates. Integrate lists.
-        """
-        # BULKER5 - do not loop over transient, but pass entire list
-        for transientMetaDict in objectList:
+        cs = catalogue_conesearch(
+            log=self.log,
+            ra=transRAs,
+            dec=transDecs,
+            radius=radius,
+            colMaps=self.colMaps,
+            tableName=catalogueName,
+            dbConn=self.dbConn,
+            settings=self.settings,
+            nearestOnly=False,
+            physicalSearch=physicalSearch,
+            transType=searchPara["transient classification"]
+        )
+        # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
+        indices, catalogueMatches = cs.search()
+        count = 1
+        annotatedcatalogueMatches = []
+        for i, xm in zip(indices, catalogueMatches):
 
-            cs = catalogue_conesearch(
-                log=self.log,
-                ra=transientMetaDict['ra'],
-                dec=transientMetaDict['dec'],
-                radius=radius,
-                colMaps=self.colMaps,
-                tableName=catalogueName,
-                dbConn=self.dbConn,
-                settings=self.settings,
-                nearestOnly=False,
-                physicalSearch=physicalSearch,
-                transType=searchPara["transient classification"]
+            # CALCULATE PHYSICAL PARAMETERS ... IF WE CAN
+            if "cmSepArcsec" in xm:
+                xm["separationArcsec"] = xm["cmSepArcsec"]
+                del xm["cmSepArcsec"]
+
+            xm["association_type"] = matchedType
+            xm["catalogue_view_name"] = catalogueName
+            xm["transient_object_id"] = objectList[i]["id"]
+            xm["catalogue_table_name"] = self.colMaps[
+                catalogueName]["table_name"]
+            xm["catalogue_table_id"] = self.colMaps[
+                catalogueName]["table_id"]
+            xm["catalogue_view_id"] = self.colMaps[
+                catalogueName]["id"]
+
+            xm = self._annotate_crossmatch_with_value_added_parameters(
+                crossmatchDict=xm,
+                catalogueName=catalogueName,
+                searchPara=searchPara,
+                search_name=search_name
             )
-            # PASSING A SINGLE TRANSIENT LOCATION SO INDICE MAP IRRELEVANT (so
-            # far) - catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
-            indices, catalogueMatches = cs.search()
-            catalogueMatches = catalogueMatches.list
+            annotatedcatalogueMatches.append(xm)
 
-            if len(catalogueMatches):
-                # CALCULATE PHYSICAL PARAMETERS ... IF WE CAN
-                for xm in catalogueMatches:
-                    xm["separationArcsec"] = xm["cmSepArcsec"]
-                    del xm["cmSepArcsec"]
-                    xm = self._annotate_crossmatch_with_value_added_parameters(
-                        crossmatchDict=xm,
-                        catalogueName=catalogueName,
-                        searchPara=searchPara,
-                        search_name=search_name)
-
-                    xm["association_type"] = matchedType
-                    xm["catalogue_view_name"] = catalogueName
-                    xm["transient_object_id"] = transientMetaDict["id"]
-                    xm["catalogue_table_name"] = self.colMaps[
-                        catalogueName]["table_name"]
-                    xm["catalogue_table_id"] = self.colMaps[
-                        catalogueName]["table_id"]
-                    xm["catalogue_view_id"] = self.colMaps[
-                        catalogueName]["id"]
-
-                # matchedObjects.append(
-                #     [transient, catalogueMatches, catalogueName, matchedType])
-
-                catalogueMatches = self._faint_star_cut(
-                    matchedObjects=catalogueMatches,
-                    catalogueName=catalogueName,
-                    searchDone=searchDone,
-                    searchPara=searchPara
-                )
+        # ONLY RETURN FAINT STARS (REMOVE BRIGHTER MATCHES)
+        catalogueMatches = annotatedcatalogueMatches
+        catalogueMatches = self._faint_star_cut(
+            matchedObjects=catalogueMatches,
+            catalogueName=catalogueName,
+            searchPara=searchPara
+        )
 
         if "match nearest source only" in searchPara and searchPara["match nearest source only"] == True and len(catalogueMatches):
-            catalogueMatches = catalogueMatches[0]
+            nearestMatches = []
+            transList = []
+            for c in catalogueMatches:
+                if c["transient_object_id"] not in transList:
+                    transList.append(c["transient_object_id"])
+                    nearestMatches.append(c)
+            catalogueMatches = nearestMatches
 
         self.log.info(
             'completed the ``angular_crossmatch_against_catalogue`` method')
-        return searchDone, catalogueMatches
+        return catalogueMatches
 
     def _annotate_crossmatch_with_value_added_parameters(
             self,
@@ -429,6 +375,7 @@ class transient_catalogue_crossmatch():
             catalogueName]["object_type"]
         crossmatchDict["search_name"] = search_name
         crossmatchDict["raDeg"] = crossmatchDict["ra"]
+
         crossmatchDict["decDeg"] = crossmatchDict["dec"]
         del crossmatchDict["ra"]
         del crossmatchDict["dec"]
@@ -454,13 +401,11 @@ class transient_catalogue_crossmatch():
             self,
             matchedObjects,
             catalogueName,
-            searchDone,
             searchPara):
         """*perform a faint star cut on the crossmatch results if required by the catalogue search*
 
         **Key Arguments:**
             - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
-            - ``searchDone`` -- is the search now complete (boolean)
             - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
             - ``catalogueName`` -- the name of the catalogue the crossmatch results from
 
@@ -478,7 +423,7 @@ class transient_catalogue_crossmatch():
             faintLimit = False
 
         # FAINT STAR CUTS
-        if searchDone and matchedObjects and magColumn:
+        if matchedObjects and magColumn:
             print "HERE"
             faintStarMatches = []
             for row in matchedObjects:
@@ -489,7 +434,7 @@ class transient_catalogue_crossmatch():
             matchedObjects = faintStarMatches
         elif "tcs_view_star_sdss" in catalogueName:
             matchSubset = []
-            if searchDone and matchedObjects:
+            if matchedObjects:
                 for row in matchedObjects:
                     rMag = row["_r"]
                     separation = row["separationArcsec"]
@@ -525,7 +470,6 @@ class transient_catalogue_crossmatch():
             - ``search_name`` -- the name of the search
 
         **Return:**
-            - searchDone -- did search complete successfully
             - matchedObjects -- any sources matched against the object
 
         To run a physical separation crossmatch, run in a similar way to the angular separation crossmatch:
@@ -536,7 +480,7 @@ class transient_catalogue_crossmatch():
 
                 search_name = "ned spec sn"
                 searchPara = self.settings["search algorithm"][search_name]
-                searchDone, matchedObjects = xmatcher.physical_separation_crossmatch_against_catalogue(
+                matchedObjects = xmatcher.physical_separation_crossmatch_against_catalogue(
                     objectList=transients,
                     searchPara=searchPara,
                     search_name=search_name
@@ -559,7 +503,7 @@ class transient_catalogue_crossmatch():
         tmpSearchPara["match nearest source only"] = False
 
         # ANGULAR CONESEARCH ON CATALOGUE - RETURN ALL MATCHES
-        searchDone, catalogueMatches = self.angular_crossmatch_against_catalogue(
+        catalogueMatches = self.angular_crossmatch_against_catalogue(
             objectList=objectList,
             searchPara=tmpSearchPara,
             search_name=search_name,
@@ -568,8 +512,7 @@ class transient_catalogue_crossmatch():
 
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
         # A PHYSICAL SEPARATION WITHIN THE PHYSICAL RADIUS.
-        # BULKER4 - need to do this loop for each transient?
-        if searchDone and catalogueMatches:
+        if catalogueMatches:
             for row in catalogueMatches:
                 thisMatch = False
                 physical_separation_kpc = row["physical_separation_kpc"]
@@ -619,7 +562,7 @@ class transient_catalogue_crossmatch():
         self.log.debug(
             'completed the ``physical_separation_crossmatch_against_catalogue`` method')
 
-        return searchDone, matchedObjects
+        return matchedObjects
 
     # use the tab-trigger below for new method
     # xt-class-method

@@ -16,6 +16,7 @@ os.environ['TERM'] = 'vt100'
 from fundamentals import tools
 from astrocalc.coords import unit_conversion
 from HMpTy.mysql import conesearch as hmptyConesearch
+import copy
 
 
 class catalogue_conesearch():
@@ -81,15 +82,23 @@ class catalogue_conesearch():
         # xt-self-arg-tmpx
 
         # CONVERT RA AND DEC TO DEGREES
+        if not isinstance(ra, list):
+            ra = [ra]
+            dec = [dec]
+
+        self.ra = []
+        self.dec = []
+
         converter = unit_conversion(
             log=self.log
         )
-        self.ra = converter.ra_sexegesimal_to_decimal(
-            ra=ra
-        )
-        self.dec = converter.dec_sexegesimal_to_decimal(
-            dec=dec
-        )
+        for r, d in zip(ra, dec):
+            self.ra.append(converter.ra_sexegesimal_to_decimal(
+                ra=r
+            ))
+            self.dec.append(converter.dec_sexegesimal_to_decimal(
+                dec=d
+            ))
 
         return None
 
@@ -161,7 +170,11 @@ class catalogue_conesearch():
         )
         matchIndies, matches = cs.search()
 
+        # MATCH ARE NOT NECESSARILY UNIQUE IF MANY TRANSIENT MATCH ONE SOURCE
+        uniqueMatchDicts = []
+        uniqueMatchDicts[:] = [copy.copy(d) for d in matches.list]
+
         self.log.info('completed the ``search`` method')
-        return matchIndies, matches
+        return matchIndies, uniqueMatchDicts
 
     # xt-class-method
