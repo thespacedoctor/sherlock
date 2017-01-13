@@ -14,7 +14,7 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 
 Usage:
     sherlock init
-    sherlock <ra> <dec> [-s <pathToSettingsFile>]
+    sherlock [-v] <ra> <dec> [<name> -s <pathToSettingsFile>]
     sherlock match [--update] [-s <pathToSettingsFile>]
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
@@ -48,8 +48,8 @@ Options:
                                     http://www.das.uchile.cl/~lgalbany/LG/research.html
 
     -h, --help              show this help message
-    -v, --version           show version
     -s, --settings          the settings file
+    -v, --verbose           print more details to stdout
     -l, --transientlistId   the id of the transient list to classify
     -u, --update            update the transient database with new classifications and crossmatches
 
@@ -214,7 +214,8 @@ def main(arguments=None):
             settings=settings,
             ra=ra,
             dec=dec,
-            name="PS17gx"
+            name=name,
+            verbose=verboseFlag
         )
         classifier.classify()
 

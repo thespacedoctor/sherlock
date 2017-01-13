@@ -12,8 +12,10 @@
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
+import collections
 os.environ['TERM'] = 'vt100'
 from datetime import datetime, date, time, timedelta
+from operator import itemgetter
 from fundamentals import tools
 from fundamentals.mysql import readquery, directory_script_runner, writequery
 from fundamentals.renderer import list_of_dictionaries
@@ -33,7 +35,7 @@ class transient_classifier():
         - ``ra`` -- right ascension of a single transient source. Default *False*
         - ``dec`` -- declination of a single transient source. Default *False*
         - ``name`` -- the ID of a single transient source. Default *False*
-
+        - ``verbose`` -- print more detail about crossmatches to stdout. Default * False*
 
     **Usage:**
 
@@ -60,7 +62,8 @@ class transient_classifier():
             update=False,
             ra=False,
             dec=False,
-            name=False
+            name=False,
+            verbose=False
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -69,6 +72,8 @@ class transient_classifier():
         self.ra = ra
         self.dec = dec
         self.name = name
+        self.cl = False
+        self.verbose = verbose
 
         # xt-self-arg-tmpx
 
@@ -84,6 +89,12 @@ class transient_classifier():
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
         self.pmDbConn = dbConns["marshall"]
+
+        # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
+        if self.ra and self.dec:
+            self.cl = True
+            if not self.name:
+                self.name = "Transient"
 
         return None
 
@@ -147,7 +158,7 @@ class transient_classifier():
             transientsMetadataList=transientsMetadataList
         )
 
-        batchSize = 10
+        batchSize = 100
         total = len(transientsMetadataList[1:])
         batches = int(total / batchSize)
 
@@ -162,24 +173,34 @@ class transient_classifier():
 
         count = 1
         for batch in theseBatches:
-            print "BATCH %(count)s " % locals()
             count += 1
             # RUN THE CROSSMATCH CLASSIFIER FOR ALL TRANSIENTS
-            classifications = self._crossmatch_transients_against_catalogues(
+            crossmatches = self._crossmatch_transients_against_catalogues(
                 colMaps=colMaps,
                 transientsMetadataList=batch
             )
 
-            # for c in classifications[0]["crossmatches"]:
-            #     for k, v in c.iteritems():
-            #         print k, v
-            #     print
+            classifications, crossmatches = self.rank_classifications(
+                colMaps=colMaps,
+                crossmatches=crossmatches
+            )
+
+            if self.cl:
+                self._print_results_to_stdout(
+                    classifications=classifications,
+                    crossmatches=crossmatches
+                )
+
+            for t in batch:
+                if t["id"] not in classifications:
+                    classifications[t["id"]] = ["ORPHAN"]
 
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
             if self.update:
                 self._update_transient_database(
+                    crossmatches=crossmatches,
                     classifications=classifications,
                     transientsMetadataList=batch,
                     colMaps=colMaps
@@ -363,13 +384,15 @@ class transient_classifier():
 
     def _update_transient_database(
             self,
+            crossmatches,
             classifications,
             transientsMetadataList,
             colMaps):
         """ update transient database with classifications and crossmatch results
 
         **Key Arguments:**
-            - ``classifications`` -- the classifications and associations resulting from the catlaogue crossmatches
+            - ``crossmatches`` -- the crossmatches and associations resulting from the catlaogue crossmatches
+            - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
             - ``transientsMetadataList`` -- the list of transient metadata lifted from the database.
             - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
         """
@@ -394,7 +417,7 @@ class transient_classifier():
         # DATABASE TABLE
         transientIDs = []
         transientIDs[:] = [str(c["transient_object_id"])
-                           for c in classifications]
+                           for c in crossmatches]
         transientIDs = ",".join(transientIDs)
 
         createStatement = """
@@ -419,6 +442,7 @@ CREATE TABLE IF NOT EXISTS `tcs_cross_matches` (
   `catalogue_table_name` varchar(100) DEFAULT NULL,
   `catalogue_view_name` varchar(100) DEFAULT NULL,
   `rank` int(11) DEFAULT NULL,
+  `rankScore` double DEFAULT NULL,
   `search_name` varchar(100) DEFAULT NULL,
   `major_axis_arcsec` double DEFAULT NULL,
   `direct_distance` double DEFAULT NULL,
@@ -428,8 +452,6 @@ CREATE TABLE IF NOT EXISTS `tcs_cross_matches` (
   `decDeg` double DEFAULT NULL,
   `original_search_radius_arcsec` double DEFAULT NULL,
   `catalogue_view_id` int(11) DEFAULT NULL,
-  `catalogue_object_mag` float DEFAULT NULL,
-  `catalogue_object_filter` varchar(10) DEFAULT NULL,
   `U` double DEFAULT NULL,
   `UErr` double DEFAULT NULL,
   `B` double DEFAULT NULL,
@@ -458,6 +480,8 @@ CREATE TABLE IF NOT EXISTS `tcs_cross_matches` (
   `_zErr` double DEFAULT NULL,
   `_y` double DEFAULT NULL,
   `_yErr` double DEFAULT NULL,
+  `G` double DEFAULT NULL,
+  `GErr` double DEFAULT NULL,
   `unkMag` double DEFAULT NULL,
   `unkMagErr` double DEFAULT NULL,
   `dateLastModified` DATETIME NULL DEFAULT NOW(),
@@ -473,7 +497,7 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
 
         dataSet = list_of_dictionaries(
             log=self.log,
-            listOfDictionaries=classifications
+            listOfDictionaries=crossmatches
         )
 
         mysqlData = dataSet.mysql(
@@ -490,87 +514,189 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
             failureRule="failed"
         )
 
-        for ob in transientsMetadataList:
-            transId = ob["id"]
-            name = ob["name"]
-
-            sqlQuery = u"""
-                select id, separationArcsec, catalogue_view_name, association_type, physical_separation_kpc, major_axis_arcsec from tcs_cross_matches where transient_object_id = %(transId)s order by separationArcsec
-            """ % locals()
-            rows = readquery(
-                log=self.log,
-                sqlQuery=sqlQuery,
-                dbConn=self.transientsDbConn,
-                quiet=False
-            )
-
-            rankScores = []
-            for row in rows:
-                if row["separationArcsec"] < 2. or (row["physical_separation_kpc"] != "null" and row["physical_separation_kpc"] < 20. and row["association_type"] == "SN") or (row["major_axis_arcsec"] != "null" and row["association_type"] == "SN"):
-                    # print row["separationArcsec"]
-                    # print row["physical_separation_kpc"]
-                    # print row["major_axis_arcsec"]
-                    rankScore = 2. - \
-                        colMaps[row["catalogue_view_name"]][
-                            "object_type_accuracy"] * 0.1
-                    # print rankScore
-                else:
-                    # print row["separationArcsec"]
-                    # print row["physical_separation_kpc"]
-                    # print row["major_axis_arcsec"]
-                    rankScore = row["separationArcsec"] + 1. - \
-                        colMaps[row["catalogue_view_name"]][
-                            "object_type_accuracy"] * 0.1
-                rankScores.append(rankScore)
-
-            rank = 0
-            for rs, row in sorted(zip(rankScores, rows)):
-                rank += 1
-                primaryId = row["id"]
-                sqlQuery = u"""
-                    update tcs_cross_matches set rank = %(rank)s where id = %(primaryId)s
-                """ % locals()
-                rows = readquery(
-                    log=self.log,
-                    sqlQuery=sqlQuery,
-                    dbConn=self.transientsDbConn,
-                    quiet=False
-                )
-
-            sqlQuery = u"""
-               select distinct association_type from (select association_type from tcs_cross_matches where transient_object_id = %(transId)s  order by rank) as alias;
-            """ % locals()
-            rows = readquery(
-                log=self.log,
-                sqlQuery=sqlQuery,
-                dbConn=self.transientsDbConn,
-                quiet=False
-            )
-
-            classification = ""
-            for row in rows:
-                classification += row["association_type"] + "/"
-            classification = classification[:-1]
-            if len(rows):
-                classification = rows[0]["association_type"]
-
-            if len(classification) == 0:
-                classification = "ORPHAN"
-
-            sqlQuery = u"""
+        sqlQuery = ""
+        for k, v in classifications.iteritems():
+            classification = v[0]
+            sqlQuery += u"""
                     update %(transientTable)s  set %(transientTableClassCol)s = "%(classification)s"
-                        where %(transientTableIdCol)s  = %(transId)s
+                        where %(transientTableIdCol)s  = "%(k)s";
                 """ % locals()
 
-            print """%(name)s: %(classification)s """ % locals()
-
-            writequery(
-                log=self.log,
-                sqlQuery=sqlQuery,
-                dbConn=self.transientsDbConn,
-            )
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+        )
 
         self.log.debug('completed the ``_update_transient_database`` method')
+        return None
+
+    def rank_classifications(
+            self,
+            crossmatches,
+            colMaps):
+        """*rank the classifications returned from the catalogue crossmatcher, annotate the results with a classification rank-number (most likely = 1) and a rank-score (weight of classification)*
+
+        **Key Arguments:**
+            - ``crossmatches`` -- the unranked crossmatch classifications
+            - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
+
+        **Return:**
+            - ``crossmatches`` -- the crossmatches annotated with rankings and rank-scores
+
+        **Usage:**
+            ..  todo::
+
+                - add usage info
+                - create a sublime snippet for usage
+                - update package tutorial if needed
+
+            .. code-block:: python 
+
+                usage code 
+
+        """
+        self.log.info('starting the ``rank_classifications`` method')
+
+        for xm in crossmatches:
+            if xm["separationArcsec"] < 2. or (xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN") or (xm["major_axis_arcsec"] != "null" and xm["association_type"] == "SN"):
+                rankScore = 2. - \
+                    colMaps[xm["catalogue_view_name"]][
+                        "object_type_accuracy"] * 0.1
+                # print rankScore
+            else:
+                rankScore = xm["separationArcsec"] + 1. - \
+                    colMaps[xm["catalogue_view_name"]][
+                        "object_type_accuracy"] * 0.1
+            xm["rankScore"] = rankScore
+
+        crossmatches = sorted(
+            crossmatches, key=itemgetter('rankScore'), reverse=False)
+        crossmatches = sorted(
+            crossmatches, key=itemgetter('transient_object_id'))
+
+        transient_object_id = None
+        classifications = {}
+        for xm in crossmatches:
+            if transient_object_id != xm["transient_object_id"]:
+                if transient_object_id != None:
+                    classifications[transient_object_id] = transClass
+                transClass = []
+                rank = 0
+                transient_object_id = xm["transient_object_id"]
+            rank += 1
+            transClass.append(xm["association_type"])
+            xm["rank"] = rank
+        if transient_object_id != None:
+            classifications[transient_object_id] = transClass
+
+        self.log.info('completed the ``rank_classifications`` method')
+        return classifications, crossmatches
+
+    def _print_results_to_stdout(
+            self,
+            classifications,
+            crossmatches):
+        """*print the classification and crossmatch results for a single transient object to stdout*
+
+        **Key Arguments:**
+            - ``crossmatches`` -- the unranked crossmatch classifications
+            - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
+
+        **Return:**
+            - None
+
+        **Usage:**
+            ..  todo::
+
+                - add usage info
+                - create a sublime snippet for usage
+                - update package tutorial if needed
+
+            .. code-block:: python 
+
+                usage code 
+
+        """
+        self.log.info('starting the ``_print_results_to_stdout`` method')
+
+        headline = self.name + "'s Predicted Classification: " + \
+            classifications[self.name][0]
+        print headline
+        print
+        print "Suggested Associations:"
+
+        # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
+        filterPreference = [
+            "R", "_r", "G", "V", "_g", "B", "I", "_i", "_z", "J", "H", "K", "U", "_u", "_y", "unkMag"
+        ]
+        basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
+                 "raDeg", "decDeg", "separationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr"]
+        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "distance_modulus", "direct_distance_scale", "major_axis_arcsec", "scale", "U", "UErr",
+                   "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
+        dontFormat = ["decDeg", "raDeg", "rank",
+                      "catalogue_object_id", "catalogue_object_subtype"]
+
+        if self.verbose:
+            basic = basic + verbose
+
+        for c in crossmatches:
+            for f in filterPreference:
+                if f in c and c[f]:
+                    c["Mag"] = c[f]
+                    c["MagFilter"] = f.replace("_", "").replace("Mag", "")
+                    if f + "Err" in c:
+                        c["MagErr"] = c[f + "Err"]
+                    else:
+                        c["MagErr"] = None
+                    break
+
+        allKeys = []
+        for c in crossmatches:
+            for k, v in c.iteritems():
+                if k not in allKeys:
+                    allKeys.append(k)
+
+        for c in crossmatches:
+            for k in allKeys:
+                if k not in c:
+                    c[k] = None
+
+        printCrossmatches = []
+        for c in crossmatches:
+            ordDict = collections.OrderedDict(sorted({}.items()))
+            for k in basic:
+                if k in c:
+                    if k == "catalogue_table_name":
+                        c[k] = c[k].replace("tcs_cat_", "").replace("_", " ")
+                    if k == "catalogue_object_subtype" and "sdss" in c["catalogue_table_name"]:
+                        if c[k] == 6:
+                            c[k] = "galaxy"
+                        elif c[k] == 3:
+                            c[k] = "star"
+                    columnName = k.replace("tcs_cat_", "").replace("_", " ")
+                    value = c[k]
+                    if k not in dontFormat:
+
+                        try:
+                            ordDict[columnName] = "%(value)0.2f" % locals()
+                        except:
+                            ordDict[columnName] = value
+                    else:
+                        ordDict[columnName] = value
+
+            printCrossmatches.append(ordDict)
+
+        from fundamentals.renderer import list_of_dictionaries
+        dataSet = list_of_dictionaries(
+            log=self.log,
+            listOfDictionaries=printCrossmatches
+        )
+        tableData = dataSet.table(filepath=None)
+
+        print tableData
+
+        self.log.info('completed the ``_print_results_to_stdout`` method')
         return None
 
     # use the tab-trigger below for new method

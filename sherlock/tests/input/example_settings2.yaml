@@ -28,7 +28,7 @@ database settings:
         loginPath: unittesting
         tunnel: False
         transient query: "select primaryId as 'id', name as 'alt_id', ra 'ra', decl 'dec', name 'name', sherlockClassification as 'object_classification'
-            from G268556_objects limit 41"
+            from G268556_objects"
         transient primary id column: primaryId
         transient classification column: sherlockClassification
         crossmatchTable: tcs_cross_matches
