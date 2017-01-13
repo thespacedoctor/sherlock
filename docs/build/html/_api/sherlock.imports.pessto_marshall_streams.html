@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.imports.pessto_marshall_streams module &mdash; sherlock 0.1 documentation</title>
   
 
   
@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
 
   
@@ -93,11 +96,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -133,7 +136,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>&lt;no title&gt;</li>
+    <li>sherlock.imports.pessto_marshall_streams module</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -147,27 +150,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-sherlock.imports.pessto_marshall_streams"></span><p><em>Import PESSTO Marshall tables into crossmatch catalogues</em></p>
+  <div class="section" id="module-sherlock.imports.pessto_marshall_streams">
+<span id="sherlock-imports-pessto-marshall-streams-module"></span><h1>sherlock.imports.pessto_marshall_streams module<a class="headerlink" href="#module-sherlock.imports.pessto_marshall_streams" title="Permalink to this headline">  ∞</a></h1>
+<p><em>Import PESSTO Marshall tables into crossmatch catalogues</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">August 25, 2015</td>
+<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">November 18, 2016</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
-<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+<ul class="last simple">
+<li>document this module</li>
+</ul>
 </div>
-<p># xdocopt-usage-tempx</p>
 <dl class="class">
 <dt id="sherlock.imports.pessto_marshall_streams.pessto_marshall_streams">
-<em class="property">class </em><code class="descclassname">sherlock.imports.pessto_marshall_streams.</code><code class="descname">pessto_marshall_streams</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>cataloguesDbConn=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/pessto_marshall_streams.html#pessto_marshall_streams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams" title="Permalink to this definition">  ∞</a></dt>
+<em class="property">class </em><code class="descclassname">sherlock.imports.pessto_marshall_streams.</code><code class="descname">pessto_marshall_streams</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/pessto_marshall_streams.html#pessto_marshall_streams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams" title="Permalink to this definition">  ∞</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></p>
-<p><em>The worker class for the pessto_marshall_streams module</em></p>
+<p>The worker class for the pessto_marshall_streams module</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
@@ -178,19 +184,18 @@
 <li><code class="docutils literal"><span class="pre">version</span></code> &#8211; version of the pessto_marshall_streams catalogue</li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean pessto_marshall_streams class</li>
 <li>&#64;review: when complete add logging</li>
 <li>&#64;review: when complete, decide whether to abstract class to another module</li>
 </ul>
-</div>
+</dd>
+</dl>
 <dl class="method">
 <dt id="sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.create_dictionary_of_pessto_marshall_streams">
 <code class="descname">create_dictionary_of_pessto_marshall_streams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/pessto_marshall_streams.html#pessto_marshall_streams.create_dictionary_of_pessto_marshall_streams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.create_dictionary_of_pessto_marshall_streams" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>create dictionary of pessto_marshall_streams</em></p>
+<dd><p>create dictionary of pessto_marshall_streams</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd># -</dd>
@@ -199,38 +204,37 @@
 <li>None</li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean create_dictionary_of_pessto_marshall_streams method</li>
 <li>&#64;review: when complete add logging</li>
 </ul>
-</div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.get">
 <code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/pessto_marshall_streams.html#pessto_marshall_streams.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.pessto_marshall_streams.pessto_marshall_streams.get" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>get the pessto_marshall_streams object</em></p>
+<dd><p>get the pessto_marshall_streams object</p>
 <dl class="docutils">
 <dt><strong>Return:</strong></dt>
 <dd><ul class="first last simple">
 <li><code class="docutils literal"><span class="pre">pessto_marshall_streams</span></code></li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-3">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean get method</li>
 <li>&#64;review: when complete add logging</li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-</dd></dl>
-
-</dd></dl>
-
 
 
            </div>

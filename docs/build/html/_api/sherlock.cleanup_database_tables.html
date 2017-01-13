@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.cleanup_database_tables module &mdash; sherlock 0.1 documentation</title>
   
 
   
@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
 
   
@@ -93,11 +96,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -133,7 +136,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>&lt;no title&gt;</li>
+    <li>sherlock.cleanup_database_tables module</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -147,26 +150,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-sherlock.cleanup_database_tables"></span><p><em>Clean up the database tables used by sherlock - maintainance tools</em></p>
+  <div class="section" id="module-sherlock.cleanup_database_tables">
+<span id="sherlock-cleanup-database-tables-module"></span><h1>sherlock.cleanup_database_tables module<a class="headerlink" href="#module-sherlock.cleanup_database_tables" title="Permalink to this headline">  ∞</a></h1>
+<p><em>Clean up the database tables used by sherlock - maintainance tools</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">August 20, 2015</td>
+<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">November 18, 2016</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
-<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
+<ul class="last simple">
+<li>document this module</li>
+</ul>
 </div>
-<p># xdocopt-usage-tempx</p>
 <dl class="class">
 <dt id="sherlock.cleanup_database_tables.cleanup_database_tables">
 <em class="property">class </em><code class="descclassname">sherlock.cleanup_database_tables.</code><code class="descname">cleanup_database_tables</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#cleanup_database_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.cleanup_database_tables" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>The worker class for the cleanup_database_tables module</em></p>
+<dd><p>The worker class for the cleanup_database_tables module</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
@@ -175,15 +181,14 @@
 <li><code class="docutils literal"><span class="pre">settings</span></code> &#8211; the settings dictionary</li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean cleanup_database_tables class</li>
 <li>&#64;review: when complete add logging</li>
 <li>&#64;review: when complete, decide whether to abstract class to another module</li>
 </ul>
-</div>
+</dd>
+</dl>
 <dl class="method">
 <dt id="sherlock.cleanup_database_tables.cleanup_database_tables.close">
 <code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#cleanup_database_tables.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.cleanup_database_tables.close" title="Permalink to this definition">  ∞</a></dt>
@@ -192,21 +197,20 @@
 <dl class="method">
 <dt id="sherlock.cleanup_database_tables.cleanup_database_tables.get">
 <code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#cleanup_database_tables.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.cleanup_database_tables.get" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>get the cleanup_database_tables object</em></p>
+<dd><p>get the cleanup_database_tables object</p>
 <dl class="docutils">
 <dt><strong>Return:</strong></dt>
 <dd><ul class="first last simple">
 <li><code class="docutils literal"><span class="pre">cleanup_database_tables</span></code></li>
 </ul>
 </dd>
-</dl>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
+<dt><strong>Todo</strong></dt>
+<dd><ul class="first last simple">
 <li>&#64;review: when complete, clean get method</li>
 <li>&#64;review: when complete add logging</li>
 </ul>
-</div>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -214,7 +218,7 @@
 <dl class="function">
 <dt id="sherlock.cleanup_database_tables.main">
 <code class="descclassname">sherlock.cleanup_database_tables.</code><code class="descname">main</code><span class="sig-paren">(</span><em>arguments=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.main" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>The main function used when ``cleanup_database_tables.py`` is run as a single script from the cl, or when installed as a cl command</em></p>
+<dd><p>The main function used when <code class="docutils literal"><span class="pre">cleanup_database_tables.py</span></code> is run as a single script from the cl, or when installed as a cl command</p>
 </dd></dl>
 
 <dl class="function">
@@ -222,6 +226,7 @@
 <code class="descclassname">sherlock.cleanup_database_tables.</code><code class="descname">tab_complete</code><span class="sig-paren">(</span><em>text</em>, <em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cleanup_database_tables.html#tab_complete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cleanup_database_tables.tab_complete" title="Permalink to this definition">  ∞</a></dt>
 <dd></dd></dl>
 
+</div>
 
 
            </div>

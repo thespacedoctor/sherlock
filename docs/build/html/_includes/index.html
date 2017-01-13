@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/>
         <link rel="next" title="Subpackages" href="../autosummary.html"/>
         <link rel="prev" title="sherlock" href="../index.html"/> 
@@ -94,16 +97,22 @@
             
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#development">Development</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#development">Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sublime-snippets">Sublime Snippets</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#issues">Issues</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#command-line-tutorial">Command-Line Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-settings-file">The Settings File</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -156,30 +165,34 @@
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">  ∞</a></h1>
 <p>The easiest way to install sherlock us to use <code class="docutils literal"><span class="pre">pip</span></code>:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>pip install sherlock
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span>
 </pre></div>
 </div>
 <p>Or you can clone the <a class="reference external" href="https://github.com/thespacedoctor/sherlock">github repo</a> and install from a local version of the code:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>git clone git@github.com:thespacedoctor/sherlock.git
-cd sherlock
-python setup.py install
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">thespacedoctor</span><span class="o">/</span><span class="n">sherlock</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">sherlock</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>To upgrade to the latest version of sherlock use the command:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>pip install sherlock --upgrade
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span> <span class="o">--</span><span class="n">upgrade</span>
 </pre></div>
 </div>
 <div class="section" id="development">
 <h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">  ∞</a></h2>
 <p>If you want to tinker with the code, then install in development mode.
 This means you can modify the code from your cloned repo:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>git clone git@github.com:thespacedoctor/sherlock.git
-cd sherlock
-python setup.py develop
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">thespacedoctor</span><span class="o">/</span><span class="n">sherlock</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">sherlock</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="https://github.com/thespacedoctor/sherlock/pulls">Pull requests</a>
 are welcomed!</p>
+<div class="section" id="sublime-snippets">
+<h3>Sublime Snippets<a class="headerlink" href="#sublime-snippets" title="Permalink to this headline">  ∞</a></h3>
+<p>If you use <a class="reference external" href="https://www.sublimetext.com/">Sublime Text</a> as your code editor, and you&#8217;re planning to develop your own python code with sherlock, you might find <a class="reference external" href="https://github.com/thespacedoctor/sherlock-Sublime-Snippets">my Sublime Snippets</a> useful.</p>
+</div>
 </div>
 <div class="section" id="issues">
 <h2>Issues<a class="headerlink" href="#issues" title="Permalink to this headline">  ∞</a></h2>
@@ -187,17 +200,64 @@ are welcomed!</p>
 <a class="reference external" href="https://github.com/thespacedoctor/sherlock/issues">here</a>.</p>
 </div>
 </div>
-<div class="section" id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">  ∞</a></h1>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock match <span class="o">[</span>--update<span class="o">]</span> <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
-sherlock clean <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
-sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+<div class="section" id="command-line-usage">
+<h1>Command-Line Usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">  ∞</a></h1>
+<div class="highlight-bash"><div class="highlight"><pre><span></span># SHERLOCK #
+: INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
+=============================================================================================
 
--h, --help            show this <span class="nb">help</span> message
--v, --version         show version
--s, --settings        the settings file
--l, --transientlistId          the id of the transient list to classify
--u, --update          update the transient database with new classifications and crossmatches
+Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en/stable
+
+.. todo ::
+
+    - docuument cl_utils module
+    - tidy usage text
+
+Usage:
+    sherlock init
+    sherlock &lt;ra&gt; &lt;dec&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock match [--update] [-s &lt;pathToSettingsFile&gt;]
+    sherlock clean [-s &lt;pathToSettingsFile&gt;]
+    sherlock wiki [-s &lt;pathToSettingsFile&gt;]
+    sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock import cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock import stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]
+
+Options:
+    init                    setup the sherlock settings file for the first time
+    match                   XXXX
+    clean                   XXXX
+    wiki                    XXXX
+    import                  XXXX
+    ned                     use the online NED database as the source catalogue
+    cat                     import a static catalogue into the crossmatch catalogues database
+    stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
+
+
+    ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
+    dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
+    radiusArcsec            radius in arcsec of the footprint to download from the online NED database
+    cat_name                name of the catalogue being imported. The following catalogues can be imported:
+                                * ``veron``: Veron AGN/QSO catalogue
+                                    http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258
+                                * ``milliquas``: Million Quasars Catalog
+                                    http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html
+                                * ``ned_d``: NED&#39;s Master List of Redshift-Independent Extragalactic Distances
+                                    https://ned.ipac.caltech.edu/Library/Distances/
+    stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:
+                                * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
+                                    http://www.das.uchile.cl/~lgalbany/LG/research.html
+
+    -h, --help              show this help message
+    -v, --version           show version
+    -s, --settings          the settings file
+    -l, --transientlistId   the id of the transient list to classify
+    -u, --update            update the transient database with new classifications and crossmatches
+
+
+.. todo ::
+
+    - document this module
 </pre></div>
 </div>
 </div>
@@ -205,13 +265,28 @@ sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="
 <h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">  ∞</a></h1>
 <p>Documentation for sherlock is hosted by <a class="reference external" href="http://sherlock.readthedocs.org/en/stable/">Read the Docs</a> (last <a class="reference external" href="http://sherlock.readthedocs.org/en/stable/">stable version</a> and <a class="reference external" href="http://sherlock.readthedocs.org/en/latest/">latest version</a>).</p>
 </div>
-<div class="section" id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">  ∞</a></h1>
+<div class="section" id="command-line-tutorial">
+<h1>Command-Line Tutorial<a class="headerlink" href="#command-line-tutorial" title="Permalink to this headline">  ∞</a></h1>
+<p>Before you begin using sherlock you will need to populate some custom settings within the sherlock settings file.</p>
+<p>To setup the default settings file at <code class="docutils literal"><span class="pre">~/.config/sherlock/sherlock.yaml</span></code> run the command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock init
+</pre></div>
+</div>
+<p>This should create and open the settings file; follow the instructions in the file to populate the missing settings values (usually given an <code class="docutils literal"><span class="pre">XXX</span></code> placeholder).</p>
+<div class="section" id="the-settings-file">
+<h2>The Settings File<a class="headerlink" href="#the-settings-file" title="Permalink to this headline">  ∞</a></h2>
+<p>Before you begin you will need to run the following code once to set a login-path for each of your mysql servers:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mysql_config_editor <span class="nb">set</span> --login-path<span class="o">=</span>&lt;uniqueLoginName&gt; --host<span class="o">=</span>localhost --user<span class="o">=</span>&lt;myUsername&gt; --password --port<span class="o">=</span>&lt;port&gt;
+</pre></div>
+</div>
+<p>This stores your credentials in an encrypted file located at &#8216;~/.mylogin.cnf&#8217;.
+Use <code class="xref py py-obj docutils literal"><span class="pre">mysql_config_editor</span> <span class="pre">print</span> <span class="pre">--all</span></code> to see all of the login-paths set.</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
 <li>add tutorial</li>
 </ul>
+</div>
 </div>
 </div>
 
@@ -234,7 +309,7 @@ sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Dave Young.
+        &copy; Copyright 2017, Dave Young.
 
     </p>
   </div>

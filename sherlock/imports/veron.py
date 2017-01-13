@@ -1,25 +1,13 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-veron.py
-============
-:Summary:
-    Import veron catagloue from plain text file
+*import veron catalogue into sherlock's crossmatch catalogues database*
 
 :Author:
     David Young
 
 :Date Created:
-    August 25, 2015
-
-:dryx syntax:
-    - ``_someObject`` = a 'private' object that should only be changed for debugging
-
-:Notes:
-    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk
-
-:Tasks:
-    @review: when complete pull all general functions and classes into dryxPython
+    December 12, 2016
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -30,20 +18,15 @@ import glob
 import pickle
 import codecs
 import string
-
 import re
 from docopt import docopt
-from dryxPython import mysql as dms
-from dryxPython import logs as dl
-from dryxPython import commonutils as dcu
-from dryxPython.projectsetup import setup_main_clutil
 from ._base_importer import _base_importer
 
 
 class veron(_base_importer):
 
     """
-    The worker class for the veron module
+    *importer object for the* `VERON AGN catalogue <http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258>`_
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -51,53 +34,89 @@ class veron(_base_importer):
         - ``settings`` -- the settings dictionary
         - ``pathToDataFIle`` -- path to the veron data file
         - ``version`` -- version of the veron catalogue
-        - ``catalogueName`` -- the name of the catalogue
 
-    **Todo**
-        - @review: when complete, clean veron class
-        - @review: when complete add logging
-        - @review: when complete, decide whether to abstract class to another module
+    **Usage:**
+
+      To import the veron catalogue catalogue, run the following:
+
+      .. code-block:: python 
+
+        from sherlock.imports import veron
+        catalogue = veron(
+            log=log,
+            settings=settings,
+            pathToDataFile="/path/to/veron.txt",
+            version="1.0",
+            catalogueName="veron"
+        )
+        catalogue.ingest()
+
+    Whenever downloading a version of the Veron catalogue from Vizier use the following column selection:
+
+    .. image:: https://i.imgur.com/4k7MJuw.png
+        :width: 800px
+        :alt: Veron column selection in Vizier
+
     """
-    # Initialisation
-    # 1. @flagged: what are the unique attrributes for each object? Add them
-    # to __init__
+    # INITIALISATION
 
-    # 4. @flagged: what actions does each object have to be able to perform? Add them here
-    # Method Attributes
-    def get(self):
-        """get the veron object
+    def ingest(self):
+        """ingest the veron catalogue into the catalogues database
 
-        **Return:**
-            - ``veron``
-
-        **Todo**
-            - @review: when complete, clean get method
-            - @review: when complete add logging
+        See class docstring for usage.
         """
         self.log.info('starting the ``get`` method')
 
-        self.dictList = self.create_dictionary_of_veron()
-        self.add_data_to_database_table()
-        self.add_htmids_to_database_table()
+        dictList = self._create_dictionary_of_veron()
+
+        tableName = self.dbTableName
+        createStatement = """
+    CREATE TABLE `%(tableName)s` (
+      `primaryId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'An internal counter',
+      `B_V` float DEFAULT NULL,
+      `U_B` float DEFAULT NULL,
+      `abs_magnitude` float DEFAULT NULL,
+      `dateCreated` datetime DEFAULT  CURRENT_TIMESTAMP,
+      `decDeg` double DEFAULT NULL,
+      `magnitude` float DEFAULT NULL,
+      `raDeg` double DEFAULT NULL,
+      `class` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+      `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+      `redshift` float DEFAULT NULL,
+      `not_radio` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+      `magnitude_filter` varchar(10) COLLATE utf8_unicode_ci DEFAULT 'V',
+      `htm16ID` bigint(20) DEFAULT NULL,
+      `redshift_flag` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+      `spectral_classification` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+      `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
+      `updated` varchar(45) DEFAULT '0',
+      `htm10ID` bigint(20) DEFAULT NULL,
+      `htm13ID` bigint(20) DEFAULT NULL,
+      PRIMARY KEY (`primaryId`),
+      UNIQUE KEY `radeg_decdeg` (`raDeg`,`decDeg`),
+      KEY `idx_htm16ID` (`htm16ID`),
+      KEY `idx_htm10ID` (`htm10ID`),
+      KEY `idx_htm13ID` (`htm13ID`)
+    ) ENGINE=MyISAM AUTO_INCREMENT=168945 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+""" % locals()
+
+        self._add_data_to_database_table(
+            dictList=dictList,
+            createStatement=createStatement
+        )
 
         self.log.info('completed the ``get`` method')
-        return veron
+        return None
 
-    def create_dictionary_of_veron(
+    def _create_dictionary_of_veron(
             self):
-        """create dictionary of veron
-
-        **Key Arguments:**
-            # -
+        """create a list of dictionaries containing all the rows in the veron catalogue
 
         **Return:**
-            - None
-
-        **Todo**
-            - @review: when complete, clean create_dictionary_of_veron method
-            - @review: when complete add logging
+            - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue
         """
-        self.log.info('starting the ``create_dictionary_of_veron`` method')
+        self.log.info(
+            'starting the ``_create_dictionary_of_veron`` method')
 
         dictList = []
         lines = string.split(self.catData, '\n')
@@ -163,30 +182,8 @@ class veron(_base_importer):
             dictList.append(thisDict)
 
         self.log.info(
-            'completed the ``create_dictionary_of_veron`` method')
+            'completed the ``_create_dictionary_of_veron`` method')
         return dictList
 
     # use the tab-trigger below for new method
     # xt-class-method
-
-    # 5. @flagged: what actions of the base class(es) need ammending? ammend them here
-    # Override Method Attributes
-    # method-override-tmpx
-
-# xt-class-tmpx
-
-
-###################################################################
-# PUBLIC FUNCTIONS                                                #
-###################################################################
-# xt-worker-def
-
-# use the tab-trigger below for new function
-# xt-def-with-logger
-
-###################################################################
-# PRIVATE (HELPER) FUNCTIONS                                      #
-###################################################################
-
-if __name__ == '__main__':
-    main()

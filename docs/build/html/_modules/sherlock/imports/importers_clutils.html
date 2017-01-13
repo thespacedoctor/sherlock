@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#modules">Modules</a></li>
@@ -152,7 +155,10 @@
 <span></span><span class="ch">#!/usr/local/bin/python</span>
 <span class="c1"># encoding: utf-8</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">*CL Utils for the Sherlock importers*</span>
+<span class="sd">importers_clutils.py</span>
+<span class="sd">====================</span>
+<span class="sd">:Summary:</span>
+<span class="sd">    CL Utils for the Sherlock importers</span>
 
 <span class="sd">:Author:</span>
 <span class="sd">    David Young</span>
@@ -160,9 +166,18 @@
 <span class="sd">:Date Created:</span>
 <span class="sd">    August 25, 2015</span>
 
-<span class="sd">.. todo::</span>
-<span class="sd">    </span>
+<span class="sd">:dryx syntax:</span>
+<span class="sd">    - ``_someObject`` = a &#39;private&#39; object that should only be changed for debugging</span>
+
+<span class="sd">:Notes:</span>
+<span class="sd">    - If you have any questions requiring this script/module please email me: d.r.young@qub.ac.uk</span>
+
+<span class="sd">:Tasks:</span>
 <span class="sd">    @review: when complete pull all general functions and classes into dryxPython</span>
+
+<span class="sd">.. todo ::</span>
+
+<span class="sd">    - docuument importers_clutils module</span>
 
 <span class="sd">Usage:</span>
 <span class="sd">    sherlock-importers cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]</span>
@@ -179,32 +194,30 @@
 <span class="kn">import</span> <span class="nn">readline</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
-<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
-<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">milliquas</span> <span class="k">as</span> <span class="n">milliquasImporter</span>
-<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">veron</span> <span class="k">as</span> <span class="n">veronImporter</span>
-<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">tmp_sdss</span> <span class="k">as</span> <span class="n">sdssImporter</span>
-<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">pessto_marshall_streams</span> <span class="k">as</span> <span class="n">pesstoImporter</span>
-<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">ifs_galaxies</span> <span class="k">as</span> <span class="n">ifsImporter</span>
-<span class="kn">from</span> <span class="nn">sherlock.imports.ned_d</span> <span class="kn">import</span> <span class="n">ned_d</span> <span class="k">as</span> <span class="n">nedImporter</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
+<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="k">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">milliquas</span> <span class="k">as</span> <span class="n">milliquasImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">veron</span> <span class="k">as</span> <span class="n">veronImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">tmp_sdss</span> <span class="k">as</span> <span class="n">sdssImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">pessto_marshall_streams</span> <span class="k">as</span> <span class="n">pesstoImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ifs_galaxies</span> <span class="k">as</span> <span class="n">ifsImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.imports.ned_d</span> <span class="k">import</span> <span class="n">ned_d</span> <span class="k">as</span> <span class="n">nedImporter</span>
 
 
 <div class="viewcode-block" id="tab_complete"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports.importers_clutils.tab_complete.html#sherlock.imports.importers_clutils.tab_complete">[docs]</a><span class="k">def</span> <span class="nf">tab_complete</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="bp">None</span><span class="p">])[</span><span class="n">state</span><span class="p">]</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">])[</span><span class="n">state</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports.importers_clutils.html#sherlock.imports.importers_clutils.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports.importers_clutils.html#sherlock.imports.importers_clutils.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *The main function used when ``importers_clutils.py`` is run as a single script from the cl, or when installed as a cl command*</span>
+<span class="sd">    The main function used when ``importers_clutils.py`` is run as a single script from the cl, or when installed as a cl command</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># setup the command-line util settings</span>
     <span class="n">su</span> <span class="o">=</span> <span class="n">tools</span><span class="p">(</span>
         <span class="n">arguments</span><span class="o">=</span><span class="n">arguments</span><span class="p">,</span>
         <span class="n">docString</span><span class="o">=</span><span class="n">__doc__</span><span class="p">,</span>
         <span class="n">logLevel</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
-        <span class="n">options_first</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">options_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">projectName</span><span class="o">=</span><span class="s2">&quot;sherlock&quot;</span>
     <span class="p">)</span>
     <span class="n">arguments</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">dbConn</span> <span class="o">=</span> <span class="n">su</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
@@ -221,10 +234,10 @@
             <span class="n">varname</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Flag&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">varname</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
-            <span class="k">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">unicode</span><span class="p">):</span>
+            <span class="n">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
+            <span class="n">exec</span><span class="p">(</span><span class="n">varname</span> <span class="o">+</span> <span class="s2">&quot; = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,))</span>
         <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="s2">&quot;--dbConn&quot;</span><span class="p">:</span>
             <span class="n">dbConn</span> <span class="o">=</span> <span class="n">val</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">varname</span><span class="p">,</span> <span class="n">val</span><span class="p">,))</span>
@@ -244,9 +257,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pathToPickleFile</span><span class="p">):</span>
                 <span class="k">pass</span>
-            <span class="n">previousSettingsExist</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">previousSettingsExist</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">previousSettingsExist</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">previousSettingsExist</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">previousSettings</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">previousSettingsExist</span><span class="p">:</span>
             <span class="n">previousSettings</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">pathToPickleFile</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>

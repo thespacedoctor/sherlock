@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.classifier (class) &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.classifier (module) &mdash; sherlock 0.1 documentation</title>
   
 
   
@@ -38,10 +38,13 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
-        <link rel="next" title="sherlock.cleanup_database_tables (class)" href="sherlock.cleanup_database_tables.html"/>
-        <link rel="prev" title="sherlock.imports.importers_clutils (module)" href="sherlock.imports.importers_clutils.html"/> 
+        <link rel="next" title="sherlock.utKit (module)" href="sherlock.utKit.html"/>
+        <link rel="prev" title="sherlock.cl_utils (module)" href="sherlock.cl_utils.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -96,29 +99,20 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#classes">Classes</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">sherlock.classifier (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.cleanup_database_tables.html">sherlock.cleanup_database_tables (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.commonutils.update_wiki_pages.html">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs_galaxies.html">sherlock.imports.ifs_galaxies (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.milliquas.html">sherlock.imports.milliquas (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.pessto_marshall_streams.html">sherlock.imports.pessto_marshall_streams (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.tmp_sdss.html">sherlock.imports.tmp_sdss (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.veron.html">sherlock.imports.veron (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_conesearch.ned_conesearch.html">sherlock.imports.ned_conesearch.ned_conesearch (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_d.ned_d.html">sherlock.imports.ned_d.ned_d (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.update_ned_stream.update_ned_stream.html">sherlock.update_ned_stream.update_ned_stream (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.utKit.html">sherlock.utKit.utKit (<em>class</em>)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#modules">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sherlock.cl_utils.html">sherlock.cl_utils (<em>module</em>)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.classifier (<em>module</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.html">sherlock.utKit (<em>module</em>)</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
 </ul>
 
@@ -152,7 +146,7 @@
       
           <li><a href="../autosummary.html">Subpackages</a> &raquo;</li>
       
-    <li>sherlock.classifier (<em>class</em>)</li>
+    <li>sherlock.classifier (<em>module</em>)</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -166,41 +160,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sherlock-classifier-class">
-<h1>sherlock.classifier (<em>class</em>)<a class="headerlink" href="#sherlock-classifier-class" title="Permalink to this headline">  ∞</a></h1>
+  <div class="section" id="sherlock-classifier-module">
+<h1>sherlock.classifier (<em>module</em>)<a class="headerlink" href="#sherlock-classifier-module" title="Permalink to this headline">  ∞</a></h1>
+<span class="target" id="module-sherlock.classifier"></span><p><em>The classifier object for Sherlock</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">November 18, 2016</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>document this module</li>
+</ul>
+</div>
 <dl class="class">
-<dt id="sherlock.classifier">
-<em class="property">class </em><code class="descclassname">sherlock.</code><code class="descname">classifier</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/classifier.html#classifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.classifier" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>The classifier object for Sherlock</em></p>
+<dt id="sherlock.classifier.classifier">
+<em class="property">class </em><code class="descclassname">sherlock.classifier.</code><code class="descname">classifier</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>update=False</em>, <em>transientIdList=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.classifier.classifier" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>The classifier object for Sherlock</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
 <li><code class="docutils literal"><span class="pre">log</span></code> &#8211; logger</li>
 <li><code class="docutils literal"><span class="pre">settings</span></code> &#8211; the settings dictionary</li>
 <li><code class="docutils literal"><span class="pre">update</span></code> &#8211; update the transient database with crossmatch results (boolean)</li>
+<li><code class="docutils literal"><span class="pre">transientIdList</span></code> &#8211; a list of individual transient ids (overrides <code class="xref py py-obj docutils literal"><span class="pre">workflowListId</span></code> - used if user want to run the classifier on specific transients)</li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
-<dt id="sherlock.classifier.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/classifier.html#classifier.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.classifier.__init__" title="Permalink to this definition">  ∞</a></dt>
-<dd></dd></dl>
+<dt id="sherlock.classifier.classifier.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.classifier.classifier.get" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>perform the classifications</p>
+</dd></dl>
 
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code>(log[,&nbsp;settings,&nbsp;update])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../_api/sherlock.classifier.html#sherlock.classifier.classifier.get" title="sherlock.classifier.classifier.get"><code class="xref py py-obj docutils literal"><span class="pre">get</span></code></a>()</td>
-<td><em>perform the classifications</em></td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>
@@ -212,10 +210,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.cleanup_database_tables.html" class="btn btn-neutral float-right" title="sherlock.cleanup_database_tables (class)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.utKit.html" class="btn btn-neutral float-right" title="sherlock.utKit (module)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sherlock.imports.importers_clutils.html" class="btn btn-neutral" title="sherlock.imports.importers_clutils (module)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sherlock.cl_utils.html" class="btn btn-neutral" title="sherlock.cl_utils (module)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -224,7 +222,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Dave Young.
+        &copy; Copyright 2017, Dave Young.
 
     </p>
   </div>

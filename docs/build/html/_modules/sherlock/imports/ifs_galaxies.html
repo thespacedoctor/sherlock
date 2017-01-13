@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary.html#modules">Modules</a></li>
@@ -158,28 +161,25 @@
 <span class="sd">    David Young</span>
 
 <span class="sd">:Date Created:</span>
-<span class="sd">    October  8, 2015</span>
+<span class="sd">    November 18, 2016</span>
 
-<span class="sd">.. todo::</span>
-<span class="sd">    </span>
-<span class="sd">    @review: when complete pull all general functions and classes into dryxPython</span>
+<span class="sd">.. todo ::</span>
+
+<span class="sd">    - document this module</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">################# GLOBAL IMPORTS ####################</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vt100&#39;</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">logs</span> <span class="k">as</span> <span class="n">dl</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">commonutils</span> <span class="k">as</span> <span class="n">dcu</span>
-<span class="kn">from</span> <span class="nn">fundamentals</span> <span class="kn">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">webcrawlers</span> <span class="k">as</span> <span class="n">dwc</span>
-<span class="kn">from</span> <span class="nn">dryxPython</span> <span class="kn">import</span> <span class="n">astrotools</span> <span class="k">as</span> <span class="n">dat</span>
-<span class="kn">from</span> <span class="nn">._base_importer</span> <span class="kn">import</span> <span class="n">_base_importer</span>
+<span class="kn">from</span> <span class="nn">fundamentals.download</span> <span class="k">import</span> <span class="n">multiobject_download</span>
+<span class="kn">from</span> <span class="nn">astrocalc.coords</span> <span class="k">import</span> <span class="n">unit_conversion</span>
+<span class="kn">from</span> <span class="nn">._base_importer</span> <span class="k">import</span> <span class="n">_base_importer</span>
 
 
 <div class="viewcode-block" id="ifs_galaxies"><a class="viewcode-back" href="../../../_autosummary/sherlock.imports.ifs_galaxies.html#sherlock.imports.ifs_galaxies.ifs_galaxies">[docs]</a><span class="k">class</span> <span class="nc">ifs_galaxies</span><span class="p">(</span><span class="n">_base_importer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *The worker class for the ifs_galaxies module*</span>
+<span class="sd">    The worker class for the ifs_galaxies module</span>
 
 <span class="sd">    **Key Arguments:**</span>
 <span class="sd">        - ``dbConn`` -- mysql database connection</span>
@@ -188,8 +188,7 @@
 <span class="sd">        - ``pathToDataFIle`` -- path to the pessto_marshall_streams data file</span>
 <span class="sd">        - ``version`` -- version of the pessto_marshall_streams catalogue</span>
 
-<span class="sd">    .. todo::</span>
-
+<span class="sd">    **Todo**</span>
 <span class="sd">        - @review: when complete, clean ifs_galaxies class</span>
 <span class="sd">        - @review: when complete add logging</span>
 <span class="sd">        - @review: when complete, decide whether to abstract class to another module</span>
@@ -198,14 +197,12 @@
     <span class="c1"># 4. @flagged: what actions does each object have to be able to perform? Add them here</span>
     <span class="c1"># Method Attributes</span>
 <div class="viewcode-block" id="ifs_galaxies.get"><a class="viewcode-back" href="../../../_api/sherlock.imports.ifs_galaxies.html#sherlock.imports.ifs_galaxies.ifs_galaxies.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        *get the ifs_galaxies object*</span>
+        <span class="sd">&quot;&quot;&quot;get the ifs_galaxies object</span>
 
 <span class="sd">        **Return:**</span>
 <span class="sd">            - ``ifs_galaxies``</span>
 
-<span class="sd">        .. todo::</span>
-
+<span class="sd">        **Todo**</span>
 <span class="sd">            - @review: when complete, clean get method</span>
 <span class="sd">            - @review: when complete add logging</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -227,8 +224,7 @@
 
     <span class="k">def</span> <span class="nf">_download_and_parse_ifs_galaxy_csv</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        *download and parse ifs galaxy csv*</span>
+        <span class="sd">&quot;&quot;&quot; download and parse ifs galaxy csv</span>
 
 <span class="sd">        **Key Arguments:**</span>
 <span class="sd">            # -</span>
@@ -236,21 +232,26 @@
 <span class="sd">        **Return:**</span>
 <span class="sd">            - None</span>
 
-<span class="sd">        .. todo::</span>
-
+<span class="sd">        **Todo**</span>
 <span class="sd">            - @review: when complete, clean _download_and_parse_ifs_galaxy_csv method</span>
 <span class="sd">            - @review: when complete add logging</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;starting the ``_download_and_parse_ifs_galaxy_csv`` method&#39;</span><span class="p">)</span>
 
-        <span class="n">urlDoc</span> <span class="o">=</span> <span class="n">dwc</span><span class="o">.</span><span class="n">singleWebDocumentDownloader</span><span class="p">(</span>
-            <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;ifs galaxies url&quot;</span><span class="p">],</span>
+        <span class="n">localUrls</span> <span class="o">=</span> <span class="n">multiobject_download</span><span class="p">(</span>
+            <span class="n">urlList</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;ifs galaxies url&quot;</span><span class="p">],</span>
             <span class="n">downloadDirectory</span><span class="o">=</span><span class="s2">&quot;/tmp&quot;</span><span class="p">,</span>
             <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
-            <span class="n">timeStamp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">credentials</span><span class="o">=</span><span class="bp">False</span>
+            <span class="n">timeStamp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+            <span class="n">concurrentDownloads</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">resetFilename</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">credentials</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># { &#39;username&#39; : &quot;...&quot;, &quot;password&quot;, &quot;...&quot; }</span>
+            <span class="n">longTime</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">indexFilenames</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+        <span class="n">urlDoc</span> <span class="o">=</span> <span class="n">localUrls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">pathToReadFile</span> <span class="o">=</span> <span class="n">urlDoc</span>
         <span class="k">try</span><span class="p">:</span>
@@ -274,26 +275,26 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">raDeg</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">ra_sexegesimal_to_decimal</span><span class="o">.</span><span class="n">ra_sexegesimal_to_decimal</span><span class="p">(</span><span class="n">values</span><span class="p">[</span>
-                                                                                    <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="n">raDeg</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="c1"># ASTROCALC UNIT CONVERTER OBJECT</span>
+                <span class="n">converter</span> <span class="o">=</span> <span class="n">unit_conversion</span><span class="p">(</span>
+                    <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span>
+                <span class="p">)</span>
+                <span class="n">raDeg</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">ra_sexegesimal_to_decimal</span><span class="p">(</span>
+                    <span class="n">ra</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="p">)</span>
                 <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;raDeg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raDeg</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">decDeg</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">declination_sexegesimal_to_decimal</span><span class="o">.</span><span class="n">declination_sexegesimal_to_decimal</span><span class="p">(</span><span class="n">values</span><span class="p">[</span>
-                                                                                                       <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="n">decDeg</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">decDeg</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">dec_sexegesimal_to_decimal</span><span class="p">(</span>
+                    <span class="n">dec</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="p">)</span>
                 <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;decDeg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decDeg</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="k">if</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
                         <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                        <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">thisDict</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">dictList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thisDict</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>

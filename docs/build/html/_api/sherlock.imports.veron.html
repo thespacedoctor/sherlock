@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.imports.veron module &mdash; sherlock 0.1 documentation</title>
   
 
   
@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
 
   
@@ -93,11 +96,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
@@ -133,7 +136,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>&lt;no title&gt;</li>
+    <li>sherlock.imports.veron module</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -147,26 +150,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-sherlock.imports.veron"></span><p><em>Import veron catagloue from plain text file</em></p>
+  <div class="section" id="module-sherlock.imports.veron">
+<span id="sherlock-imports-veron-module"></span><h1>sherlock.imports.veron module<a class="headerlink" href="#module-sherlock.imports.veron" title="Permalink to this headline">  ∞</a></h1>
+<p><em>import veron catalogue into sherlock&#8217;s crossmatch catalogues database</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Young</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">August 25, 2015</td>
+<tr class="field-even field"><th class="field-name">Date Created:</th><td class="field-body">December 12, 2016</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">&#64;review: when complete pull all general functions and classes into dryxPython</p>
-</div>
 <dl class="class">
 <dt id="sherlock.imports.veron.veron">
-<em class="property">class </em><code class="descclassname">sherlock.imports.veron.</code><code class="descname">veron</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>cataloguesDbConn=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/veron.html#veron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.veron.veron" title="Permalink to this definition">  ∞</a></dt>
+<em class="property">class </em><code class="descclassname">sherlock.imports.veron.</code><code class="descname">veron</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/veron.html#veron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.veron.veron" title="Permalink to this definition">  ∞</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></p>
-<p><em>The worker class for the veron module</em></p>
+<p><em>importer object for the</em> <a class="reference external" href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258">VERON AGN catalogue</a></p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
@@ -175,62 +176,36 @@
 <li><code class="docutils literal"><span class="pre">settings</span></code> &#8211; the settings dictionary</li>
 <li><code class="docutils literal"><span class="pre">pathToDataFIle</span></code> &#8211; path to the veron data file</li>
 <li><code class="docutils literal"><span class="pre">version</span></code> &#8211; version of the veron catalogue</li>
-<li><code class="docutils literal"><span class="pre">catalogueName</span></code> &#8211; the name of the catalogue</li>
 </ul>
 </dd>
 </dl>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>&#64;review: when complete, clean veron class</li>
-<li>&#64;review: when complete add logging</li>
-<li>&#64;review: when complete, decide whether to abstract class to another module</li>
-</ul>
+<p><strong>Usage:</strong></p>
+<blockquote>
+<div><p>To import the veron catalogue catalogue, run the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">veron</span>
+<span class="n">catalogue</span> <span class="o">=</span> <span class="n">veron</span><span class="p">(</span>
+    <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+    <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+    <span class="n">pathToDataFile</span><span class="o">=</span><span class="s2">&quot;/path/to/veron.txt&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+    <span class="n">catalogueName</span><span class="o">=</span><span class="s2">&quot;veron&quot;</span>
+<span class="p">)</span>
+<span class="n">catalogue</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+</pre></div>
 </div>
+</div></blockquote>
+<p>Whenever downloading a version of the Veron catalogue from Vizier use the following column selection:</p>
+<a class="reference internal image-reference" href="https://i.imgur.com/4k7MJuw.png"><img alt="Veron column selection in Vizier" src="https://i.imgur.com/4k7MJuw.png" style="width: 800px;" /></a>
 <dl class="method">
-<dt id="sherlock.imports.veron.veron.create_dictionary_of_veron">
-<code class="descname">create_dictionary_of_veron</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/veron.html#veron.create_dictionary_of_veron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.veron.veron.create_dictionary_of_veron" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>create dictionary of veron</em></p>
-<dl class="docutils">
-<dt><strong>Key Arguments:</strong></dt>
-<dd># -</dd>
-<dt><strong>Return:</strong></dt>
-<dd><ul class="first last simple">
-<li>None</li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>&#64;review: when complete, clean create_dictionary_of_veron method</li>
-<li>&#64;review: when complete add logging</li>
-</ul>
+<dt id="sherlock.imports.veron.veron.ingest">
+<code class="descname">ingest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/veron.html#veron.ingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.veron.veron.ingest" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>ingest the veron catalogue into the catalogues database</p>
+<p>See class docstring for usage.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="sherlock.imports.veron.veron.get">
-<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/veron.html#veron.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.veron.veron.get" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>get the veron object</em></p>
-<dl class="docutils">
-<dt><strong>Return:</strong></dt>
-<dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">veron</span></code></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-todo admonition" id="index-3">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>&#64;review: when complete, clean get method</li>
-<li>&#64;review: when complete add logging</li>
-</ul>
-</div>
-</dd></dl>
-
-</dd></dl>
-
 
 
            </div>
@@ -242,7 +217,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Dave Young.
+        &copy; Copyright 2017, Dave Young.
 
     </p>
   </div>

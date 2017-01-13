@@ -38,6 +38,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="#"/>
         <link rel="next" title="Installation" href="_includes/index.html"/> 
 
@@ -94,11 +97,11 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html#modules">Modules</a></li>
@@ -150,48 +153,119 @@
             
   <div class="section" id="sherlock">
 <h1>sherlock<a class="headerlink" href="#sherlock" title="Permalink to this headline">  ∞</a></h1>
-<p><em>A contextual classifier for astronomical transient sources. Sherlock mines a library of historical and on-going survey data to search for the source of a transient event, and predicting the classification of the event based on that associated data.</em>.</p>
+<p><em>A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data</em>.</p>
+<p>Here&#8217;s a summary of what&#8217;s included in the python package:</p>
+<p><strong>Classes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.catalogue_conesearch.html#sherlock.catalogue_conesearch" title="sherlock.catalogue_conesearch"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.catalogue_conesearch</span></code></a></td>
+<td><em>The worker class for the conesearch module</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/sherlock.database.html#sherlock.database" title="sherlock.database"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.database</span></code></a></td>
+<td><em>the database object for sherlock, setting up ssh tunnels and various database connections</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.database_cleaner.html#sherlock.database_cleaner" title="sherlock.database_cleaner"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.database_cleaner</span></code></a></td>
+<td><em>Clean and maintain the database helper tables used by sherlock</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/sherlock.transient_catalogue_crossmatch.html#sherlock.transient_catalogue_crossmatch" title="sherlock.transient_catalogue_crossmatch"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.transient_catalogue_crossmatch</span></code></a></td>
+<td><em>crossmatch a list of transients against a suite of catalogues according to given search algorithm</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.transient_classifier.html#sherlock.transient_classifier" title="sherlock.transient_classifier"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.transient_classifier</span></code></a></td>
+<td><em>The Sherlock Transient Classifier</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages" title="sherlock.commonutils.update_wiki_pages"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.commonutils.update_wiki_pages</span></code></a></td>
+<td>Update sherlock&#8217;s github wiki pages with some useful info regarding the crossmatch database catalogue tables</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.imports.ifs.html#sherlock.imports.ifs" title="sherlock.imports.ifs"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ifs</span></code></a></td>
+<td><em>importer object for the Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue stream</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/sherlock.imports.marshall.html#sherlock.imports.marshall" title="sherlock.imports.marshall"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.marshall</span></code></a></td>
+<td><em>importer object for the Marshall transient streams (includes multiple on-going transient survey streams)</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.imports.milliquas.html#sherlock.imports.milliquas" title="sherlock.imports.milliquas"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.milliquas</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">Milliquas (Million Quasars Catalog)</a> <em>catagloue</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/sherlock.imports.ned.html#sherlock.imports.ned" title="sherlock.imports.ned"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ned</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/">NED</a> <em>galaxy stream</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.imports.ned_d.html#sherlock.imports.ned_d" title="sherlock.imports.ned_d"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ned_d</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/sherlock.imports.veron.html#sherlock.imports.veron" title="sherlock.imports.veron"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.veron</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258">VERON AGN catalogue</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.classifier.classifier.html#sherlock.classifier.classifier" title="sherlock.classifier.classifier"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.classifier.classifier</span></code></a></td>
+<td>The classifier object for Sherlock</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/sherlock.commonutils.get_crossmatch_catalogues_column_map.html#sherlock.commonutils.get_crossmatch_catalogues_column_map" title="sherlock.commonutils.get_crossmatch_catalogues_column_map"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.commonutils.get_crossmatch_catalogues_column_map</span></code></a></td>
+<td><em>query the crossmatch catalogues helper tables to generate a map of the important columns of each catalogue</em></td>
+</tr>
+</tbody>
+</table>
 <div class="toctree-wrapper compound" id="getting-started">
 <p class="caption"><span class="caption-text">Getting Started</span><a class="headerlink" href="#getting-started" title="Permalink to this toctree">  ∞</a></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="_includes/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="_includes/index.html#development">Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_includes/index.html#development">Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_includes/index.html#sublime-snippets">Sublime Snippets</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="_includes/index.html#issues">Issues</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_includes/index.html#command-line-tutorial">Command-Line Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_includes/index.html#the-settings-file">The Settings File</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">  ∞</a></h1>
 <p>The easiest way to install sherlock us to use <code class="docutils literal"><span class="pre">pip</span></code>:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>pip install sherlock
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span>
 </pre></div>
 </div>
 <p>Or you can clone the <a class="reference external" href="https://github.com/thespacedoctor/sherlock">github repo</a> and install from a local version of the code:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>git clone git@github.com:thespacedoctor/sherlock.git
-cd sherlock
-python setup.py install
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">thespacedoctor</span><span class="o">/</span><span class="n">sherlock</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">sherlock</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>To upgrade to the latest version of sherlock use the command:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>pip install sherlock --upgrade
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span> <span class="o">--</span><span class="n">upgrade</span>
 </pre></div>
 </div>
 <div class="section" id="development">
 <h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">  ∞</a></h2>
 <p>If you want to tinker with the code, then install in development mode.
 This means you can modify the code from your cloned repo:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre><span></span>git clone git@github.com:thespacedoctor/sherlock.git
-cd sherlock
-python setup.py develop
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">thespacedoctor</span><span class="o">/</span><span class="n">sherlock</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">sherlock</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="https://github.com/thespacedoctor/sherlock/pulls">Pull requests</a>
 are welcomed!</p>
+<div class="section" id="sublime-snippets">
+<h3>Sublime Snippets<a class="headerlink" href="#sublime-snippets" title="Permalink to this headline">  ∞</a></h3>
+<p>If you use <a class="reference external" href="https://www.sublimetext.com/">Sublime Text</a> as your code editor, and you&#8217;re planning to develop your own python code with sherlock, you might find <a class="reference external" href="https://github.com/thespacedoctor/sherlock-Sublime-Snippets">my Sublime Snippets</a> useful.</p>
+</div>
 </div>
 <div class="section" id="issues">
 <h2>Issues<a class="headerlink" href="#issues" title="Permalink to this headline">  ∞</a></h2>
@@ -199,17 +273,64 @@ are welcomed!</p>
 <a class="reference external" href="https://github.com/thespacedoctor/sherlock/issues">here</a>.</p>
 </div>
 </div>
-<div class="section" id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">  ∞</a></h1>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock match <span class="o">[</span>--update<span class="o">]</span> <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
-sherlock clean <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
-sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+<div class="section" id="command-line-usage">
+<h1>Command-Line Usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">  ∞</a></h1>
+<div class="highlight-bash"><div class="highlight"><pre><span></span># SHERLOCK #
+: INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
+=============================================================================================
 
--h, --help            show this <span class="nb">help</span> message
--v, --version         show version
--s, --settings        the settings file
--l, --transientlistId          the id of the transient list to classify
--u, --update          update the transient database with new classifications and crossmatches
+Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en/stable
+
+.. todo ::
+
+    - docuument cl_utils module
+    - tidy usage text
+
+Usage:
+    sherlock init
+    sherlock &lt;ra&gt; &lt;dec&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock match [--update] [-s &lt;pathToSettingsFile&gt;]
+    sherlock clean [-s &lt;pathToSettingsFile&gt;]
+    sherlock wiki [-s &lt;pathToSettingsFile&gt;]
+    sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock import cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock import stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]
+
+Options:
+    init                    setup the sherlock settings file for the first time
+    match                   XXXX
+    clean                   XXXX
+    wiki                    XXXX
+    import                  XXXX
+    ned                     use the online NED database as the source catalogue
+    cat                     import a static catalogue into the crossmatch catalogues database
+    stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
+
+
+    ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
+    dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
+    radiusArcsec            radius in arcsec of the footprint to download from the online NED database
+    cat_name                name of the catalogue being imported. The following catalogues can be imported:
+                                * ``veron``: Veron AGN/QSO catalogue
+                                    http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258
+                                * ``milliquas``: Million Quasars Catalog
+                                    http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html
+                                * ``ned_d``: NED&#39;s Master List of Redshift-Independent Extragalactic Distances
+                                    https://ned.ipac.caltech.edu/Library/Distances/
+    stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:
+                                * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
+                                    http://www.das.uchile.cl/~lgalbany/LG/research.html
+
+    -h, --help              show this help message
+    -v, --version           show version
+    -s, --settings          the settings file
+    -l, --transientlistId   the id of the transient list to classify
+    -u, --update            update the transient database with new classifications and crossmatches
+
+
+.. todo ::
+
+    - document this module
 </pre></div>
 </div>
 </div>
@@ -217,65 +338,72 @@ sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="
 <h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">  ∞</a></h1>
 <p>Documentation for sherlock is hosted by <a class="reference external" href="http://sherlock.readthedocs.org/en/stable/">Read the Docs</a> (last <a class="reference external" href="http://sherlock.readthedocs.org/en/stable/">stable version</a> and <a class="reference external" href="http://sherlock.readthedocs.org/en/latest/">latest version</a>).</p>
 </div>
-<div class="section" id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">  ∞</a></h1>
+<div class="section" id="command-line-tutorial">
+<h1>Command-Line Tutorial<a class="headerlink" href="#command-line-tutorial" title="Permalink to this headline">  ∞</a></h1>
+<p>Before you begin using sherlock you will need to populate some custom settings within the sherlock settings file.</p>
+<p>To setup the default settings file at <code class="docutils literal"><span class="pre">~/.config/sherlock/sherlock.yaml</span></code> run the command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock init
+</pre></div>
+</div>
+<p>This should create and open the settings file; follow the instructions in the file to populate the missing settings values (usually given an <code class="docutils literal"><span class="pre">XXX</span></code> placeholder).</p>
+<div class="section" id="the-settings-file">
+<h2>The Settings File<a class="headerlink" href="#the-settings-file" title="Permalink to this headline">  ∞</a></h2>
+<p>Before you begin you will need to run the following code once to set a login-path for each of your mysql servers:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mysql_config_editor <span class="nb">set</span> --login-path<span class="o">=</span>&lt;uniqueLoginName&gt; --host<span class="o">=</span>localhost --user<span class="o">=</span>&lt;myUsername&gt; --password --port<span class="o">=</span>&lt;port&gt;
+</pre></div>
+</div>
+<p>This stores your credentials in an encrypted file located at &#8216;~/.mylogin.cnf&#8217;.
+Use <code class="xref py py-obj docutils literal"><span class="pre">mysql_config_editor</span> <span class="pre">print</span> <span class="pre">--all</span></code> to see all of the login-paths set.</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
 <li>add tutorial</li>
 </ul>
 </div>
-<div class="toctree-wrapper compound" id="id1">
-<p class="caption"><span class="caption-text">Documentation</span><a class="headerlink" href="#id1" title="Permalink to this toctree">  ∞</a></p>
+<div class="toctree-wrapper compound" id="python-package-documentation">
+<p class="caption"><span class="caption-text">Python Package Documentation</span><a class="headerlink" href="#python-package-documentation" title="Permalink to this toctree">  ∞</a></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html">Subpackages</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.html">sherlock (<em>subpackage</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.commonutils.html">sherlock.commonutils (<em>subpackage</em>)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/sherlock.commonutils.html#commonutils-sub-package">commonutils sub-package</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.commonutils.html">sherlock.commonutils (<em>subpackage</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.html">sherlock.imports (<em>subpackage</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ned_conesearch.html">sherlock.imports.ned_conesearch (<em>subpackage</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ned_d.html">sherlock.imports.ned_d (<em>subpackage</em>)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html#modules">Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.cl_utils.html">sherlock.cl_utils (<em>module</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.update_ned_stream.html">sherlock.update_ned_stream (<em>module</em>)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/sherlock.update_ned_stream.html#update-ned-stream-py">update_ned_stream.py</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.classifier.html">sherlock.classifier (<em>module</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.utKit.html">sherlock.utKit (<em>module</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.importers_clutils.html">sherlock.imports.importers_clutils (<em>module</em>)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html#classes">Classes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.classifier.html">sherlock.classifier (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.cleanup_database_tables.html">sherlock.cleanup_database_tables (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.catalogue_conesearch.html">sherlock.catalogue_conesearch (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.database.html">sherlock.database (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.database_cleaner.html">sherlock.database_cleaner (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.transient_catalogue_crossmatch.html">sherlock.transient_catalogue_crossmatch (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.transient_classifier.html">sherlock.transient_classifier (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.commonutils.update_wiki_pages.html">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ifs_galaxies.html">sherlock.imports.ifs_galaxies (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ifs.html">sherlock.imports.ifs (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.marshall.html">sherlock.imports.marshall (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.milliquas.html">sherlock.imports.milliquas (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.pessto_marshall_streams.html">sherlock.imports.pessto_marshall_streams (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.tmp_sdss.html">sherlock.imports.tmp_sdss (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ned.html">sherlock.imports.ned (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ned_d.html">sherlock.imports.ned_d (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.veron.html">sherlock.imports.veron (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ned_conesearch.ned_conesearch.html">sherlock.imports.ned_conesearch.ned_conesearch (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.ned_d.ned_d.html">sherlock.imports.ned_d.ned_d (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.update_ned_stream.update_ned_stream.html">sherlock.update_ned_stream.update_ned_stream (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.classifier.classifier.html">sherlock.classifier.classifier (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.utKit.utKit.html">sherlock.utKit.utKit (<em>class</em>)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary.html#functions">Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.cl_utils.tab_complete.html">sherlock.cl_utils.tab_complete (<em>function</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.imports.importers_clutils.tab_complete.html">sherlock.imports.importers_clutils.tab_complete (<em>function</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/sherlock.commonutils.get_crossmatch_catalogues_column_map.html">sherlock.commonutils.get_crossmatch_catalogues_column_map (<em>function</em>)</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</div>
 <div class="section" id="indexes">
-<span id="id2"></span><h2>Indexes<a class="headerlink" href="#indexes" title="Permalink to this headline">  ∞</a></h2>
+<span id="id1"></span><h2>Indexes<a class="headerlink" href="#indexes" title="Permalink to this headline">  ∞</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="genindex.html"><span>Full Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Full Index</span></a></li>
 </ul>
 </div>
 <div class="section" id="todo">
@@ -303,7 +431,7 @@ sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Dave Young.
+        &copy; Copyright 2017, Dave Young.
 
     </p>
   </div>

@@ -38,10 +38,13 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
-        <link rel="next" title="sherlock.imports.ifs_galaxies (class)" href="sherlock.imports.ifs_galaxies.html"/>
-        <link rel="prev" title="sherlock.cleanup_database_tables (class)" href="sherlock.cleanup_database_tables.html"/> 
+        <link rel="next" title="sherlock.imports.ifs (class)" href="sherlock.imports.ifs.html"/>
+        <link rel="prev" title="sherlock.transient_classifier (class)" href="sherlock.transient_classifier.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -96,26 +99,28 @@
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#tutorial">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
+<p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#classes">Classes</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="sherlock.classifier.html">sherlock.classifier (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.cleanup_database_tables.html">sherlock.cleanup_database_tables (<em>class</em>)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs_galaxies.html">sherlock.imports.ifs_galaxies (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.catalogue_conesearch.html">sherlock.catalogue_conesearch (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.database.html">sherlock.database (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.database_cleaner.html">sherlock.database_cleaner (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_catalogue_crossmatch.html">sherlock.transient_catalogue_crossmatch (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_classifier.html">sherlock.transient_classifier (<em>class</em>)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs.html">sherlock.imports.ifs (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.marshall.html">sherlock.imports.marshall (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.milliquas.html">sherlock.imports.milliquas (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.pessto_marshall_streams.html">sherlock.imports.pessto_marshall_streams (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.tmp_sdss.html">sherlock.imports.tmp_sdss (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned.html">sherlock.imports.ned (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_d.html">sherlock.imports.ned_d (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.veron.html">sherlock.imports.veron (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_conesearch.ned_conesearch.html">sherlock.imports.ned_conesearch.ned_conesearch (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_d.ned_d.html">sherlock.imports.ned_d.ned_d (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.update_ned_stream.update_ned_stream.html">sherlock.update_ned_stream.update_ned_stream (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.classifier.classifier.html">sherlock.classifier.classifier (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.utKit.html">sherlock.utKit.utKit (<em>class</em>)</a></li>
 </ul>
 </li>
@@ -171,7 +176,7 @@
 <dl class="class">
 <dt id="sherlock.commonutils.update_wiki_pages">
 <em class="property">class </em><code class="descclassname">sherlock.commonutils.</code><code class="descname">update_wiki_pages</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>The worker class for the update_wiki_pages module</em></p>
+<dd><p>Update sherlock&#8217;s github wiki pages with some useful info regarding the crossmatch database catalogue tables</p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
@@ -180,14 +185,18 @@
 </ul>
 </dd>
 </dl>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>&#64;review: when complete, clean update_wiki_pages class</li>
-<li>&#64;review: when complete add logging</li>
-<li>&#64;review: when complete, decide whether to abstract class to another module</li>
-</ul>
+<p><strong>Usage:</strong></p>
+<blockquote>
+<div><p>To trigger an update of sherlock&#8217;s wiki pages to give an overview of the crossmatch table database tables run the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sherlock.commonutils</span> <span class="kn">import</span> <span class="n">update_wiki_pages</span>
+<span class="n">wiki</span> <span class="o">=</span> <span class="n">update_wiki_pages</span><span class="p">(</span>
+    <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+    <span class="n">settings</span><span class="o">=</span><span class="n">settings</span>
+<span class="p">)</span>
+<span class="n">wiki</span><span class="o">.</span><span class="n">update</span><span class="p">()</span> 
+</pre></div>
 </div>
+</div></blockquote>
 <dl class="method">
 <dt id="sherlock.commonutils.update_wiki_pages.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages.__init__" title="Permalink to this definition">  ∞</a></dt>
@@ -203,8 +212,8 @@
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code>(log[,&nbsp;settings])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.get" title="sherlock.commonutils.update_wiki_pages.update_wiki_pages.get"><code class="xref py py-obj docutils literal"><span class="pre">get</span></code></a>()</td>
-<td><em>get the update_wiki_pages object</em></td>
+<tr class="row-even"><td><a class="reference internal" href="../_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.update" title="sherlock.commonutils.update_wiki_pages.update_wiki_pages.update"><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></a>()</td>
+<td>Update wiki pages</td>
 </tr>
 </tbody>
 </table>
@@ -219,10 +228,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.imports.ifs_galaxies.html" class="btn btn-neutral float-right" title="sherlock.imports.ifs_galaxies (class)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.imports.ifs.html" class="btn btn-neutral float-right" title="sherlock.imports.ifs (class)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sherlock.cleanup_database_tables.html" class="btn btn-neutral" title="sherlock.cleanup_database_tables (class)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sherlock.transient_classifier.html" class="btn btn-neutral" title="sherlock.transient_classifier (class)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -231,7 +240,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Dave Young.
+        &copy; Copyright 2017, Dave Young.
 
     </p>
   </div>

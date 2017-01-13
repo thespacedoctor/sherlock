@@ -1,3 +1,6 @@
+sherlock.imports.tmp_sdss module
+================================
+
 .. automodule:: sherlock.imports.tmp_sdss
     :members:
     :undoc-members:
