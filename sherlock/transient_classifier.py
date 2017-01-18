@@ -452,7 +452,7 @@ class transient_classifier():
         transientIDs = ",".join(transientIDs)
 
         createStatement = """
-CREATE TABLE IF NOT EXISTS `tcs_cross_matches` (
+CREATE TABLE IF NOT EXISTS `%(transientTable)s` (
   `transient_object_id` bigint(20) unsigned DEFAULT NULL,
   `catalogue_object_id` varchar(30) DEFAULT NULL,
   `catalogue_table_id` smallint(5) unsigned DEFAULT NULL,
@@ -523,7 +523,7 @@ CREATE TABLE IF NOT EXISTS `tcs_cross_matches` (
   KEY `idx_separationArcsec` (`separationArcsec`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 
-delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
+delete from %(transientTable)s where transient_object_id in (%(transientIDs)s);
 """ % locals()
 
         dataSet = list_of_dictionaries(
@@ -532,7 +532,7 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
         )
 
         mysqlData = dataSet.mysql(
-            tableName="tcs_cross_matches", filepath="/tmp/sherlock/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
+            tableName=transientTable, filepath="/tmp/sherlock/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
 
         directory_script_runner(
             log=self.log,
