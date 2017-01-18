@@ -80,12 +80,7 @@ class transient_catalogue_crossmatch():
         **Return:**
             - ``classification`` -- the crossmatch results and classifications assigned to the transients
 
-        See the class' docstring for usage.
-
-            ..  todo::
-
-                - tidy the 'BUILD THE LIST OF CROSSMATCH DICTIONARIE' code below, try and make it generic       
-
+        See the class docstring for usage.
         """
         self.log.info('starting the ``match`` method')
 
@@ -241,14 +236,12 @@ class transient_catalogue_crossmatch():
             log=self.log,
             ra=transRAs,
             dec=transDecs,
-            radius=radius,
+            radiusArcsec=radius,
             colMaps=self.colMaps,
             tableName=catalogueName,
             dbConn=self.dbConn,
-            settings=self.settings,
             nearestOnly=False,
-            physicalSearch=physicalSearch,
-            transType=searchPara["transient classification"]
+            physicalSearch=physicalSearch
         )
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
         indices, catalogueMatches = cs.search()

@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Command-Line Tutorial &mdash; sherlock 0.1 documentation</title>
+  <title>Sherlock Tutorial &mdash; sherlock 0.2.0 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
+    <link rel="top" title="sherlock 0.2.0 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                v0.1
+                v0.2.0
               </div>
             
           
@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-tutorial">Command-Line Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#sherlock-tutorial">Sherlock Tutorial</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
@@ -136,7 +136,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Command-Line Tutorial</li>
+    <li>Sherlock Tutorial</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -150,27 +150,321 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="command-line-tutorial">
-<h1>Command-Line Tutorial<a class="headerlink" href="#command-line-tutorial" title="Permalink to this headline">  ∞</a></h1>
+  <div class="section" id="sherlock-tutorial">
+<h1>Sherlock Tutorial<a class="headerlink" href="#sherlock-tutorial" title="Permalink to this headline">  ∞</a></h1>
 <p>Before you begin using sherlock you will need to populate some custom settings within the sherlock settings file.</p>
 <p>To setup the default settings file at <code class="docutils literal"><span class="pre">~/.config/sherlock/sherlock.yaml</span></code> run the command:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock init
 </pre></div>
 </div>
 <p>This should create and open the settings file; follow the instructions in the file to populate the missing settings values (usually given an <code class="docutils literal"><span class="pre">XXX</span></code> placeholder).</p>
-<div class="section" id="the-settings-file">
-<h2>The Settings File<a class="headerlink" href="#the-settings-file" title="Permalink to this headline">  ∞</a></h2>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>add tutorial</li>
+</ul>
+</div>
+<div class="section" id="initialisation-and-setup">
+<h2>Initialisation and Setup<a class="headerlink" href="#initialisation-and-setup" title="Permalink to this headline">  ∞</a></h2>
 <p>Before you begin you will need to run the following code once to set a login-path for each of your mysql servers:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>mysql_config_editor <span class="nb">set</span> --login-path<span class="o">=</span>&lt;uniqueLoginName&gt; --host<span class="o">=</span>localhost --user<span class="o">=</span>&lt;myUsername&gt; --password --port<span class="o">=</span>&lt;port&gt;
 </pre></div>
 </div>
 <p>This stores your credentials in an encrypted file located at &#8216;~/.mylogin.cnf&#8217;.
 Use <code class="xref py py-obj docutils literal"><span class="pre">mysql_config_editor</span> <span class="pre">print</span> <span class="pre">--all</span></code> to see all of the login-paths set.</p>
-<div class="admonition-todo admonition" id="index-0">
+<div class="section" id="populating-sherlock-s-settings-file">
+<h3>Populating Sherlock&#8217;s Settings File<a class="headerlink" href="#populating-sherlock-s-settings-file" title="Permalink to this headline">  ∞</a></h3>
+<p>The settings file now contains every option required to change the way the code runs, including database settings and the actual search algorithm.</p>
+<div class="section" id="database-settings">
+<h4>Database Settings<a class="headerlink" href="#database-settings" title="Permalink to this headline">  ∞</a></h4>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>yaml
+database settings:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>static catalogues:</dt>
+<dd>db: crossmatch_catalogues
+host: 127.0.0.1
+user: pessto
+password: p355t0</dd>
+<dt>transients:</dt>
+<dd><p class="first">user: pessto
+password: p355t0
+db: ps13pipublic
+host: 127.0.0.1
+transient table: tcs_transient_objects
+transient query: &#8220;select id as &#8216;id&#8217;, followup_id as &#8216;alt_id&#8217;, ra_psf &#8216;ra&#8217;, dec_psf &#8216;dec&#8217;, local_designation &#8216;name&#8217;, object_classification as &#8216;object_classification&#8217;</p>
+<blockquote>
+<div>from tcs_transient_objects
+where detection_list_id = 2
+and object_classification is null
+order by followup_id&#8221;</div></blockquote>
+<p class="last">transient id column: id
+transient classification column: object_classification</p>
+</dd>
+<dt>pessto marshall:</dt>
+<dd>user: pessto
+password: p355t0
+db: pessto_marshall
+host: 127.0.0.1</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>The <code class="xref py py-obj docutils literal"><span class="pre">static</span> <span class="pre">catalogues</span></code> settings are the settings for connecting to the static catalogues database. Do not edit these settings unless you know what you&#8217;re doing. If you have your RSA key on starbase, the code will setup a ssh-tunnel for you so that you can connect to this database remotely.</p>
+<p>The <code class="xref py py-obj docutils literal"><span class="pre">transients</span></code> settings are for the database you have your transients stored in. <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">table</span></code> is the name of the table containing your transients, <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">query</span></code> is the SQL query that need executed to get the following info for the transients needing classified:</p>
+<ul class="simple">
+<li><code class="xref py py-obj docutils literal"><span class="pre">id</span></code> - the primary ID for the transient in the database</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">alt_id</span></code> - human readable name (optional)</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">ra</span></code> - the ra of the object</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">dec</span></code> - the dec of the object</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">name</span></code> - a further alt id (optional)</li>
+</ul>
+<p>The <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">id</span> <span class="pre">column</span></code> is the primary ID column in the transient database and <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">classification</span> <span class="pre">column</span></code> is the column you wish to add the classification to.</p>
+</div>
+<div class="section" id="the-search-algorithm">
+<h4>The Search Algorithm<a class="headerlink" href="#the-search-algorithm" title="Permalink to this headline">  ∞</a></h4>
+<p>The order searches appear in the <code class="xref py py-obj docutils literal"><span class="pre">search</span> <span class="pre">algorithm</span></code> section is the order they shall be run in the actual code:</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>yaml
+search algorithm:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>sdss qso:</dt>
+<dd>angular radius arcsec: 2.0
+transient classification: AGN
+database table: tcs_cat_v_sdss_dr9_spect_qsos</dd>
+<dt>milliquas:</dt>
+<dd>angular radius arcsec: 3.0
+transient classification: AGN
+database table: tcs_cat_milliquas</dd>
+<dt>veron:</dt>
+<dd>angular radius arcsec: 2.0
+transient classification: AGN
+database table: tcs_veron_cat</dd>
+<dt>ned qso:</dt>
+<dd>angular radius arcsec: 2.0
+transient classification: AGN
+database table: tcs_cat_v_ned_qsos</dd>
+<dt>ned nt:</dt>
+<dd>angular radius arcsec: 3.0
+physical radius kpc: 0.5
+transient classification: NT
+database table: tcs_cat_v_ned_galaxies</dd>
+<dt>sdss spec nt:</dt>
+<dd>angular radius arcsec: 3.0
+physical radius kpc: 0.5
+transient classification: NT
+database table: tcs_cat_v_sdss_dr9_spect_galaxies</dd>
+<dt>sdss phot nt:</dt>
+<dd>angular radius arcsec: 0.5
+transient classification: NT
+database table: tcs_cat_v_sdss_dr9_galaxies_notspec</dd>
+</dl>
+<p>...</p>
+</div></blockquote>
+<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>The first time you run <a class="reference internal" href="../_autosummary/sherlock.html#module-sherlock" title="sherlock"><code class="xref py py-obj docutils literal"><span class="pre">sherlock</span></code></a> you will be told to add your settings to the empty settings file that&#8217;s been created in <code class="xref py py-obj docutils literal"><span class="pre">yaml</span></code>.</p>
+<p>For details about all of the catalogue in the catalogues database, run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock info
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="classifying-transients">
+<h2>Classifying Transients<a class="headerlink" href="#classifying-transients" title="Permalink to this headline">  ∞</a></h2>
+<div class="section" id="a-single-transient-classification">
+<h3>A Single Transient Classification<a class="headerlink" href="#a-single-transient-classification" title="Permalink to this headline">  ∞</a></h3>
+</div>
+<div class="section" id="classifying-transients-in-a-transient-database">
+<h3>Classifying Transients in a Transient Database<a class="headerlink" href="#classifying-transients-in-a-transient-database" title="Permalink to this headline">  ∞</a></h3>
+</div>
+<div class="section" id="the-classification-workflow">
+<h3>The Classification Workflow<a class="headerlink" href="#the-classification-workflow" title="Permalink to this headline">  ∞</a></h3>
+<p>![](<a class="reference external" href="https://i.imgur.com/TaGi9pb.png">https://i.imgur.com/TaGi9pb.png</a>)</p>
+<p>[zoom](<a class="reference external" href="https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67">https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67</a>)</p>
+<div class="section" id="ned-stream-updater">
+<h4>NED Stream Updater<a class="headerlink" href="#ned-stream-updater" title="Permalink to this headline">  ∞</a></h4>
+<p>The settings in the settings file relating to the NED stream are:</p>
+<p><code class="docutils literal"><span class="pre">`yaml</span>
+<span class="pre">ned</span> <span class="pre">stream</span> <span class="pre">search</span> <span class="pre">radius</span> <span class="pre">arcec:</span> <span class="pre">300</span>
+<span class="pre">first</span> <span class="pre">pass</span> <span class="pre">ned</span> <span class="pre">search</span> <span class="pre">radius</span> <span class="pre">arcec:</span> <span class="pre">240</span>
+<span class="pre">ned</span> <span class="pre">stream</span> <span class="pre">refresh</span> <span class="pre">rate</span> <span class="pre">in</span> <span class="pre">days:</span> <span class="pre">90</span>
+<span class="pre">`</span></code></p>
+<p>To update the NED stream, for each transient coordinates the code does a conesearch on the <code class="xref py py-obj docutils literal"><span class="pre">tcs_helper_ned_query_history</span></code> table to see if a search has already been performed within the designated <code class="xref py py-obj docutils literal"><span class="pre">ned</span> <span class="pre">stream</span> <span class="pre">refresh</span> <span class="pre">rate</span> <span class="pre">in</span> <span class="pre">days</span></code>. If a match isn&#8217;t found then NED is queried and the <code class="xref py py-obj docutils literal"><span class="pre">tcs_helper_ned_query_history</span></code> is updated for the transient coordinates.</p>
+</div>
+<div class="section" id="search-algoritm">
+<h4>Search Algoritm<a class="headerlink" href="#search-algoritm" title="Permalink to this headline">  ∞</a></h4>
+<p>The algorithm is written and modified within the <code class="xref py py-obj docutils literal"><span class="pre">sherlock.yaml</span></code> settings file. This means you can modify the algorithm without affecting anyone else&#8217;s search (as long as you are working off the different transient databases).</p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>yaml
+search algorithm:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>sdss qso:</dt>
+<dd>angular radius arcsec: 2.0
+transient classification: AGN
+database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
+stop algorithm on match: False
+match nearest source only: False</dd>
+<dt>milliquas:</dt>
+<dd>angular radius arcsec: 3.0
+transient classification: AGN
+database table: tcs_view_agn_milliquas_v4_5
+stop algorithm on match: False
+match nearest source only: False</dd>
+<dt>veron:</dt>
+<dd>angular radius arcsec: 2.0
+transient classification: AGN
+database table: tcs_view_agn_veron_v13
+stop algorithm on match: False
+match nearest source only: False</dd>
+<dt>ned qso:</dt>
+<dd>angular radius arcsec: 2.0
+transient classification: AGN
+...</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+<p>Note, to remove a module temporarily, simply comment it out in the settings file (yaml treats lines beginning with <code class="xref py py-obj docutils literal"><span class="pre">#</span></code> as comments).</p>
+<p>Behind the scenes there are 2 types of searches performed on the catalogues.</p>
+<ol class="arabic simple">
+<li>Angular Separation Search</li>
+<li>Physical Separation Search</li>
+</ol>
+</div>
+<div class="section" id="angular-separation-search">
+<h4>Angular Separation Search<a class="headerlink" href="#angular-separation-search" title="Permalink to this headline">  ∞</a></h4>
+<p>An example of an angular separation search looks like this in the settings file:</p>
+<p><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a>yaml
+milliquas:</p>
+<blockquote>
+<div>angular radius arcsec: 2.0
+transient classification: AGN
+database table: tcs_view_agn_milliquas_v4_5
+stop algorithm on match: False
+match nearest source only: False</div></blockquote>
+<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a></p>
+<p>The code performs a cone-search on <code class="xref py py-obj docutils literal"><span class="pre">database</span> <span class="pre">table</span></code> using the <code class="xref py py-obj docutils literal"><span class="pre">angular</span> <span class="pre">radius</span> <span class="pre">arcsec</span></code>. If matches are found the associated transient is given a <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">classification</span></code> and the results are added to the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table of the transients database. If <code class="xref py py-obj docutils literal"><span class="pre">stop</span> <span class="pre">algorithm</span> <span class="pre">on</span> <span class="pre">match</span></code> is true the code breaks out of the search algorithm and starts afresh with the next transient to be classified, otherwise the algorithm contines and all matches are recorded in the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table. If <code class="xref py py-obj docutils literal"><span class="pre">match</span> <span class="pre">nearest</span> <span class="pre">source</span> <span class="pre">only</span></code> is true only the closest match from each catalogue query is be recorded in the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table.</p>
+</div>
+<div class="section" id="physical-separation-search">
+<h4>Physical Separation Search<a class="headerlink" href="#physical-separation-search" title="Permalink to this headline">  ∞</a></h4>
+<p>If the <code class="xref py py-obj docutils literal"><span class="pre">physical</span> <span class="pre">radius</span> <span class="pre">kpc</span></code> key is found in the conesearch module then a physical separation search is performed. First of all an angular cone-search is performed at the coordinates using a suitably large search radius. After this a further search is done on the physical distance parameters returned (distance, physical separation distance, semi-major axis length ...) for each match.</p>
+<p>A physical match is found if:</p>
+<ul class="simple">
+<li>The transient falls within 1.5 x semi-major axis of a galaxy</li>
+<li>The transient is within the <code class="xref py py-obj docutils literal"><span class="pre">physical</span> <span class="pre">radius</span> <span class="pre">kpc</span></code> of a galaxy</li>
+</ul>
+<p>As before, all matches are recorded in the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table.</p>
+</div>
+<div class="section" id="classification-rankings">
+<h4>Classification Rankings<a class="headerlink" href="#classification-rankings" title="Permalink to this headline">  ∞</a></h4>
+<p>If transients are found:</p>
+<ul class="simple">
+<li>within 2.0 arc of source, <strong>OR</strong></li>
+<li>within 20 kpc of host galaxy <strong>AND</strong> assigned a SN classification, <strong>OR</strong></li>
+<li>within 1.2 times the semi-major axis of the host <strong>AND</strong> assigned a SN classification</li>
+</ul>
+<p>they are all given the same top level ranking for classification. After this catalogue weights come into effect to determine the orders of classifications. The catalogue weights are found in the [<code class="xref py py-obj docutils literal"><span class="pre">tcs_helper_catalogue_tables_info</span></code>](Crossmatch Catalogue Tables) table of the catalogues database and give an indication of the accuracy of the classifications of sources in the catalogue. For example the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cat_sdss_spect_galaxies_qsos_dr12</span></code> is given a greater weight than <code class="xref py py-obj docutils literal"><span class="pre">tcs_cat_sdss_photo_stars_galaxies_dr12</span></code> as classifications of the objects based on spectral observations is more accurate than photometry alone.</p>
+<p>Once the classifications for each individual transient are ranked, a final, ordered classification listing is given to the transient within its original database table. For example <code class="xref py py-obj docutils literal"><span class="pre">SN/VARIABLE</span> <span class="pre">STAR</span></code> means the the transient is most likely a SN but may also be a variable star.</p>
+<p>A transient is matched against a source in the crossmatch catalogues because it is either synonymous with a point-like catalogue source (e.g. a variable star or an AGN) or it is hosted by the catalogue source (e.g. supernova, nuclear transient).</p>
+<p>A synonymous crossmatch is always a simple angular crossmatch with a search radius that reflects the astrometric accuracy of the RMS combined astrometric errors of the transient source location and that of the catalogue being matched against.</p>
+</div>
+</div>
+</div>
+<div class="section" id="sherlock-s-catalogue-database">
+<h2>Sherlock&#8217;s Catalogue Database<a class="headerlink" href="#sherlock-s-catalogue-database" title="Permalink to this headline">  ∞</a></h2>
+<div class="section" id="database-table-naming-scheme">
+<h3>Database Table Naming Scheme<a class="headerlink" href="#database-table-naming-scheme" title="Permalink to this headline">  ∞</a></h3>
+<p>There&#8217;s a [strict table naming syntax for the crossmatch-catalogues](Crossmatch-Catalogues Database Scheme) database to help deal with catalogue versioning (as updated versions of out crossmatch catalogues are released) and to help ease the burden of modifying crossmatch algorithms employed.</p>
+<p>[See here for an up-to-date list of the crossmatch-catalogues](Crossmatch Catalogue Tables) and the [views](Crossmatch Catalogue Views) found on those tables.</p>
+<div class="section" id="table-classes">
+<h4>Table Classes<a class="headerlink" href="#table-classes" title="Permalink to this headline">  ∞</a></h4>
+<p>There are 4 classes of tables in the <code class="xref py py-obj docutils literal"><span class="pre">crossmatch_catalogues</span></code> database:</p>
+<div class="line-block">
+<div class="line">Table Type  | Prefix | Notes | Example |</div>
+<div class="line">:&#8212;&#8212;&#8212;&#8212; | :&#8212;&#8212;&#8212;&#8211; | :&#8212;&#8212;&#8212;&#8211; | :&#8212;&#8212;&#8212;&#8211; |</div>
+<div class="line">Catalogue     | <code class="xref py py-obj docutils literal"><span class="pre">tcs_cat</span></code>  | The table is named with the scheme <code class="xref py py-obj docutils literal"><span class="pre">tcs_cat_</span></code> &lt;catalogue name&gt; &lt;version&gt; | <code class="xref py py-obj docutils literal"><span class="pre">tcs_cat_ned_d_v10_2_0</span></code> |</div>
+<div class="line">View     | <code class="xref py py-obj docutils literal"><span class="pre">tcs_view</span></code>  | The view is named with the scheme <code class="xref py py-obj docutils literal"><span class="pre">tcs_view_</span></code> &lt;object type contained&gt; &lt;source table name&gt; | <code class="xref py py-obj docutils literal"><span class="pre">tcs_view_galaxies_ned_d</span></code> |</div>
+<div class="line">Helper     | <code class="xref py py-obj docutils literal"><span class="pre">tcs_helper</span></code>  | Mostly used to store relational information, notes on database tables and book-keeper info | <code class="xref py py-obj docutils literal"><span class="pre">tcs_helper_catalogue_tables_info</span></code> |</div>
+<div class="line">Legacy     | <code class="xref py py-obj docutils literal"><span class="pre">legacy_tcs_</span></code>  | Legacy tables used in previous incarnations of the transient classifier | <code class="xref py py-obj docutils literal"><span class="pre">legacy_tcs_cat_md01_chiappetti2005</span></code> |</div>
+</div>
+</div>
+<div class="section" id="versioning">
+<h4>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">  ∞</a></h4>
+<p>Each catalogue is versioned by appending a version indicator to the end of the table name. There are 3 indicator types:</p>
+<ol class="arabic simple">
+<li><code class="xref py py-obj docutils literal"><span class="pre">_final</span></code> to show that the catalogue is now at it&#8217;s final version and shall remain unchanged.</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">_stream</span></code> to show that the catalogue is constantly being updated</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">_vX_X</span></code> to show a version number for the catalogue, e.g. for v10.2 this would be <code class="xref py py-obj docutils literal"><span class="pre">_v10_2</span></code>. We can also have data-release versions (e.g. <code class="xref py py-obj docutils literal"><span class="pre">_dr12</span></code>).</li>
+</ol>
+</div>
+</div>
+<div class="section" id="maintainance-and-updates-of-catalogues-database">
+<h3>Maintainance and Updates of Catalogues Database<a class="headerlink" href="#maintainance-and-updates-of-catalogues-database" title="Permalink to this headline">  ∞</a></h3>
+<div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
-<li>add tutorial</li>
+<li>write about marshall stream updates</li>
+<li>write about helper table updates</li>
+<li>write that some tasks need automated</li>
 </ul>
+</div>
+<p>There are various cron-scripts that run on PESSTO-VM03 to automate some tasks. These tasks include</p>
+<ul class="simple">
+<li>updating of data-streams into the crossmatch-catalogues database and</li>
+<li>the updates of certain helper tables in the crossmatch-catalogues database.</li>
+</ul>
+<p>Currently there are scripts running every:</p>
+<ul class="simple">
+<li>5 mins</li>
+<li>30 mins</li>
+<li>1 hr</li>
+<li>3 hrs</li>
+<li>12 hrs</li>
+<li>24 hrs</li>
+</ul>
+</div>
+<div class="section" id="updating-catalogues-and-adding-new-catalogues-to-the-database">
+<h3>Updating Catalogues and Adding New Catalogues to the Database<a class="headerlink" href="#updating-catalogues-and-adding-new-catalogues-to-the-database" title="Permalink to this headline">  ∞</a></h3>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>list current catalogue importers and how to use them</li>
+<li>add tutorial about creating a new importer</li>
+<li>add steps for adding a catalogue to the database and the search algorithm</li>
+<li>add details about updating the column map</li>
+<li>write code into conf.py to generate tables for docs and link them from here (views, tables and streams)</li>
+</ul>
+</div>
+<p>Using the <code class="xref py py-obj docutils literal"><span class="pre">sherlock-import</span></code> command it&#8217;s possible to <strong>import and update various catalogues and data-streams</strong> including Milliquas, Veron AGN and the NED-D catalogues. [See here for details](Catalogue Importers).</p>
+<p><code class="docutils literal"><span class="pre">`bash</span>
+<span class="pre">sherlock-importers</span> <span class="pre">cat</span> <span class="pre">&lt;cat_name&gt;</span> <span class="pre">&lt;pathToDataFile&gt;</span> <span class="pre">&lt;cat_version&gt;</span> <span class="pre">[-s</span> <span class="pre">&lt;pathToSettingsFile&gt;]</span>
+<span class="pre">sherlock-importers</span> <span class="pre">stream</span> <span class="pre">&lt;stream_name&gt;</span> <span class="pre">[-s</span> <span class="pre">&lt;pathToSettingsFile&gt;]</span>
+<span class="pre">`</span></code></p>
+<p>The command to <strong>import new versions of catalogues</strong> and <strong>data streams</strong> into the <code class="xref py py-obj docutils literal"><span class="pre">crossmatch_catalogues</span></code> database is:</p>
+<p><a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a>python
+Usage:</p>
+<blockquote>
+<div>sherlock-importers cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]
+sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</div></blockquote>
+<p><a href="#id37"><span class="problematic" id="id38">``</span></a><a href="#id39"><span class="problematic" id="id40">`</span></a></p>
+<p>For example:</p>
+<p><code class="docutils literal"><span class="pre">`bash</span>
+<span class="pre">&gt;</span> <span class="pre">sherlock-importers</span> <span class="pre">cat</span> <span class="pre">milliquas</span> <span class="pre">~/Desktop/milliquas.txt</span> <span class="pre">4.5</span>
+<span class="pre">1153111</span> <span class="pre">/</span> <span class="pre">1153111</span> <span class="pre">milliquas</span> <span class="pre">data</span> <span class="pre">added</span> <span class="pre">to</span> <span class="pre">memory</span>
+<span class="pre">1153111</span> <span class="pre">/</span> <span class="pre">1153111</span> <span class="pre">rows</span> <span class="pre">inserted</span> <span class="pre">into</span> <span class="pre">tcs_cat_milliquas_v4_5</span>
+<span class="pre">5694</span> <span class="pre">/</span> <span class="pre">5694</span> <span class="pre">htmIds</span> <span class="pre">added</span> <span class="pre">to</span> <span class="pre">tcs_cat_milliquas_v4_5</span>
+<span class="pre">`</span></code></p>
+<p>The command currently supports imports for the following <strong>catalogues</strong>:</p>
+<ul class="simple">
+<li>Milliquas</li>
+<li>Veron AGN</li>
+<li>NED-D</li>
+</ul>
+<p>Using the command:</p>
+<p><code class="docutils literal"><span class="pre">`bash</span>
+<span class="pre">sherlock-importers</span> <span class="pre">stream</span> <span class="pre">pessto</span>
+<span class="pre">`</span></code></p>
+<p>will import all of the various <strong>data-streams</strong> added to the PESSTO marshall (ASASSN, CRTS, LSQ, PSST ...).</p>
+<p>THE COLUMN MAP LIFTED FROM <a href="#id41"><span class="problematic" id="id42">``</span></a>tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH &#8216;ColName&#8217;)</p>
 </div>
 </div>
 </div>
@@ -207,7 +501,7 @@ Use <code class="xref py py-obj docutils literal"><span class="pre">mysql_config
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

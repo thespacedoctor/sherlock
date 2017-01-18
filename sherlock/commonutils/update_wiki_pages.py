@@ -14,6 +14,7 @@ import os
 os.environ['TERM'] = 'vt100'
 import readline
 import glob
+import collections
 import codecs
 from datetime import datetime, date, time
 import pickle
@@ -68,6 +69,19 @@ class update_wiki_pages():
         self.cataloguesDbConn = dbConns["catalogues"]
         self.pmDbConn = dbConns["marshall"]
 
+        self.basicColumns = [
+            "view_name",
+            "master table",
+            "description",
+            "version_number",
+            "object_types",
+            "object_type",
+            "number_of_rows",
+            "url",
+            "object_type_accuracy",
+            "last_updated",
+        ]
+
         return None
 
     def update(self):
@@ -102,13 +116,14 @@ class update_wiki_pages():
         return update_wiki_pages
 
     def _get_table_infos(
-            self):
+            self,
+            trimmed=False):
         """query the crossmatch catalogues database table metadata
         """
         self.log.info('starting the ``_get_table_infos`` method')
 
         sqlQuery = u"""
-            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" order by number_of_rows desc;
+            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" and table_name not like "%%stream"  order by number_of_rows desc;
         """ % locals()
         tableInfo = readquery(
             log=self.log,
@@ -117,17 +132,28 @@ class update_wiki_pages():
             quiet=False
         )
 
+        if trimmed:
+            cleanTable = []
+            for r in tableInfo:
+                orow = collections.OrderedDict(sorted({}.items()))
+                for c in self.basicColumns:
+                    if c in r:
+                        orow[c] = r[c]
+                cleanTable.append(orow)
+            tableInfo = cleanTable
+
         self.log.info('completed the ``_get_table_infos`` method')
         return tableInfo
 
     def _get_view_infos(
-            self):
+            self,
+            trimmed=False):
         """query the crossmatch catalogues database view metadata
         """
         self.log.info('starting the ``_get_view_infos`` method')
 
         sqlQuery = u"""
-            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_views_info where legacy_view = 0 and view_name not like "legacy%%" order by number_of_rows desc;
+            SELECT v.*, t.description as "master table" FROM crossmatch_catalogues.tcs_helper_catalogue_views_info as v,  crossmatch_catalogues.tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like "legacy%%" and t.id=v.table_id order by number_of_rows desc
         """ % locals()
         viewInfo = readquery(
             log=self.log,
@@ -136,11 +162,22 @@ class update_wiki_pages():
             quiet=False
         )
 
+        if trimmed:
+            cleanTable = []
+            for r in viewInfo:
+                orow = collections.OrderedDict(sorted({}.items()))
+                for c in self.basicColumns:
+                    if c in r:
+                        orow[c] = r[c]
+                cleanTable.append(orow)
+            viewInfo = cleanTable
+
         self.log.info('completed the ``_get_view_infos`` method')
         return viewInfo
 
     def _get_stream_view_infos(
-            self):
+            self,
+            trimmed=False):
         """query the crossmatch catalogues database streamed data tables' metadata
         """
         self.log.info('starting the ``_get_stream_view_infos`` method')
@@ -154,6 +191,16 @@ class update_wiki_pages():
             dbConn=self.cataloguesDbConn,
             quiet=False
         )
+
+        if trimmed:
+            cleanTable = []
+            for r in streamInfo:
+                orow = collections.OrderedDict(sorted({}.items()))
+                for c in self.basicColumns:
+                    if c in r:
+                        orow[c] = r[c]
+                cleanTable.append(orow)
+            streamInfo = cleanTable
 
         self.log.info('completed the ``_get_stream_view_infos`` method')
         return streamInfo

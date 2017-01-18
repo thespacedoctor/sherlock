@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.commonutils.update_wiki_pages &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.commonutils.update_wiki_pages &mdash; sherlock 0.2.0 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="sherlock 0.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="sherlock 0.2.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                v0.1
+                v0.2.0
               </div>
             
           
@@ -99,7 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_includes/index.html#sherlock-tutorial">Sherlock Tutorial</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
@@ -168,6 +168,7 @@
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vt100&#39;</span>
 <span class="kn">import</span> <span class="nn">readline</span>
 <span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">time</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
@@ -222,6 +223,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span> <span class="o">=</span> <span class="n">dbConns</span><span class="p">[</span><span class="s2">&quot;catalogues&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pmDbConn</span> <span class="o">=</span> <span class="n">dbConns</span><span class="p">[</span><span class="s2">&quot;marshall&quot;</span><span class="p">]</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">basicColumns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;view_name&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;master table&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version_number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_types&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;number_of_rows&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_type_accuracy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;last_updated&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages.update"><a class="viewcode-back" href="../../../_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -256,13 +270,14 @@
         <span class="k">return</span> <span class="n">update_wiki_pages</span></div>
 
     <span class="k">def</span> <span class="nf">_get_table_infos</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">trimmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;query the crossmatch catalogues database table metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
 
         <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
-<span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; order by number_of_rows desc;</span>
+<span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; and table_name not like &quot;</span><span class="si">%%</span><span class="s2">stream&quot;  order by number_of_rows desc;</span>
 <span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
         <span class="n">tableInfo</span> <span class="o">=</span> <span class="n">readquery</span><span class="p">(</span>
             <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
@@ -271,17 +286,28 @@
             <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">trimmed</span><span class="p">:</span>
+            <span class="n">cleanTable</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">tableInfo</span><span class="p">:</span>
+                <span class="n">orow</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">({}</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basicColumns</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+                        <span class="n">orow</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+                <span class="n">cleanTable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orow</span><span class="p">)</span>
+            <span class="n">tableInfo</span> <span class="o">=</span> <span class="n">cleanTable</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tableInfo</span>
 
     <span class="k">def</span> <span class="nf">_get_view_infos</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">trimmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;query the crossmatch catalogues database view metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
 
         <span class="n">sqlQuery</span> <span class="o">=</span> <span class="s2">u&quot;&quot;&quot;</span>
-<span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_views_info where legacy_view = 0 and view_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; order by number_of_rows desc;</span>
+<span class="s2">            SELECT v.*, t.description as &quot;master table&quot; FROM crossmatch_catalogues.tcs_helper_catalogue_views_info as v,  crossmatch_catalogues.tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; and t.id=v.table_id order by number_of_rows desc</span>
 <span class="s2">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
         <span class="n">viewInfo</span> <span class="o">=</span> <span class="n">readquery</span><span class="p">(</span>
             <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
@@ -290,11 +316,22 @@
             <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">trimmed</span><span class="p">:</span>
+            <span class="n">cleanTable</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">viewInfo</span><span class="p">:</span>
+                <span class="n">orow</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">({}</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basicColumns</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+                        <span class="n">orow</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+                <span class="n">cleanTable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orow</span><span class="p">)</span>
+            <span class="n">viewInfo</span> <span class="o">=</span> <span class="n">cleanTable</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">viewInfo</span>
 
     <span class="k">def</span> <span class="nf">_get_stream_view_infos</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">trimmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;query the crossmatch catalogues database streamed data tables&#39; metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
@@ -308,6 +345,16 @@
             <span class="n">dbConn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cataloguesDbConn</span><span class="p">,</span>
             <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">trimmed</span><span class="p">:</span>
+            <span class="n">cleanTable</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">streamInfo</span><span class="p">:</span>
+                <span class="n">orow</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">({}</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basicColumns</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+                        <span class="n">orow</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+                <span class="n">cleanTable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orow</span><span class="p">)</span>
+            <span class="n">streamInfo</span> <span class="o">=</span> <span class="n">cleanTable</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">streamInfo</span>
@@ -555,7 +602,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

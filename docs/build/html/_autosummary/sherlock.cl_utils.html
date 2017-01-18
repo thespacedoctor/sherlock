@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.cl_utils (module) &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.cl_utils (module) &mdash; sherlock 0.2.0 documentation</title>
   
 
   
@@ -41,9 +41,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock 0.2.0 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
-        <link rel="next" title="sherlock.classifier (module)" href="sherlock.classifier.html"/>
+        <link rel="next" title="sherlock.utKit (module)" href="sherlock.utKit.html"/>
         <link rel="prev" title="sherlock.imports (subpackage)" href="sherlock.imports.html"/> 
 
   
@@ -75,7 +75,7 @@
             
             
               <div class="version">
-                v0.1
+                v0.2.0
               </div>
             
           
@@ -101,14 +101,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#sherlock-tutorial">Sherlock Tutorial</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#modules">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.cl_utils (<em>module</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.classifier.html">sherlock.classifier (<em>module</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.html">sherlock.utKit (<em>module</em>)</a></li>
 </ul>
 </li>
@@ -176,7 +175,8 @@
 <dl class="docutils">
 <dt>Usage:</dt>
 <dd>sherlock init
-sherlock &lt;ra&gt; &lt;dec&gt; [-s &lt;pathToSettingsFile&gt;]
+sherlock info [-s &lt;pathToSettingsFile&gt;]
+sherlock [-v] &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]
 sherlock match [&#8211;update] [-s &lt;pathToSettingsFile&gt;]
 sherlock clean [-s &lt;pathToSettingsFile&gt;]
 sherlock wiki [-s &lt;pathToSettingsFile&gt;]
@@ -191,7 +191,8 @@ wiki                    XXXX
 import                  XXXX
 ned                     use the online NED database as the source catalogue
 cat                     import a static catalogue into the crossmatch catalogues database
-stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database</p>
+stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
+info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching</p>
 <p>ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
 dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
 radiusArcsec            radius in arcsec of the footprint to download from the online NED database
@@ -238,11 +239,11 @@ cat_name                name of the catalogue being imported. The following cata
 <kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></td>
 <td>show this help message</td></tr>
 <tr><td class="option-group">
-<kbd><span class="option">-v</span>, <span class="option">--version</span></kbd></td>
-<td>show version</td></tr>
-<tr><td class="option-group">
 <kbd><span class="option">-s</span>, <span class="option">--settings</span></kbd></td>
 <td>the settings file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-v</span>, <span class="option">--verbose</span></kbd></td>
+<td>print more details to stdout</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-l</span>, <span class="option">--transientlistId</span></kbd></td>
 </tr>
@@ -254,12 +255,6 @@ cat_name                name of the catalogue being imported. The following cata
 </table>
 </dd>
 </dl>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>document this module</li>
-</ul>
-</div>
 <dl class="function">
 <dt id="sherlock.cl_utils.main">
 <code class="descclassname">sherlock.cl_utils.</code><code class="descname">main</code><span class="sig-paren">(</span><em>arguments=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/cl_utils.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.cl_utils.main" title="Permalink to this definition">  ∞</a></dt>
@@ -275,7 +270,7 @@ cat_name                name of the catalogue being imported. The following cata
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.classifier.html" class="btn btn-neutral float-right" title="sherlock.classifier (module)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.utKit.html" class="btn btn-neutral float-right" title="sherlock.utKit (module)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="sherlock.imports.html" class="btn btn-neutral" title="sherlock.imports (subpackage)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -309,7 +304,7 @@ cat_name                name of the catalogue being imported. The following cata
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

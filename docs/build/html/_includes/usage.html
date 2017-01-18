@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Command-Line Usage &mdash; sherlock 0.1 documentation</title>
+  <title>Command-Line Usage &mdash; sherlock 0.2.0 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 0.1 documentation" href="../index.html"/> 
+    <link rel="top" title="sherlock 0.2.0 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                v0.1
+                v0.2.0
               </div>
             
           
@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-tutorial">Command-Line Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#sherlock-tutorial">Sherlock Tutorial</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
@@ -165,7 +165,8 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 
 Usage:
     sherlock init
-    sherlock &lt;ra&gt; &lt;dec&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock info [-s &lt;pathToSettingsFile&gt;]
+    sherlock [-v] &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]
     sherlock match [--update] [-s &lt;pathToSettingsFile&gt;]
     sherlock clean [-s &lt;pathToSettingsFile&gt;]
     sherlock wiki [-s &lt;pathToSettingsFile&gt;]
@@ -182,7 +183,7 @@ Options:
     ned                     use the online NED database as the source catalogue
     cat                     import a static catalogue into the crossmatch catalogues database
     stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
-
+    info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching
 
     ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
     dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
@@ -199,15 +200,10 @@ Options:
                                     http://www.das.uchile.cl/~lgalbany/LG/research.html
 
     -h, --help              show this help message
-    -v, --version           show version
     -s, --settings          the settings file
+    -v, --verbose           print more details to stdout
     -l, --transientlistId   the id of the transient list to classify
     -u, --update            update the transient database with new classifications and crossmatches
-
-
-.. todo ::
-
-    - document this module
 </pre></div>
 </div>
 </div>
@@ -244,7 +240,7 @@ Options:
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -17,7 +17,8 @@ Command-Line Usage
     
     Usage:
         sherlock init
-        sherlock <ra> <dec> [-s <pathToSettingsFile>]
+        sherlock info [-s <pathToSettingsFile>]
+        sherlock [-v] <ra> <dec> [<name> -s <pathToSettingsFile>]
         sherlock match [--update] [-s <pathToSettingsFile>]
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
@@ -34,7 +35,7 @@ Command-Line Usage
         ned                     use the online NED database as the source catalogue
         cat                     import a static catalogue into the crossmatch catalogues database
         stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
-    
+        info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching
     
         ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
@@ -51,14 +52,8 @@ Command-Line Usage
                                         http://www.das.uchile.cl/~lgalbany/LG/research.html
     
         -h, --help              show this help message
-        -v, --version           show version
         -s, --settings          the settings file
+        -v, --verbose           print more details to stdout
         -l, --transientlistId   the id of the transient list to classify
         -u, --update            update the transient database with new classifications and crossmatches
-    
-    
-    .. todo ::
-    
-        - document this module
-    
     

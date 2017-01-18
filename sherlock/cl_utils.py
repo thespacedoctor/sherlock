@@ -14,6 +14,7 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 
 Usage:
     sherlock init
+    sherlock info [-s <pathToSettingsFile>]
     sherlock [-v] <ra> <dec> [<name> -s <pathToSettingsFile>]
     sherlock match [--update] [-s <pathToSettingsFile>]
     sherlock clean [-s <pathToSettingsFile>]
@@ -31,7 +32,7 @@ Options:
     ned                     use the online NED database as the source catalogue
     cat                     import a static catalogue into the crossmatch catalogues database
     stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
-
+    info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching
 
     ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
     dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
@@ -52,12 +53,6 @@ Options:
     -v, --verbose           print more details to stdout
     -l, --transientlistId   the id of the transient list to classify
     -u, --update            update the transient database with new classifications and crossmatches
-
-
-.. todo ::
-
-    - document this module
-
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -68,7 +63,7 @@ import glob
 import pickle
 from docopt import docopt
 from fundamentals import tools, times
-from classifier import classifier
+from fundamentals.renderer import list_of_dictionaries
 from database_cleaner import database_cleaner
 from commonutils import update_wiki_pages
 from subprocess import Popen, PIPE, STDOUT
@@ -78,6 +73,7 @@ from sherlock.imports import marshall as marshallImporter
 from sherlock.imports import ifs as ifsImporter
 from sherlock.imports import ned_d as nedImporter
 from sherlock.imports import ned as nedStreamImporter
+from sherlock.commonutils import update_wiki_pages
 from sherlock import transient_classifier
 # from ..__init__ import *
 
@@ -125,6 +121,8 @@ def main(arguments=None):
         from os.path import expanduser
         home = expanduser("~")
         filepath = home + "/.config/sherlock/sherlock.yaml"
+        cmd = """open %(filepath)s""" % locals()
+        p = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
         try:
             cmd = """open %(filepath)s""" % locals()
             p = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
@@ -137,7 +135,7 @@ def main(arguments=None):
             pass
 
     if match:
-        classifier = transient_classifier(
+        classifier = transient_classifier.transient_classifier(
             log=log,
             settings=settings,
             update=updateFlag
@@ -218,6 +216,42 @@ def main(arguments=None):
             verbose=verboseFlag
         )
         classifier.classify()
+
+    if info:
+        print "Crossmatch Catalogues"
+        wiki = update_wiki_pages(
+            log=log,
+            settings=settings
+        )
+        table = list(wiki._get_table_infos(trimmed=True))
+
+        dataSet = list_of_dictionaries(
+            log=log,
+            listOfDictionaries=table
+        )
+        tableData = dataSet.reST(filepath=None)
+        print tableData
+        print
+
+        print "Crossmatch Streams"
+        table = list(wiki._get_stream_view_infos(trimmed=True))
+        dataSet = list_of_dictionaries(
+            log=log,
+            listOfDictionaries=table
+        )
+        tableData = dataSet.reST(filepath=None)
+        print tableData
+        print
+
+        print "Views on Catalogues and Streams"
+
+        table = list(wiki._get_view_infos(trimmed=True))
+        dataSet = list_of_dictionaries(
+            log=log,
+            listOfDictionaries=table
+        )
+        tableData = dataSet.reST(filepath=None)
+        print tableData
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()

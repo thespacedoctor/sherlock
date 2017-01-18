@@ -62,27 +62,30 @@ directory_script_runner(
 
 class test_transient_classifier():
 
-    def test_transient_classifier_function(self):
-
-        from sherlock import transient_classifier
-        this = transient_classifier(
-            log=log,
-            settings=settings,
-            update=True
-        )
-        this.classify()
-
-    # def test_transient_classifier_single_source_function(self):
+    # def test_transient_classifier_function(self):
 
     #     from sherlock import transient_classifier
     #     this = transient_classifier(
     #         log=log,
     #         settings=settings,
-    #         ra="08:57:57.19",
-    #         dec="+43:25:44.1",
-    #         name="PS17gx"
+    #         update=True
     #     )
     #     this.classify()
+
+    def test_transient_classifier_single_source_function(self):
+
+        from sherlock import transient_classifier
+        this = transient_classifier(
+            log=log,
+            settings=settings,
+            ra="08:57:57.19",
+            dec="+43:25:44.1",
+            name="PS17gx",
+            verbose=0
+        )
+        classifications, crossmatches = this.classify()
+        print classifications
+        print crossmatches
 
     # def test_get_transient_metadata_from_database_list(self):
 

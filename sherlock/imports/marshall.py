@@ -31,20 +31,19 @@ class marshall(_base_importer):
     *importer object for the Marshall transient streams (includes multiple on-going transient survey streams)*
 
     **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
 
     **Usage:**
 
-      To import the marshall catalogue stream, run the following:
+      To import/update the marshall catalogue streams in the catalogues' database, run the following:
 
       .. code-block:: python 
 
         from sherlock.imports import marshall
         stream = marshall(
             log=log,
-            settings=settings,
+            settings=settings
         )
         stream.ingest()
     """
@@ -55,10 +54,7 @@ class marshall(_base_importer):
 
         The method first generates a list of python dictionaries from the marshall datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
-        .. todo ::
-
-          - add create statement
-
+        See the class docstring for usage
         """
         self.log.info('starting the ``get`` method')
 
