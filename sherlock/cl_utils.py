@@ -15,7 +15,7 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 Usage:
     sherlock init
     sherlock info [-s <pathToSettingsFile>]
-    sherlock [-v] <ra> <dec> [<name> -s <pathToSettingsFile>]
+    sherlock match [-v]  <ra> <dec> [<name> -s <pathToSettingsFile>]
     sherlock match [--update] [-s <pathToSettingsFile>]
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
@@ -205,7 +205,7 @@ def main(arguments=None):
                 settings=settings
             )
             stream.ingest()
-    if not init and not match and not clean and not wiki and not iimport:
+    if not init and not match and not clean and not wiki and not iimport and ra:
 
         classifier = transient_classifier.transient_classifier(
             log=log,
