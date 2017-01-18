@@ -439,6 +439,8 @@ class transient_classifier():
             "transients"]["transient classification column"]
         transientTableIdCol = self.settings["database settings"][
             "transients"]["transient primary id column"]
+        crossmatchTable = self.settings["database settings"][
+            "transients"]["crossmatchTable"]
 
         # RECURSIVELY CREATE MISSING DIRECTORIES
         if not os.path.exists("/tmp/sherlock"):
@@ -452,7 +454,7 @@ class transient_classifier():
         transientIDs = ",".join(transientIDs)
 
         createStatement = """
-CREATE TABLE IF NOT EXISTS `%(transientTable)s` (
+CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `transient_object_id` bigint(20) unsigned DEFAULT NULL,
   `catalogue_object_id` varchar(30) DEFAULT NULL,
   `catalogue_table_id` smallint(5) unsigned DEFAULT NULL,
@@ -523,7 +525,7 @@ CREATE TABLE IF NOT EXISTS `%(transientTable)s` (
   KEY `idx_separationArcsec` (`separationArcsec`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 
-delete from %(transientTable)s where transient_object_id in (%(transientIDs)s);
+delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 """ % locals()
 
         dataSet = list_of_dictionaries(
@@ -532,7 +534,7 @@ delete from %(transientTable)s where transient_object_id in (%(transientIDs)s);
         )
 
         mysqlData = dataSet.mysql(
-            tableName=transientTable, filepath="/tmp/sherlock/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
+            tableName=crossmatchTable, filepath="/tmp/sherlock/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
 
         directory_script_runner(
             log=self.log,
