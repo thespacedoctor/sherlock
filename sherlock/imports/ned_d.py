@@ -259,6 +259,14 @@ class ned_d(_base_importer):
 
         sqlQuery = u"""
                 set sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION";
+            """ % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn,
+        )
+
+        sqlQuery = u"""
                 update %(tableName)s set dist_mod_err = null where dist_mod_err = 0;
                 update %(tableName)s set dist_in_ned_flag = null where dist_in_ned_flag = "";
                 update %(tableName)s set notes = null where notes = "";
@@ -404,7 +412,6 @@ class ned_d(_base_importer):
 
         colList = ["redshift_quality", "redshift", "hierarchy", "object_type", "major_diameter_arcmin", "morphology", "magnitude_filter",
                    "ned_notes", "eb_v", "raDeg", "radio_morphology", "activity_type", "minor_diameter_arcmin", "decDeg", "redshift_err", "in_ned"]
-        print results
 
         if not len(results):
             for k, v in self.theseIds.iteritems():

@@ -16,7 +16,6 @@
    sherlock.imports.ned
    sherlock.imports.ned_d
    sherlock.imports.veron
-   sherlock.classifier.classifier
  
 
 **Functions**

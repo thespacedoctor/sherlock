@@ -51,19 +51,19 @@ if not os.path.exists(pathToOutputDir):
 
 class test_database():
 
-    # def test_tunnel(self):
+    def test_tunnel(self):
 
-    #     from sherlock import database
-    #     db = database(
-    #         log=log,
-    #         settings=settings
-    #     )
-    #     sshPort = db._setup_tunnel(
-    #         tunnelParameters=settings["database settings"][
-    #             "static catalogues"]["tunnel"]
-    #     )
+        from sherlock import database
+        db = database(
+            log=log,
+            settings=settings
+        )
+        sshPort = db._setup_tunnel(
+            tunnelParameters=settings["database settings"][
+                "static catalogues"]["tunnel"]
+        )
 
-    #     return
+        return
 
     def test_database_function(self):
 

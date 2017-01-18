@@ -25,15 +25,27 @@ class database_cleaner():
 
     """*Clean and maintain the database helper tables used by sherlock*
 
+    The helper tables list row counts for tables and views and provide the column maps that help sherlock know which catalogue columns relate to which parameters (e.g. RA, DEC etc)
+
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
 
-    .. todo::
+     **Usage:**
 
-        - add snippets
-        - add usage
+        .. todo::
+
+            - add an entry in the tutorial to clean database tables
+
+        .. code-block:: python 
+
+            from sherlock.database_cleaner import database_cleaner
+            db = database_cleaner(
+                log=log,
+                settings=settings
+            )
+            db.clean()
     """
     # Initialisation
 

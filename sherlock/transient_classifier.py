@@ -35,7 +35,7 @@ class transient_classifier():
         - ``ra`` -- right ascension of a single transient source. Default *False*
         - ``dec`` -- declination of a single transient source. Default *False*
         - ``name`` -- the ID of a single transient source. Default *False*
-        - ``verbose`` -- print more detail about crossmatches to stdout. Default * False*
+        - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
 
     **Usage:**
 
@@ -45,13 +45,57 @@ class transient_classifier():
 
         .. todo::
 
-            - add usage info
-            - create a sublime snippet for usage
             - update the package tutorial if needed
+
+        The sherlock classifier can be run in one of two ways. The first is to pass into the coordinates of an object you wish to classify:
 
         .. code-block:: python
 
-            usage code
+            from sherlock import transient_classifier
+            classifier = transient_classifier(
+                log=log,
+                settings=settings,
+                ra="08:57:57.19",
+                dec="+43:25:44.1",
+                name="PS17gx",
+                verbose=0
+            )
+            classifications, crossmatches = classifier.classify()
+
+        The crossmatches returned are a list of dictionaries giving details of the crossmatched sources. The classifications returned are a list of classifications resulting from these crossmatches. The lists are ordered from most to least likely classification and the indicies for the crossmatch and the classification lists are synced.
+
+        The second way to run the classifier is to not pass in a coordinate set and therefore cause sherlock to run the classifier on the transient database referenced in the sherlock settings file:
+
+        .. code-block:: python
+
+            from sherlock import transient_classifier
+            classifier = transient_classifier(
+                log=log,
+                settings=settings,
+                update=True
+            )
+            classifier.classify()
+
+        Here the transient list is selected out of the database using the ``transient query`` value in the settings file:
+
+        .. code-block:: yaml
+
+            database settings:
+                transients:
+                    user: myusername
+                    password: mypassword
+                    db: nice_transients
+                    host: 127.0.0.1
+                    transient table: transientBucket
+                    transient query: "select primaryKeyId as 'id', transientBucketId as 'alt_id', raDeg 'ra', decDeg 'dec', name 'name', sherlockClassification as 'object_classification'
+                        from transientBucket where object_classification is null
+                    transient primary id column: primaryKeyId
+                    transient classification column: sherlockClassification
+                    crossmatchTable: tcs_cross_matches
+                    tunnel: False
+
+        By setting ``update=True`` the classifier will update the ``sherlockClassification`` column of the ``transient table`` with new classification and populate the ``crossmatchTable`` with key details of the crossmatched sources from the catalogues database. By setting ``update=False`` results are printed to stdout but the database is not updated (useful for dry runs and testing new algorithms),
+
     """
     # INITIALISATION
 
@@ -63,7 +107,7 @@ class transient_classifier():
             ra=False,
             dec=False,
             name=False,
-            verbose=False
+            verbose=0
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -100,21 +144,13 @@ class transient_classifier():
 
     def classify(self):
         """
-        *classify the transients selected from the transient selection query in the settings file or passed in via the CL*
+        *classify the transients selected from the transient selection query in the settings file or passed in via the CL or other code*
 
         **Return:**
-            - None
+            - ``crossmatches`` -- list of dictionaries of crossmatched associated sources
+            - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
 
-        **Usage:**
-        .. todo::
-
-            - add usage info
-            - create a sublime snippet for usage
-            - update the package tutorial if needed
-
-        .. code-block:: python
-
-            usage code
+        See class docstring for usage.
         """
         self.log.info('starting the ``classify`` method')
 
@@ -144,6 +180,10 @@ class transient_classifier():
                 'ra': self.ra
             }
             transientsMetadataList = [transient]
+
+        if len(transientsMetadataList) == 0:
+            print "No transients need classified"
+            return None, None
 
         # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
         # REDSHIFT, MAG ETC
@@ -180,7 +220,7 @@ class transient_classifier():
                 transientsMetadataList=batch
             )
 
-            classifications, crossmatches = self.rank_classifications(
+            classifications, crossmatches = self._rank_classifications(
                 colMaps=colMaps,
                 crossmatches=crossmatches
             )
@@ -198,7 +238,7 @@ class transient_classifier():
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
-            if self.update:
+            if self.update and not self.ra:
                 self._update_transient_database(
                     crossmatches=crossmatches,
                     classifications=classifications,
@@ -206,8 +246,11 @@ class transient_classifier():
                     colMaps=colMaps
                 )
 
+            if self.ra:
+                return classifications, crossmatches
+
         self.log.info('completed the ``classify`` method')
-        return None
+        return None, None
 
     def _get_transient_metadata_from_database_list(
             self):
@@ -349,19 +392,7 @@ class transient_classifier():
             - ``transientsMetadataList`` -- the list of transient metadata lifted from the database.
 
         **Return:**
-            - None
-
-        **Usage:**
-            ..  todo::
-
-                - add usage info
-                - create a sublime snippet for usage
-                - update package tutorial if needed
-
-            .. code-block:: python 
-
-                usage code 
-
+            - ``crossmatches`` -- a list of dictionaries of the associated sources crossmatched from the catalogues database
         """
         self.log.debug(
             'starting the ``_crossmatch_transients_against_catalogues`` method')
@@ -376,11 +407,11 @@ class transient_classifier():
             settings=self.settings,
             colMaps=colMaps
         )
-        classifications = cm.match()
+        crossmatches = cm.match()
 
         self.log.debug(
             'completed the ``_crossmatch_transients_against_catalogues`` method')
-        return classifications
+        return crossmatches
 
     def _update_transient_database(
             self,
@@ -531,7 +562,7 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
         self.log.debug('completed the ``_update_transient_database`` method')
         return None
 
-    def rank_classifications(
+    def _rank_classifications(
             self,
             crossmatches,
             colMaps):
@@ -542,21 +573,10 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
             - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
 
         **Return:**
+            - ``classifications`` -- the classifications assigned to the transients post-crossmatches
             - ``crossmatches`` -- the crossmatches annotated with rankings and rank-scores
-
-        **Usage:**
-            ..  todo::
-
-                - add usage info
-                - create a sublime snippet for usage
-                - update package tutorial if needed
-
-            .. code-block:: python 
-
-                usage code 
-
         """
-        self.log.info('starting the ``rank_classifications`` method')
+        self.log.info('starting the ``_rank_classifications`` method')
 
         for xm in crossmatches:
             if xm["separationArcsec"] < 2. or (xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN") or (xm["major_axis_arcsec"] != "null" and xm["association_type"] == "SN"):
@@ -590,7 +610,7 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
         if transient_object_id != None:
             classifications[transient_object_id] = transClass
 
-        self.log.info('completed the ``rank_classifications`` method')
+        self.log.info('completed the ``_rank_classifications`` method')
         return classifications, crossmatches
 
     def _print_results_to_stdout(
@@ -602,23 +622,11 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
         **Key Arguments:**
             - ``crossmatches`` -- the unranked crossmatch classifications
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
-
-        **Return:**
-            - None
-
-        **Usage:**
-            ..  todo::
-
-                - add usage info
-                - create a sublime snippet for usage
-                - update package tutorial if needed
-
-            .. code-block:: python 
-
-                usage code 
-
         """
         self.log.info('starting the ``_print_results_to_stdout`` method')
+
+        if self.verbose == 0:
+            return
 
         headline = self.name + "'s Predicted Classification: " + \
             classifications[self.name][0]
@@ -637,7 +645,7 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
         dontFormat = ["decDeg", "raDeg", "rank",
                       "catalogue_object_id", "catalogue_object_subtype"]
 
-        if self.verbose:
+        if self.verbose == 2:
             basic = basic + verbose
 
         for c in crossmatches:
@@ -693,8 +701,6 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
             listOfDictionaries=printCrossmatches
         )
         tableData = dataSet.table(filepath=None)
-
-        print tableData
 
         self.log.info('completed the ``_print_results_to_stdout`` method')
         return None

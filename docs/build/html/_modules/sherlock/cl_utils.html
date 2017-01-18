@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.cl_utils &mdash; sherlock 0.1 documentation</title>
+  <title>sherlock.cl_utils &mdash; sherlock 0.2.0 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="sherlock 0.1 documentation" href="../../index.html"/>
+    <link rel="top" title="sherlock 0.2.0 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                v0.1
+                v0.2.0
               </div>
             
           
@@ -99,7 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#documentation">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#command-line-tutorial">Command-Line Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#sherlock-tutorial">Sherlock Tutorial</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
@@ -168,7 +168,8 @@
 
 <span class="sd">Usage:</span>
 <span class="sd">    sherlock init</span>
-<span class="sd">    sherlock &lt;ra&gt; &lt;dec&gt; [-s &lt;pathToSettingsFile&gt;]</span>
+<span class="sd">    sherlock info [-s &lt;pathToSettingsFile&gt;]</span>
+<span class="sd">    sherlock [-v] &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock match [--update] [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock clean [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock wiki [-s &lt;pathToSettingsFile&gt;]</span>
@@ -185,7 +186,7 @@
 <span class="sd">    ned                     use the online NED database as the source catalogue</span>
 <span class="sd">    cat                     import a static catalogue into the crossmatch catalogues database</span>
 <span class="sd">    stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database</span>
-
+<span class="sd">    info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching</span>
 
 <span class="sd">    ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)</span>
 <span class="sd">    dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)</span>
@@ -202,16 +203,10 @@
 <span class="sd">                                    http://www.das.uchile.cl/~lgalbany/LG/research.html</span>
 
 <span class="sd">    -h, --help              show this help message</span>
-<span class="sd">    -v, --version           show version</span>
 <span class="sd">    -s, --settings          the settings file</span>
+<span class="sd">    -v, --verbose           print more details to stdout</span>
 <span class="sd">    -l, --transientlistId   the id of the transient list to classify</span>
 <span class="sd">    -u, --update            update the transient database with new classifications and crossmatches</span>
-
-
-<span class="sd">.. todo ::</span>
-
-<span class="sd">    - document this module</span>
-
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">################# GLOBAL IMPORTS ####################</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -222,7 +217,7 @@
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
 <span class="kn">from</span> <span class="nn">fundamentals</span> <span class="k">import</span> <span class="n">tools</span><span class="p">,</span> <span class="n">times</span>
-<span class="kn">from</span> <span class="nn">classifier</span> <span class="k">import</span> <span class="n">classifier</span>
+<span class="kn">from</span> <span class="nn">fundamentals.renderer</span> <span class="k">import</span> <span class="n">list_of_dictionaries</span>
 <span class="kn">from</span> <span class="nn">database_cleaner</span> <span class="k">import</span> <span class="n">database_cleaner</span>
 <span class="kn">from</span> <span class="nn">commonutils</span> <span class="k">import</span> <span class="n">update_wiki_pages</span>
 <span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">STDOUT</span>
@@ -232,6 +227,7 @@
 <span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ifs</span> <span class="k">as</span> <span class="n">ifsImporter</span>
 <span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ned_d</span> <span class="k">as</span> <span class="n">nedImporter</span>
 <span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="k">import</span> <span class="n">ned</span> <span class="k">as</span> <span class="n">nedStreamImporter</span>
+<span class="kn">from</span> <span class="nn">sherlock.commonutils</span> <span class="k">import</span> <span class="n">update_wiki_pages</span>
 <span class="kn">from</span> <span class="nn">sherlock</span> <span class="k">import</span> <span class="n">transient_classifier</span>
 <span class="c1"># from ..__init__ import *</span>
 
@@ -279,6 +275,8 @@
         <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">expanduser</span>
         <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
         <span class="n">filepath</span> <span class="o">=</span> <span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.config/sherlock/sherlock.yaml&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;open </span><span class="si">%(filepath)s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;open </span><span class="si">%(filepath)s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -291,7 +289,7 @@
             <span class="k">pass</span>
 
     <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
-        <span class="n">classifier</span> <span class="o">=</span> <span class="n">transient_classifier</span><span class="p">(</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">transient_classifier</span><span class="o">.</span><span class="n">transient_classifier</span><span class="p">(</span>
             <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
             <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
             <span class="n">update</span><span class="o">=</span><span class="n">updateFlag</span>
@@ -368,9 +366,46 @@
             <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
             <span class="n">ra</span><span class="o">=</span><span class="n">ra</span><span class="p">,</span>
             <span class="n">dec</span><span class="o">=</span><span class="n">dec</span><span class="p">,</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;PS17gx&quot;</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verboseFlag</span>
         <span class="p">)</span>
         <span class="n">classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;Crossmatch Catalogues&quot;</span>
+        <span class="n">wiki</span> <span class="o">=</span> <span class="n">update_wiki_pages</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="n">settings</span>
+        <span class="p">)</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">wiki</span><span class="o">.</span><span class="n">_get_table_infos</span><span class="p">(</span><span class="n">trimmed</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="n">dataSet</span> <span class="o">=</span> <span class="n">list_of_dictionaries</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">listOfDictionaries</span><span class="o">=</span><span class="n">table</span>
+        <span class="p">)</span>
+        <span class="n">tableData</span> <span class="o">=</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">reST</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">tableData</span>
+        <span class="nb">print</span>
+
+        <span class="nb">print</span> <span class="s2">&quot;Crossmatch Streams&quot;</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">wiki</span><span class="o">.</span><span class="n">_get_stream_view_infos</span><span class="p">(</span><span class="n">trimmed</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="n">dataSet</span> <span class="o">=</span> <span class="n">list_of_dictionaries</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">listOfDictionaries</span><span class="o">=</span><span class="n">table</span>
+        <span class="p">)</span>
+        <span class="n">tableData</span> <span class="o">=</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">reST</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">tableData</span>
+        <span class="nb">print</span>
+
+        <span class="nb">print</span> <span class="s2">&quot;Views on Catalogues and Streams&quot;</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">wiki</span><span class="o">.</span><span class="n">_get_view_infos</span><span class="p">(</span><span class="n">trimmed</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="n">dataSet</span> <span class="o">=</span> <span class="n">list_of_dictionaries</span><span class="p">(</span>
+            <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+            <span class="n">listOfDictionaries</span><span class="o">=</span><span class="n">table</span>
+        <span class="p">)</span>
+        <span class="n">tableData</span> <span class="o">=</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">reST</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="n">tableData</span>
 
     <span class="k">if</span> <span class="s2">&quot;dbConn&quot;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="ow">and</span> <span class="n">dbConn</span><span class="p">:</span>
         <span class="n">dbConn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -419,7 +454,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

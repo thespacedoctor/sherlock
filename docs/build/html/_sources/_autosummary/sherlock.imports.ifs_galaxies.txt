@@ -1,7 +1,0 @@
-sherlock.imports.ifs_galaxies (*module*)
-=============================
-
-
-.. automodule:: sherlock.imports.ifs_galaxies
-    :members:
-

@@ -19,7 +19,6 @@ Modules
    :nosignatures:
 
    sherlock.cl_utils
-   sherlock.classifier
    sherlock.utKit 
 
 Classes
@@ -41,7 +40,6 @@ Classes
    sherlock.imports.ned
    sherlock.imports.ned_d
    sherlock.imports.veron
-   sherlock.classifier.classifier
    sherlock.utKit.utKit 
 
 Functions

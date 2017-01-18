@@ -113,10 +113,6 @@ class test_transient_catalogue_crossmatch():
             transients=transients
         )
         classifications = this.match()
-        for c in classifications:
-
-            print c["id"], c["object_classification_new"]
-            print c["crossmatches"]
 
     def test_transient_catalogue_crossmatch_search_catalogue_function(self):
 
