@@ -62,15 +62,15 @@ directory_script_runner(
 
 class test_transient_classifier():
 
-    # def test_transient_classifier_function(self):
+    def test_transient_classifier_function(self):
 
-    #     from sherlock import transient_classifier
-    #     this = transient_classifier(
-    #         log=log,
-    #         settings=settings,
-    #         update=True
-    #     )
-    #     this.classify()
+        from sherlock import transient_classifier
+        this = transient_classifier(
+            log=log,
+            settings=settings,
+            update=True
+        )
+        this.classify()
 
     def test_transient_classifier_single_source_function(self):
 
@@ -84,65 +84,59 @@ class test_transient_classifier():
             verbose=0
         )
         classifications, crossmatches = this.classify()
-        print classifications
-        print crossmatches
 
-    # def test_get_transient_metadata_from_database_list(self):
+    def test_get_transient_metadata_from_database_list(self):
 
-    #     from sherlock import transient_classifier
-    #     classifier = transient_classifier(
-    #         log=log,
-    #         settings=settings
-    #     )
-    #     transientsMetadataList = classifier._get_transient_metadata_from_database_list()
-    #     classifier._update_ned_stream(
-    #         transientsMetadataList=transientsMetadataList
-    #     )
+        from sherlock import transient_classifier
+        classifier = transient_classifier(
+            log=log,
+            settings=settings
+        )
+        transientsMetadataList = classifier._get_transient_metadata_from_database_list()
+        classifier._update_ned_stream(
+            transientsMetadataList=transientsMetadataList
+        )
 
-    # def test_crossmatching(self):
+    def test_crossmatching(self):
 
-    #     # SETUP ALL DATABASE CONNECTIONS
-    #     from sherlock import database
-    #     db = database(
-    #         log=log,
-    #         settings=settings
-    #     )
-    #     dbConns = db.connect()
-    #     transientsDbConn = dbConns["transients"]
-    #     cataloguesDbConn = dbConns["catalogues"]
-    #     pmDbConn = dbConns["marshall"]
+        # SETUP ALL DATABASE CONNECTIONS
+        from sherlock import database
+        db = database(
+            log=log,
+            settings=settings
+        )
+        dbConns = db.connect()
+        transientsDbConn = dbConns["transients"]
+        cataloguesDbConn = dbConns["catalogues"]
+        pmDbConn = dbConns["marshall"]
 
-    #     from sherlock.commonutils import get_crossmatch_catalogues_column_map
-    #     colMaps = get_crossmatch_catalogues_column_map(
-    #         log=log,
-    #         dbConn=cataloguesDbConn
-    #     )
+        from sherlock.commonutils import get_crossmatch_catalogues_column_map
+        colMaps = get_crossmatch_catalogues_column_map(
+            log=log,
+            dbConn=cataloguesDbConn
+        )
 
-    #     from sherlock import transient_classifier
-    #     classifier = transient_classifier(
-    #         log=log,
-    #         settings=settings
-    #     )
-    #     transientsMetadataList = classifier._get_transient_metadata_from_database_list()
-    #     classifications = classifier._crossmatch_transients_against_catalogues(
-    #         colMaps=colMaps,
-    #         transientsMetadataList=transientsMetadataList
-    #     )
+        from sherlock import transient_classifier
+        classifier = transient_classifier(
+            log=log,
+            settings=settings
+        )
+        transientsMetadataList = classifier._get_transient_metadata_from_database_list()
+        crossmatches = classifier._crossmatch_transients_against_catalogues(
+            colMaps=colMaps,
+            transientsMetadataList=transientsMetadataList
+        )
 
-    #     classifier._update_transient_database(
-    #         classifications=classifications,
-    #         transientsMetadataList=transientsMetadataList,
-    #         colMaps=colMaps
-    #     )
+        classifications, crossmatches = classifier._rank_classifications(
+            colMaps=colMaps,
+            crossmatches=crossmatches
+        )
 
-    # def test_create_crossmatch_table_if_not_existing(self):
-
-    #     from sherlock import transient_classifier
-    #     this = transient_classifier(
-    #         log=log,
-    #         settings=settings
-    #     )
-    #     this._create_crossmatch_table_if_not_existing()
+        classifier._update_transient_database(
+            classifications=classifications,
+            transientsMetadataList=transientsMetadataList,
+            colMaps=colMaps,
+            crossmatches=crossmatches)
 
     def test_transient_classifier_function_exception(self):
 

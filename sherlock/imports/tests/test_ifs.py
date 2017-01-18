@@ -60,22 +60,22 @@ if not os.path.exists(pathToOutputDir):
 #     pass
 
 
-class test_IFS():
+class test_ifs():
 
-    def test_IFS_function(self):
+    def test_ifs_function(self):
 
-        from sherlock.imports import IFS
-        catalogue = IFS(
+        from sherlock.imports import ifs
+        catalogue = ifs(
             log=log,
             settings=settings
         )
         catalogue.ingest()
 
-    def test_IFS_function_exception(self):
+    def test_ifs_function_exception(self):
 
-        from sherlock.imports import IFS
+        from sherlock.imports import ifs
         try:
-            this = IFS(
+            this = ifs(
                 log=log,
                 settings=settings,
                 fakeKey="break the code"

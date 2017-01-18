@@ -48,32 +48,32 @@ if not os.path.exists(pathToOutputDir):
 # xt-setup-unit-testing-files-and-folders
 
 
-class test_update_wiki_pages():
+# class test_update_wiki_pages():
 
-    def test_update_wiki_pages_function(self):
+#     def test_update_wiki_pages_function(self):
 
-        from sherlock.commonutils import update_wiki_pages
-        wiki = update_wiki_pages(
-            log=log,
-            settings=settings
-        )
-        wiki.update()
+#         from sherlock.commonutils import update_wiki_pages
+#         wiki = update_wiki_pages(
+#             log=log,
+#             settings=settings
+#         )
+#         wiki.update()
 
-    def test_update_wiki_pages_function_exception(self):
+#     def test_update_wiki_pages_function_exception(self):
 
-        from sherlock.commonutils import update_wiki_pages
-        try:
-            this = update_wiki_pages(
-                log=log,
-                settings=settings,
-                fakeKey="break the code"
-            )
-            this.update()
-            assert False
-        except Exception, e:
-            assert True
-            print str(e)
+#         from sherlock.commonutils import update_wiki_pages
+#         try:
+#             this = update_wiki_pages(
+#                 log=log,
+#                 settings=settings,
+#                 fakeKey="break the code"
+#             )
+#             this.update()
+#             assert False
+#         except Exception, e:
+#             assert True
+#             print str(e)
 
-        # x-print-testpage-for-pessto-marshall-web-object
+    # x-print-testpage-for-pessto-marshall-web-object
 
     # x-class-to-test-named-worker-function

@@ -702,8 +702,6 @@ delete from tcs_cross_matches where transient_object_id in (%(transientIDs)s);
         )
         tableData = dataSet.table(filepath=None)
 
-        print tableData
-
         self.log.info('completed the ``_print_results_to_stdout`` method')
         return None
 
