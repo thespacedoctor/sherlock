@@ -49,8 +49,11 @@ setup(name="qub-sherlock",
       author_email='davidrobertyoung@gmail.com',
       license='MIT',
       packages=find_packages(),
+      package_data={'sherlock': [
+          'resources/*/*', 'resources/*.*']},
       include_package_data=True,
       install_requires=install_requires,
+
       test_suite='nose.collector',
       tests_require=['nose', 'nose-cover3'],
       entry_points={
