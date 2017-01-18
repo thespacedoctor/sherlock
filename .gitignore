@@ -22,8 +22,6 @@ _ignore_*
 /*.egg-info
 /*.egg
 
-README.rst
-
 ## Apache logs
 logs/*.log
 transients_cache/
@@ -33,3 +31,5 @@ test_database.sql
 path_to_settings.yaml
 blog-post.md
 blog-post.rst/build
+
+
