@@ -24,14 +24,14 @@ install_requires = [
 exists = os.path.exists("/home/docs/")
 if exists:
     c_exclude_list = ['healpy', 'astropy',
-                      'numpy', 'sherlock', 'wcsaxes', 'HMpTy', 'ligo-gracedb']
+                      'numpy', 'qub-sherlock', 'wcsaxes', 'HMpTy', 'ligo-gracedb']
     for e in c_exclude_list:
         try:
             install_requires.remove(e)
         except:
             pass
 
-setup(name="sherlock",
+setup(name="qub-sherlock",
       version=__version__,
       description="A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data",
       long_description=readme(),
