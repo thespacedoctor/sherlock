@@ -135,10 +135,17 @@ def main(arguments=None):
             pass
 
     if match:
+        if verboseFlag:
+            verbose = 2
+        else:
+            verbose = 1
         classifier = transient_classifier.transient_classifier(
             log=log,
             settings=settings,
-            update=updateFlag
+            ra=ra,
+            dec=dec,
+            name=name,
+            verbose=verbose
         )
         classifier.classify()
 
