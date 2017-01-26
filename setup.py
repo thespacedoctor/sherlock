@@ -11,7 +11,7 @@ def readme():
 
 install_requires = [
     'pyyaml',
-    'sherlock',
+    'qub-sherlock',
     'fundamentals',
     'astrocalc',
     'neddy',

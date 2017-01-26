@@ -145,7 +145,8 @@ def main(arguments=None):
             ra=ra,
             dec=dec,
             name=name,
-            verbose=verbose
+            verbose=verbose,
+            update=updateFlag
         )
         classifier.classify()
 

@@ -20,6 +20,7 @@ import time
 from subprocess import Popen, PIPE, STDOUT
 import MySQLdb as ms
 from docopt import docopt
+from fundamentals.mysql import readquery
 
 
 class database():
@@ -50,7 +51,7 @@ class database():
                 log=log,
                 settings=settings
             )
-            dbConns = db.connect()
+            dbConns, dbVersions = db.connect()
             transientsDbConn = dbConns["transients"]
             cataloguesDbConn = dbConns["catalogues"]
             pmDbConn = dbConns["marshall"]
@@ -119,8 +120,22 @@ class database():
             "marshall": dbConns[2]
         }
 
+        dbVersions = {}
+        for k, v in dbConns.iteritems():
+            sqlQuery = u"""
+                SELECT VERSION() as v;
+            """ % locals()
+            rows = readquery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=v,
+                quiet=False
+            )
+            version = rows[0]['v']
+            dbVersions[k] = version
+
         self.log.debug('completed the ``get`` method')
-        return dbConns
+        return dbConns, dbVersions
 
     def _setup_tunnel(
             self,

@@ -67,7 +67,7 @@ class database_cleaner():
             log=self.log,
             settings=self.settings
         )
-        dbConns = db.connect()
+        dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
         self.pmDbConn = dbConns["marshall"]

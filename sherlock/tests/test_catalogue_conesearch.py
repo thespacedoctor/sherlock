@@ -54,7 +54,7 @@ db = database(
     log=log,
     settings=settings
 )
-dbConns = db.connect()
+dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 pmDbConn = dbConns["marshall"]

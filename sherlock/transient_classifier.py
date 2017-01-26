@@ -129,7 +129,7 @@ class transient_classifier():
             log=self.log,
             settings=self.settings
         )
-        dbConns = db.connect()
+        dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
         self.pmDbConn = dbConns["marshall"]
@@ -159,6 +159,9 @@ class transient_classifier():
         if not self.ra and not self.dec:
             # A LIST OF DICTIONARIES OF TRANSIENT METADATA
             transientsMetadataList = self._get_transient_metadata_from_database_list()
+            count = len(transientsMetadataList)
+            print "%(count)s transient sources requiring a classification remain" % locals()
+
             # EXAMPLE OF TRANSIENT METADATA
             # { 'name': 'PS17gx',
             # 'alt_id': 'PS17gx',
@@ -467,7 +470,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `photoZ` double DEFAULT NULL,
   `photoZErr` double DEFAULT NULL,
   `association_type` varchar(45) DEFAULT NULL,
-  `dateCreated` DATETIME DEFAULT NOW(),
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `physical_separation_kpc` double DEFAULT NULL,
   `catalogue_object_type` varchar(45) DEFAULT NULL,
   `catalogue_object_subtype` varchar(45) DEFAULT NULL,
@@ -517,7 +520,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `GErr` double DEFAULT NULL,
   `unkMag` double DEFAULT NULL,
   `unkMagErr` double DEFAULT NULL,
-  `dateLastModified` DATETIME NULL DEFAULT NOW(),
+  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated` TINYINT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `key_transient_object_id` (`transient_object_id`),

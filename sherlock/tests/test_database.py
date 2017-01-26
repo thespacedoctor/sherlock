@@ -74,14 +74,14 @@ class test_database():
             log=log,
             settings=settings
         )
-        dbConns = db.connect()
+        dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
         self.pmDbConn = dbConns["marshall"]
 
         from fundamentals.mysql import readquery
         sqlQuery = u"""
-            show tables;
+            SELECT VERSION();
         """ % locals()
         rows = readquery(
             log=log,
