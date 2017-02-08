@@ -280,7 +280,7 @@ class ned(_base_importer):
 
     def _get_ned_sources_needing_metadata(
             self):
-        """get the names of 10000 or less NED sources that still require metabase in the database
+        """get the names of 50000 or less NED sources that still require metabase in the database
 
         **Return:**
             - ``len(self.theseIds)`` -- the number of NED IDs returned
@@ -292,7 +292,7 @@ class ned(_base_importer):
 
         # SELECT THE DATA FROM NED TABLE
         sqlQuery = u"""
-            select ned_name from %(tableName)s where raDeg is null and download_error != 1 limit 10000;
+            select ned_name from %(tableName)s where raDeg is null and download_error != 1 limit 50000;
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -434,7 +434,7 @@ class ned(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(self.total / 10000.) + 1
+        self.batches = int(self.total / 50000.) + 1
 
         if self.total == 0:
             self.batches = 0
