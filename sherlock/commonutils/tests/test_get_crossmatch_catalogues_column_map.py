@@ -48,7 +48,7 @@ if not os.path.exists(pathToOutputDir):
 # xt-setup-unit-testing-files-and-folders
 
 
-class test_get_crossmatch_catalogues_column_map():
+class test_get_crossmatch_catalogues_column_map(unittest.TestCase):
 
     def test_get_crossmatch_catalogues_column_map_function(self):
 

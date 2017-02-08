@@ -33,6 +33,9 @@ class catalogue_conesearch():
         - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
         - ``nearestOnly`` -- return only the nearest object. Default *False*
         - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
+        - ``magnitudeLimit`` -- the magnitude of the limit if a magnitude cut is requird with the conesearch. Default *False*
+        - ``magnitudeLimitType`` -- the type of magnitude limit if required. Default *False* ("lower"|"upper"|False)
+        - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G"|)
 
     **Usage:**
 
@@ -52,7 +55,7 @@ class catalogue_conesearch():
                 log=log,
                 settings=settings
             )
-            dbConns = db.connect()
+            dbConns, dbVersions = db.connect()
             transientsDbConn = dbConns["transients"]
             cataloguesDbConn = dbConns["catalogues"]
             pmDbConn = dbConns["marshall"]
@@ -136,7 +139,10 @@ class catalogue_conesearch():
             colMaps,
             dbConn=False,
             nearestOnly=False,
-            physicalSearch=False
+            physicalSearch=False,
+            magnitudeLimit=False,
+            magnitudeLimitType=False,
+            magnitudeLimitFilter=False
     ):
         self.log = log
         log.debug("instansiating a new 'conesearcher' object")
@@ -146,7 +152,9 @@ class catalogue_conesearch():
         self.nearestOnly = nearestOnly
         self.colMaps = colMaps
         self.physicalSearch = physicalSearch
-
+        self.magnitudeLimit = magnitudeLimit
+        self.magnitudeLimitType = magnitudeLimitType
+        self.magnitudeLimitFilter = magnitudeLimitFilter
         # xt-self-arg-tmpx
 
         # CONVERT RA AND DEC TO DEGREES
@@ -160,13 +168,25 @@ class catalogue_conesearch():
         converter = unit_conversion(
             log=self.log
         )
-        for r, d in zip(ra, dec):
-            self.ra.append(converter.ra_sexegesimal_to_decimal(
-                ra=r
-            ))
-            self.dec.append(converter.dec_sexegesimal_to_decimal(
-                dec=d
-            ))
+
+        try:
+            float(ra[0])
+            convert = False
+        except:
+            convert = True
+
+        if convert == True:
+
+            for r, d in zip(ra, dec):
+                self.ra.append(converter.ra_sexegesimal_to_decimal(
+                    ra=r
+                ))
+                self.dec.append(converter.dec_sexegesimal_to_decimal(
+                    dec=d
+                ))
+        else:
+            self.ra = ra
+            self.dec = dec
 
         return None
 
@@ -195,8 +215,19 @@ class catalogue_conesearch():
                 colName = self.colMaps[self.tableName][d]
                 if colName:
                     sqlWhere += " or `%(colName)s` is not null" % locals()
-            if len(sqlWhere):
-                sqlWhere = " and (" + sqlWhere[4:] + ")"
+                if len(sqlWhere):
+                    sqlWhere = " and (" + sqlWhere[4:] + ")"
+
+        if self.magnitudeLimit != False and self.magnitudeLimit:
+            if self.magnitudeLimitType.lower() == "upper":
+                direction = ">"
+            elif self.magnitudeLimitType.lower() == "lower":
+                direction = "<"
+            magnitudeLimit = self.magnitudeLimit
+            magnitudeLimitFilter = self.magnitudeLimitFilter
+            newWhere = " and `%(magnitudeLimitFilter)s` %(direction)s %(magnitudeLimit)s" % locals(
+            )
+            sqlWhere += newWhere
 
         if sqlWhere and " and" == sqlWhere[0:4]:
             sqlWhere = sqlWhere[5:]

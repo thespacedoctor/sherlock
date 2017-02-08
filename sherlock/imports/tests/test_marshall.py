@@ -60,7 +60,7 @@ except:
     pass
 
 
-class test_marshall():
+class test_marshall(unittest.TestCase):
 
     def test_marshall_function(self):
 

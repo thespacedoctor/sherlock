@@ -60,7 +60,7 @@ except:
     pass
 
 
-class test_milliquas():
+class test_milliquas(unittest.TestCase):
 
     def test_milliquas_function(self):
 

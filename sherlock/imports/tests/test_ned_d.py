@@ -60,7 +60,7 @@ except:
     pass
 
 
-class test_ned_d():
+class test_ned_d(unittest.TestCase):
 
     def test_ned_d_function(self):
 

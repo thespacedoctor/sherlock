@@ -15,8 +15,8 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 Usage:
     sherlock init
     sherlock info [-s <pathToSettingsFile>]
-    sherlock match [-v]  <ra> <dec> [<name> -s <pathToSettingsFile>]
-    sherlock match [--update] [-s <pathToSettingsFile>]
+    sherlock dbmatch [-f --update] [-s <pathToSettingsFile>]
+    sherlock [-v] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
     sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -26,6 +26,7 @@ Usage:
 Options:
     init                    setup the sherlock settings file for the first time
     match                   XXXX
+    dbmatch                 database match
     clean                   XXXX
     wiki                    XXXX
     import                  XXXX
@@ -48,6 +49,7 @@ Options:
                                 * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
                                     http://www.das.uchile.cl/~lgalbany/LG/research.html
 
+    -f, --fast              faster but errors in crossmatch table ingest my be misses
     -h, --help              show this help message
     -s, --settings          the settings file
     -v, --verbose           print more details to stdout
@@ -83,6 +85,7 @@ def main(arguments=None):
     The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command
     """
     # setup the command-line util settings
+
     su = tools(
         arguments=arguments,
         docString=__doc__,
@@ -134,7 +137,7 @@ def main(arguments=None):
         except:
             pass
 
-    if match:
+    if match or dbmatch:
         if verboseFlag:
             verbose = 2
         else:
@@ -145,7 +148,9 @@ def main(arguments=None):
             ra=ra,
             dec=dec,
             name=name,
-            verbose=verbose
+            verbose=verbose,
+            update=updateFlag,
+            fast=fastFlag
         )
         classifier.classify()
 

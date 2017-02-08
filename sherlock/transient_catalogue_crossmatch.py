@@ -222,6 +222,20 @@ class transient_catalogue_crossmatch():
         radius = searchPara["angular radius arcsec"]
         catalogueName = searchPara["database table"]
         matchedType = searchPara["transient classification"]
+        if "faint mag column" in searchPara and searchPara["faint mag column"] and "faint limit" in searchPara and searchPara["faint limit"]:
+            magnitudeLimitType = "upper"
+            magnitudeLimit = searchPara["faint limit"]
+            magnitudeLimitFilter = self.colMaps[
+                catalogueName][searchPara["faint mag column"] + "ColName"]
+        elif "bright mag column" in searchPara and searchPara["bright mag column"] and "bright limit" in searchPara and searchPara["bright limit"]:
+            magnitudeLimitType = "lower"
+            magnitudeLimit = searchPara["bright limit"]
+            magnitudeLimitFilter = self.colMaps[
+                catalogueName][searchPara["bright mag column"] + "ColName"]
+        else:
+            magnitudeLimitType = None
+            magnitudeLimit = None
+            magnitudeLimitFilter = None
 
         # VARIABLES
         matchedObjects = []
@@ -241,7 +255,10 @@ class transient_catalogue_crossmatch():
             tableName=catalogueName,
             dbConn=self.dbConn,
             nearestOnly=False,
-            physicalSearch=physicalSearch
+            physicalSearch=physicalSearch,
+            magnitudeLimitType=magnitudeLimitType,
+            magnitudeLimit=magnitudeLimit,
+            magnitudeLimitFilter=magnitudeLimitFilter
         )
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
         indices, catalogueMatches = cs.search()
@@ -274,11 +291,11 @@ class transient_catalogue_crossmatch():
 
         # ONLY RETURN FAINT STARS (REMOVE BRIGHTER MATCHES)
         catalogueMatches = annotatedcatalogueMatches
-        catalogueMatches = self._faint_star_cut(
-            matchedObjects=catalogueMatches,
-            catalogueName=catalogueName,
-            searchPara=searchPara
-        )
+        # catalogueMatches = self._faint_star_cut(
+        #     matchedObjects=catalogueMatches,
+        #     catalogueName=catalogueName,
+        #     searchPara=searchPara
+        # )
 
         if "match nearest source only" in searchPara and searchPara["match nearest source only"] == True and len(catalogueMatches):
             nearestMatches = []
@@ -409,7 +426,7 @@ class transient_catalogue_crossmatch():
 
         # FAINT STAR EXTRAS
         try:
-            magColumn = searchPara["mag column"]
+            magColumn = searchPara["faint mag column"]
             faintLimit = searchPara["faint limit"]
         except:
             magColumn = False
@@ -417,10 +434,8 @@ class transient_catalogue_crossmatch():
 
         # FAINT STAR CUTS
         if matchedObjects and magColumn:
-            print "HERE"
             faintStarMatches = []
             for row in matchedObjects:
-                print row
                 rMag = row[magColumn]
                 if rMag and rMag > faintLimit:
                     faintStarMatches.append(row)
