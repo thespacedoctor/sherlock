@@ -67,7 +67,7 @@ colMaps = get_crossmatch_catalogues_column_map(
 )
 
 
-class test_catalogue_conesearch():
+class test_catalogue_conesearch(unittest.TestCase):
 
     def test_catalogue_conesearch_function(self):
 

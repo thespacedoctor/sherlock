@@ -1,5 +1,5 @@
 import os
-import nose
+import unittest
 import shutil
 import yaml
 from sherlock.utKit import utKit
@@ -155,7 +155,7 @@ transients = [
 sa = settings["search algorithm"]
 
 
-class test_transient_catalogue_crossmatch():
+class test_transient_catalogue_crossmatch(unittest.TestCase):
 
     # def test_transient_catalogue_crossmatch_function(self):
 

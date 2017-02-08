@@ -168,13 +168,25 @@ class catalogue_conesearch():
         converter = unit_conversion(
             log=self.log
         )
-        for r, d in zip(ra, dec):
-            self.ra.append(converter.ra_sexegesimal_to_decimal(
-                ra=r
-            ))
-            self.dec.append(converter.dec_sexegesimal_to_decimal(
-                dec=d
-            ))
+
+        try:
+            float(ra[0])
+            convert = False
+        except:
+            convert = True
+
+        if convert == True:
+
+            for r, d in zip(ra, dec):
+                self.ra.append(converter.ra_sexegesimal_to_decimal(
+                    ra=r
+                ))
+                self.dec.append(converter.dec_sexegesimal_to_decimal(
+                    dec=d
+                ))
+        else:
+            self.ra = ra
+            self.dec = dec
 
         return None
 

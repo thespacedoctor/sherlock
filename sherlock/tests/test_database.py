@@ -49,7 +49,7 @@ if not os.path.exists(pathToOutputDir):
 # xt-setup-unit-testing-files-and-folders
 
 
-class test_database():
+class test_database(unittest.TestCase):
 
     def test_tunnel(self):
 

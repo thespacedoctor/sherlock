@@ -1,5 +1,5 @@
 import os
-import nose
+import unittest
 import shutil
 import yaml
 from sherlock import transient_classifier, cl_utils
@@ -31,6 +31,8 @@ utKit.tearDownModule()
 # load settings
 stream = file(
     pathToInputDir + "/example_settings2.yaml", 'r')
+stream = file(
+    "/Users/Dave/Dropbox/config/dave-macbook/sherlock/sherlock_gw_database.yaml")
 settings = yaml.load(stream)
 stream.close()
 
@@ -46,21 +48,21 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-from fundamentals.mysql import directory_script_runner
-directory_script_runner(
-    log=log,
-    pathToScriptDirectory=pathToInputDir.replace(
-        "/input", "/resources") + "/transient_database",
-    databaseName=settings["database settings"]["db"],
-    loginPath=settings["database settings"]["loginPath"],
-    successRule=False,
-    failureRule="failed"
-)
+# from fundamentals.mysql import directory_script_runner
+# directory_script_runner(
+#     log=log,
+#     pathToScriptDirectory=pathToInputDir.replace(
+#         "/input", "/resources") + "/transient_database",
+#     databaseName=settings["database settings"]["db"],
+#     loginPath=settings["database settings"]["loginPath"],
+#     successRule=False,
+#     failureRule="failed"
+# )
 
 # xt-setup-unit-testing-files-and-folders
 
 
-class test_transient_classifier():
+class test_transient_classifier(unittest.TestCase):
 
     def test_transient_classifier_function(self):
 
@@ -68,7 +70,8 @@ class test_transient_classifier():
         this = transient_classifier(
             log=log,
             settings=settings,
-            update=True
+            update=True,
+            fast=True
         )
         this.classify()
 

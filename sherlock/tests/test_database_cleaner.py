@@ -47,7 +47,7 @@ if not os.path.exists(pathToOutputDir):
 # xt-setup-unit-testing-files-and-folders
 
 
-class test_database_cleaner():
+class test_database_cleaner(unittest.TestCase):
 
     def test_database_cleaner_function(self):
 

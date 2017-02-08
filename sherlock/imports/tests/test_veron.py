@@ -60,7 +60,7 @@ except:
     pass
 
 
-class test_veron():
+class test_veron(unittest.TestCase):
 
     def test_veron_function(self):
 
