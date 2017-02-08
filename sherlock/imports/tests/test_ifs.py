@@ -60,7 +60,7 @@ if not os.path.exists(pathToOutputDir):
 #     pass
 
 
-class test_ifs():
+class test_ifs(unittest.TestCase):
 
     def test_ifs_function(self):
 

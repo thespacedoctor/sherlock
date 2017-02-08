@@ -11,7 +11,7 @@ def readme():
 
 install_requires = [
     'pyyaml',
-    'sherlock',
+    'qub-sherlock',
     'fundamentals',
     'astrocalc',
     'neddy',
@@ -54,8 +54,8 @@ setup(name="qub-sherlock",
       include_package_data=True,
       install_requires=install_requires,
 
-      test_suite='nose.collector',
-      tests_require=['nose', 'nose-cover3'],
+      test_suite='nose2.collector.collector',
+      tests_require=['nose2', 'cov-core'],
       entry_points={
           'console_scripts': [
               'sherlock=sherlock.cl_utils:main'

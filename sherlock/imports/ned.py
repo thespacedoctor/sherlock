@@ -205,13 +205,6 @@ class ned(_base_importer):
                 ra = coord[0]
                 dec = coord[1]
 
-            ra = converter.ra_sexegesimal_to_decimal(
-                ra=ra
-            )
-            dec = converter.dec_sexegesimal_to_decimal(
-                dec=dec
-            )
-
             dataList.append(
                 {"raDeg": ra,
                  "decDeg": dec,
@@ -223,7 +216,8 @@ class ned(_base_importer):
 
         dataSet = list_of_dictionaries(
             log=self.log,
-            listOfDictionaries=dataList
+            listOfDictionaries=dataList,
+            reDatetime=self.reDatetime
         )
         # Recursively create missing directories
         if not os.path.exists("/tmp/mysql-inserts"):
@@ -286,7 +280,7 @@ class ned(_base_importer):
 
     def _get_ned_sources_needing_metadata(
             self):
-        """get the names of 3000 or less NED sources that still require metabase in the database
+        """get the names of 10000 or less NED sources that still require metabase in the database
 
         **Return:**
             - ``len(self.theseIds)`` -- the number of NED IDs returned
@@ -298,7 +292,7 @@ class ned(_base_importer):
 
         # SELECT THE DATA FROM NED TABLE
         sqlQuery = u"""
-            select ned_name from %(tableName)s where raDeg is null and download_error != 1 limit 3000;
+            select ned_name from %(tableName)s where raDeg is null and download_error != 1 limit 10000;
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -361,13 +355,18 @@ class ned(_base_importer):
                 if isinstance(v, str) and '"' in v:
                     thisDict[k] = v.replace('"', '\\"')
             if "Input name not" not in thisDict["input_note"] and "Same object as" not in thisDict["input_note"]:
-
-                thisDict["raDeg"] = converter.ra_sexegesimal_to_decimal(
-                    ra=thisDict["ra"]
-                )
-                thisDict["decDeg"] = converter.dec_sexegesimal_to_decimal(
-                    dec=thisDict["dec"]
-                )
+                try:
+                    thisDict["raDeg"] = converter.ra_sexegesimal_to_decimal(
+                        ra=thisDict["ra"]
+                    )
+                    thisDict["decDeg"] = converter.dec_sexegesimal_to_decimal(
+                        dec=thisDict["dec"]
+                    )
+                except:
+                    name = thisDict["input_name"]
+                    self.log.warning(
+                        "Could not convert the RA & DEC for the %(name)s NED source" % locals())
+                    continue
                 thisDict["eb_v"] = thisDict["eb-v"]
                 thisDict["ned_name"] = thisDict["input_name"]
                 row = {}
@@ -378,11 +377,6 @@ class ned(_base_importer):
                         row[k] = thisDict[k]
 
                 dictList.append(row)
-
-        dataSet = list_of_dictionaries(
-            log=self.log,
-            listOfDictionaries=dictList
-        )
 
         self._add_data_to_database_table(
             dictList=dictList,
@@ -440,7 +434,7 @@ class ned(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(self.total / 3000.) + 1
+        self.batches = int(self.total / 10000.) + 1
 
         if self.total == 0:
             self.batches = 0

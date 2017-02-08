@@ -13,13 +13,17 @@
 import sys
 import os
 import collections
+import codecs
+import re
 os.environ['TERM'] = 'vt100'
 from datetime import datetime, date, time, timedelta
 from operator import itemgetter
+import numpy as np
 from fundamentals import tools
 from fundamentals.mysql import readquery, directory_script_runner, writequery
 from fundamentals.renderer import list_of_dictionaries
 from HMpTy.mysql import conesearch
+from HMpTy.htm import sets
 from sherlock.imports import ned
 from sherlock.commonutils import get_crossmatch_catalogues_column_map
 
@@ -36,6 +40,7 @@ class transient_classifier():
         - ``dec`` -- declination of a single transient source. Default *False*
         - ``name`` -- the ID of a single transient source. Default *False*
         - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
+        - ``fast`` -- run in fast mode. This mode may not catch errors in the ingest of data to the crossmatches table but runs twice as fast. Default *False*.
 
     **Usage:**
 
@@ -107,7 +112,8 @@ class transient_classifier():
             ra=False,
             dec=False,
             name=False,
-            verbose=0
+            verbose=0,
+            fast=False
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -118,6 +124,7 @@ class transient_classifier():
         self.name = name
         self.cl = False
         self.verbose = verbose
+        self.fast = fast
 
         # xt-self-arg-tmpx
 
@@ -129,7 +136,8 @@ class transient_classifier():
             log=self.log,
             settings=self.settings
         )
-        dbConns = db.connect()
+        dbConns, dbVersions = db.connect()
+        self.dbVersions = dbVersions
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
         self.pmDbConn = dbConns["marshall"]
@@ -139,6 +147,9 @@ class transient_classifier():
             self.cl = True
             if not self.name:
                 self.name = "Transient"
+
+        # DATETIME REGEX - EXPENSIVE OPERATION, LET"S JUST DO IT ONCE
+        self.reDatetime = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
 
         return None
 
@@ -154,100 +165,120 @@ class transient_classifier():
         """
         self.log.info('starting the ``classify`` method')
 
-        # IF A TRANSIENT HAS NOT BEEN PASSED IN VIA THE COMMAND-LINE, THEN
-        # QUERY THE TRANSIENT DATABASE
-        if not self.ra and not self.dec:
-            # A LIST OF DICTIONARIES OF TRANSIENT METADATA
-            transientsMetadataList = self._get_transient_metadata_from_database_list()
-            # EXAMPLE OF TRANSIENT METADATA
-            # { 'name': 'PS17gx',
-            # 'alt_id': 'PS17gx',
-            # 'object_classification': 'SN',
-            # 'dec': '+43:25:44.1',
-            # 'id': 1,
-            # 'ra': '08:57:57.19'}
-        # TRANSIENT PASSED VIA COMMAND-LINE
-        else:
-            if not self.name:
-                name = "transient"
+        remaining = 1
+        while remaining:
+
+            # IF A TRANSIENT HAS NOT BEEN PASSED IN VIA THE COMMAND-LINE, THEN
+            # QUERY THE TRANSIENT DATABASE
+            if not self.ra and not self.dec:
+
+                # COUNT REMAINING TRANSIENTS
+                from fundamentals.mysql import readquery
+                sqlQuery = self.settings["database settings"][
+                    "transients"]["transient count"]
+                rows = readquery(
+                    log=self.log,
+                    sqlQuery=sqlQuery,
+                    dbConn=self.transientsDbConn,
+                )
+                remaining = rows[0]["count(*)"]
+                print "%(remaining)s transient sources requiring a classification remain" % locals()
+
+                # A LIST OF DICTIONARIES OF TRANSIENT METADATA
+                transientsMetadataList = self._get_transient_metadata_from_database_list()
+                count = len(transientsMetadataList)
+                print "  now classifying the next %(count)s transient sources" % locals()
+
+                # EXAMPLE OF TRANSIENT METADATA
+                # { 'name': 'PS17gx',
+                # 'alt_id': 'PS17gx',
+                # 'object_classification': 'SN',
+                # 'dec': '+43:25:44.1',
+                # 'id': 1,
+                # 'ra': '08:57:57.19'}
+            # TRANSIENT PASSED VIA COMMAND-LINE
             else:
-                name = self.name
-            transient = {
-                'name': name,
-                'object_classification': None,
-                'dec': self.dec,
-                'id': name,
-                'ra': self.ra
-            }
-            transientsMetadataList = [transient]
+                if not self.name:
+                    name = "transient"
+                else:
+                    name = self.name
+                transient = {
+                    'name': name,
+                    'object_classification': None,
+                    'dec': self.dec,
+                    'id': name,
+                    'ra': self.ra
+                }
+                transientsMetadataList = [transient]
+                remaining = 0
 
-        if len(transientsMetadataList) == 0:
-            print "No transients need classified"
-            return None, None
+            if len(transientsMetadataList) == 0:
+                print "No transients need classified"
+                return None, None
 
-        # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
-        # REDSHIFT, MAG ETC
-        colMaps = get_crossmatch_catalogues_column_map(
-            log=self.log,
-            dbConn=self.cataloguesDbConn
-        )
-
-        # FROM THE LOCATIONS OF THE TRANSIENTS, CHECK IF OUR LOCAL NED DATABASE
-        # NEEDS UPDATED
-        self._update_ned_stream(
-            transientsMetadataList=transientsMetadataList
-        )
-
-        batchSize = 100
-        total = len(transientsMetadataList[1:])
-        batches = int(total / batchSize)
-
-        start = 0
-        end = 0
-        theseBatches = []
-        for i in range(batches + 1):
-            end = end + batchSize
-            start = i * batchSize
-            thisBatch = transientsMetadataList[start:end]
-            theseBatches.append(thisBatch)
-
-        count = 1
-        for batch in theseBatches:
-            count += 1
-            # RUN THE CROSSMATCH CLASSIFIER FOR ALL TRANSIENTS
-            crossmatches = self._crossmatch_transients_against_catalogues(
-                colMaps=colMaps,
-                transientsMetadataList=batch
+            # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
+            # REDSHIFT, MAG ETC
+            colMaps = get_crossmatch_catalogues_column_map(
+                log=self.log,
+                dbConn=self.cataloguesDbConn
             )
 
-            classifications, crossmatches = self._rank_classifications(
-                colMaps=colMaps,
-                crossmatches=crossmatches
+            # FROM THE LOCATIONS OF THE TRANSIENTS, CHECK IF OUR LOCAL NED DATABASE
+            # NEEDS UPDATED
+            self._update_ned_stream(
+                transientsMetadataList=transientsMetadataList
             )
 
-            if self.cl:
-                self._print_results_to_stdout(
-                    classifications=classifications,
+            batchSize = 100
+            total = len(transientsMetadataList[1:])
+            batches = int(total / batchSize)
+
+            start = 0
+            end = 0
+            theseBatches = []
+            for i in range(batches + 1):
+                end = end + batchSize
+                start = i * batchSize
+                thisBatch = transientsMetadataList[start:end]
+                theseBatches.append(thisBatch)
+
+            count = 1
+            for batch in theseBatches:
+                count += 1
+                # RUN THE CROSSMATCH CLASSIFIER FOR ALL TRANSIENTS
+                crossmatches = self._crossmatch_transients_against_catalogues(
+                    colMaps=colMaps,
+                    transientsMetadataList=batch
+                )
+
+                classifications, crossmatches = self._rank_classifications(
+                    colMaps=colMaps,
                     crossmatches=crossmatches
                 )
 
-            for t in batch:
-                if t["id"] not in classifications:
-                    classifications[t["id"]] = ["ORPHAN"]
+                if self.cl:
+                    self._print_results_to_stdout(
+                        classifications=classifications,
+                        crossmatches=crossmatches
+                    )
 
-            # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
-            # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
-            # TABLE)
-            if self.update and not self.ra:
-                self._update_transient_database(
-                    crossmatches=crossmatches,
-                    classifications=classifications,
-                    transientsMetadataList=batch,
-                    colMaps=colMaps
-                )
+                for t in batch:
+                    if t["id"] not in classifications:
+                        classifications[t["id"]] = ["ORPHAN"]
 
-            if self.ra:
-                return classifications, crossmatches
+                # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
+                # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
+                # TABLE)
+                if self.update and not self.ra:
+                    self._update_transient_database(
+                        crossmatches=crossmatches,
+                        classifications=classifications,
+                        transientsMetadataList=batch,
+                        colMaps=colMaps
+                    )
+
+                if self.ra:
+                    return classifications, crossmatches
 
         self.log.info('completed the ``classify`` method')
         return None, None
@@ -263,7 +294,9 @@ class transient_classifier():
             'starting the ``_get_transient_metadata_from_database_list`` method')
 
         sqlQuery = self.settings["database settings"][
-            "transients"]["transient query"]
+            "transients"]["transient query"] + " limit " + str(self.settings["database settings"][
+                "transients"]["classificationBatchSize"])
+
         transientsMetadataList = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
@@ -288,10 +321,16 @@ class transient_classifier():
 
         coordinateList = []
         for i in transientsMetadataList:
-            thisList = str(i["ra"]) + " " + str(i["dec"])
+            # thisList = str(i["ra"]) + " " + str(i["dec"])
+            thisList = (i["ra"], i["dec"])
             coordinateList.append(thisList)
 
         coordinateList = self._remove_previous_ned_queries(
+            coordinateList=coordinateList
+        )
+
+        # MINIMISE COORDINATES IN LIST TO REDUCE NUMBER OF REQUIRE NED QUERIES
+        coordinateList = self._consolidate_coordinateList(
             coordinateList=coordinateList
         )
 
@@ -322,6 +361,7 @@ class transient_classifier():
         # 1 DEGREE QUERY RADIUS
         radius = 60. * 60.
         updatedCoordinateList = []
+        keepers = []
 
         # CALCULATE THE OLDEST RESULTS LIMIT
         now = datetime.now()
@@ -330,53 +370,45 @@ class transient_classifier():
         refreshLimit = now - td
         refreshLimit = refreshLimit.strftime("%Y-%m-%d %H:%M:%S")
 
-        from astrocalc.coords import unit_conversion
-        # ASTROCALC UNIT CONVERTER OBJECT
-        converter = unit_conversion(
-            log=self.log
+        raList = []
+        raList[:] = [c[0] for c in coordinateList]
+        decList = []
+        decList[:] = [c[1] for c in coordinateList]
+
+        # MATCH COORDINATES AGAINST PREVIOUS NED SEARCHES
+        cs = conesearch(
+            log=self.log,
+            dbConn=self.cataloguesDbConn,
+            tableName="tcs_helper_ned_query_history",
+            columns="*",
+            ra=raList,
+            dec=decList,
+            radiusArcsec=radius,
+            separations=True,
+            distinct=True,
+            sqlWhere="dateQueried > '%(refreshLimit)s'" % locals(),
+            closest=True
         )
+        matchIndies, matches = cs.search()
 
-        # FOR EACH TRANSIENT IN COORDINATE LIST
-        for c in coordinateList:
-            this = c.split(" ")
+        # NON MATCHES
+        for i, v in enumerate(coordinateList):
+            if i not in matchIndies:
+                updatedCoordinateList.append(v)
 
-            raDeg = converter.ra_sexegesimal_to_decimal(
-                ra=this[0]
-            )
-            decDeg = converter.dec_sexegesimal_to_decimal(
-                dec=this[1]
-            )
-
-            cs = conesearch(
-                log=self.log,
-                dbConn=self.cataloguesDbConn,
-                tableName="tcs_helper_ned_query_history",
-                columns="*",
-                ra=raDeg,
-                dec=decDeg,
-                radiusArcsec=radius,
-                separations=True,
-                distinct=True,
-                sqlWhere="dateQueried > '%(refreshLimit)s'" % locals(),
-                closest=True
-            )
-            matchIndies, matches = cs.search()
-
-            # DETERMINE WHICH COORDINATES REQUIRE A NED QUERY
+        # DETERMINE WHICH COORDINATES REQUIRE A NED QUERY
+        for i, m in zip(matchIndies, matches.list):
             match = False
-            for row in matches.list:
-                row["separationArcsec"] = row["cmSepArcsec"]
-                raStream = row["raDeg"]
-                decStream = row["decDeg"]
-                radiusStream = row["arcsecRadius"]
-                dateStream = row["dateQueried"]
-                angularSeparation = row["separationArcsec"]
+            row = m
+            row["separationArcsec"] = row["cmSepArcsec"]
+            raStream = row["raDeg"]
+            decStream = row["decDeg"]
+            radiusStream = row["arcsecRadius"]
+            dateStream = row["dateQueried"]
+            angularSeparation = row["separationArcsec"]
 
-                if angularSeparation + self.settings["first pass ned search radius arcec"] < radiusStream:
-                    match = True
-
-            if match == False:
-                updatedCoordinateList.append(c)
+            if not angularSeparation + self.settings["first pass ned search radius arcec"] < radiusStream:
+                updatedCoordinateList.append(coordinateList[i])
 
         self.log.info('completed the ``_remove_previous_ned_queries`` method')
         return updatedCoordinateList
@@ -467,7 +499,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `photoZ` double DEFAULT NULL,
   `photoZErr` double DEFAULT NULL,
   `association_type` varchar(45) DEFAULT NULL,
-  `dateCreated` DATETIME DEFAULT NOW(),
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `physical_separation_kpc` double DEFAULT NULL,
   `catalogue_object_type` varchar(45) DEFAULT NULL,
   `catalogue_object_subtype` varchar(45) DEFAULT NULL,
@@ -517,7 +549,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `GErr` double DEFAULT NULL,
   `unkMag` double DEFAULT NULL,
   `unkMagErr` double DEFAULT NULL,
-  `dateLastModified` DATETIME NULL DEFAULT NOW(),
+  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated` TINYINT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `key_transient_object_id` (`transient_object_id`),
@@ -528,13 +560,70 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
 delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 """ % locals()
 
+        # A FIX FOR MYSQL VERSIONS < 5.6
+        if float(self.dbVersions["transients"][:3]) < 5.6:
+            createStatement = createStatement.replace(
+                "`dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateLastModified` datetime DEFAULT NULL,")
+            createStatement = createStatement.replace(
+                "`dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateCreated` datetime DEFAULT NULL,")
+
+            exists = os.path.exists(
+                "/tmp/sherlock_trigger/%(crossmatchTable)s_trigger.sql" % locals())
+            if not exists:
+                trigger = """
+                    DELIMITER $$
+                    CREATE TRIGGER dateCreated
+                    BEFORE INSERT ON `%(crossmatchTable)s`
+                    FOR EACH ROW
+                    BEGIN
+                       IF NEW.dateCreated IS NULL THEN
+                          SET NEW.dateCreated = NOW();
+                          SET NEW.dateLastModified = NOW();
+                       END IF;
+                    END$$
+                    DELIMITER ;""" % locals()
+
+                # Recursively create missing directories
+                if not os.path.exists("/tmp/sherlock_trigger"):
+                    os.makedirs("/tmp/sherlock_trigger")
+
+                pathToWriteFile = "/tmp/sherlock_trigger/%(crossmatchTable)s_trigger.sql" % locals(
+                )
+                try:
+                    self.log.debug("attempting to open the file %s" %
+                                   (pathToWriteFile,))
+                    writeFile = codecs.open(
+                        pathToWriteFile, encoding='utf-8', mode='w')
+                except IOError, e:
+                    message = 'could not open the file %s' % (pathToWriteFile,)
+                    self.log.critical(message)
+                    raise IOError(message)
+                writeFile.write(trigger)
+                writeFile.close()
+
+                directory_script_runner(
+                    log=self.log,
+                    pathToScriptDirectory="/tmp/sherlock_trigger",
+                    databaseName=self.settings[
+                        "database settings"]["transients"]["db"],
+                    loginPath=self.settings["database settings"][
+                        "transients"]["loginPath"],
+                    waitForResult=False
+                )
+
         dataSet = list_of_dictionaries(
             log=self.log,
-            listOfDictionaries=crossmatches
+            listOfDictionaries=crossmatches,
+            reDatetime=self.reDatetime
         )
 
         mysqlData = dataSet.mysql(
             tableName=crossmatchTable, filepath="/tmp/sherlock/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
+
+        if self.fast:
+            waitForResult = "delete"
+        else:
+            waitForResult = True
 
         directory_script_runner(
             log=self.log,
@@ -543,6 +632,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                 "database settings"]["transients"]["db"],
             loginPath=self.settings["database settings"][
                 "transients"]["loginPath"],
+            waitForResult=waitForResult,
             successRule="delete",
             failureRule="failed"
         )
@@ -704,8 +794,66 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         )
         tableData = dataSet.table(filepath=None)
 
+        print tableData
+
         self.log.info('completed the ``_print_results_to_stdout`` method')
         return None
+
+    def _consolidate_coordinateList(
+            self,
+            coordinateList):
+        """*match the coordinate list against itself with the parameters of the NED search queries to minimise duplicated NED queries*
+
+        **Key Arguments:**
+            - ``coordinateList`` -- the original coordinateList.
+
+        **Return:**
+            - ``updatedCoordinateList`` -- the coordinate list with duplicated search areas removed
+
+        **Usage:**
+            ..  todo::
+
+                - add usage info
+                - create a sublime snippet for usage
+                - update package tutorial if needed
+
+            .. code-block:: python 
+
+                usage code 
+
+        """
+        self.log.info('starting the ``_consolidate_coordinateList`` method')
+
+        raList = []
+        raList[:] = np.array([c[0] for c in coordinateList])
+        decList = []
+        decList[:] = np.array([c[1] for c in coordinateList])
+
+        nedStreamRadius = self.settings[
+            "ned stream search radius arcec"] / (60. * 60.)
+        firstPassNedSearchRadius = self.settings[
+            "first pass ned search radius arcec"] / (60. * 60.)
+        radius = nedStreamRadius - firstPassNedSearchRadius
+
+        # LET"S BE CONSERVATIVE
+        radius = radius * 0.9
+
+        xmatcher = sets(
+            log=self.log,
+            ra=raList,
+            dec=decList,
+            radius=radius,  # in degrees
+            sourceList=coordinateList,
+            convertToArray=False
+        )
+        allMatches = xmatcher.match
+
+        updatedCoordianteList = []
+        for aSet in allMatches:
+            updatedCoordianteList.append(aSet[0])
+
+        self.log.info('completed the ``_consolidate_coordinateList`` method')
+        return updatedCoordianteList
 
     # use the tab-trigger below for new method
     # xt-class-method

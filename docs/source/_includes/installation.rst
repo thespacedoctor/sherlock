@@ -1,7 +1,7 @@
 Installation
 ============
 
-The easiest way to install sherlock us to use ``pip``:
+The easiest way to install sherlock is to use ``pip``:
 
 .. code:: bash
 

@@ -74,7 +74,7 @@ class _base_importer():
             log=self.log,
             settings=self.settings
         )
-        dbConns = db.connect()
+        dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
         self.pmDbConn = dbConns["marshall"]
@@ -116,6 +116,9 @@ class _base_importer():
         self.declColName = "decDeg"
         self.uniqueKeyList = [self.raColName, "decDeg"]
 
+        # DATETIME REGEX - EXPENSIVE OPERATION, LET"S JUST DO IT ONCE
+        self.reDatetime = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
+
         return None
 
     def _add_data_to_database_table(
@@ -147,7 +150,8 @@ class _base_importer():
             os.makedirs("/tmp/myinserts/")
         dataSet = list_of_dictionaries(
             log=self.log,
-            listOfDictionaries=dictList
+            listOfDictionaries=dictList,
+            reDatetime=self.reDatetime
         )
 
         now = datetime.now()

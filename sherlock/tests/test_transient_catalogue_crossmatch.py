@@ -1,5 +1,5 @@
 import os
-import nose
+import unittest
 import shutil
 import yaml
 from sherlock.utKit import utKit
@@ -56,7 +56,7 @@ transients = [
      'ra': 0.02548233704918263,
      'followup_id': 2065412L,
      'dec': -4.284933417540423,
-     'id': 1000006110041705700L,
+     'id': 1,
      'object_classification': 0L
      },
 
@@ -67,7 +67,7 @@ transients = [
      'ra': 4.754236999477372,
      'followup_id': 1140386L,
      'dec': 28.276703631398625,
-     'id': 1001901011281636100L,
+     'id': 2,
      'object_classification': 0L
      },
 
@@ -78,31 +78,164 @@ transients = [
      'ra': 1.3324973428505413,
      'followup_id': 1202386L,
      'dec': 32.98869220595689,
-     'id': 1000519791325919200L,
+     'id': 3,
+     'object_classification': 0L
+     },
+
+    {'ps1_designation': u'faint-sdss-star',
+     'name': u'faint-star',
+     'detection_list_id': 2,
+     'local_comments': u'',
+     'ra': 134.74209,
+     'followup_id': 1202386L,
+     'dec': 59.18086,
+     'id': 4,
+     'object_classification': 0L
+     },
+
+    {'ps1_designation': u'faint-sdss-galaxy',
+     'name': u'faint-star',
+     'detection_list_id': 2,
+     'local_comments': u'',
+     'ra': 134.77235,
+     'followup_id': 1202386L,
+     'dec': 59.20961,
+     'id': 5,
+     'object_classification': 0L
+     },
+
+    {'ps1_designation': u'faint-sdss-medium-galaxy',
+     'name': u'faint-star',
+     'detection_list_id': 2,
+     'local_comments': u'',
+     'ra': 134.76298,
+     'followup_id': 1202386L,
+     'dec': 59.18248,
+     'id': 6,
+     'object_classification': 0L
+     },
+
+    {'ps1_designation': u'faint-sdss-bright-star',
+     'name': u'faint-star',
+     'detection_list_id': 2,
+     'local_comments': u'',
+     'ra': 134.81694,
+     'followup_id': 1202386L,
+     'dec': 59.19204,
+     'id': 7,
+     'object_classification': 0L
+     },
+
+    {'ps1_designation': u'faint-sdss-medium-star',
+     'name': u'faint-star',
+     'detection_list_id': 2,
+     'local_comments': u'',
+     'ra': 134.84064,
+     'followup_id': 1202386L,
+     'dec': 59.21254,
+     'id': 8,
      'object_classification': 0L
      }
 ]
 
-transients = [
-    {'ps1_designation': u'ATLAS17aeu',
-     'name': u'ATLAS17aeu',
-     'detection_list_id': 2,
-     'local_comments': u'',
-     'ra': 138.30789,
-     'followup_id': 1202386L,
-     'dec': +61.09267,
-     'id': 1000519791325919200L,
-     'object_classification': 0L
-     }
-]
+# transients = [
+#     {'ps1_designation': u'ATLAS17aeu',
+#      'name': u'ATLAS17aeu',
+#      'detection_list_id': 2,
+#      'local_comments': u'',
+#      'ra': 138.30789,
+#      'followup_id': 1202386L,
+#      'dec': +61.09267,
+#      'id': 1000519791325919200L,
+#      'object_classification': 0L
+#      }
+# ]
 
 
 sa = settings["search algorithm"]
 
 
-class test_transient_catalogue_crossmatch():
+class test_transient_catalogue_crossmatch(unittest.TestCase):
 
-    def test_transient_catalogue_crossmatch_function(self):
+    # def test_transient_catalogue_crossmatch_function(self):
+
+    #     from sherlock import transient_catalogue_crossmatch
+    #     this = transient_catalogue_crossmatch(
+    #         log=log,
+    #         settings=settings,
+    #         dbConn=dbConn,
+    #         colMaps=colMaps,
+    #         transients=transients
+    #     )
+    #     classifications = this.match()
+
+    # def test_transient_catalogue_crossmatch_search_catalogue_function(self):
+
+    #     from sherlock import transient_catalogue_crossmatch
+    #     this = transient_catalogue_crossmatch(
+    #         log=log,
+    #         settings=settings,
+    #         dbConn=dbConn,
+    #         colMaps=colMaps,
+    #         transients=transients
+    #     )
+    #     search_name = "ned_d spec sn"
+    #     searchPara = sa[search_name]
+    #     matchedObjects = this.angular_crossmatch_against_catalogue(
+    #         objectList=transients,
+    #         searchPara=searchPara,
+    #         search_name=search_name
+    #     )
+    #     print matchedObjects
+
+    #     search_name = "ned phot sn"
+    #     searchPara = sa[search_name]
+    #     matchedObjects = this.angular_crossmatch_against_catalogue(
+    #         objectList=transients,
+    #         searchPara=searchPara,
+    #         search_name=search_name
+    #     )
+    #     print matchedObjects
+
+    #     search_name = "ned phot other"
+    #     searchPara = sa[search_name]
+    #     matchedObjects = this.angular_crossmatch_against_catalogue(
+    #         objectList=transients,
+    #         searchPara=searchPara,
+    #         search_name=search_name
+    #     )
+    #     print matchedObjects
+
+    # def
+    # test_transient_catalogue_phyiscal_crossmatch_search_catalogue_function(self):
+
+    #     from sherlock import transient_catalogue_crossmatch
+    #     this = transient_catalogue_crossmatch(
+    #         log=log,
+    #         settings=settings,
+    #         dbConn=dbConn,
+    #         colMaps=colMaps,
+    #         transients=transients
+    #     )
+    #     search_name = "ned spec sn"
+    #     searchPara = sa[search_name]
+    #     matchedObjects = this.physical_separation_crossmatch_against_catalogue(
+    #         objectList=transients,
+    #         searchPara=searchPara,
+    #         search_name=search_name
+    #     )
+    #     print matchedObjects
+
+    #     search_name = "sdss spec sn"
+    #     searchPara = sa[search_name]
+    #     matchedObjects = this.physical_separation_crossmatch_against_catalogue(
+    #         objectList=transients,
+    #         searchPara=searchPara,
+    #         search_name=search_name
+    #     )
+    #     print matchedObjects
+
+    def test_transient_catalogue_faint_mag_search_catalogue_function(self):
 
         from sherlock import transient_catalogue_crossmatch
         this = transient_catalogue_crossmatch(
@@ -112,9 +245,38 @@ class test_transient_catalogue_crossmatch():
             colMaps=colMaps,
             transients=transients
         )
-        classifications = this.match()
 
-    def test_transient_catalogue_crossmatch_search_catalogue_function(self):
+        search_name = "sdss faint stars sn"
+        searchPara = sa[search_name]
+        matchedObjects = this.angular_crossmatch_against_catalogue(
+            objectList=transients,
+            searchPara=searchPara,
+            search_name=search_name
+        )
+        print matchedObjects
+        print
+
+        search_name = "2mass faint stars sn"
+        searchPara = sa[search_name]
+        matchedObjects = this.angular_crossmatch_against_catalogue(
+            objectList=transients,
+            searchPara=searchPara,
+            search_name=search_name
+        )
+        print matchedObjects
+        print
+
+        search_name = "gsc faint stars sn"
+        searchPara = sa[search_name]
+        matchedObjects = this.angular_crossmatch_against_catalogue(
+            objectList=transients,
+            searchPara=searchPara,
+            search_name=search_name
+        )
+        print matchedObjects
+        print
+
+    def test_transient_catalogue_bright_mag_search_catalogue_function(self):
 
         from sherlock import transient_catalogue_crossmatch
         this = transient_catalogue_crossmatch(
@@ -124,7 +286,8 @@ class test_transient_catalogue_crossmatch():
             colMaps=colMaps,
             transients=transients
         )
-        search_name = "ned_d spec sn"
+
+        search_name = "sdss bright stars"
         searchPara = sa[search_name]
         matchedObjects = this.angular_crossmatch_against_catalogue(
             objectList=transients,
@@ -132,8 +295,9 @@ class test_transient_catalogue_crossmatch():
             search_name=search_name
         )
         print matchedObjects
+        print
 
-        search_name = "ned phot sn"
+        search_name = "2mass bright stars"
         searchPara = sa[search_name]
         matchedObjects = this.angular_crossmatch_against_catalogue(
             objectList=transients,
@@ -141,8 +305,9 @@ class test_transient_catalogue_crossmatch():
             search_name=search_name
         )
         print matchedObjects
+        print
 
-        search_name = "ned phot other"
+        search_name = "gsc bright stars"
         searchPara = sa[search_name]
         matchedObjects = this.angular_crossmatch_against_catalogue(
             objectList=transients,
@@ -150,34 +315,7 @@ class test_transient_catalogue_crossmatch():
             search_name=search_name
         )
         print matchedObjects
-
-    def test_transient_catalogue_phyiscal_crossmatch_search_catalogue_function(self):
-
-        from sherlock import transient_catalogue_crossmatch
-        this = transient_catalogue_crossmatch(
-            log=log,
-            settings=settings,
-            dbConn=dbConn,
-            colMaps=colMaps,
-            transients=transients
-        )
-        search_name = "ned spec sn"
-        searchPara = sa[search_name]
-        matchedObjects = this.physical_separation_crossmatch_against_catalogue(
-            objectList=transients,
-            searchPara=searchPara,
-            search_name=search_name
-        )
-        print matchedObjects
-
-        search_name = "sdss spec sn"
-        searchPara = sa[search_name]
-        matchedObjects = this.physical_separation_crossmatch_against_catalogue(
-            objectList=transients,
-            searchPara=searchPara,
-            search_name=search_name
-        )
-        print matchedObjects
+        print
 
     def test_transient_catalogue_crossmatch_function_exception(self):
 

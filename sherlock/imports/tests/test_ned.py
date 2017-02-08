@@ -60,7 +60,7 @@ except:
     pass
 
 
-class test_ned():
+class test_ned(unittest.TestCase):
 
     def test_ned_function(self):
         coordinateList = ["23.2323 -43.23434"]

@@ -49,67 +49,78 @@ ssh tunnel:
     use tunnel: True
 
 search algorithm:
+    sdss bright stars:
+        angular radius arcsec: 10.0
+        transient classification: BS
+        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
+        bright mag column: _r
+        bright limit: 14.
+        match nearest source only: False
+    2mass bright stars:
+        angular radius arcsec: 10.0
+        transient classification: BS
+        database table: tcs_view_star_2mass_psc_final
+        bright mag column: J
+        bright limit: 14.
+        match nearest source only: False
+    gsc bright stars:
+        angular radius arcsec: 10.0
+        transient classification: BS
+        database table: tcs_view_star_guide_star_catalogue_v2_3
+        bright mag column: B
+        bright limit: 14.
+        match nearest source only: False
     gaia:
-        angular radius arcsec: 40.0
-        transient classification: CV
+        angular radius arcsec: 1.0
+        transient classification: VARIABLESTAR
         database table: tcs_view_star_gaia_dr1
-        stop algorithm on match: False
         match nearest source only: False
     downes cv:
         angular radius arcsec: 0.5
         transient classification: CV
         database table: tcs_view_cv_downes_cataclysmic_variables_final
-        stop algorithm on match: False
         match nearest source only: False
     ritter binaries:
         angular radius arcsec: 0.5
         transient classification: CV
         database table: tcs_view_cb_ritter_cataclysmic_binaries_v7_21
-        stop algorithm on match: False
         match nearest source only: False
     sdss qso:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
-        stop algorithm on match: False
         match nearest source only: False
     milliquas:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_view_agn_milliquas_v4_5
-        stop algorithm on match: False
         match nearest source only: False
     veron:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_view_agn_veron_v13
-        stop algorithm on match: False
         match nearest source only: False
     ned_d spec nt:
         angular radius arcsec: 3.0
         physical radius kpc: 0.5
         transient classification: NT
         database table: tcs_view_galaxy_ned_d_v10_2_0
-        stop algorithm on match: False
         match nearest source only: False
     ned qso:
         angular radius arcsec: 2.0
         transient classification: AGN
         database table: tcs_view_agn_ned_stream
-        stop algorithm on match: False
         match nearest source only: False
     ned phot nt:
         angular radius arcsec: 0.5
         transient classification: NT
         database table: tcs_view_galaxy_ned_stream
-        stop algorithm on match: False
         match nearest source only: False
     ned spec nt:
         angular radius arcsec: 3.0
         physical radius kpc: 0.5
         transient classification: NT
         database table: tcs_view_galaxy_ned_stream
-        stop algorithm on match: False
         match nearest source only: False
     ned_d spec sn:
         angular radius arcsec: 240.0
@@ -117,20 +128,17 @@ search algorithm:
         or within semi major axis: True
         transient classification: SN
         database table: tcs_view_galaxy_ned_d_v13_1_0
-        stop algorithm on match: False
         match nearest source only: False
     sdss spec nt:
         angular radius arcsec: 3.0
         physical radius kpc: 0.5
         transient classification: NT
         database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
-        stop algorithm on match: False
         match nearest source only: False
     sdss phot nt: 
         angular radius arcsec: 0.5
         transient classification: NT
         database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
-        stop algorithm on match: False
         match nearest source only: False
     ned spec sn:
         angular radius arcsec: 240.0
@@ -138,7 +146,6 @@ search algorithm:
         or within semi major axis: True
         transient classification: SN
         database table: tcs_view_galaxy_ned_stream
-        stop algorithm on match: False
         match nearest source only: False
     sdss spec sn:
         angular radius arcsec: 240.0
@@ -146,133 +153,57 @@ search algorithm:
         or within semi major axis: True
         transient classification: SN
         database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
-        stop algorithm on match: False
         match nearest source only: False
     ned phot sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_view_galaxy_ned_stream
-        stop algorithm on match: False
         match nearest source only: False
     sdss phot sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
-        stop algorithm on match: False
         match nearest source only: False
     sdss faint stars sn:
-        angular radius arcsec: 20.0
+        angular radius arcsec: 1.0
         transient classification: SN
         database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
-        faint mag column: petroMag_r
+        faint mag column: _r
         faint limit: 21.0
-        filter names: 
-            - u
-            - g
-            - r
-            - i
-            - z
-        mag columns: 
-            - petroMag_u
-            - petroMag_g
-            - petroMag_r
-            - petroMag_i
-            - petroMag_z
-        mag err columns: 
-            - petroMagErr_u
-            - petroMagErr_g
-            - petroMagErr_r
-            - petroMagErr_i
-            - petroMagErr_z
-        stop algorithm on match: False
         match nearest source only: False
     2mass faint stars sn:
         angular radius arcsec: 1.0
         transient classification: SN
         database table: tcs_view_star_2mass_psc_final
-        faint mag column: j_m
+        faint mag column: J
         faint limit: 18.0
-        filter names: 
-            - J
-            - H
-            - K
-        mag columns: 
-            - j_m
-            - h_m
-            - k_m
-        mag err columns: 
-            - j_cmsig
-            - h_cmsig
-            - k_cmsig
-        stop algorithm on match: False
         match nearest source only: False
     gsc faint stars sn:
-        angular radius arcsec: 1.0
+        angular radius arcsec: 6.0
         transient classification: SN
         database table: tcs_view_star_guide_star_catalogue_v2_3
-        faint mag column: VMag
-        faint limit: 20.0
-        filter names: 
-            - U
-            - B
-            - V
-            - R
-            - I
-        mag columns: 
-            - UMag
-            - VMag
-            - BMag
-            - RMag
-            - IMag
-        mag err columns: 
-            - UMagErr
-            - VMagErr
-            - BMagErr
-            - RMagErr
-            - IMagErr
-        stop algorithm on match: False
+        faint mag column: B
+        faint limit: 18.0
         match nearest source only: False
     ps1 ubercal star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_view_star_ps1_ubercal_stars_v1
-        stop algorithm on match: False
         match nearest source only: False
     sdss star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
-        stop algorithm on match: False
         match nearest source only: False
-        filter names: 
-            - u
-            - g
-            - r
-            - i
-            - z
-        mag columns: 
-            - petroMag_u
-            - petroMag_g
-            - petroMag_r
-            - petroMag_i
-            - petroMag_z
-        mag err columns: 
-            - petroMagErr_u
-            - petroMagErr_g
-            - petroMagErr_r
-            - petroMagErr_i
-            - petroMagErr_z
     2mass star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_view_star_2mass_psc_final
-        stop algorithm on match: False
         match nearest source only: False
     gsc star:
         angular radius arcsec: 1.0
         transient classification: VARIABLESTAR
         database table: tcs_view_star_guide_star_catalogue_v2_3
-        stop algorithm on match: False
         match nearest source only: False
     ned spec other:
         angular radius arcsec: 240.0
@@ -280,33 +211,28 @@ search algorithm:
         or within semi major axis: True
         transient classification: "?"
         database table: tcs_view_other_ned_stream
-        stop algorithm on match: False
         match nearest source only: False
     ned phot other:
         # angular radius arcsec: 20.0
         angular radius arcsec: 240.0
         transient classification: "?"
         database table: tcs_view_other_ned_stream
-        stop algorithm on match: False
         match nearest source only: False
     ifs galaxies phot:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_view_galaxy_ifs_stream
-        stop algorithm on match: False
         match nearest source only: False
     ifs galaxies phot sn:
         angular radius arcsec: 20.0
         transient classification: SN
         database table: tcs_view_galaxy_ifs_stream
-        stop algorithm on match: False
         match nearest source only: False
     ifs galaxies spec sn:
         angular radius arcsec: 240.0
         physical radius kpc: 30.0
         transient classification: SN
         database table: tcs_view_galaxy_ifs_stream
-        stop algorithm on match: False
         match nearest source only: False
 
 
@@ -315,7 +241,6 @@ supplementary search:
         angular radius arcsec: 30.0
         transient classification: KEPLER
         database table: tcs_view_galaxy_kepler_k2
-        stop algorithm on match: False
         match nearest source only: False
 
 sherlock wiki root: /Users/Dave/gh-wikis/sherlock.wiki/

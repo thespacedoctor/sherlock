@@ -48,7 +48,7 @@ if not os.path.exists(pathToOutputDir):
 # xt-setup-unit-testing-files-and-folders
 
 
-# class test_update_wiki_pages():
+# class test_update_wiki_pages(unittest.TestCase):
 
 #     def test_update_wiki_pages_function(self):
 
