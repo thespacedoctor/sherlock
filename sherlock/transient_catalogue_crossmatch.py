@@ -128,15 +128,16 @@ class transient_catalogue_crossmatch():
 
         # PERFORM ANY SUPPLIMENTARY SEARCHES
         ss = self.settings["supplementary search"]
-        for search_name, searchPara in ss.iteritems():
-            self.log.info("""  searching: %(search_name)s""" % locals())
-            supMatches = self.angular_crossmatch_against_catalogue(
-                objectList=self.transients,
-                searchPara=searchPara,
-                search_name=search_name
-            )
-            if supMatches:
-                allCatalogueMatches = allCatalogueMatches + supMatches
+        if ss:
+            for search_name, searchPara in ss.iteritems():
+                self.log.info("""  searching: %(search_name)s""" % locals())
+                supMatches = self.angular_crossmatch_against_catalogue(
+                    objectList=self.transients,
+                    searchPara=searchPara,
+                    search_name=search_name
+                )
+                if supMatches:
+                    allCatalogueMatches = allCatalogueMatches + supMatches
 
         self.log.info('completed the ``match`` method')
         return allCatalogueMatches

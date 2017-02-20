@@ -15,8 +15,8 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 Usage:
     sherlock init
     sherlock info [-s <pathToSettingsFile>]
-    sherlock dbmatch [-f --update] [-s <pathToSettingsFile>]
-    sherlock [-v] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
+    sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
+    sherlock [-vN] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
     sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -49,6 +49,7 @@ Options:
                                 * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
                                     http://www.das.uchile.cl/~lgalbany/LG/research.html
 
+    -N, --skipNedUpdate     do not update the NED database before classification
     -f, --fast              faster but errors in crossmatch table ingest my be misses
     -h, --help              show this help message
     -s, --settings          the settings file
@@ -142,6 +143,12 @@ def main(arguments=None):
             verbose = 2
         else:
             verbose = 1
+
+        if skipNedUpdateFlag:
+            updateNed = False
+        else:
+            updateNed = True
+
         classifier = transient_classifier.transient_classifier(
             log=log,
             settings=settings,
@@ -150,7 +157,8 @@ def main(arguments=None):
             name=name,
             verbose=verbose,
             update=updateFlag,
-            fast=fastFlag
+            fast=fastFlag,
+            updateNed=updateNed
         )
         classifier.classify()
 
