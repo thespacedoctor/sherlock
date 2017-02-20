@@ -41,6 +41,8 @@ class transient_classifier():
         - ``name`` -- the ID of a single transient source. Default *False*
         - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
         - ``fast`` -- run in fast mode. This mode may not catch errors in the ingest of data to the crossmatches table but runs twice as fast. Default *False*.
+        - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
+
 
     **Usage:**
 
@@ -113,7 +115,8 @@ class transient_classifier():
             dec=False,
             name=False,
             verbose=0,
-            fast=False
+            fast=False,
+            updateNed=True
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -125,6 +128,7 @@ class transient_classifier():
         self.cl = False
         self.verbose = verbose
         self.fast = fast
+        self.updateNed = updateNed
 
         # xt-self-arg-tmpx
 
@@ -225,9 +229,10 @@ class transient_classifier():
 
             # FROM THE LOCATIONS OF THE TRANSIENTS, CHECK IF OUR LOCAL NED DATABASE
             # NEEDS UPDATED
-            self._update_ned_stream(
-                transientsMetadataList=transientsMetadataList
-            )
+            if self.updateNed:
+                self._update_ned_stream(
+                    transientsMetadataList=transientsMetadataList
+                )
 
             batchSize = 100
             total = len(transientsMetadataList[1:])
@@ -387,16 +392,13 @@ class transient_classifier():
             separations=True,
             distinct=True,
             sqlWhere="dateQueried > '%(refreshLimit)s'" % locals(),
-            closest=True
+            closest=False
         )
         matchIndies, matches = cs.search()
 
-        # NON MATCHES
-        for i, v in enumerate(coordinateList):
-            if i not in matchIndies:
-                updatedCoordinateList.append(v)
-
         # DETERMINE WHICH COORDINATES REQUIRE A NED QUERY
+        curatedMatchIndices = []
+        curatedMatches = []
         for i, m in zip(matchIndies, matches.list):
             match = False
             row = m
@@ -407,8 +409,14 @@ class transient_classifier():
             dateStream = row["dateQueried"]
             angularSeparation = row["separationArcsec"]
 
-            if not angularSeparation + self.settings["first pass ned search radius arcec"] < radiusStream:
-                updatedCoordinateList.append(coordinateList[i])
+            if angularSeparation + self.settings["first pass ned search radius arcec"] < radiusStream:
+                curatedMatchIndices.append(i)
+                curatedMatches.append(m)
+
+        # NON MATCHES
+        for i, v in enumerate(coordinateList):
+            if i not in curatedMatchIndices:
+                updatedCoordinateList.append(v)
 
         self.log.info('completed the ``_remove_previous_ned_queries`` method')
         return updatedCoordinateList
@@ -835,8 +843,8 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             "first pass ned search radius arcec"] / (60. * 60.)
         radius = nedStreamRadius - firstPassNedSearchRadius
 
-        # LET"S BE CONSERVATIVE
-        radius = radius * 0.9
+        # LET'S BE CONSERVATIVE
+        # radius = radius * 0.9
 
         xmatcher = sets(
             log=self.log,
