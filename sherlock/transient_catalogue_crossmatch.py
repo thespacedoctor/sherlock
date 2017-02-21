@@ -290,13 +290,15 @@ class transient_catalogue_crossmatch():
             )
             annotatedcatalogueMatches.append(xm)
 
-        # ONLY RETURN FAINT STARS (REMOVE BRIGHTER MATCHES)
         catalogueMatches = annotatedcatalogueMatches
-        # catalogueMatches = self._faint_star_cut(
-        #     matchedObjects=catalogueMatches,
-        #     catalogueName=catalogueName,
-        #     searchPara=searchPara
-        # )
+
+        # IF BRIGHT STAR SEARCH
+        if magnitudeLimitType == "lower":
+            catalogueMatches = self._bright_star_match(
+                matchedObjects=catalogueMatches,
+                catalogueName=catalogueName,
+                searchPara=searchPara
+            )
 
         if "match nearest source only" in searchPara and searchPara["match nearest source only"] == True and len(catalogueMatches):
             nearestMatches = []
@@ -408,12 +410,12 @@ class transient_catalogue_crossmatch():
             'completed the ``_annotate_crossmatch_with_value_added_parameters`` method')
         return crossmatchDict
 
-    def _faint_star_cut(
+    def _bright_star_match(
             self,
             matchedObjects,
             catalogueName,
             searchPara):
-        """*perform a faint star cut on the crossmatch results if required by the catalogue search*
+        """*perform a bright star match on the crossmatch results if required by the catalogue search*
 
         **Key Arguments:**
             - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
@@ -421,47 +423,35 @@ class transient_catalogue_crossmatch():
             - ``catalogueName`` -- the name of the catalogue the crossmatch results from
 
         **Return:**
-            - ``matchedObjects`` -- the trimmed matched sources (faint stars only)
+            - ``brightStarMatches`` -- the trimmed matched sources (bright stars associations only)
         """
-        self.log.info('starting the ``_faint_star_cut`` method')
+        self.log.info('starting the ``_bright_star_match`` method')
 
         # FAINT STAR EXTRAS
         try:
-            magColumn = searchPara["faint mag column"]
-            faintLimit = searchPara["faint limit"]
+            magColumn = searchPara["bright mag column"]
+            magLimit = searchPara["bright limit"]
         except:
             magColumn = False
-            faintLimit = False
+            magLimit = False
 
-        # FAINT STAR CUTS
+        # MATCH BRIGHT STAR ASSOCIATIONS
+        brightStarMatches = []
         if matchedObjects and magColumn:
-            faintStarMatches = []
             for row in matchedObjects:
-                rMag = row[magColumn]
-                if rMag and rMag > faintLimit:
-                    faintStarMatches.append(row)
-            matchedObjects = faintStarMatches
-        elif "tcs_view_star_sdss" in catalogueName:
-            matchSubset = []
-            if matchedObjects:
-                for row in matchedObjects:
-                    rMag = row["_r"]
-                    separation = row["separationArcsec"]
-                    # Line passes through (x,y) = (2.5,18) and (19,13)
-                    lineTwo = -((18 - 13) / (19 - 2.5)) * \
-                        separation + 13 + 19 * ((18 - 13) / (19 - 2.5))
-                    if rMag < 13.0:
-                        matchSubset.append(row)
-                    elif rMag >= 13.0 and rMag < 18.0:
-                        if rMag < lineTwo:
-                            matchSubset.append(row)
-                    elif rMag >= 18.0 and separation < 2.5:
-                        matchSubset.append(row)
+                mag = row[magColumn]
+                match = False
+                if mag and mag < magLimit:
+                    sep = row["separationArcsec"]
+                    sepLimit = 10**(-0.2 * mag + 3.47712)
 
-            matchedObjects = matchSubset
+                    if sep < 10**(-0.2 * mag + 3.47712):
+                        match = True
+                        brightStarMatches.append(row)
+                    print sep, sepLimit, match
 
-        self.log.info('completed the ``_faint_star_cut`` method')
-        return matchedObjects
+        self.log.info('completed the ``_bright_star_match`` method')
+        return brightStarMatches
 
     def physical_separation_crossmatch_against_catalogue(
         self,
