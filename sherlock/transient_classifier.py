@@ -15,6 +15,7 @@ import os
 import collections
 import codecs
 import re
+from random import randint
 os.environ['TERM'] = 'vt100'
 from datetime import datetime, date, time, timedelta
 from operator import itemgetter
@@ -180,6 +181,11 @@ class transient_classifier():
                 from fundamentals.mysql import readquery
                 sqlQuery = self.settings["database settings"][
                     "transients"]["transient count"]
+                thisInt = randint(0, 100)
+                if "where" in sqlQuery:
+                    sqlQuery = sqlQuery.replace(
+                        "where", "where %(thisInt)s=%(thisInt)s and " % locals())
+
                 rows = readquery(
                     log=self.log,
                     sqlQuery=sqlQuery,
@@ -301,6 +307,11 @@ class transient_classifier():
         sqlQuery = self.settings["database settings"][
             "transients"]["transient query"] + " limit " + str(self.settings["database settings"][
                 "transients"]["classificationBatchSize"])
+
+        thisInt = randint(0, 100)
+        if "where" in sqlQuery:
+            sqlQuery = sqlQuery.replace(
+                "where", "where %(thisInt)s=%(thisInt)s and " % locals())
 
         transientsMetadataList = readquery(
             log=self.log,
@@ -559,6 +570,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `unkMagErr` double DEFAULT NULL,
   `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated` TINYINT NULL DEFAULT 0,
+  `synonym` TINYINT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `key_transient_object_id` (`transient_object_id`),
   KEY `key_catalogue_object_id` (`catalogue_object_id`),
