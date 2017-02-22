@@ -95,6 +95,7 @@ class transient_catalogue_crossmatch():
 
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         allCatalogueMatches = []
+        nonSynonymTransients = self.transients[:]
 
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
@@ -108,7 +109,8 @@ class transient_catalogue_crossmatch():
                 catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
                     objectList=self.transients,
                     searchPara=searchPara,
-                    search_name=search_name
+                    search_name=search_name,
+                    synonymSearch=True
                 )
             else:
                 # THE ANGULAR SEPARATION SEARCHES
@@ -119,7 +121,46 @@ class transient_catalogue_crossmatch():
                 catalogueMatches = self.angular_crossmatch_against_catalogue(
                     objectList=self.transients,
                     searchPara=searchPara,
-                    search_name=search_name
+                    search_name=search_name,
+                    synonymSearch=True
+                )
+
+            # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
+            if catalogueMatches:
+                allCatalogueMatches = allCatalogueMatches + catalogueMatches
+
+        synonymIDs = []
+        synonymIDs[:] = [xm["transient_object_id"] for xm in catalogueMatches]
+        nonSynonymTransients = []
+        nonSynonymTransients[:] = [
+            t for t in self.transients if t["id"] not in synonymIDs]
+
+        # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
+        # PRESENTED IN THE SETTINGS FILE
+        for search_name, searchPara in sa.iteritems():
+            self.log.info("""  searching: %(search_name)s""" % locals())
+            if "physical radius kpc" in searchPara:
+                search_name = search_name + " physical"
+                # THE PHYSICAL SEPARATION SEARCHES
+                self.log.info(
+                    'checking physical distance crossmatches in %(search_name)s' % locals())
+                catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
+                    objectList=nonSynonymTransients,
+                    searchPara=searchPara,
+                    search_name=search_name,
+                    synonymSearch=False
+                )
+            else:
+                # THE ANGULAR SEPARATION SEARCHES
+                self.log.info(
+                    'Crossmatching against %(search_name)s' % locals())
+                search_name = search_name + " angular"
+                # RENAMED from searchCatalogue
+                catalogueMatches = self.angular_crossmatch_against_catalogue(
+                    objectList=nonSynonymTransients,
+                    searchPara=searchPara,
+                    search_name=search_name,
+                    synonymSearch=False
                 )
 
             # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
@@ -147,7 +188,8 @@ class transient_catalogue_crossmatch():
         objectList,
         searchPara={},
         search_name="",
-        physicalSearch=False
+        physicalSearch=False,
+        synonymSearch=False
     ):
         """*perform an angular separation crossmatch against a given catalogue in the database and annotate the crossmatch with some value added parameters (distances, physical separations, sub-type of transient etc)*
 
@@ -156,6 +198,7 @@ class transient_catalogue_crossmatch():
             - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
             - ``search_name`` -- the name of the search as given in the sherlock settings file
             - ``physicalSearch`` -- is this angular search a sub-part of a physical separation search
+            - ``synonymSearch`` -- find only sources that are synonymous with the transient (i.e. not just associated by closeseparation, but located at almost the same position on the sky). Default *False*
 
          **Return:**
             - matchedObjects -- any sources matched against the object
@@ -220,9 +263,14 @@ class transient_catalogue_crossmatch():
             'starting the ``angular_crossmatch_against_catalogue`` method')
 
         # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
-        radius = searchPara["angular radius arcsec"]
+        if synonymSearch:
+            radius = self.settings["synonym radius arcsec"]
+            matchedType = searchPara["synonym"]
+        else:
+            radius = searchPara["angular radius arcsec"]
+            matchedType = searchPara["association"]
         catalogueName = searchPara["database table"]
-        matchedType = searchPara["transient classification"]
+
         if "faint mag column" in searchPara and searchPara["faint mag column"] and "faint limit" in searchPara and searchPara["faint limit"]:
             magnitudeLimitType = "upper"
             magnitudeLimit = searchPara["faint limit"]
@@ -281,6 +329,10 @@ class transient_catalogue_crossmatch():
                 catalogueName]["table_id"]
             xm["catalogue_view_id"] = self.colMaps[
                 catalogueName]["id"]
+            if synonymSearch:
+                xm["synonym"] = 1
+            else:
+                xm["synonym"] = 0
 
             xm = self._annotate_crossmatch_with_value_added_parameters(
                 crossmatchDict=xm,
@@ -440,15 +492,12 @@ class transient_catalogue_crossmatch():
         if matchedObjects and magColumn:
             for row in matchedObjects:
                 mag = row[magColumn]
-                match = False
                 if mag and mag < magLimit:
                     sep = row["separationArcsec"]
                     sepLimit = 10**(-0.2 * mag + 3.47712)
 
                     if sep < 10**(-0.2 * mag + 3.47712):
-                        match = True
                         brightStarMatches.append(row)
-                    print sep, sepLimit, match
 
         self.log.info('completed the ``_bright_star_match`` method')
         return brightStarMatches
@@ -457,7 +506,8 @@ class transient_catalogue_crossmatch():
         self,
         objectList,
         searchPara,
-        search_name
+        search_name,
+        synonymSearch=False
     ):
         """*perform an physical separation crossmatch against a given catalogue in the database*
 
@@ -467,6 +517,7 @@ class transient_catalogue_crossmatch():
             - ``objectList`` -- transients to be crossmatched
             - ``searchPara`` -- parameters of the search (from settings file)
             - ``search_name`` -- the name of the search
+            - ``synonymSearch`` -- find only sources that are synonymous with the transient (i.e. not just associated by closeseparation, but located at almost the same position on the sky). Default *False*
 
         **Return:**
             - matchedObjects -- any sources matched against the object
@@ -494,7 +545,10 @@ class transient_catalogue_crossmatch():
         matchedObjects = []
         matchSubset = []
         physicalRadius = searchPara["physical radius kpc"]
-        matchedType = searchPara["transient classification"]
+        if synonymSearch:
+            matchedType = searchPara["synonym"]
+        else:
+            matchedType = searchPara["association"]
 
         # RETURN ALL ANGULAR MATCHES BEFORE RETURNING NEAREST PHYSICAL SEARCH
         nearestOnly = searchPara["match nearest source only"]
@@ -506,7 +560,8 @@ class transient_catalogue_crossmatch():
             objectList=objectList,
             searchPara=tmpSearchPara,
             search_name=search_name,
-            physicalSearch=True
+            physicalSearch=True,
+            synonymSearch=synonymSearch
         )
 
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
