@@ -479,6 +479,9 @@ class transient_catalogue_crossmatch():
         """
         self.log.info('starting the ``_bright_star_match`` method')
 
+        import decimal
+        decimal.getcontext().prec = 10
+
         # FAINT STAR EXTRAS
         try:
             magColumn = searchPara["bright mag column"]
@@ -491,12 +494,10 @@ class transient_catalogue_crossmatch():
         brightStarMatches = []
         if matchedObjects and magColumn:
             for row in matchedObjects:
-                mag = row[magColumn]
+                mag = decimal.Decimal(row[magColumn])
                 if mag and mag < magLimit:
-                    sep = row["separationArcsec"]
-                    sepLimit = 10**(-0.2 * mag + 3.47712)
-
-                    if sep < 10**(-0.2 * mag + 3.47712):
+                    sep = decimal.Decimal(row["separationArcsec"])
+                    if sep < decimal.Decimal(decimal.Decimal(10)**(-decimal.Decimal(0.2) * mag + decimal.Decimal(3.47712))):
                         brightStarMatches.append(row)
 
         self.log.info('completed the ``_bright_star_match`` method')
