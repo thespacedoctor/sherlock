@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Command-Line Usage &mdash; sherlock 0.2.0 documentation</title>
+  <title>Command-Line Usage &mdash; sherlock 1.1.2 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 0.2.0 documentation" href="../index.html"/> 
+    <link rel="top" title="sherlock 1.1.2 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                v0.2.0
+                v1.1.2
               </div>
             
           
@@ -166,8 +166,8 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 Usage:
     sherlock init
     sherlock info [-s &lt;pathToSettingsFile&gt;]
-    sherlock [-v] &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]
-    sherlock match [--update] [-s &lt;pathToSettingsFile&gt;]
+    sherlock [-N] dbmatch [-f --update] [-s &lt;pathToSettingsFile&gt;]
+    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]
     sherlock clean [-s &lt;pathToSettingsFile&gt;]
     sherlock wiki [-s &lt;pathToSettingsFile&gt;]
     sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]
@@ -177,6 +177,7 @@ Usage:
 Options:
     init                    setup the sherlock settings file for the first time
     match                   XXXX
+    dbmatch                 database match
     clean                   XXXX
     wiki                    XXXX
     import                  XXXX
@@ -199,6 +200,8 @@ Options:
                                 * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
                                     http://www.das.uchile.cl/~lgalbany/LG/research.html
 
+    -N, --skipNedUpdate     do not update the NED database before classification
+    -f, --fast              faster but errors in crossmatch table ingest my be misses
     -h, --help              show this help message
     -s, --settings          the settings file
     -v, --verbose           print more details to stdout
@@ -240,7 +243,7 @@ Options:
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.2.0',
+            VERSION:'1.1.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock &mdash; sherlock 0.2.0 documentation</title>
+  <title>sherlock &mdash; sherlock 1.1.2 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="sherlock 0.2.0 documentation" href="#"/>
+    <link rel="top" title="sherlock 1.1.2 documentation" href="#"/>
         <link rel="next" title="Installation" href="_includes/index.html"/> 
 
   
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                v0.2.0
+                v1.1.2
               </div>
             
           
@@ -153,6 +153,8 @@
             
   <div class="section" id="sherlock">
 <h1>sherlock<a class="headerlink" href="#sherlock" title="Permalink to this headline">  ∞</a></h1>
+<a class="reference external image-reference" href="http://qub-sherlock.readthedocs.io/en/latest/?badge"><img alt="Documentation Status" src="https://readthedocs.org/projects/qub-sherlock/badge/" /></a>
+<a class="reference external image-reference" href="https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html"><img alt="Coverage Status" src="https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg" /></a>
 <p><em>A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data</em>.</p>
 <p>Here&#8217;s a summary of what&#8217;s included in the python package:</p>
 <p><strong>Classes</strong></p>
@@ -238,6 +240,7 @@
 <li class="toctree-l3"><a class="reference internal" href="_includes/index.html#a-single-transient-classification">A Single Transient Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_includes/index.html#classifying-transients-in-a-transient-database">Classifying Transients in a Transient Database</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_includes/index.html#the-classification-workflow">The Classification Workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="_includes/index.html#synonyms-vs-associations">Synonyms vs Associations</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_includes/index.html#ned-stream-updater">NED Stream Updater</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_includes/index.html#search-algoritm">Search Algoritm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_includes/index.html#angular-separation-search">Angular Separation Search</a></li>
@@ -264,7 +267,7 @@
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">  ∞</a></h1>
-<p>The easiest way to install sherlock us to use <code class="docutils literal"><span class="pre">pip</span></code>:</p>
+<p>The easiest way to install sherlock is to use <code class="docutils literal"><span class="pre">pip</span></code>:</p>
 <div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span>
 </pre></div>
 </div>
@@ -276,6 +279,15 @@
 </div>
 <p>To upgrade to the latest version of sherlock use the command:</p>
 <div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span> <span class="o">--</span><span class="n">upgrade</span>
+</pre></div>
+</div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>make a note about how to setup mysql login paths and have them associated with the database setting in the sherlock settings file</li>
+</ul>
+</div>
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">mysql_config_editor</span> <span class="nb">set</span> <span class="o">--</span><span class="n">login</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">xxx</span> <span class="o">--</span><span class="n">host</span><span class="o">=</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">--</span><span class="n">user</span><span class="o">=</span><span class="n">myuser</span> <span class="o">--</span><span class="n">password</span> <span class="o">--</span><span class="n">port</span><span class="o">=</span><span class="n">xxx</span>
 </pre></div>
 </div>
 <div class="section" id="development">
@@ -316,8 +328,8 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 Usage:
     sherlock init
     sherlock info [-s &lt;pathToSettingsFile&gt;]
-    sherlock [-v] &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]
-    sherlock match [--update] [-s &lt;pathToSettingsFile&gt;]
+    sherlock [-N] dbmatch [-f --update] [-s &lt;pathToSettingsFile&gt;]
+    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]
     sherlock clean [-s &lt;pathToSettingsFile&gt;]
     sherlock wiki [-s &lt;pathToSettingsFile&gt;]
     sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]
@@ -327,6 +339,7 @@ Usage:
 Options:
     init                    setup the sherlock settings file for the first time
     match                   XXXX
+    dbmatch                 database match
     clean                   XXXX
     wiki                    XXXX
     import                  XXXX
@@ -349,6 +362,8 @@ Options:
                                 * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
                                     http://www.das.uchile.cl/~lgalbany/LG/research.html
 
+    -N, --skipNedUpdate     do not update the NED database before classification
+    -f, --fast              faster but errors in crossmatch table ingest my be misses
     -h, --help              show this help message
     -s, --settings          the settings file
     -v, --verbose           print more details to stdout
@@ -369,7 +384,7 @@ Options:
 </pre></div>
 </div>
 <p>This should create and open the settings file; follow the instructions in the file to populate the missing settings values (usually given an <code class="docutils literal"><span class="pre">XXX</span></code> placeholder).</p>
-<div class="admonition-todo admonition" id="index-0">
+<div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
 <li>add tutorial</li>
@@ -490,8 +505,67 @@ database table: tcs_cat_v_sdss_dr9_galaxies_notspec</dd>
 </div>
 <div class="section" id="the-classification-workflow">
 <h3>The Classification Workflow<a class="headerlink" href="#the-classification-workflow" title="Permalink to this headline">  ∞</a></h3>
-<p>![](<a class="reference external" href="https://i.imgur.com/TaGi9pb.png">https://i.imgur.com/TaGi9pb.png</a>)</p>
-<p>[zoom](<a class="reference external" href="https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67">https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67</a>)</p>
+<div class="figure">
+<img alt="https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67" src="https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67" />
+</div>
+<div class="section" id="synonyms-vs-associations">
+<h4>Synonyms vs Associations<a class="headerlink" href="#synonyms-vs-associations" title="Permalink to this headline">  ∞</a></h4>
+<p>Sherlock distinguishes between what it views as transient objects
+synonymous with a catalogued source (the same as or very closely linked
+to), <em>synonyms</em>, and those it deems as merely associated with the
+catalogued source, <em>associations</em>.</p>
+<p>Examples of transient-synonym matches are CVs, AGN and variable stars
+(VS) that match within 1-2 arcsec of their catalogue counterpart.
+Stretching the definition of <em>synonym</em> a little, Sherlock will also
+match transients close to the centre of galaxies as synonyms<a class="footnote-reference" href="#id18" id="id17">[1]</a>.
+Transient-associations include those transients that are located near,
+but not on top of, a catalogued source. Example of these associations
+are &#8216;transients&#8217; matching close to bright-stars and are classified as
+bright-star artefacts (BS) resulting from poor image subtractions near
+bright stars (<span class="math">\(~&gt;14-16^{th}\)</span> mag) or transients matched near to a galaxy
+which may be classified as supernovae (SN). By definition synonyms are a
+more secure match than associations.</p>
+<p>Each search algorithm module should contain a <em>synonym</em> and an
+<em>association</em> key-value sets. For example here is a Guide-Star Catalogue
+search module:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">gsc bright stars</span><span class="p p-Indicator">:</span>
+ <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">100.0</span>
+ <span class="l l-Scalar l-Scalar-Plain">synonym</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">VS</span>
+ <span class="l l-Scalar l-Scalar-Plain">association</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">BS</span>
+ <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_view_star_guide_star_catalogue_v2_3</span>
+ <span class="l l-Scalar l-Scalar-Plain">bright mag column</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">B</span>
+ <span class="l l-Scalar l-Scalar-Plain">bright limit</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">16.</span>
+</pre></div>
+</div>
+<p>If a transient is matched on top of a source in the GSC it&#8217;s identified as a synonym and classified as a variable star, but if it is match near to the source but not co-located if may been identified as an association and classified as a potential bright-star artefact (BS).</p>
+<p>There&#8217;s also a top-level <code class="docutils literal"><span class="pre">synonym</span> <span class="pre">radius</span> <span class="pre">arcsec</span></code> parameter in the
+Sherlock settings file that defines the maximum transient-catalogue
+source separation that secures a synonym identification.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">synonym radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0.5</span>
+</pre></div>
+</div>
+<p>Sherlock performs a two-staged catalogue match, first looking for
+synonym matches and then for associations. For an individual transient
+if a synonym match is found within the first search stage the second
+search stage for associations is skipped as it becomes irrelevant. For
+example consider the image below (transients marked in red):</p>
+<div class="figure">
+<img alt="https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px" src="https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px" />
+</div>
+<p>The first stage search should match transients A, C and E as synonyms
+(NT, VS, VS), these transients are then removed from a further
+association search. The second stage search then flags B as associated
+with the large galaxy at the centre of the image and transient D as
+either associated with the bright-star in the bottom right corner of the
+image or with the galaxy in the centre.</p>
+<table class="docutils footnote" frame="void" id="id18" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id17">[1]</a></td><td>could be classified as a nuclear transient or supernova depending on
+search algorithm parameters</td></tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="ned-stream-updater">
 <h4>NED Stream Updater<a class="headerlink" href="#ned-stream-updater" title="Permalink to this headline">  ∞</a></h4>
 <p>The settings in the settings file relating to the NED stream are:</p>
@@ -505,7 +579,7 @@ database table: tcs_cat_v_sdss_dr9_galaxies_notspec</dd>
 <div class="section" id="search-algoritm">
 <h4>Search Algoritm<a class="headerlink" href="#search-algoritm" title="Permalink to this headline">  ∞</a></h4>
 <p>The algorithm is written and modified within the <code class="xref py py-obj docutils literal"><span class="pre">sherlock.yaml</span></code> settings file. This means you can modify the algorithm without affecting anyone else&#8217;s search (as long as you are working off the different transient databases).</p>
-<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>yaml
+<p><a href="#id19"><span class="problematic" id="id20">``</span></a><a href="#id21"><span class="problematic" id="id22">`</span></a>yaml
 search algorithm:</p>
 <blockquote>
 <div><dl class="docutils">
@@ -533,7 +607,7 @@ transient classification: AGN
 ...</dd>
 </dl>
 </div></blockquote>
-<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+<p><a href="#id23"><span class="problematic" id="id24">``</span></a><a href="#id25"><span class="problematic" id="id26">`</span></a></p>
 <p>Note, to remove a module temporarily, simply comment it out in the settings file (yaml treats lines beginning with <code class="xref py py-obj docutils literal"><span class="pre">#</span></code> as comments).</p>
 <p>Behind the scenes there are 2 types of searches performed on the catalogues.</p>
 <ol class="arabic simple">
@@ -544,7 +618,7 @@ transient classification: AGN
 <div class="section" id="angular-separation-search">
 <h4>Angular Separation Search<a class="headerlink" href="#angular-separation-search" title="Permalink to this headline">  ∞</a></h4>
 <p>An example of an angular separation search looks like this in the settings file:</p>
-<p><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a>yaml
+<p><a href="#id27"><span class="problematic" id="id28">``</span></a><a href="#id29"><span class="problematic" id="id30">`</span></a>yaml
 milliquas:</p>
 <blockquote>
 <div>angular radius arcsec: 2.0
@@ -552,7 +626,7 @@ transient classification: AGN
 database table: tcs_view_agn_milliquas_v4_5
 stop algorithm on match: False
 match nearest source only: False</div></blockquote>
-<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a></p>
+<p><a href="#id31"><span class="problematic" id="id32">``</span></a><a href="#id33"><span class="problematic" id="id34">`</span></a></p>
 <p>The code performs a cone-search on <code class="xref py py-obj docutils literal"><span class="pre">database</span> <span class="pre">table</span></code> using the <code class="xref py py-obj docutils literal"><span class="pre">angular</span> <span class="pre">radius</span> <span class="pre">arcsec</span></code>. If matches are found the associated transient is given a <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">classification</span></code> and the results are added to the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table of the transients database. If <code class="xref py py-obj docutils literal"><span class="pre">stop</span> <span class="pre">algorithm</span> <span class="pre">on</span> <span class="pre">match</span></code> is true the code breaks out of the search algorithm and starts afresh with the next transient to be classified, otherwise the algorithm contines and all matches are recorded in the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table. If <code class="xref py py-obj docutils literal"><span class="pre">match</span> <span class="pre">nearest</span> <span class="pre">source</span> <span class="pre">only</span></code> is true only the closest match from each catalogue query is be recorded in the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table.</p>
 </div>
 <div class="section" id="physical-separation-search">
@@ -610,7 +684,7 @@ match nearest source only: False</div></blockquote>
 </div>
 <div class="section" id="maintainance-and-updates-of-catalogues-database">
 <h3>Maintainance and Updates of Catalogues Database<a class="headerlink" href="#maintainance-and-updates-of-catalogues-database" title="Permalink to this headline">  ∞</a></h3>
-<div class="admonition-todo admonition" id="index-1">
+<div class="admonition-todo admonition" id="index-2">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
 <li>write about marshall stream updates</li>
@@ -635,7 +709,7 @@ match nearest source only: False</div></blockquote>
 </div>
 <div class="section" id="updating-catalogues-and-adding-new-catalogues-to-the-database">
 <h3>Updating Catalogues and Adding New Catalogues to the Database<a class="headerlink" href="#updating-catalogues-and-adding-new-catalogues-to-the-database" title="Permalink to this headline">  ∞</a></h3>
-<div class="admonition-todo admonition" id="index-2">
+<div class="admonition-todo admonition" id="index-3">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
 <li>list current catalogue importers and how to use them</li>
@@ -651,12 +725,12 @@ match nearest source only: False</div></blockquote>
 <span class="pre">sherlock-importers</span> <span class="pre">stream</span> <span class="pre">&lt;stream_name&gt;</span> <span class="pre">[-s</span> <span class="pre">&lt;pathToSettingsFile&gt;]</span>
 <span class="pre">`</span></code></p>
 <p>The command to <strong>import new versions of catalogues</strong> and <strong>data streams</strong> into the <code class="xref py py-obj docutils literal"><span class="pre">crossmatch_catalogues</span></code> database is:</p>
-<p><a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a>python
+<p><a href="#id35"><span class="problematic" id="id36">``</span></a><a href="#id37"><span class="problematic" id="id38">`</span></a>python
 Usage:</p>
 <blockquote>
 <div>sherlock-importers cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]
 sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</div></blockquote>
-<p><a href="#id37"><span class="problematic" id="id38">``</span></a><a href="#id39"><span class="problematic" id="id40">`</span></a></p>
+<p><a href="#id39"><span class="problematic" id="id40">``</span></a><a href="#id41"><span class="problematic" id="id42">`</span></a></p>
 <p>For example:</p>
 <p><code class="docutils literal"><span class="pre">`bash</span>
 <span class="pre">&gt;</span> <span class="pre">sherlock-importers</span> <span class="pre">cat</span> <span class="pre">milliquas</span> <span class="pre">~/Desktop/milliquas.txt</span> <span class="pre">4.5</span>
@@ -675,7 +749,7 @@ sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</d
 <span class="pre">sherlock-importers</span> <span class="pre">stream</span> <span class="pre">pessto</span>
 <span class="pre">`</span></code></p>
 <p>will import all of the various <strong>data-streams</strong> added to the PESSTO marshall (ASASSN, CRTS, LSQ, PSST ...).</p>
-<p>THE COLUMN MAP LIFTED FROM <a href="#id41"><span class="problematic" id="id42">``</span></a>tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH &#8216;ColName&#8217;)</p>
+<p>THE COLUMN MAP LIFTED FROM <a href="#id43"><span class="problematic" id="id44">``</span></a>tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH &#8216;ColName&#8217;)</p>
 <div class="toctree-wrapper compound" id="python-package-documentation">
 <p class="caption"><span class="caption-text">Python Package Documentation</span><a class="headerlink" href="#python-package-documentation" title="Permalink to this toctree">  ∞</a></p>
 <ul>
@@ -715,7 +789,7 @@ sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</d
 </div>
 </div>
 <div class="section" id="indexes">
-<span id="id43"></span><h2>Indexes<a class="headerlink" href="#indexes" title="Permalink to this headline">  ∞</a></h2>
+<span id="id45"></span><h2>Indexes<a class="headerlink" href="#indexes" title="Permalink to this headline">  ∞</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Full Index</span></a></li>
@@ -768,7 +842,7 @@ sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</d
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2.0',
+            VERSION:'1.1.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

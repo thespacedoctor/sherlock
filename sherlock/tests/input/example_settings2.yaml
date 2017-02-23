@@ -49,6 +49,7 @@ ned stream search radius arcec: 300
 first pass ned search radius arcec: 240
 ned stream refresh rate in days: 90
 galaxy radius stetch factor: 1.2
+synonym radius arcsec: 0.5
 
 # SSH TUNNEL - if a tunnel is required to connect to the database(s) then add setup here
 # Note only one tunnel is setup - may need to change this to 2 tunnels in the future if 
