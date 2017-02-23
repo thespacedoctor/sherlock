@@ -1,6 +1,14 @@
 sherlock 
 =========================
 
+.. image:: https://readthedocs.org/projects/qub-sherlock/badge/
+    :target: http://qub-sherlock.readthedocs.io/en/latest/?badge
+    :alt: Documentation Status
+
+.. image:: https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg
+    :target: https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html
+    :alt: Coverage Status
+
 *A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data*.
 
 Here's a summary of what's included in the python package:
@@ -27,8 +35,8 @@ Command-Line Usage
     Usage:
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
-        sherlock [-v] <ra> <dec> [<name> -s <pathToSettingsFile>]
-        sherlock match [--update] [-s <pathToSettingsFile>]
+        sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
+        sherlock [-vN] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
         sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -38,6 +46,7 @@ Command-Line Usage
     Options:
         init                    setup the sherlock settings file for the first time
         match                   XXXX
+        dbmatch                 database match
         clean                   XXXX
         wiki                    XXXX
         import                  XXXX
@@ -60,6 +69,8 @@ Command-Line Usage
                                     * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
                                         http://www.das.uchile.cl/~lgalbany/LG/research.html
     
+        -N, --skipNedUpdate     do not update the NED database before classification
+        -f, --fast              faster but errors in crossmatch table ingest my be misses
         -h, --help              show this help message
         -s, --settings          the settings file
         -v, --verbose           print more details to stdout
@@ -94,6 +105,16 @@ To upgrade to the latest version of sherlock use the command:
 .. code:: bash
 
     pip install qub-sherlock --upgrade
+
+
+
+.. todo::
+
+    - make a note about how to setup mysql login paths and have them associated with the database setting in the sherlock settings file
+
+.. code:: bash
+
+    mysql_config_editor set --login-path=xxx --host=127.0.0.1 --user=myuser --password --port=xxx
 
 
 Development
