@@ -358,6 +358,15 @@ class transient_classifier():
         )
         stream.ingest()
 
+        sqlQuery = """SET session sql_mode = "";
+        update tcs_cat_ned_stream set magnitude = CAST(`magnitude_filter` AS DECIMAL(5,2)) where magnitude is null;""" % locals(
+        )
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn
+        )
+
         self.log.info('completed the ``_update_ned_stream`` method')
         return None
 
@@ -570,7 +579,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `unkMagErr` double DEFAULT NULL,
   `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated` TINYINT NULL DEFAULT 0,
-  `synonym` TINYINT NULL DEFAULT NULL,
+  `classificationReliability` TINYINT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `key_transient_object_id` (`transient_object_id`),
   KEY `key_catalogue_object_id` (`catalogue_object_id`),
@@ -653,22 +662,70 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             loginPath=self.settings["database settings"][
                 "transients"]["loginPath"],
             waitForResult=waitForResult,
-            successRule="delete",
+            successRule="success",
             failureRule="failed"
         )
 
         sqlQuery = ""
+        inserts = []
         for k, v in classifications.iteritems():
+            thisInsert = {
+                "transient_object_id": k,
+                "classification": v[0]
+            }
+            inserts.append(thisInsert)
+
             classification = v[0]
             sqlQuery += u"""
-                    update %(transientTable)s  set %(transientTableClassCol)s = "%(classification)s"
+                    update %(transientTable)s set %(transientTableClassCol)s = "%(classification)s"
                         where %(transientTableIdCol)s  = "%(k)s";
                 """ % locals()
-
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
+        )
+
+        createStatement = """CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
+  `transient_object_id` bigint(20) NOT NULL,
+  `classification` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `annotation` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dateLastModified` datetime DEFAULT NULL,
+  `dateCreated` datetime DEFAULT NULL,
+  `updated` varchar(45) DEFAULT '0',
+  PRIMARY KEY (`transient_object_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+"""
+        dataSet = list_of_dictionaries(
+            log=self.log,
+            listOfDictionaries=inserts,
+            reDatetime=re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
+        )
+
+        # Recursively create missing directories
+        if not os.path.exists("/tmp/sherlock/classifications"):
+            os.makedirs("/tmp/sherlock/classifications")
+
+        now = datetime.now()
+        now = now.strftime("%Y%m%dt%H%M%S")
+        mysqlData = dataSet.mysql(tableName="sherlock_classifications",
+                                  filepath="/tmp/sherlock/classifications/%(now)s.sql" % locals(), createStatement=createStatement)
+
+        if self.fast:
+            waitForResult = "delete"
+        else:
+            waitForResult = True
+
+        directory_script_runner(
+            log=self.log,
+            pathToScriptDirectory="/tmp/sherlock/classifications",
+            databaseName=self.settings[
+                "database settings"]["transients"]["db"],
+            loginPath=self.settings["database settings"][
+                "transients"]["loginPath"],
+            waitForResult=waitForResult,
+            successRule="delete",
+            failureRule="failed"
         )
 
         self.log.debug('completed the ``_update_transient_database`` method')

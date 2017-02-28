@@ -33,8 +33,8 @@ class catalogue_conesearch():
         - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
         - ``nearestOnly`` -- return only the nearest object. Default *False*
         - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
-        - ``magnitudeLimit`` -- the magnitude of the limit if a magnitude cut is requird with the conesearch. Default *False*
-        - ``magnitudeLimitType`` -- the type of magnitude limit if required. Default *False* ("lower"|"upper"|False)
+        - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
+        - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
         - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G"|)
 
     **Usage:**
@@ -140,8 +140,8 @@ class catalogue_conesearch():
             dbConn=False,
             nearestOnly=False,
             physicalSearch=False,
-            magnitudeLimit=False,
-            magnitudeLimitType=False,
+            upperMagnitudeLimit=False,
+            lowerMagnitudeLimit=False,
             magnitudeLimitFilter=False
     ):
         self.log = log
@@ -152,8 +152,8 @@ class catalogue_conesearch():
         self.nearestOnly = nearestOnly
         self.colMaps = colMaps
         self.physicalSearch = physicalSearch
-        self.magnitudeLimit = magnitudeLimit
-        self.magnitudeLimitType = magnitudeLimitType
+        self.upperMagnitudeLimit = upperMagnitudeLimit
+        self.lowerMagnitudeLimit = lowerMagnitudeLimit
         self.magnitudeLimitFilter = magnitudeLimitFilter
         # xt-self-arg-tmpx
 
@@ -206,6 +206,7 @@ class catalogue_conesearch():
 
         # ACCOUNT FOR TYPE OF SEARCH
         sqlWhere = False
+        magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
                    "distanceColName", "semiMajorColName"]
         sqlWhere = ""
@@ -218,16 +219,17 @@ class catalogue_conesearch():
                 if len(sqlWhere):
                     sqlWhere = " and (" + sqlWhere[4:] + ")"
 
-        if self.magnitudeLimit != False and self.magnitudeLimit:
-            if self.magnitudeLimitType.lower() == "upper":
-                direction = ">"
-            elif self.magnitudeLimitType.lower() == "lower":
-                direction = "<"
-            magnitudeLimit = self.magnitudeLimit
-            magnitudeLimitFilter = self.magnitudeLimitFilter
-            newWhere = " and `%(magnitudeLimitFilter)s` %(direction)s %(magnitudeLimit)s" % locals(
-            )
-            sqlWhere += newWhere
+        if self.upperMagnitudeLimit != False and self.upperMagnitudeLimit and not self.lowerMagnitudeLimit:
+            mag = self.upperMagnitudeLimit
+            sqlWhere += " and `%(magnitudeLimitFilter)s` > %(mag)s" % locals()
+        if self.lowerMagnitudeLimit != False and self.lowerMagnitudeLimit and not self.upperMagnitudeLimit:
+            mag = self.lowerMagnitudeLimit
+            sqlWhere += " and `%(magnitudeLimitFilter)s` < %(mag)s" % locals()
+        # THE GENERAL (INBETWEEN) CASE
+        if self.lowerMagnitudeLimit != False and self.lowerMagnitudeLimit and self.upperMagnitudeLimit != False and self.upperMagnitudeLimit:
+            upperMagnitudeLimit = self.upperMagnitudeLimit
+            lowerMagnitudeLimit = self.lowerMagnitudeLimit
+            sqlWhere += " and `%(magnitudeLimitFilter)s` > %(upperMagnitudeLimit)s and `%(magnitudeLimitFilter)s` < %(lowerMagnitudeLimit)s" % locals()
 
         if sqlWhere and " and" == sqlWhere[0:4]:
             sqlWhere = sqlWhere[5:]
@@ -254,7 +256,7 @@ class catalogue_conesearch():
             sqlWhere=sqlWhere,
             closest=self.nearestOnly,
             raCol="ra",
-            decCol="dec",
+            decCol="dec"
         )
         matchIndies, matches = cs.search()
 

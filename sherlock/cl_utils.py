@@ -167,7 +167,7 @@ def main(arguments=None):
             log=log,
             settings=settings
         )
-        cleaner.get()
+        cleaner.clean()
     if wiki:
         updateWiki = update_wiki_pages(
             log=log,
