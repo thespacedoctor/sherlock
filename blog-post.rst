@@ -1,6 +1,14 @@
 sherlock 
 =========================
 
+.. image:: https://readthedocs.org/projects/qub-sherlock/badge/
+    :target: http://qub-sherlock.readthedocs.io/en/latest/?badge
+    :alt: Documentation Status
+
+.. image:: https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg
+    :target: https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html
+    :alt: Coverage Status
+
 *A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data*.
 
 Here's a summary of what's included in the python package:
@@ -27,8 +35,8 @@ Command-Line Usage
     Usage:
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
-        sherlock [-v] <ra> <dec> [<name> -s <pathToSettingsFile>]
-        sherlock match [--update] [-s <pathToSettingsFile>]
+        sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
+        sherlock [-vN] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
         sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -38,6 +46,7 @@ Command-Line Usage
     Options:
         init                    setup the sherlock settings file for the first time
         match                   XXXX
+        dbmatch                 database match
         clean                   XXXX
         wiki                    XXXX
         import                  XXXX
@@ -60,6 +69,8 @@ Command-Line Usage
                                     * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
                                         http://www.das.uchile.cl/~lgalbany/LG/research.html
     
+        -N, --skipNedUpdate     do not update the NED database before classification
+        -f, --fast              faster but errors in crossmatch table ingest my be misses
         -h, --help              show this help message
         -s, --settings          the settings file
         -v, --verbose           print more details to stdout
@@ -89,6 +100,16 @@ To upgrade to the latest version of sherlock use the command:
 .. code:: bash
 
     pip install qub-sherlock --upgrade
+
+
+
+.. todo::
+
+    - make a note about how to setup mysql login paths and have them associated with the database setting in the sherlock settings file
+
+.. code:: bash
+
+    mysql_config_editor set --login-path=xxx --host=127.0.0.1 --user=myuser --password --port=xxx
 
 
 Documentation
@@ -241,9 +262,71 @@ Classifying Transients in a Transient Database
 The Classification Workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-![](https://i.imgur.com/TaGi9pb.png)
+.. figure:: https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67
 
-[zoom](https://camo.githubusercontent.com/dd84c3c74b99d24d1343a9ab29ca289ee2f16c9f/68747470733a2f2f692e696d6775722e636f6d2f546147693970622e706e67)
+Synonyms vs Associations
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sherlock distinguishes between what it views as transient objects
+synonymous with a catalogued source (the same as or very closely linked
+to), *synonyms*, and those it deems as merely associated with the
+catalogued source, *associations*.
+
+Examples of transient-synonym matches are CVs, AGN and variable stars
+(VS) that match within 1-2 arcsec of their catalogue counterpart.
+Stretching the definition of *synonym* a little, Sherlock will also
+match transients close to the centre of galaxies as synonyms [1]_.
+Transient-associations include those transients that are located near,
+but not on top of, a catalogued source. Example of these associations
+are 'transients' matching close to bright-stars and are classified as
+bright-star artefacts (BS) resulting from poor image subtractions near
+bright stars (:math:`~>14-16^{th}` mag) or transients matched near to a galaxy
+which may be classified as supernovae (SN). By definition synonyms are a
+more secure match than associations.
+
+Each search algorithm module should contain a *synonym* and an
+*association* key-value sets. For example here is a Guide-Star Catalogue
+search module:
+
+.. code-block:: yaml 
+    
+    gsc bright stars:
+     angular radius arcsec: 100.0
+     synonym: VS
+     association: BS
+     database table: tcs_view_star_guide_star_catalogue_v2_3
+     bright mag column: B
+     bright limit: 16. 
+
+If a transient is matched on top of a source in the GSC it's identified as a synonym and classified as a variable star, but if it is match near to the source but not co-located if may been identified as an association and classified as a potential bright-star artefact (BS).
+
+
+There's also a top-level ``synonym radius arcsec`` parameter in the
+Sherlock settings file that defines the maximum transient-catalogue
+source separation that secures a synonym identification.
+
+.. code-block:: yaml 
+    
+    synonym radius arcsec: 0.5
+
+Sherlock performs a two-staged catalogue match, first looking for
+synonym matches and then for associations. For an individual transient
+if a synonym match is found within the first search stage the second
+search stage for associations is skipped as it becomes irrelevant. For
+example consider the image below (transients marked in red):
+
+.. figure:: https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px
+
+The first stage search should match transients A, C and E as synonyms
+(NT, VS, VS), these transients are then removed from a further
+association search. The second stage search then flags B as associated
+with the large galaxy at the centre of the image and transient D as
+either associated with the bright-star in the bottom right corner of the
+image or with the galaxy in the centre.
+
+.. [1]
+   could be classified as a nuclear transient or supernova depending on
+   search algorithm parameters
 
 NED Stream Updater
 ^^^^^^^^^^^^^^^^^^

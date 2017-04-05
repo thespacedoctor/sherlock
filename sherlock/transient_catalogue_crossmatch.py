@@ -17,6 +17,7 @@ os.environ['TERM'] = 'vt100'
 from fundamentals import tools
 from sherlock.catalogue_conesearch import catalogue_conesearch
 from astrocalc.distances import converter
+from astrocalc.coords import separations
 
 
 class transient_catalogue_crossmatch():
@@ -95,49 +96,133 @@ class transient_catalogue_crossmatch():
 
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         allCatalogueMatches = []
+        nonSynonymTransients = self.transients[:]
 
+        # SYNONYM SEARCHES
+        # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
+        # PRESENTED IN THE SETTINGS FILE
+        brightnessFilters = ["bright", "faint", "general"]
+        for search_name, searchPara in sa.iteritems():
+            for bf in brightnessFilters:
+                if bf not in searchPara:
+                    continue
+                if "synonym" not in searchPara[bf] or searchPara[bf]["synonym"] == False:
+                    continue
+                self.log.info("""  searching: %(search_name)s""" % locals())
+                if "physical radius kpc" in searchPara[bf]:
+                    # THE PHYSICAL SEPARATION SEARCHES
+                    self.log.info(
+                        'checking physical distance crossmatches in %(search_name)s' % locals())
+                    catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
+                        objectList=self.transients,
+                        searchPara=searchPara,
+                        search_name=search_name + " physical",
+                        brightnessFilter=bf,
+                        classificationType="synonym"
+                    )
+                else:
+                    # THE ANGULAR SEPARATION SEARCHES
+                    self.log.info(
+                        'Crossmatching against %(search_name)s' % locals())
+                    # RENAMED from searchCatalogue
+                    catalogueMatches = self.angular_crossmatch_against_catalogue(
+                        objectList=self.transients,
+                        searchPara=searchPara,
+                        search_name=search_name + " angular",
+                        brightnessFilter=bf,
+                        classificationType="synonym"
+                    )
+
+                # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
+                if catalogueMatches:
+                    allCatalogueMatches = allCatalogueMatches + catalogueMatches
+
+        synonymIDs = []
+        synonymIDs[:] = [xm["transient_object_id"] for xm in catalogueMatches]
+        nonSynonymTransients = []
+        nonSynonymTransients[:] = [
+            t for t in self.transients if t["id"] not in synonymIDs]
+
+        # ASSOCIATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         for search_name, searchPara in sa.iteritems():
             self.log.info("""  searching: %(search_name)s""" % locals())
-            if "physical radius kpc" in searchPara:
-                search_name = search_name + " physical"
-                # THE PHYSICAL SEPARATION SEARCHES
-                self.log.info(
-                    'checking physical distance crossmatches in %(search_name)s' % locals())
-                catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
-                    objectList=self.transients,
-                    searchPara=searchPara,
-                    search_name=search_name
-                )
-            else:
-                # THE ANGULAR SEPARATION SEARCHES
-                self.log.info(
-                    'Crossmatching against %(search_name)s' % locals())
-                search_name = search_name + " angular"
-                # RENAMED from searchCatalogue
-                catalogueMatches = self.angular_crossmatch_against_catalogue(
-                    objectList=self.transients,
-                    searchPara=searchPara,
-                    search_name=search_name
-                )
+            for bf in brightnessFilters:
+                if bf not in searchPara:
+                    continue
+                if "association" not in searchPara[bf] or searchPara[bf]["association"] == False:
+                    continue
+                if "physical radius kpc" in searchPara[bf]:
 
-            # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
-            if catalogueMatches:
-                allCatalogueMatches = allCatalogueMatches + catalogueMatches
+                    # THE PHYSICAL SEPARATION SEARCHES
+                    self.log.info(
+                        'checking physical distance crossmatches in %(search_name)s' % locals())
+                    catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
+                        objectList=nonSynonymTransients,
+                        searchPara=searchPara,
+                        search_name=search_name + " physical",
+                        brightnessFilter=bf,
+                        classificationType="association"
+                    )
+                else:
+                    # THE ANGULAR SEPARATION SEARCHES
+                    self.log.info(
+                        'Crossmatching against %(search_name)s' % locals())
 
-        # PERFORM ANY SUPPLIMENTARY SEARCHES
-        ss = self.settings["supplementary search"]
-        if ss:
-            for search_name, searchPara in ss.iteritems():
+                    # RENAMED from searchCatalogue
+                    catalogueMatches = self.angular_crossmatch_against_catalogue(
+                        objectList=nonSynonymTransients,
+                        searchPara=searchPara,
+                        search_name=search_name + " angular",
+                        brightnessFilter=bf,
+                        classificationType="association"
+                    )
+
+                # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
+                if catalogueMatches:
+                    allCatalogueMatches = allCatalogueMatches + catalogueMatches
+
+        # ANNOTATION SEARCHES
+        # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
+        # PRESENTED IN THE SETTINGS FILE
+        brightnessFilters = ["bright", "faint", "general"]
+        for search_name, searchPara in sa.iteritems():
+            for bf in brightnessFilters:
+                if bf not in searchPara:
+                    continue
+                if "annotation" not in searchPara[bf] or searchPara[bf]["annotation"] == False:
+                    continue
                 self.log.info("""  searching: %(search_name)s""" % locals())
-                supMatches = self.angular_crossmatch_against_catalogue(
-                    objectList=self.transients,
-                    searchPara=searchPara,
-                    search_name=search_name
-                )
-                if supMatches:
-                    allCatalogueMatches = allCatalogueMatches + supMatches
+                if "physical radius kpc" in searchPara[bf]:
+                    # THE PHYSICAL SEPARATION SEARCHES
+                    self.log.info(
+                        'checking physical distance crossmatches in %(search_name)s' % locals())
+                    if bf in searchPara:
+                        catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
+                            objectList=self.transients,
+                            searchPara=searchPara,
+                            search_name=search_name + " physical",
+                            brightnessFilter=bf,
+                            classificationType="annotation"
+                        )
+                else:
+                    # THE ANGULAR SEPARATION SEARCHES
+                    self.log.info(
+                        'Crossmatching against %(search_name)s' % locals())
+                    # RENAMED from searchCatalogue
+                    if bf in searchPara:
+                        catalogueMatches = self.angular_crossmatch_against_catalogue(
+                            objectList=self.transients,
+                            searchPara=searchPara,
+                            search_name=search_name + " angular",
+                            brightnessFilter=bf,
+                            classificationType="annotation"
+                        )
+
+                # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
+                if catalogueMatches:
+                    allCatalogueMatches = allCatalogueMatches + catalogueMatches
 
         self.log.info('completed the ``match`` method')
         return allCatalogueMatches
@@ -147,7 +232,9 @@ class transient_catalogue_crossmatch():
         objectList,
         searchPara={},
         search_name="",
-        physicalSearch=False
+        brightnessFilter=False,
+        physicalSearch=False,
+        classificationType=False
     ):
         """*perform an angular separation crossmatch against a given catalogue in the database and annotate the crossmatch with some value added parameters (distances, physical separations, sub-type of transient etc)*
 
@@ -155,7 +242,9 @@ class transient_catalogue_crossmatch():
             - ``objectList`` -- the list of transient locations to match against the crossmatch catalogue
             - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
             - ``search_name`` -- the name of the search as given in the sherlock settings file
+            - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
             - ``physicalSearch`` -- is this angular search a sub-part of a physical separation search
+            - ``classificationType`` -- synonym, association or annotation. Default *False*
 
          **Return:**
             - matchedObjects -- any sources matched against the object
@@ -219,24 +308,44 @@ class transient_catalogue_crossmatch():
         self.log.info(
             'starting the ``angular_crossmatch_against_catalogue`` method')
 
-        # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
-        radius = searchPara["angular radius arcsec"]
+        # DEFAULTS
+
+        # print search_name, classificationType
+
+        magnitudeLimitFilter = None
+        upperMagnitudeLimit = False
+        lowerMagnitudeLimit = False
+
         catalogueName = searchPara["database table"]
-        matchedType = searchPara["transient classification"]
-        if "faint mag column" in searchPara and searchPara["faint mag column"] and "faint limit" in searchPara and searchPara["faint limit"]:
-            magnitudeLimitType = "upper"
-            magnitudeLimit = searchPara["faint limit"]
-            magnitudeLimitFilter = self.colMaps[
-                catalogueName][searchPara["faint mag column"] + "ColName"]
-        elif "bright mag column" in searchPara and searchPara["bright mag column"] and "bright limit" in searchPara and searchPara["bright limit"]:
-            magnitudeLimitType = "lower"
-            magnitudeLimit = searchPara["bright limit"]
-            magnitudeLimitFilter = self.colMaps[
-                catalogueName][searchPara["bright mag column"] + "ColName"]
+
+        if brightnessFilter:
+            if "mag column" in searchPara:
+                magnitudeLimitFilter = self.colMaps[
+                    catalogueName][searchPara["mag column"] + "ColName"]
+            theseSearchPara = searchPara[brightnessFilter]
         else:
-            magnitudeLimitType = None
-            magnitudeLimit = None
-            magnitudeLimitFilter = None
+            theseSearchPara = searchPara
+
+        # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
+        if classificationType == "synonym":
+            radius = self.settings["synonym radius arcsec"]
+            matchedType = theseSearchPara["synonym"]
+        elif classificationType == "association":
+            radius = theseSearchPara["angular radius arcsec"]
+            matchedType = theseSearchPara["association"]
+        elif classificationType == "annotation":
+            radius = theseSearchPara["angular radius arcsec"]
+            matchedType = theseSearchPara["annotation"]
+
+        if brightnessFilter == "faint":
+            upperMagnitudeLimit = theseSearchPara["mag limit"]
+        elif brightnessFilter == "bright":
+            lowerMagnitudeLimit = theseSearchPara["mag limit"]
+        elif brightnessFilter == "general":
+            if "faint" in searchPara:
+                lowerMagnitudeLimit = searchPara["faint"]["mag limit"]
+            if "bright" in searchPara:
+                upperMagnitudeLimit = searchPara["bright"]["mag limit"]
 
         # VARIABLES
         matchedObjects = []
@@ -246,6 +355,9 @@ class transient_catalogue_crossmatch():
         transRAs[:] = [t['ra'] for t in objectList]
         transDecs = []
         transDecs[:] = [t['dec'] for t in objectList]
+
+        if len(transRAs) == 0:
+            return []
 
         cs = catalogue_conesearch(
             log=self.log,
@@ -257,8 +369,8 @@ class transient_catalogue_crossmatch():
             dbConn=self.dbConn,
             nearestOnly=False,
             physicalSearch=physicalSearch,
-            magnitudeLimitType=magnitudeLimitType,
-            magnitudeLimit=magnitudeLimit,
+            upperMagnitudeLimit=upperMagnitudeLimit,
+            lowerMagnitudeLimit=lowerMagnitudeLimit,
             magnitudeLimitFilter=magnitudeLimitFilter
         )
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
@@ -270,22 +382,41 @@ class transient_catalogue_crossmatch():
             # CALCULATE PHYSICAL PARAMETERS ... IF WE CAN
             if "cmSepArcsec" in xm:
                 xm["separationArcsec"] = xm["cmSepArcsec"]
+                # CALCULATE SEPARATION IN ARCSEC
+
+                calculator = separations(
+                    log=self.log,
+                    ra1=objectList[i]["ra"],
+                    dec1=objectList[i]["dec"],
+                    ra2=xm["ra"],
+                    dec2=xm["dec"]
+                )
+                angularSeparation, north, east = calculator.get()
+
+                xm["northSeparationArcsec"] = north
+                xm["eastSeparationArcsec"] = east
                 del xm["cmSepArcsec"]
 
             xm["association_type"] = matchedType
             xm["catalogue_view_name"] = catalogueName
             xm["transient_object_id"] = objectList[i]["id"]
             xm["catalogue_table_name"] = self.colMaps[
-                catalogueName]["table_name"]
+                catalogueName]["description"]
             xm["catalogue_table_id"] = self.colMaps[
                 catalogueName]["table_id"]
             xm["catalogue_view_id"] = self.colMaps[
                 catalogueName]["id"]
+            if classificationType == "synonym":
+                xm["classificationReliability"] = 1
+            elif classificationType == "association":
+                xm["classificationReliability"] = 2
+            elif classificationType == "annotation":
+                xm["classificationReliability"] = 3
 
             xm = self._annotate_crossmatch_with_value_added_parameters(
                 crossmatchDict=xm,
                 catalogueName=catalogueName,
-                searchPara=searchPara,
+                searchPara=theseSearchPara,
                 search_name=search_name
             )
             annotatedcatalogueMatches.append(xm)
@@ -293,14 +424,24 @@ class transient_catalogue_crossmatch():
         catalogueMatches = annotatedcatalogueMatches
 
         # IF BRIGHT STAR SEARCH
-        if magnitudeLimitType == "lower":
+        if brightnessFilter == "bright" and "star" in search_name:
             catalogueMatches = self._bright_star_match(
                 matchedObjects=catalogueMatches,
                 catalogueName=catalogueName,
-                searchPara=searchPara
+                lowerMagnitudeLimit=lowerMagnitudeLimit,
+                magnitudeLimitFilter=searchPara["mag column"]
             )
 
-        if "match nearest source only" in searchPara and searchPara["match nearest source only"] == True and len(catalogueMatches):
+        if brightnessFilter == "general" and "galaxy" in search_name and "galaxy-like" not in search_name and "physical radius kpc" not in theseSearchPara:
+            catalogueMatches = self._galaxy_association_cuts(
+                matchedObjects=catalogueMatches,
+                catalogueName=catalogueName,
+                lowerMagnitudeLimit=lowerMagnitudeLimit,
+                upperMagnitudeLimit=upperMagnitudeLimit,
+                magnitudeLimitFilter=searchPara["mag column"]
+            )
+
+        if "match nearest source only" in theseSearchPara and theseSearchPara["match nearest source only"] == True and len(catalogueMatches):
             nearestMatches = []
             transList = []
             for c in catalogueMatches:
@@ -344,9 +485,11 @@ class transient_catalogue_crossmatch():
         direct_distance_modulus = None
 
         # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
-        if 'redshift' in crossmatchDict:
+        if 'z' in crossmatchDict:
             # THE CATALOGUE HAS A REDSHIFT COLUMN
-            redshift = crossmatchDict['redshift']
+            redshift = crossmatchDict['z']
+        elif 'photoZ' in crossmatchDict:
+            redshift = crossmatchDict['photoZ']
         if redshift and redshift > 0.0:
             # CALCULATE DISTANCE MODULUS, ETC
             c = converter(log=self.log)
@@ -375,7 +518,7 @@ class transient_catalogue_crossmatch():
             direct_distance_scale = direct_distance / 206.264806
             direct_distance_modulus = 5 * \
                 math.log10(direct_distance * 1e6) - 5
-        crossmatchDict['z'] = z
+        # crossmatchDict['z'] = z
         crossmatchDict['scale'] = scale
         crossmatchDict['distance'] = distance
         crossmatchDict['distance_modulus'] = distance_modulus
@@ -414,50 +557,82 @@ class transient_catalogue_crossmatch():
             self,
             matchedObjects,
             catalogueName,
-            searchPara):
+            magnitudeLimitFilter,
+            lowerMagnitudeLimit):
         """*perform a bright star match on the crossmatch results if required by the catalogue search*
 
         **Key Arguments:**
             - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
-            - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
             - ``catalogueName`` -- the name of the catalogue the crossmatch results from
+            - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
+            - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match bright stars against
 
         **Return:**
             - ``brightStarMatches`` -- the trimmed matched sources (bright stars associations only)
         """
         self.log.info('starting the ``_bright_star_match`` method')
 
-        # FAINT STAR EXTRAS
-        try:
-            magColumn = searchPara["bright mag column"]
-            magLimit = searchPara["bright limit"]
-        except:
-            magColumn = False
-            magLimit = False
+        import decimal
+        decimal.getcontext().prec = 10
 
         # MATCH BRIGHT STAR ASSOCIATIONS
         brightStarMatches = []
-        if matchedObjects and magColumn:
-            for row in matchedObjects:
-                mag = row[magColumn]
-                match = False
-                if mag and mag < magLimit:
-                    sep = row["separationArcsec"]
-                    sepLimit = 10**(-0.2 * mag + 3.47712)
-
-                    if sep < 10**(-0.2 * mag + 3.47712):
-                        match = True
-                        brightStarMatches.append(row)
-                    print sep, sepLimit, match
+        for row in matchedObjects:
+            mag = decimal.Decimal(row[magnitudeLimitFilter])
+            if mag and mag < lowerMagnitudeLimit:
+                sep = decimal.Decimal(row["separationArcsec"])
+                if sep < decimal.Decimal(decimal.Decimal(10)**(-decimal.Decimal(0.2) * mag + decimal.Decimal(3.47712))):
+                    brightStarMatches.append(row)
 
         self.log.info('completed the ``_bright_star_match`` method')
         return brightStarMatches
+
+    def _galaxy_association_cuts(
+            self,
+            matchedObjects,
+            catalogueName,
+            magnitudeLimitFilter,
+            upperMagnitudeLimit,
+            lowerMagnitudeLimit):
+        """*perform a bright star match on the crossmatch results if required by the catalogue search*
+
+        **Key Arguments:**
+            - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
+            - ``catalogueName`` -- the name of the catalogue the crossmatch results from
+            - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
+            - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match general galaxies against
+            - ``upperMagnitudeLimit`` -- the upper magnitude limit to match general galaxies against
+
+        **Return:**
+            - ``galaxyMatches`` -- the trimmed matched sources (associated galaxies only)
+        """
+        self.log.info('starting the ``_galaxy_association_cuts`` method')
+
+        import decimal
+        decimal.getcontext().prec = 10
+
+        # MATCH BRIGHT STAR ASSOCIATIONS
+        galaxyMatches = []
+        for row in matchedObjects:
+            if row[magnitudeLimitFilter] == None:
+                galaxyMatches.append(row)
+            else:
+                mag = decimal.Decimal(row[magnitudeLimitFilter])
+                if mag and mag < lowerMagnitudeLimit and mag > upperMagnitudeLimit:
+                    sep = decimal.Decimal(row["separationArcsec"])
+                    if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal((decimal.Decimal(25.) - mag) / decimal.Decimal(6.)))):
+                        galaxyMatches.append(row)
+
+        self.log.info('completed the ``_galaxy_association_cuts`` method')
+        return galaxyMatches
 
     def physical_separation_crossmatch_against_catalogue(
         self,
         objectList,
         searchPara,
-        search_name
+        search_name,
+        brightnessFilter=False,
+        classificationType=False
     ):
         """*perform an physical separation crossmatch against a given catalogue in the database*
 
@@ -467,6 +642,8 @@ class transient_catalogue_crossmatch():
             - ``objectList`` -- transients to be crossmatched
             - ``searchPara`` -- parameters of the search (from settings file)
             - ``search_name`` -- the name of the search
+            - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
+            - ``classificationType`` -- synonym, association or annotation. Default *False*
 
         **Return:**
             - matchedObjects -- any sources matched against the object
@@ -488,16 +665,30 @@ class transient_catalogue_crossmatch():
         self.log.debug(
             'starting the ``physical_separation_crossmatch_against_catalogue`` method')
 
+        bf = brightnessFilter
         # SETUP PARAMETERS
         tableName = searchPara["database table"]
-        angularRadius = searchPara["angular radius arcsec"]
+        if bf:
+            angularRadius = searchPara[bf]["angular radius arcsec"]
+            physicalRadius = searchPara[bf]["physical radius kpc"]
+            matchedType = searchPara[bf][classificationType]
+            if "match nearest source only" in searchPara[bf]:
+                nearestOnly = searchPara[bf]["match nearest source only"]
+            else:
+                nearestOnly = False
+        else:
+            angularRadius = searchPara["angular radius arcsec"]
+            physicalRadius = searchPara["physical radius kpc"]
+            matchedType = searchPara[classificationType]
+            if "match nearest source only" in searchPara:
+                nearestOnly = searchPara["match nearest source only"]
+            else:
+                nearestOnly = False
+
         matchedObjects = []
         matchSubset = []
-        physicalRadius = searchPara["physical radius kpc"]
-        matchedType = searchPara["transient classification"]
 
         # RETURN ALL ANGULAR MATCHES BEFORE RETURNING NEAREST PHYSICAL SEARCH
-        nearestOnly = searchPara["match nearest source only"]
         tmpSearchPara = dict(searchPara)
         tmpSearchPara["match nearest source only"] = False
 
@@ -506,7 +697,9 @@ class transient_catalogue_crossmatch():
             objectList=objectList,
             searchPara=tmpSearchPara,
             search_name=search_name,
-            physicalSearch=True
+            physicalSearch=True,
+            brightnessFilter=brightnessFilter,
+            classificationType=classificationType
         )
 
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
@@ -519,12 +712,13 @@ class transient_catalogue_crossmatch():
 
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
                 if row["major_axis_arcsec"] and row["separationArcsec"] < row["major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]:
-                    thisMatch = True
-                    newsearch_name = newsearch_name + \
-                        " (within %s * major axis)" % (
-                            self.settings["galaxy radius stetch factor"],)
-                    newAngularSep = row[
-                        "major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]
+                    if "ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.):
+                        thisMatch = True
+                        newsearch_name = newsearch_name + \
+                            " (within %s * major axis)" % (
+                                self.settings["galaxy radius stetch factor"],)
+                        newAngularSep = row[
+                            "major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 elif row["direct_distance_scale"] and physical_separation_kpc < physicalRadius:
                     thisMatch = True

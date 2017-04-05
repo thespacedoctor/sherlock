@@ -1,6 +1,10 @@
 sherlock
 ========
 
+[![Documentation Status](https://readthedocs.org/projects/qub-sherlock/badge/)](http://qub-sherlock.readthedocs.io/en/latest/?badge)
+
+[![Coverage Status](https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg)](https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html)
+
 *A python package and command-line tools to contextually classify
 astronomical transient sources. Sherlock mines a library of historical
 and on-going survey data to attempt to identify the source of a
@@ -26,8 +30,8 @@ Command-Line Usage
     Usage:
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
-        sherlock [-v] <ra> <dec> [<name> -s <pathToSettingsFile>]
-        sherlock match [--update] [-s <pathToSettingsFile>]
+        sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
+        sherlock [-vN] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
         sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -37,6 +41,7 @@ Command-Line Usage
     Options:
         init                    setup the sherlock settings file for the first time
         match                   XXXX
+        dbmatch                 database match
         clean                   XXXX
         wiki                    XXXX
         import                  XXXX
@@ -59,6 +64,8 @@ Command-Line Usage
                                     * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
                                         http://www.das.uchile.cl/~lgalbany/LG/research.html
 
+        -N, --skipNedUpdate     do not update the NED database before classification
+        -f, --fast              faster but errors in crossmatch table ingest my be misses
         -h, --help              show this help message
         -s, --settings          the settings file
         -v, --verbose           print more details to stdout
@@ -76,7 +83,7 @@ version](http://sherlock.readthedocs.org/en/latest/)).
 Installation
 ============
 
-The easiest way to install sherlock us to use `pip`:
+The easiest way to install sherlock is to use `pip`:
 
     pip install qub-sherlock
 
@@ -91,6 +98,8 @@ local version of the code:
 To upgrade to the latest version of sherlock use the command:
 
     pip install qub-sherlock --upgrade
+
+    mysql_config_editor set --login-path=xxx --host=127.0.0.1 --user=myuser --password --port=xxx
 
 Development
 -----------

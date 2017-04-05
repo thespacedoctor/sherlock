@@ -292,7 +292,7 @@ class ned(_base_importer):
 
         # SELECT THE DATA FROM NED TABLE
         sqlQuery = u"""
-            select ned_name from %(tableName)s where raDeg is null and download_error != 1 limit 50000;
+            select ned_name from %(tableName)s where raDeg is null and (download_error != 1 or download_error is null) limit 50000;
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -380,7 +380,7 @@ class ned(_base_importer):
 
         self._add_data_to_database_table(
             dictList=dictList,
-            createStatement=False
+            createStatement="""SET SESSION sql_mode="";"""
         )
 
         if not len(dictList):
@@ -425,7 +425,7 @@ class ned(_base_importer):
         tableName = self.dbTableName
 
         sqlQuery = u"""
-            select count(*) as count from %(tableName)s where raDeg is null and download_error != 1
+            select count(*) as count from %(tableName)s where raDeg is null and (download_error != 1 or download_error is null)
         """ % locals()
         rows = readquery(
             log=self.log,
