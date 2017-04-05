@@ -16,7 +16,7 @@ Usage:
     sherlock init
     sherlock info [-s <pathToSettingsFile>]
     sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
-    sherlock [-vN] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
+    sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
     sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -154,7 +154,7 @@ def main(arguments=None):
             settings=settings,
             ra=ra,
             dec=dec,
-            name=name,
+            name=False,
             verbose=verbose,
             update=updateFlag,
             fast=fastFlag,
@@ -232,7 +232,7 @@ def main(arguments=None):
             settings=settings,
             ra=ra,
             dec=dec,
-            name=name,
+            name=False,
             verbose=verboseFlag
         )
         classifier.classify()

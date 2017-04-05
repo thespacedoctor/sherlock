@@ -15,6 +15,7 @@ import os
 import collections
 import codecs
 import re
+import math
 from random import randint
 os.environ['TERM'] = 'vt100'
 from datetime import datetime, date, time, timedelta
@@ -358,8 +359,15 @@ class transient_classifier():
         )
         stream.ingest()
 
-        sqlQuery = """SET session sql_mode = "";
-        update tcs_cat_ned_stream set magnitude = CAST(`magnitude_filter` AS DECIMAL(5,2)) where magnitude is null;""" % locals(
+        sqlQuery = """SET session sql_mode = "";""" % locals(
+        )
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn
+        )
+
+        sqlQuery = """update tcs_cat_ned_stream set magnitude = CAST(`magnitude_filter` AS DECIMAL(5,2)) where magnitude is null;""" % locals(
         )
         writequery(
             log=self.log,
@@ -519,6 +527,8 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `catalogue_object_id` varchar(30) DEFAULT NULL,
   `catalogue_table_id` smallint(5) unsigned DEFAULT NULL,
   `separationArcsec` double DEFAULT NULL,
+  `northSeparationArcsec` DOUBLE DEFAULT NULL,
+  `eastSeparationArcsec` DOUBLE DEFAULT NULL,
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `z` double DEFAULT NULL,
   `scale` double DEFAULT NULL,
@@ -580,6 +590,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated` TINYINT NULL DEFAULT 0,
   `classificationReliability` TINYINT NULL DEFAULT NULL,
+  `transientAbsMag` DOUBLE NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `key_transient_object_id` (`transient_object_id`),
   KEY `key_catalogue_object_id` (`catalogue_object_id`),
@@ -688,8 +699,11 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
         createStatement = """CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
   `transient_object_id` bigint(20) NOT NULL,
-  `classification` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `classification` varchar(45) DEFAULT NULL,
   `annotation` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `summary` VARCHAR(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `matchVerified` TINYINT NULL DEFAULT NULL,
+  `developmentComment` VARCHAR(100) NULL,
   `dateLastModified` datetime DEFAULT NULL,
   `dateCreated` datetime DEFAULT NULL,
   `updated` varchar(45) DEFAULT '0',
@@ -748,13 +762,12 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         self.log.info('starting the ``_rank_classifications`` method')
 
         for xm in crossmatches:
-            if xm["separationArcsec"] < 2. or (xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN") or (xm["major_axis_arcsec"] != "null" and xm["association_type"] == "SN"):
-                rankScore = 2. - \
+            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
+                rankScore = xm["classificationReliability"] * 1000 + 2. - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1
-                # print rankScore
             else:
-                rankScore = xm["separationArcsec"] + 1. - \
+                rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] + 1. - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1
             xm["rankScore"] = rankScore
@@ -797,8 +810,11 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         if self.verbose == 0:
             return
 
-        headline = self.name + "'s Predicted Classification: " + \
-            classifications[self.name][0]
+        if self.name in classifications:
+            headline = self.name + "'s Predicted Classification: " + \
+                classifications[self.name][0]
+        else:
+            headline = self.name + "'s Predicted Classification: ORPHAN"
         print headline
         print
         print "Suggested Associations:"
@@ -808,7 +824,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             "R", "_r", "G", "V", "_g", "B", "I", "_i", "_z", "J", "H", "K", "U", "_u", "_y", "unkMag"
         ]
         basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
-                 "raDeg", "decDeg", "separationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr"]
+                 "raDeg", "decDeg", "separationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability"]
         verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "distance_modulus", "direct_distance_scale", "major_axis_arcsec", "scale", "U", "UErr",
                    "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
@@ -846,6 +862,14 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                 if k in c:
                     if k == "catalogue_table_name":
                         c[k] = c[k].replace("tcs_cat_", "").replace("_", " ")
+                    if k == "classificationReliability":
+                        if c[k] == 1:
+                            c["classification reliability"] = "synonym"
+                        elif c[k] == 2:
+                            c["classification reliability"] = "association"
+                        elif c[k] == 3:
+                            c["classification reliability"] = "annotation"
+                        k = "classification reliability"
                     if k == "catalogue_object_subtype" and "sdss" in c["catalogue_table_name"]:
                         if c[k] == 6:
                             c[k] = "galaxy"
@@ -894,9 +918,9 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                 - create a sublime snippet for usage
                 - update package tutorial if needed
 
-            .. code-block:: python 
+            .. code-block:: python
 
-                usage code 
+                usage code
 
         """
         self.log.info('starting the ``_consolidate_coordinateList`` method')
@@ -931,6 +955,327 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
         self.log.info('completed the ``_consolidate_coordinateList`` method')
         return updatedCoordianteList
+
+    def classification_annotations(
+            self):
+        """*add a detialed classification annotation to each classification in the sherlock_classifications table*
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Usage:**
+            ..  todo::
+
+                - add usage info
+                - create a sublime snippet for usage
+                - write a command-line tool for this method
+                - update package tutorial with command-line tool info if needed
+
+            .. code-block:: python
+
+                usage code
+
+        """
+        self.log.info('starting the ``classification_annotations`` method')
+
+        from fundamentals.mysql import readquery
+        sqlQuery = u"""
+            select * from sherlock_classifications cl, sherlock_crossmatches xm where cl.transient_object_id=xm.transient_object_id and cl.annotation is null
+        """ % locals()
+        topXMs = readquery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn
+        )
+
+        for xm in topXMs:
+            annotation = []
+            classType = xm["classificationReliability"]
+            if classType == 1:
+                annotation.append("is synonymous with")
+            elif classType in [2, 3]:
+                annotation.append("is possibly associated with")
+
+            print xm["catalogue_object_id"]
+
+        self.log.info('completed the ``classification_annotations`` method')
+        return None
+
+    # use the tab-trigger below for new method
+    def update_classification_annotations_and_summaries(
+            self):
+        """*update classification annotations and summaries*
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Usage:**
+            ..  todo::
+
+                - add usage info
+                - create a sublime snippet for usage
+                - write a command-line tool for this method
+                - update package tutorial with command-line tool info if needed
+
+            .. code-block:: python
+
+                usage code
+
+        """
+        self.log.info(
+            'starting the ``update_classification_annotations_and_summaries`` method')
+
+        sqlQuery = u"""
+            SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id
+        """ % locals()
+        rows = readquery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+            quiet=False
+        )
+
+        from astrocalc.coords import unit_conversion
+        # ASTROCALC UNIT CONVERTER OBJECT
+        converter = unit_conversion(
+            log=self.log
+        )
+
+        updates = []
+
+        for row in rows:
+
+            catalogue = row["catalogue_table_name"]
+            objectId = row["catalogue_object_id"]
+            objectType = row["catalogue_object_type"]
+            objectSubtype = row["catalogue_object_subtype"]
+            catalogueString = catalogue
+            if "catalogue" not in catalogueString.lower():
+                catalogueString = catalogue + " catalogue"
+
+            if "ned" in catalogue.lower():
+                objectId = '''<a href="https://ned.ipac.caltech.edu/cgi-bin/objsearch?objname=%(objectId)s&extend=no&hconst=73&omegam=0.27&omegav=0.73&corr_z=1&out_csys=Equatorial&out_equinox=J2000.0&obj_sort=RA+or+Longitude&of=pre_text&zv_breaker=30000.0&list_limit=5&img_stamp=YES">%(objectId)s</a>''' % locals()
+            elif "sdss" in catalogue.lower():
+                objectId = "http://skyserver.sdss.org/dr12/en/tools/explore/Summary.aspx?id=%(objectId)s" % locals(
+                )
+
+                ra = converter.ra_decimal_to_sexegesimal(
+                    ra=row["raDeg"],
+                    delimiter=""
+                )
+                dec = converter.dec_decimal_to_sexegesimal(
+                    dec=row["decDeg"],
+                    delimiter=""
+                )
+                betterName = "SDSS J" + ra[0:9] + dec[0:9]
+                objectId = '''<a href="%(objectId)s">%(betterName)s</a>''' % locals()
+            elif "milliquas" in catalogue.lower():
+                objectId = '''<a href="https://heasarc.gsfc.nasa.gov/db-perl/W3Browse/w3query.pl?bparam_name=%(objectId)s&navtrail=%%3Ca+class%%3D%%27navpast%%27+href%%3D%%27https%%3A%%2F%%2Fheasarc.gsfc.nasa.gov%%2FW3Browse%%2Fall%%2Fmilliquas.html%%27%%3E+Choose+Tables%%3C%%2Fa%%3E+%%3E+%%3Ca+class%%3D%%27navpast%%27+href%%3D%%27%%2Fcgi-bin%%2FW3Browse%%2Fw3table.pl%%3FREAL_REMOTE_HOST%%3D143.117.37.81%%26tablehead%%3Dname%%253Dmilliquas%%26Action%%3DMore%%2BOptions%%26REAL_REMOTE_HOST%%3D143%%252E117%%252E37%%252E81%%26Equinox%%3D2000%%26Action%%3DMore%%2BOptions%%26sortby%%3Dpriority%%26ResultMax%%3D1000%%26maxpriority%%3D99%%26Coordinates%%3DEquatorial%%26tablehead%%3Dname%%253Dmilliquas%%26Action%%3DParameter%%2BSearch%%27%%3EParameter+Search%%3C%%2Fa%%3E&popupFrom=Query+Results&tablehead=name%%3Dheasarc_milliquas%%26description%%3DMillion+Quasars+Catalog+%%28MILLIQUAS%%29%%2C+Version+4.5+%%2810+May+2015%%29%%26url%%3Dhttp%%3A%%2F%%2Fheasarc.gsfc.nasa.gov%%2FW3Browse%%2Fgalaxy-catalog%%2Fmilliquas.html%%26archive%%3DN%%26radius%%3D1%%26mission%%3DGALAXY+CATALOG%%26priority%%3D5%%26tabletype%%3DObject&dummy=Examples+of+query+constraints%%3A&varon=name&bparam_name%%3A%%3Aunit=+&bparam_name%%3A%%3Aformat=char25&varon=ra&bparam_ra=&bparam_ra%%3A%%3Aunit=degree&bparam_ra%%3A%%3Aformat=float8%%3A.5f&varon=dec&bparam_dec=&bparam_dec%%3A%%3Aunit=degree&bparam_dec%%3A%%3Aformat=float8%%3A.5f&varon=bmag&bparam_bmag=&bparam_bmag%%3A%%3Aunit=mag&bparam_bmag%%3A%%3Aformat=float8%%3A4.1f&varon=rmag&bparam_rmag=&bparam_rmag%%3A%%3Aunit=mag&bparam_rmag%%3A%%3Aformat=float8%%3A4.1f&varon=redshift&bparam_redshift=&bparam_redshift%%3A%%3Aunit=+&bparam_redshift%%3A%%3Aformat=float8%%3A6.3f&varon=radio_name&bparam_radio_name=&bparam_radio_name%%3A%%3Aunit=+&bparam_radio_name%%3A%%3Aformat=char22&varon=xray_name&bparam_xray_name=&bparam_xray_name%%3A%%3Aunit=+&bparam_xray_name%%3A%%3Aformat=char22&bparam_lii=&bparam_lii%%3A%%3Aunit=degree&bparam_lii%%3A%%3Aformat=float8%%3A.5f&bparam_bii=&bparam_bii%%3A%%3Aunit=degree&bparam_bii%%3A%%3Aformat=float8%%3A.5f&bparam_broad_type=&bparam_broad_type%%3A%%3Aunit=+&bparam_broad_type%%3A%%3Aformat=char4&bparam_optical_flag=&bparam_optical_flag%%3A%%3Aunit=+&bparam_optical_flag%%3A%%3Aformat=char3&bparam_red_psf_flag=&bparam_red_psf_flag%%3A%%3Aunit=+&bparam_red_psf_flag%%3A%%3Aformat=char1&bparam_blue_psf_flag=&bparam_blue_psf_flag%%3A%%3Aunit=+&bparam_blue_psf_flag%%3A%%3Aformat=char1&bparam_ref_name=&bparam_ref_name%%3A%%3Aunit=+&bparam_ref_name%%3A%%3Aformat=char6&bparam_ref_redshift=&bparam_ref_redshift%%3A%%3Aunit=+&bparam_ref_redshift%%3A%%3Aformat=char6&bparam_qso_prob=&bparam_qso_prob%%3A%%3Aunit=percent&bparam_qso_prob%%3A%%3Aformat=int2%%3A3d&bparam_alt_name_1=&bparam_alt_name_1%%3A%%3Aunit=+&bparam_alt_name_1%%3A%%3Aformat=char22&bparam_alt_name_2=&bparam_alt_name_2%%3A%%3Aunit=+&bparam_alt_name_2%%3A%%3Aformat=char22&Entry=&Coordinates=J2000&Radius=Default&Radius_unit=arcsec&NR=CheckCaches%%2FGRB%%2FSIMBAD%%2FNED&Time=&ResultMax=10&displaymode=Display&Action=Start+Search&table=heasarc_milliquas">%(objectId)s</a>''' % locals()
+
+            if objectSubtype and objectSubtype.lower() in ["uvs", "radios", "xray", "qso", "irs", 'uves', 'viss', 'hii', 'gclstr', 'ggroup', 'gpair', 'gtrpl']:
+                objectType = objectSubtype
+
+            if objectType == "star":
+                objectType = "stellar source"
+            elif objectType == "agn":
+                objectType = "AGN"
+            elif objectType == "cb":
+                objectType = "CV"
+            elif objectType == "unknown":
+                objectType = "unclassified source"
+
+            sep = row["separationArcsec"]
+            if row["classificationReliability"] == 1:
+                classificationReliability = "synonymous"
+                psep = row["physical_separation_kpc"]
+                if psep:
+                    location = '%(sep)0.1f" (%(psep)0.1f Kpc) from the %(objectType)s core' % locals(
+                    )
+                else:
+                    location = '%(sep)0.1f" from the %(objectType)s core' % locals(
+                    )
+            elif row["classificationReliability"] in (2, 3):
+                classificationReliability = "possibly associated"
+                n = row["northSeparationArcsec"]
+                if n < 0:
+                    nd = "S"
+                else:
+                    nd = "N"
+                e = row["eastSeparationArcsec"]
+                if e < 0:
+                    ed = "W"
+                else:
+                    ed = "E"
+                n = math.fabs(n)
+                e = math.fabs(e)
+                psep = row["physical_separation_kpc"]
+                if psep:
+                    location = '%(n)0.2f" %(nd)s, %(e)0.2f" %(ed)s (%(psep)0.1f Kpc) from the %(objectType)s centre' % locals(
+                    )
+                else:
+                    location = '%(n)0.2f" %(nd)s, %(e)0.2f" %(ed)s from the %(objectType)s centre' % locals(
+                    )
+                location = location.replace("unclassified", "object's")
+
+            best_mag = None
+            best_mag_error = None
+            best_mag_filter = None
+            filters = ["R", "V", "B", "I", "J", "G", "H", "K", "U",
+                       "_r", "_g", "_i", "_g", "_z", "_y", "_u", "unkMag"]
+            for f in filters:
+                if row[f] and not best_mag:
+                    best_mag = row[f]
+                    best_mag_error = row[f + "Err"]
+                    subfilter = f.replace(
+                        "_", "").replace("Mag", "")
+                    best_mag_filter = f.replace(
+                        "_", "").replace("Mag", "") + "="
+                    if "unk" in best_mag_filter:
+                        best_mag_filter = ""
+                        subfilter = ''
+
+            if not best_mag_filter:
+                if str(best_mag)[0].lower() in ("1", "8") and str(best_mag)[1].lower() not in ("0"):
+                    best_mag_filter = "an "
+                else:
+                    best_mag_filter = "a "
+            else:
+                if str(best_mag_filter)[0].lower() in ("r", "i", "h"):
+                    best_mag_filter = "an " + best_mag_filter
+                else:
+                    best_mag_filter = "a " + best_mag_filter
+            if not best_mag:
+                best_mag = "an unknown-"
+                best_mag_filter = ""
+            else:
+                best_mag = "%(best_mag)0.2f " % locals()
+
+            distance = None
+            if row["direct_distance"]:
+                d = row["direct_distance"]
+                distance = "distance of %(d)0.1f Mpc" % locals()
+
+                if row["z"]:
+                    z = row["z"]
+                    distance += "(z=%(z)0.3f)" % locals()
+            elif row["z"]:
+                z = row["z"]
+                distance = "z=%(z)0.3f" % locals()
+            elif row["photoZ"]:
+                z = row["photoZ"]
+                zErr = row["photoZErr"]
+                distance = "photoZ=%(z)0.3f (&plusmn%(zErr)0.3f)" % locals()
+
+            if distance:
+                distance = "%(distance)s" % locals()
+
+            if distance:
+                absMag = row["transientAbsMag"]
+                absMag = """ A host %(distance)s implies M<sub>%(subfilter)s</sub> = %(absMag)s.""" % locals()
+            else:
+                absMag = ""
+
+            annotation = "The transient is %(classificationReliability)s with <em>%(objectId)s</em>; %(best_mag_filter)s%(best_mag)smag %(objectType)s found in the %(catalogueString)s. It's located %(location)s.%(absMag)s" % locals()
+            summary = '%(sep)0.1f" from %(objectType)s in %(catalogue)s' % locals(
+            )
+
+            update = {
+                "transient_object_id": row["transient_object_id"],
+                "annotation": annotation,
+                "summary": summary
+            }
+            updates.append(update)
+
+        # Recursively create missing directories
+        if not os.path.exists("/tmp/sherlock/"):
+            os.makedirs("/tmp/sherlock/")
+
+        dataSet = list_of_dictionaries(
+            log=self.log,
+            listOfDictionaries=updates,
+            reDatetime=re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
+        )
+        mysqlData = dataSet.mysql(
+            tableName="sherlock_classifications", filepath="/tmp/sherlock/annotation_updates.sql")
+
+        directory_script_runner(
+            log=self.log,
+            pathToScriptDirectory="/tmp/sherlock/",
+            databaseName=self.settings[
+                "database settings"]["transients"]["db"],
+            loginPath=self.settings["database settings"][
+                "transients"]["loginPath"],
+            waitForResult=True,
+            successRule="delete",
+            failureRule="delete"
+        )
+
+        from fundamentals.mysql import writequery
+        sqlQuery = """update sherlock_classifications  set annotation = "The transient location is not matched against any known catalogued source", summary = "No catalogued match" where classification = 'ORPHAN' """ % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+        )
+
+        self.log.info(
+            'completed the ``update_classification_annotations_and_summaries`` method')
+        return None
+
+    # use the tab-trigger below for new method
+    def update_peak_magnitudes(
+            self):
+        """*update peak magnitudes*
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Usage:**
+            ..  todo::
+
+                - add usage info
+                - create a sublime snippet for usage
+                - write a command-line tool for this method
+                - update package tutorial with command-line tool info if needed
+
+            .. code-block:: python 
+
+                usage code 
+
+        """
+        self.log.info('starting the ``update_peak_magnitudes`` method')
+
+        sqlQuery = self.settings["database settings"][
+            "transients"]["transient peak magnitude query"]
+
+        sqlQuery = """UPDATE sherlock_crossmatches s,
+            (%(sqlQuery)s) t 
+        SET 
+            s.transientAbsMag = ROUND(t.mag - IFNULL(direct_distance_modulus,
+                            distance_modulus),
+                    2)
+        WHERE
+            IFNULL(direct_distance_modulus,
+                    distance_modulus) IS NOT NULL
+                AND t.id = s.transient_object_id;""" % locals()
+
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+        )
+
+        self.log.info('completed the ``update_peak_magnitudes`` method')
+        return None
 
     # use the tab-trigger below for new method
     # xt-class-method
