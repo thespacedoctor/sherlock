@@ -1144,7 +1144,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                         subfilter = ''
 
             if not best_mag_filter:
-                if str(best_mag)[0].lower() in ("1", "8") and str(best_mag)[1].lower() not in ("0"):
+                if str(best_mag).lower() in ("8", "11", "18"):
                     best_mag_filter = "an "
                 else:
                     best_mag_filter = "a "
