@@ -292,6 +292,9 @@ class transient_classifier():
                 if self.ra:
                     return classifications, crossmatches
 
+                self.update_peak_magnitudes()
+                self.update_classification_annotations_and_summaries()
+
         self.log.info('completed the ``classify`` method')
         return None, None
 
