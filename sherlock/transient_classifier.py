@@ -1180,7 +1180,8 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
             if distance:
                 absMag = row["transientAbsMag"]
-                absMag = """ A host %(distance)s implies M<sub>%(subfilter)s</sub> = %(absMag)s.""" % locals()
+                absMag = """ A host %(distance)s implies a transient <em>M =</em> %(absMag)s.""" % locals(
+                )
             else:
                 absMag = ""
 
