@@ -146,23 +146,23 @@ class _base_importer():
             return
 
         # RECURSIVELY CREATE MISSING DIRECTORIES
-        if not os.path.exists("/tmp/myinserts/"):
-            os.makedirs("/tmp/myinserts/")
+        now = datetime.now()
+        now = now.strftime("%Y%m%dt%H%M%S")
+        if not os.path.exists("/tmp/myinserts/%(now)s" % locals()):
+            os.makedirs("/tmp/myinserts/%(now)s" % locals())
         dataSet = list_of_dictionaries(
             log=self.log,
             listOfDictionaries=dictList,
             reDatetime=self.reDatetime
         )
 
-        now = datetime.now()
-        now = now.strftime("%Y%m%dt%H%M%S")
-        filepath = "/tmp/myinserts/" + self.dbTableName + "-" + now + ".sql"
+        filepath = "/tmp/myinserts/" + now + "/" + self.dbTableName + "-" + now + ".sql"
         mysqlData = dataSet.mysql(
             tableName=self.dbTableName, filepath=filepath, createStatement=createStatement)
 
         directory_script_runner(
             log=self.log,
-            pathToScriptDirectory="/tmp/myinserts/",
+            pathToScriptDirectory="/tmp/myinserts/" + now,
             databaseName=self.settings["database settings"][
                 "static catalogues"]["db"],
             loginPath=self.settings["database settings"][
