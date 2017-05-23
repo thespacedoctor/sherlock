@@ -389,7 +389,7 @@ class ned(_base_importer):
         theseIds = ("\", \"").join(self.theseIds)
 
         sqlQuery = u"""
-            update %(tableName)s set download_error = 1 where ned_name = ("%(theseIds)s");
+            update %(tableName)s set download_error = 1 where ned_name in ("%(theseIds)s");
         """ % locals()
         writequery(
             log=self.log,
