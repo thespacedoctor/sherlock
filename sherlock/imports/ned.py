@@ -386,7 +386,7 @@ class ned(_base_importer):
             createStatement="""SET SESSION sql_mode="";"""
         )
 
-        theseIds = (",").join(self.theseIds)
+        theseIds = ("\", \"").join(self.theseIds)
 
         sqlQuery = u"""
             update %(tableName)s set download_error = 1 where ned_name = ("%(theseIds)s");
@@ -396,8 +396,6 @@ class ned(_base_importer):
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn,
         )
-
-        print theseIds
 
         print "%(count)s/%(totalCount)s galaxy metadata batch entries added to database" % locals()
         if count < totalCount:
