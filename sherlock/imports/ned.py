@@ -383,16 +383,16 @@ class ned(_base_importer):
             createStatement="""SET SESSION sql_mode="";"""
         )
 
-        if not len(dictList):
-            for thisId in self.theseIds:
-                sqlQuery = u"""
-                    update %(tableName)s set download_error = 1 where ned_name = "%(thisId)s"
-                """ % locals()
-                writequery(
-                    log=self.log,
-                    sqlQuery=sqlQuery,
-                    dbConn=self.cataloguesDbConn,
-                )
+        theseIds = (",").join(self.theseIds)
+
+        sqlQuery = u"""
+            update %(tableName)s set download_error = 1 where ned_name = ("%(theseIds)s");
+        """ % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn,
+        )
 
         print "%(count)s/%(totalCount)s galaxy metadata batch entries added to database" % locals()
         if count < totalCount:
