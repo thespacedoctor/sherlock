@@ -16,8 +16,9 @@ install_requires = [
     'astrocalc',
     'neddy',
     'sloancone',
+    'numpy',
     'HMpTy',
-    'numpy'
+    'pymysql'
 ]
 
 # READ THE DOCS SERVERS
