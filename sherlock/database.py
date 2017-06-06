@@ -18,7 +18,7 @@ import glob
 import pickle
 import time
 from subprocess import Popen, PIPE, STDOUT
-# import MySQLdb as ms
+# import pymysql as ms
 import pymysql as ms
 from docopt import docopt
 from fundamentals.mysql import readquery
