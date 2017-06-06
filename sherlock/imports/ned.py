@@ -86,6 +86,7 @@ class ned(_base_importer):
         dictList = self._create_dictionary_of_ned()
 
         tableName = self.dbTableName
+
         createStatement = """CREATE TABLE IF NOT EXISTS `%(tableName)s` (
   `primaryId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'An internal counter',
   `ned_name` varchar(150) NOT NULL,
@@ -257,6 +258,8 @@ class ned(_base_importer):
         """
         self.log.info('starting the ``_download_ned_source_metadata`` method')
 
+        self.dbTableName = "tcs_cat_ned_stream"
+
         total, batches = self._count_ned_sources_in_database_requiring_metadata()
 
         self.log.info(
@@ -383,16 +386,16 @@ class ned(_base_importer):
             createStatement="""SET SESSION sql_mode="";"""
         )
 
-        if not len(dictList):
-            for thisId in self.theseIds:
-                sqlQuery = u"""
-                    update %(tableName)s set download_error = 1 where ned_name = "%(thisId)s"
-                """ % locals()
-                writequery(
-                    log=self.log,
-                    sqlQuery=sqlQuery,
-                    dbConn=self.cataloguesDbConn,
-                )
+        theseIds = ("\", \"").join(self.theseIds)
+
+        sqlQuery = u"""
+            update %(tableName)s set download_error = 1 where ned_name in ("%(theseIds)s");
+        """ % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn,
+        )
 
         print "%(count)s/%(totalCount)s galaxy metadata batch entries added to database" % locals()
         if count < totalCount:
