@@ -2,7 +2,7 @@ import os
 import nose
 import shutil
 import yaml
-
+import unittest
 from sherlock.utKit import utKit
 
 from fundamentals import tools
@@ -30,9 +30,10 @@ utKit.tearDownModule()
 
 # load settings
 stream = file(
-    pathToInputDir + "/example_settings.yaml", 'r')
+    pathToInputDir + "/example_settings3.yaml", 'r')
 settings = yaml.load(stream)
 stream.close()
+
 
 import shutil
 try:
@@ -62,8 +63,8 @@ except:
 
 class test_ned(unittest.TestCase):
 
-    def test_ned_function(self):
-        coordinateList = ["23.2323 -43.23434"]
+    def test_ned_metadata_function(self):
+        coordinateList = []
         from sherlock.imports import ned
         catalogue = ned(
             log=log,
@@ -71,7 +72,18 @@ class test_ned(unittest.TestCase):
             coordinateList=coordinateList,
             radiusArcsec=300
         )
-        catalogue.ingest()
+        catalogue._download_ned_source_metadata()
+
+    # def test_ned_function(self):
+    #     coordinateList = ["23.2323 -43.23434"]
+    #     from sherlock.imports import ned
+    #     catalogue = ned(
+    #         log=log,
+    #         settings=settings,
+    #         coordinateList=coordinateList,
+    #         radiusArcsec=300
+    #     )
+    #     catalogue.ingest()
 
     def test_ned_function_exception(self):
 
