@@ -16,6 +16,7 @@ import collections
 import codecs
 import re
 import math
+import time
 from random import randint
 os.environ['TERM'] = 'vt100'
 from datetime import datetime, date, time, timedelta
@@ -44,7 +45,7 @@ class transient_classifier():
         - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
         - ``fast`` -- run in fast mode. This mode may not catch errors in the ingest of data to the crossmatches table but runs twice as fast. Default *False*.
         - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
-        - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *False*
+        - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
 
 
     **Usage:**
@@ -120,7 +121,7 @@ class transient_classifier():
             verbose=0,
             fast=False,
             updateNed=True,
-            daemonMode=False
+            daemonMode=True
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -226,12 +227,14 @@ class transient_classifier():
                 transientsMetadataList = [transient]
                 remaining = 0
 
-            if self.daemonMode == False:
-                remaining = 0
-
             if len(transientsMetadataList) == 0:
-                print "No transients need classified"
-                return None, None
+                if self.daemonMode == False:
+                    remaining = 0
+                    print "No transients need classified"
+                    return None, None
+                else:
+                    print "No remaining transients need classified, will try again in 5 mins"
+                    time.sleep("10")
 
             # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
             # REDSHIFT, MAG ETC
