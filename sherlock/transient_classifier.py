@@ -121,7 +121,7 @@ class transient_classifier():
             verbose=0,
             fast=False,
             updateNed=True,
-            daemonMode=True
+            daemonMode=False
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
