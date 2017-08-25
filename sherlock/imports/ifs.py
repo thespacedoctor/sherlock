@@ -133,6 +133,7 @@ class ifs(_base_importer):
 
         dictList = []
         columns = ["name", "raDeg", "decDeg", "z"]
+
         for line in thisData:
             thisDict = {}
             line = line.strip()
@@ -145,14 +146,20 @@ class ifs(_base_importer):
                 converter = unit_conversion(
                     log=self.log
                 )
-                raDeg = converter.ra_sexegesimal_to_decimal(
-                    ra=values[1].strip()
-                )
-                thisDict["raDeg"] = raDeg
-                decDeg = converter.dec_sexegesimal_to_decimal(
-                    dec=values[2].strip()
-                )
-                thisDict["decDeg"] = decDeg
+                try:
+                    raDeg = converter.ra_sexegesimal_to_decimal(
+                        ra=values[1].strip()
+                    )
+                    thisDict["raDeg"] = raDeg
+                    decDeg = converter.dec_sexegesimal_to_decimal(
+                        dec=values[2].strip()
+                    )
+                    thisDict["decDeg"] = decDeg
+                except:
+                    name = thisDict["name"]
+                    self.log.warning(
+                        'Could not convert the coordinates for IFS source %(name)s. Skipping import of this source.' % locals())
+                    continue
                 try:
                     z = float(values[3].strip())
                     if z > 0.:
