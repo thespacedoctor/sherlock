@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; sherlock 1.1.2 documentation</title>
+  <title>Installation &mdash; sherlock 1.2.5 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 1.1.2 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock 1.2.5 documentation" href="../index.html"/>
         <link rel="next" title="Subpackages" href="../autosummary.html"/>
         <link rel="prev" title="sherlock" href="../index.html"/> 
 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                v1.1.2
+                v1.2.5
               </div>
             
           
@@ -257,7 +257,7 @@ Usage:
     sherlock init
     sherlock info [-s &lt;pathToSettingsFile&gt;]
     sherlock [-N] dbmatch [-f --update] [-s &lt;pathToSettingsFile&gt;]
-    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;]
+    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;pathToSettingsFile&gt;]
     sherlock clean [-s &lt;pathToSettingsFile&gt;]
     sherlock wiki [-s &lt;pathToSettingsFile&gt;]
     sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]
@@ -331,38 +331,34 @@ Use <code class="xref py py-obj docutils literal"><span class="pre">mysql_config
 <p>The settings file now contains every option required to change the way the code runs, including database settings and the actual search algorithm.</p>
 <div class="section" id="database-settings">
 <h4>Database Settings<a class="headerlink" href="#database-settings" title="Permalink to this headline">  ∞</a></h4>
-<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>yaml
-database settings:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>static catalogues:</dt>
-<dd>db: crossmatch_catalogues
-host: 127.0.0.1
-user: pessto
-password: p355t0</dd>
-<dt>transients:</dt>
-<dd><p class="first">user: pessto
-password: p355t0
-db: ps13pipublic
-host: 127.0.0.1
-transient table: tcs_transient_objects
-transient query: &#8220;select id as &#8216;id&#8217;, followup_id as &#8216;alt_id&#8217;, ra_psf &#8216;ra&#8217;, dec_psf &#8216;dec&#8217;, local_designation &#8216;name&#8217;, object_classification as &#8216;object_classification&#8217;</p>
-<blockquote>
-<div>from tcs_transient_objects
-where detection_list_id = 2
-and object_classification is null
-order by followup_id&#8221;</div></blockquote>
-<p class="last">transient id column: id
-transient classification column: object_classification</p>
-</dd>
-<dt>pessto marshall:</dt>
-<dd>user: pessto
-password: p355t0
-db: pessto_marshall
-host: 127.0.0.1</dd>
-</dl>
-</div></blockquote>
-<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">database settings</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">static catalogues</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">db</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">crossmatch_catalogues</span>
+        <span class="l l-Scalar l-Scalar-Plain">host</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+        <span class="l l-Scalar l-Scalar-Plain">user</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pessto</span>
+        <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">p355t0</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">transients</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">user</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pessto</span>
+        <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">p355t0</span>
+        <span class="l l-Scalar l-Scalar-Plain">db</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ps13pipublic</span>
+        <span class="l l-Scalar l-Scalar-Plain">host</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_transient_objects</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient query</span><span class="p p-Indicator">:</span> <span class="s">&quot;select</span><span class="nv"> </span><span class="s">id</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">&#39;id&#39;,</span><span class="nv"> </span><span class="s">followup_id</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">&#39;alt_id&#39;,</span><span class="nv"> </span><span class="s">ra_psf</span><span class="nv"> </span><span class="s">&#39;ra&#39;,</span><span class="nv"> </span><span class="s">dec_psf</span><span class="nv"> </span><span class="s">&#39;dec&#39;,</span><span class="nv"> </span><span class="s">local_designation</span><span class="nv"> </span><span class="s">&#39;name&#39;,</span><span class="nv"> </span><span class="s">object_classification</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">&#39;object_classification&#39;</span>
+            <span class="s">from</span><span class="nv"> </span><span class="s">tcs_transient_objects</span>
+            <span class="s">where</span><span class="nv"> </span><span class="s">detection_list_id</span><span class="nv"> </span><span class="s">=</span><span class="nv"> </span><span class="s">2</span>
+            <span class="s">and</span><span class="nv"> </span><span class="s">object_classification</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">null</span>
+            <span class="s">order</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">followup_id&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient id column</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification column</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object_classification</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">pessto marshall</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">user</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pessto</span>
+        <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">p355t0</span>
+        <span class="l l-Scalar l-Scalar-Plain">db</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pessto_marshall</span>
+        <span class="l l-Scalar l-Scalar-Plain">host</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+</pre></div>
+</div>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">static</span> <span class="pre">catalogues</span></code> settings are the settings for connecting to the static catalogues database. Do not edit these settings unless you know what you&#8217;re doing. If you have your RSA key on starbase, the code will setup a ssh-tunnel for you so that you can connect to this database remotely.</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">transients</span></code> settings are for the database you have your transients stored in. <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">table</span></code> is the name of the table containing your transients, <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">query</span></code> is the SQL query that need executed to get the following info for the transients needing classified:</p>
 <ul class="simple">
@@ -377,44 +373,40 @@ host: 127.0.0.1</dd>
 <div class="section" id="the-search-algorithm">
 <h4>The Search Algorithm<a class="headerlink" href="#the-search-algorithm" title="Permalink to this headline">  ∞</a></h4>
 <p>The order searches appear in the <code class="xref py py-obj docutils literal"><span class="pre">search</span> <span class="pre">algorithm</span></code> section is the order they shall be run in the actual code:</p>
-<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>yaml
-search algorithm:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>sdss qso:</dt>
-<dd>angular radius arcsec: 2.0
-transient classification: AGN
-database table: tcs_cat_v_sdss_dr9_spect_qsos</dd>
-<dt>milliquas:</dt>
-<dd>angular radius arcsec: 3.0
-transient classification: AGN
-database table: tcs_cat_milliquas</dd>
-<dt>veron:</dt>
-<dd>angular radius arcsec: 2.0
-transient classification: AGN
-database table: tcs_veron_cat</dd>
-<dt>ned qso:</dt>
-<dd>angular radius arcsec: 2.0
-transient classification: AGN
-database table: tcs_cat_v_ned_qsos</dd>
-<dt>ned nt:</dt>
-<dd>angular radius arcsec: 3.0
-physical radius kpc: 0.5
-transient classification: NT
-database table: tcs_cat_v_ned_galaxies</dd>
-<dt>sdss spec nt:</dt>
-<dd>angular radius arcsec: 3.0
-physical radius kpc: 0.5
-transient classification: NT
-database table: tcs_cat_v_sdss_dr9_spect_galaxies</dd>
-<dt>sdss phot nt:</dt>
-<dd>angular radius arcsec: 0.5
-transient classification: NT
-database table: tcs_cat_v_sdss_dr9_galaxies_notspec</dd>
-</dl>
-<p>...</p>
-</div></blockquote>
-<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">search algorithm</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">sdss qso</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_cat_v_sdss_dr9_spect_qsos</span>
+    <span class="l l-Scalar l-Scalar-Plain">milliquas</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_cat_milliquas</span>
+    <span class="l l-Scalar l-Scalar-Plain">veron</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_veron_cat</span>
+    <span class="l l-Scalar l-Scalar-Plain">ned qso</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_cat_v_ned_qsos</span>
+    <span class="l l-Scalar l-Scalar-Plain">ned nt</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">physical radius kpc</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0.5</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">NT</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_cat_v_ned_galaxies</span>
+    <span class="l l-Scalar l-Scalar-Plain">sdss spec nt</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">physical radius kpc</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0.5</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">NT</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_cat_v_sdss_dr9_spect_galaxies</span>
+    <span class="l l-Scalar l-Scalar-Plain">sdss phot nt</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0.5</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">NT</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_cat_v_sdss_dr9_galaxies_notspec</span>
+    <span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
 <p>The first time you run <a class="reference internal" href="../_autosummary/sherlock.html#module-sherlock" title="sherlock"><code class="xref py py-obj docutils literal"><span class="pre">sherlock</span></code></a> you will be told to add your settings to the empty settings file that&#8217;s been created in <code class="xref py py-obj docutils literal"><span class="pre">yaml</span></code>.</p>
 <p>For details about all of the catalogue in the catalogues database, run:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock info
@@ -445,7 +437,7 @@ catalogued source, <em>associations</em>.</p>
 <p>Examples of transient-synonym matches are CVs, AGN and variable stars
 (VS) that match within 1-2 arcsec of their catalogue counterpart.
 Stretching the definition of <em>synonym</em> a little, Sherlock will also
-match transients close to the centre of galaxies as synonyms<a class="footnote-reference" href="#id18" id="id17">[1]</a>.
+match transients close to the centre of galaxies as synonyms<a class="footnote-reference" href="#id2" id="id1">[1]</a>.
 Transient-associations include those transients that are located near,
 but not on top of, a catalogued source. Example of these associations
 are &#8216;transients&#8217; matching close to bright-stars and are classified as
@@ -486,10 +478,10 @@ association search. The second stage search then flags B as associated
 with the large galaxy at the centre of the image and transient D as
 either associated with the bright-star in the bottom right corner of the
 image or with the galaxy in the centre.</p>
-<table class="docutils footnote" frame="void" id="id18" rules="none">
+<table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id17">[1]</a></td><td>could be classified as a nuclear transient or supernova depending on
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>could be classified as a nuclear transient or supernova depending on
 search algorithm parameters</td></tr>
 </tbody>
 </table>
@@ -497,45 +489,43 @@ search algorithm parameters</td></tr>
 <div class="section" id="ned-stream-updater">
 <h4>NED Stream Updater<a class="headerlink" href="#ned-stream-updater" title="Permalink to this headline">  ∞</a></h4>
 <p>The settings in the settings file relating to the NED stream are:</p>
-<p><code class="docutils literal"><span class="pre">`yaml</span>
-<span class="pre">ned</span> <span class="pre">stream</span> <span class="pre">search</span> <span class="pre">radius</span> <span class="pre">arcec:</span> <span class="pre">300</span>
-<span class="pre">first</span> <span class="pre">pass</span> <span class="pre">ned</span> <span class="pre">search</span> <span class="pre">radius</span> <span class="pre">arcec:</span> <span class="pre">240</span>
-<span class="pre">ned</span> <span class="pre">stream</span> <span class="pre">refresh</span> <span class="pre">rate</span> <span class="pre">in</span> <span class="pre">days:</span> <span class="pre">90</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>ned stream search radius arcec: 300
+first pass ned search radius arcec: 240
+ned stream refresh rate in days: 90
+<a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
 <p>To update the NED stream, for each transient coordinates the code does a conesearch on the <code class="xref py py-obj docutils literal"><span class="pre">tcs_helper_ned_query_history</span></code> table to see if a search has already been performed within the designated <code class="xref py py-obj docutils literal"><span class="pre">ned</span> <span class="pre">stream</span> <span class="pre">refresh</span> <span class="pre">rate</span> <span class="pre">in</span> <span class="pre">days</span></code>. If a match isn&#8217;t found then NED is queried and the <code class="xref py py-obj docutils literal"><span class="pre">tcs_helper_ned_query_history</span></code> is updated for the transient coordinates.</p>
 </div>
 <div class="section" id="search-algoritm">
 <h4>Search Algoritm<a class="headerlink" href="#search-algoritm" title="Permalink to this headline">  ∞</a></h4>
 <p>The algorithm is written and modified within the <code class="xref py py-obj docutils literal"><span class="pre">sherlock.yaml</span></code> settings file. This means you can modify the algorithm without affecting anyone else&#8217;s search (as long as you are working off the different transient databases).</p>
-<p><a href="#id19"><span class="problematic" id="id20">``</span></a><a href="#id21"><span class="problematic" id="id22">`</span></a>yaml
-search algorithm:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>sdss qso:</dt>
-<dd>angular radius arcsec: 2.0
-transient classification: AGN
-database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
-stop algorithm on match: False
-match nearest source only: False</dd>
-<dt>milliquas:</dt>
-<dd>angular radius arcsec: 3.0
-transient classification: AGN
-database table: tcs_view_agn_milliquas_v4_5
-stop algorithm on match: False
-match nearest source only: False</dd>
-<dt>veron:</dt>
-<dd>angular radius arcsec: 2.0
-transient classification: AGN
-database table: tcs_view_agn_veron_v13
-stop algorithm on match: False
-match nearest source only: False</dd>
-<dt>ned qso:</dt>
-<dd>angular radius arcsec: 2.0
-transient classification: AGN
-...</dd>
-</dl>
-</div></blockquote>
-<p><a href="#id23"><span class="problematic" id="id24">``</span></a><a href="#id25"><span class="problematic" id="id26">`</span></a></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">search algorithm</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">sdss qso</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_view_qso_sdss_spect_galaxies_qsos_dr12</span>
+        <span class="l l-Scalar l-Scalar-Plain">stop algorithm on match</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+        <span class="l l-Scalar l-Scalar-Plain">match nearest source only</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+    <span class="l l-Scalar l-Scalar-Plain">milliquas</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_view_agn_milliquas_v4_5</span>
+        <span class="l l-Scalar l-Scalar-Plain">stop algorithm on match</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+        <span class="l l-Scalar l-Scalar-Plain">match nearest source only</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+    <span class="l l-Scalar l-Scalar-Plain">veron</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_view_agn_veron_v13</span>
+        <span class="l l-Scalar l-Scalar-Plain">stop algorithm on match</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+        <span class="l l-Scalar l-Scalar-Plain">match nearest source only</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+    <span class="l l-Scalar l-Scalar-Plain">ned qso</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2.0</span>
+        <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+        <span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
 <p>Note, to remove a module temporarily, simply comment it out in the settings file (yaml treats lines beginning with <code class="xref py py-obj docutils literal"><span class="pre">#</span></code> as comments).</p>
 <p>Behind the scenes there are 2 types of searches performed on the catalogues.</p>
 <ol class="arabic simple">
@@ -546,15 +536,14 @@ transient classification: AGN
 <div class="section" id="angular-separation-search">
 <h4>Angular Separation Search<a class="headerlink" href="#angular-separation-search" title="Permalink to this headline">  ∞</a></h4>
 <p>An example of an angular separation search looks like this in the settings file:</p>
-<p><a href="#id27"><span class="problematic" id="id28">``</span></a><a href="#id29"><span class="problematic" id="id30">`</span></a>yaml
-milliquas:</p>
-<blockquote>
-<div>angular radius arcsec: 2.0
-transient classification: AGN
-database table: tcs_view_agn_milliquas_v4_5
-stop algorithm on match: False
-match nearest source only: False</div></blockquote>
-<p><a href="#id31"><span class="problematic" id="id32">``</span></a><a href="#id33"><span class="problematic" id="id34">`</span></a></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">milliquas</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">angular radius arcsec</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2.0</span>
+    <span class="l l-Scalar l-Scalar-Plain">transient classification</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AGN</span>
+    <span class="l l-Scalar l-Scalar-Plain">database table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcs_view_agn_milliquas_v4_5</span>
+    <span class="l l-Scalar l-Scalar-Plain">stop algorithm on match</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+    <span class="l l-Scalar l-Scalar-Plain">match nearest source only</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
 <p>The code performs a cone-search on <code class="xref py py-obj docutils literal"><span class="pre">database</span> <span class="pre">table</span></code> using the <code class="xref py py-obj docutils literal"><span class="pre">angular</span> <span class="pre">radius</span> <span class="pre">arcsec</span></code>. If matches are found the associated transient is given a <code class="xref py py-obj docutils literal"><span class="pre">transient</span> <span class="pre">classification</span></code> and the results are added to the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table of the transients database. If <code class="xref py py-obj docutils literal"><span class="pre">stop</span> <span class="pre">algorithm</span> <span class="pre">on</span> <span class="pre">match</span></code> is true the code breaks out of the search algorithm and starts afresh with the next transient to be classified, otherwise the algorithm contines and all matches are recorded in the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table. If <code class="xref py py-obj docutils literal"><span class="pre">match</span> <span class="pre">nearest</span> <span class="pre">source</span> <span class="pre">only</span></code> is true only the closest match from each catalogue query is be recorded in the <code class="xref py py-obj docutils literal"><span class="pre">tcs_cross_matches</span></code> table.</p>
 </div>
 <div class="section" id="physical-separation-search">
@@ -653,12 +642,12 @@ match nearest source only: False</div></blockquote>
 <span class="pre">sherlock-importers</span> <span class="pre">stream</span> <span class="pre">&lt;stream_name&gt;</span> <span class="pre">[-s</span> <span class="pre">&lt;pathToSettingsFile&gt;]</span>
 <span class="pre">`</span></code></p>
 <p>The command to <strong>import new versions of catalogues</strong> and <strong>data streams</strong> into the <code class="xref py py-obj docutils literal"><span class="pre">crossmatch_catalogues</span></code> database is:</p>
-<p><a href="#id35"><span class="problematic" id="id36">``</span></a><a href="#id37"><span class="problematic" id="id38">`</span></a>python
+<p><a href="#id7"><span class="problematic" id="id8">``</span></a><a href="#id9"><span class="problematic" id="id10">`</span></a>python
 Usage:</p>
 <blockquote>
 <div>sherlock-importers cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]
 sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</div></blockquote>
-<p><a href="#id39"><span class="problematic" id="id40">``</span></a><a href="#id41"><span class="problematic" id="id42">`</span></a></p>
+<p><a href="#id11"><span class="problematic" id="id12">``</span></a><a href="#id13"><span class="problematic" id="id14">`</span></a></p>
 <p>For example:</p>
 <p><code class="docutils literal"><span class="pre">`bash</span>
 <span class="pre">&gt;</span> <span class="pre">sherlock-importers</span> <span class="pre">cat</span> <span class="pre">milliquas</span> <span class="pre">~/Desktop/milliquas.txt</span> <span class="pre">4.5</span>
@@ -677,7 +666,7 @@ sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</d
 <span class="pre">sherlock-importers</span> <span class="pre">stream</span> <span class="pre">pessto</span>
 <span class="pre">`</span></code></p>
 <p>will import all of the various <strong>data-streams</strong> added to the PESSTO marshall (ASASSN, CRTS, LSQ, PSST ...).</p>
-<p>THE COLUMN MAP LIFTED FROM <a href="#id43"><span class="problematic" id="id44">``</span></a>tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH &#8216;ColName&#8217;)</p>
+<p>THE COLUMN MAP LIFTED FROM <a href="#id15"><span class="problematic" id="id16">``</span></a>tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH &#8216;ColName&#8217;)</p>
 </div>
 </div>
 </div>
@@ -723,7 +712,7 @@ sherlock-importers stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]</d
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.1.2',
+            VERSION:'1.2.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

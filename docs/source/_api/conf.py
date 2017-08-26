@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # sherlock documentation build configuration file, created by
-# sphinx-quickstart on Wed Feb 22 11:23:47 2017.
+# sphinx-quickstart on Fri Aug 25 21:10:06 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.

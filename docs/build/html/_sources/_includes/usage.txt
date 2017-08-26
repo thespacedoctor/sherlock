@@ -19,7 +19,7 @@ Command-Line Usage
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
         sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
-        sherlock [-vN] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
+        sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
         sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]

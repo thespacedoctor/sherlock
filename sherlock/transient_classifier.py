@@ -102,10 +102,9 @@ class transient_classifier():
                         from transientBucket where object_classification is null
                     transient primary id column: primaryKeyId
                     transient classification column: sherlockClassification
-                    crossmatchTable: tcs_cross_matches
                     tunnel: False
 
-        By setting ``update=True`` the classifier will update the ``sherlockClassification`` column of the ``transient table`` with new classification and populate the ``crossmatchTable`` with key details of the crossmatched sources from the catalogues database. By setting ``update=False`` results are printed to stdout but the database is not updated (useful for dry runs and testing new algorithms),
+        By setting ``update=True`` the classifier will update the ``sherlockClassification`` column of the ``transient table`` with new classification and populate the ``sherlock_crossmatches`` table with key details of the crossmatched sources from the catalogues database. By setting ``update=False`` results are printed to stdout but the database is not updated (useful for dry runs and testing new algorithms),
 
     """
     # INITIALISATION
@@ -519,8 +518,7 @@ class transient_classifier():
             "transients"]["transient classification column"]
         transientTableIdCol = self.settings["database settings"][
             "transients"]["transient primary id column"]
-        crossmatchTable = self.settings["database settings"][
-            "transients"]["crossmatchTable"]
+        crossmatchTable = "sherlock_crossmatches"
 
         # RECURSIVELY CREATE MISSING DIRECTORIES
         if not os.path.exists("/tmp/sherlock"):

@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.cl_utils &mdash; sherlock 1.1.2 documentation</title>
+  <title>sherlock.cl_utils &mdash; sherlock 1.2.5 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="sherlock 1.1.2 documentation" href="../../index.html"/>
+    <link rel="top" title="sherlock 1.2.5 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                v1.1.2
+                v1.2.5
               </div>
             
           
@@ -170,7 +170,7 @@
 <span class="sd">    sherlock init</span>
 <span class="sd">    sherlock info [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock [-N] dbmatch [-f --update] [-s &lt;pathToSettingsFile&gt;]</span>
-<span class="sd">    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;name&gt; -s &lt;pathToSettingsFile&gt;] </span>
+<span class="sd">    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;pathToSettingsFile&gt;] </span>
 <span class="sd">    sherlock clean [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock wiki [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]</span>
@@ -308,7 +308,7 @@
             <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
             <span class="n">ra</span><span class="o">=</span><span class="n">ra</span><span class="p">,</span>
             <span class="n">dec</span><span class="o">=</span><span class="n">dec</span><span class="p">,</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
             <span class="n">update</span><span class="o">=</span><span class="n">updateFlag</span><span class="p">,</span>
             <span class="n">fast</span><span class="o">=</span><span class="n">fastFlag</span><span class="p">,</span>
@@ -321,7 +321,7 @@
             <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
             <span class="n">settings</span><span class="o">=</span><span class="n">settings</span>
         <span class="p">)</span>
-        <span class="n">cleaner</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="n">cleaner</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">wiki</span><span class="p">:</span>
         <span class="n">updateWiki</span> <span class="o">=</span> <span class="n">update_wiki_pages</span><span class="p">(</span>
             <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
@@ -386,7 +386,7 @@
             <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
             <span class="n">ra</span><span class="o">=</span><span class="n">ra</span><span class="p">,</span>
             <span class="n">dec</span><span class="o">=</span><span class="n">dec</span><span class="p">,</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">verbose</span><span class="o">=</span><span class="n">verboseFlag</span>
         <span class="p">)</span>
         <span class="n">classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">()</span>
@@ -474,7 +474,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.1.2',
+            VERSION:'1.2.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
