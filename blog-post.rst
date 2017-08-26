@@ -11,9 +11,9 @@ sherlock
 
 *A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data*.
 
-Here's a summary of what's included in the python package:
 
-.. include:: /classes_and_functions.rst
+
+
 
 Command-Line Usage
 ==================
@@ -36,7 +36,7 @@ Command-Line Usage
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
         sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
-        sherlock [-vN] match -- <ra> <dec> [<name> -s <pathToSettingsFile>] 
+        sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
         sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -156,35 +156,34 @@ The settings file now contains every option required to change the way the code 
 Database Settings
 ^^^^^^^^^^^^^^^^^
 
-```yaml
-database settings:
-    static catalogues:
-        db: crossmatch_catalogues
-        host: 127.0.0.1
-        user: pessto
-        password: p355t0
+.. code-block:: yaml
 
-    transients:
-        user: pessto
-        password: p355t0
-        db: ps13pipublic
-        host: 127.0.0.1
-        transient table: tcs_transient_objects
-        transient query: "select id as 'id', followup_id as 'alt_id', ra_psf 'ra', dec_psf 'dec', local_designation 'name', object_classification as 'object_classification'
-            from tcs_transient_objects
-            where detection_list_id = 2
-            and object_classification is null
-            order by followup_id"
-        transient id column: id
-        transient classification column: object_classification
+    database settings:
+        static catalogues:
+            db: crossmatch_catalogues
+            host: 127.0.0.1
+            user: pessto
+            password: p355t0
 
-    pessto marshall:
-        user: pessto
-        password: p355t0
-        db: pessto_marshall
-        host: 127.0.0.1
-```
+        transients:
+            user: pessto
+            password: p355t0
+            db: ps13pipublic
+            host: 127.0.0.1
+            transient table: tcs_transient_objects
+            transient query: "select id as 'id', followup_id as 'alt_id', ra_psf 'ra', dec_psf 'dec', local_designation 'name', object_classification as 'object_classification'
+                from tcs_transient_objects
+                where detection_list_id = 2
+                and object_classification is null
+                order by followup_id"
+            transient id column: id
+            transient classification column: object_classification
 
+        pessto marshall:
+            user: pessto
+            password: p355t0
+            db: pessto_marshall
+            host: 127.0.0.1
 
 The `static catalogues` settings are the settings for connecting to the static catalogues database. Do not edit these settings unless you know what you're doing. If you have your RSA key on starbase, the code will setup a ssh-tunnel for you so that you can connect to this database remotely.
 
@@ -203,40 +202,40 @@ The Search Algorithm
 
 The order searches appear in the `search algorithm` section is the order they shall be run in the actual code:
 
-```yaml
-search algorithm:
-    sdss qso:
-        angular radius arcsec: 2.0
-        transient classification: AGN
-        database table: tcs_cat_v_sdss_dr9_spect_qsos
-    milliquas:
-        angular radius arcsec: 3.0
-        transient classification: AGN
-        database table: tcs_cat_milliquas
-    veron:
-        angular radius arcsec: 2.0
-        transient classification: AGN
-        database table: tcs_veron_cat
-    ned qso:
-        angular radius arcsec: 2.0
-        transient classification: AGN
-        database table: tcs_cat_v_ned_qsos
-    ned nt:
-        angular radius arcsec: 3.0
-        physical radius kpc: 0.5
-        transient classification: NT
-        database table: tcs_cat_v_ned_galaxies
-    sdss spec nt:
-        angular radius arcsec: 3.0
-        physical radius kpc: 0.5
-        transient classification: NT
-        database table: tcs_cat_v_sdss_dr9_spect_galaxies
-    sdss phot nt: 
-        angular radius arcsec: 0.5
-        transient classification: NT
-        database table: tcs_cat_v_sdss_dr9_galaxies_notspec
-    ...
-```
+.. code-block:: yaml
+
+    search algorithm:
+        sdss qso:
+            angular radius arcsec: 2.0
+            transient classification: AGN
+            database table: tcs_cat_v_sdss_dr9_spect_qsos
+        milliquas:
+            angular radius arcsec: 3.0
+            transient classification: AGN
+            database table: tcs_cat_milliquas
+        veron:
+            angular radius arcsec: 2.0
+            transient classification: AGN
+            database table: tcs_veron_cat
+        ned qso:
+            angular radius arcsec: 2.0
+            transient classification: AGN
+            database table: tcs_cat_v_ned_qsos
+        ned nt:
+            angular radius arcsec: 3.0
+            physical radius kpc: 0.5
+            transient classification: NT
+            database table: tcs_cat_v_ned_galaxies
+        sdss spec nt:
+            angular radius arcsec: 3.0
+            physical radius kpc: 0.5
+            transient classification: NT
+            database table: tcs_cat_v_sdss_dr9_spect_galaxies
+        sdss phot nt: 
+            angular radius arcsec: 0.5
+            transient classification: NT
+            database table: tcs_cat_v_sdss_dr9_galaxies_notspec
+        ...
 
 The first time you run `sherlock` you will be told to add your settings to the empty settings file that's been created in `~/.config/sherlock/sherlock.yaml`.
 
@@ -333,7 +332,8 @@ NED Stream Updater
 
 The settings in the settings file relating to the NED stream are:
 
-```yaml
+.. code-block:: yaml
+
 ned stream search radius arcec: 300
 first pass ned search radius arcec: 240
 ned stream refresh rate in days: 90
@@ -346,31 +346,31 @@ Search Algoritm
 
 The algorithm is written and modified within the `sherlock.yaml` settings file. This means you can modify the algorithm without affecting anyone else's search (as long as you are working off the different transient databases).
 
-```yaml
-search algorithm:
-    sdss qso:
-        angular radius arcsec: 2.0
-        transient classification: AGN
-        database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
-        stop algorithm on match: False
-        match nearest source only: False
-    milliquas:
-        angular radius arcsec: 3.0
-        transient classification: AGN
-        database table: tcs_view_agn_milliquas_v4_5
-        stop algorithm on match: False
-        match nearest source only: False
-    veron:
-        angular radius arcsec: 2.0
-        transient classification: AGN
-        database table: tcs_view_agn_veron_v13
-        stop algorithm on match: False
-        match nearest source only: False
-    ned qso:
-        angular radius arcsec: 2.0
-        transient classification: AGN
-        ...
-```
+.. code-block:: yaml
+
+    search algorithm:
+        sdss qso:
+            angular radius arcsec: 2.0
+            transient classification: AGN
+            database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
+            stop algorithm on match: False
+            match nearest source only: False
+        milliquas:
+            angular radius arcsec: 3.0
+            transient classification: AGN
+            database table: tcs_view_agn_milliquas_v4_5
+            stop algorithm on match: False
+            match nearest source only: False
+        veron:
+            angular radius arcsec: 2.0
+            transient classification: AGN
+            database table: tcs_view_agn_veron_v13
+            stop algorithm on match: False
+            match nearest source only: False
+        ned qso:
+            angular radius arcsec: 2.0
+            transient classification: AGN
+            ...
 
 Note, to remove a module temporarily, simply comment it out in the settings file (yaml treats lines beginning with `#` as comments).
 
@@ -384,14 +384,14 @@ Angular Separation Search
 
 An example of an angular separation search looks like this in the settings file:
 
-```yaml
-milliquas:
-    angular radius arcsec: 2.0
-    transient classification: AGN
-    database table: tcs_view_agn_milliquas_v4_5
-    stop algorithm on match: False
-    match nearest source only: False
-```
+.. code-block:: yaml
+
+    milliquas:
+        angular radius arcsec: 2.0
+        transient classification: AGN
+        database table: tcs_view_agn_milliquas_v4_5
+        stop algorithm on match: False
+        match nearest source only: False
 
 The code performs a cone-search on `database table` using the `angular radius arcsec`. If matches are found the associated transient is given a `transient classification` and the results are added to the `tcs_cross_matches` table of the transients database. If `stop algorithm on match` is true the code breaks out of the search algorithm and starts afresh with the next transient to be classified, otherwise the algorithm contines and all matches are recorded in the `tcs_cross_matches` table. If `match nearest source only` is true only the closest match from each catalogue query is be recorded in the `tcs_cross_matches` table.
 

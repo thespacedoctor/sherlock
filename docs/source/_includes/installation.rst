@@ -21,8 +21,6 @@ To upgrade to the latest version of sherlock use the command:
 
     pip install qub-sherlock --upgrade
 
-
-
 .. todo::
 
     - make a note about how to setup mysql login paths and have them associated with the database setting in the sherlock settings file
