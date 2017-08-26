@@ -96,6 +96,7 @@ class transient_catalogue_crossmatch():
 
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         allCatalogueMatches = []
+        catalogueMatches = []
         nonSynonymTransients = self.transients[:]
 
         # SYNONYM SEARCHES
@@ -318,8 +319,11 @@ class transient_catalogue_crossmatch():
 
         catalogueName = searchPara["database table"]
 
+        if not "mag column" in searchPara:
+            searchPara["mag column"] = None
+
         if brightnessFilter:
-            if "mag column" in searchPara:
+            if "mag column" in searchPara and searchPara["mag column"]:
                 magnitudeLimitFilter = self.colMaps[
                     catalogueName][searchPara["mag column"] + "ColName"]
             theseSearchPara = searchPara[brightnessFilter]
@@ -614,7 +618,7 @@ class transient_catalogue_crossmatch():
         # MATCH BRIGHT STAR ASSOCIATIONS
         galaxyMatches = []
         for row in matchedObjects:
-            if row[magnitudeLimitFilter] == None:
+            if not magnitudeLimitFilter or row[magnitudeLimitFilter] == None:
                 galaxyMatches.append(row)
             else:
                 mag = decimal.Decimal(row[magnitudeLimitFilter])

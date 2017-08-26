@@ -64,9 +64,11 @@ html:
 	@cat $(INDIR)/issues.rst >> $(READMERST)
 	@echo "" >> $(READMERST)
 	@cat $(INDIR)/license.rst >> $(READMERST)
-	@echo "" >> $(BLOGRST)
+	@echo "" >> $(READMERST)
 	sed -i -e "s/Here's a summary of what's included in the python package://g" $(READMERST)
-	sed -i -e "s/.. include:: \/classes_and_functions.rst//g" $(READMERST)	@cat $(INDIR)/description.rst > $(BLOGRST)
+	sed -i -e "s/.. include:: \/classes_and_functions.rst//g" $(READMERST)
+
+	@cat $(INDIR)/description.rst > $(BLOGRST)
 	@echo "" >> $(BLOGRST)
 	@cat $(INDIR)/usage.rst >> $(BLOGRST)
 	@echo "" >> $(BLOGRST)
@@ -79,7 +81,7 @@ html:
 	sed -i -e "s/Here's a summary of what's included in the python package://g" $(BLOGRST)
 	sed -i -e "s/.. include:: \/classes_and_functions.rst//g" $(BLOGRST)
 
-    pandoc -s --columns=3000 --smart --wrap=preserve -f rst -t  markdown_mmd+yaml_metadata_block+tex_math_dollars+mmd_link_attributes+raw_html+backtick_code_blocks --output=$(BLOGMD) $(BLOGRST)
+	pandoc -s --columns=3000 --smart --wrap=preserve -f rst -t  markdown_mmd+yaml_metadata_block+tex_math_dollars+mmd_link_attributes+raw_html+backtick_code_blocks --output=$(BLOGMD) $(BLOGRST)
 
 	pandoc --from=rst --to=markdown_mmd --output=$(READMEMD) $(READMERST)
 
