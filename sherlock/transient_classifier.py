@@ -701,7 +701,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                     update %(transientTable)s set %(transientTableClassCol)s = "%(classification)s"
                         where %(transientTableIdCol)s  = "%(k)s";
                 """ % locals()
-            print sqlQuery
+
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
