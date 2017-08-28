@@ -64,6 +64,7 @@ class _base_importer():
         self.catalogueName = catalogueName
         self.coordinateList = coordinateList
         self.radiusArcsec = radiusArcsec
+        self.myPid = str(os.getpid())
         # xt-self-arg-tmpx
 
         # INITIAL ACTIONS
@@ -145,24 +146,27 @@ class _base_importer():
         if len(dictList) == 0:
             return
 
+        myPid = self.myPid
+        dbTableName = self.dbTableName
+
         # RECURSIVELY CREATE MISSING DIRECTORIES
         now = datetime.now()
         now = now.strftime("%Y%m%dt%H%M%S")
-        if not os.path.exists("/tmp/myinserts/%(now)s" % locals()):
-            os.makedirs("/tmp/myinserts/%(now)s" % locals())
+        if not os.path.exists("/tmp/myinserts/%(myPid)s/%(now)s" % locals()):
+            os.makedirs("/tmp/myinserts/%(myPid)s/%(now)s" % locals())
         dataSet = list_of_dictionaries(
             log=self.log,
             listOfDictionaries=dictList,
             reDatetime=self.reDatetime
         )
 
-        filepath = "/tmp/myinserts/" + now + "/" + self.dbTableName + "-" + now + ".sql"
+        filepath = "/tmp/myinserts/%(myPid)s/%(now)s/%(dbTableName)s-%(now)s.sql" % locals()
         mysqlData = dataSet.mysql(
             tableName=self.dbTableName, filepath=filepath, createStatement=createStatement)
 
         directory_script_runner(
             log=self.log,
-            pathToScriptDirectory="/tmp/myinserts/" + now,
+            pathToScriptDirectory="/tmp/myinserts/%(myPid)s/%(now)s" % locals(),
             databaseName=self.settings["database settings"][
                 "static catalogues"]["db"],
             loginPath=self.settings["database settings"][
