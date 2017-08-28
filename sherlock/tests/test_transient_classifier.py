@@ -55,7 +55,7 @@ if not os.path.exists(pathToOutputDir):
 #         "/input", "/resources") + "/transient_database",
 #     databaseName=settings["database settings"]["db"],
 #     loginPath=settings["database settings"]["loginPath"],
-#     successRule=False,
+#     successRule="delete",
 #     failureRule="failed"
 # )
 

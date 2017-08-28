@@ -683,7 +683,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             loginPath=self.settings["database settings"][
                 "transients"]["loginPath"],
             waitForResult=waitForResult,
-            successRule="success",
+            successRule="delete",
             failureRule="failed"
         )
 
@@ -1227,7 +1227,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                 "transients"]["loginPath"],
             waitForResult=True,
             successRule="delete",
-            failureRule="delete"
+            failureRule="failed"
         )
 
         from fundamentals.mysql import writequery
