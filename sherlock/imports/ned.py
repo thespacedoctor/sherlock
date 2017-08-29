@@ -169,6 +169,8 @@ class ned(_base_importer):
         """
         self.log.info('starting the ``_update_ned_query_history`` method')
 
+        myPid = self.myPid
+
         # ASTROCALC UNIT CONVERTER OBJECT
         converter = unit_conversion(
             log=self.log
@@ -221,16 +223,17 @@ class ned(_base_importer):
             reDatetime=self.reDatetime
         )
         # Recursively create missing directories
-        if not os.path.exists("/tmp/mysql-inserts"):
-            os.makedirs("/tmp/mysql-inserts")
+        myPid = self.myPid
+        if not os.path.exists("/tmp/ned-inserts/" + myPid):
+            os.makedirs("/tmp/ned-inserts/" + myPid)
         now = datetime.now()
         now = now.strftime("%Y%m%dt%H%M%S")
         mysqlData = dataSet.mysql(
-            tableName="tcs_helper_ned_query_history", filepath="/tmp/mysql-inserts/ned-updates-%(now)s.sql" % locals(), createStatement=createStatement)
+            tableName="tcs_helper_ned_query_history", filepath="/tmp/ned-inserts/%(myPid)s/ned-updates-%(now)s.sql" % locals(), createStatement=createStatement)
 
         directory_script_runner(
             log=self.log,
-            pathToScriptDirectory="/tmp/mysql-inserts",
+            pathToScriptDirectory="/tmp/ned-inserts/" + self.myPid,
             databaseName=self.settings["database settings"][
                 "static catalogues"]["db"],
             loginPath=self.settings["database settings"][

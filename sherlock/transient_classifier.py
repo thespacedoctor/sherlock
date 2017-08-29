@@ -134,6 +134,7 @@ class transient_classifier():
         self.fast = fast
         self.updateNed = updateNed
         self.daemonMode = daemonMode
+        self.myPid = str(os.getpid())
 
         # xt-self-arg-tmpx
 
@@ -509,6 +510,7 @@ class transient_classifier():
 
         self.log.debug('starting the ``_update_transient_database`` method')
 
+        myPid = self.myPid
         now = datetime.now()
         now = now.strftime("%Y-%m-%d_%H-%M-%S-%f")
 
@@ -618,7 +620,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                 "`dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateCreated` datetime DEFAULT NULL,")
 
             exists = os.path.exists(
-                "/tmp/sherlock_trigger/%(crossmatchTable)s_trigger.sql" % locals())
+                "/tmp/sherlock_trigger/%(myPid)s/%(crossmatchTable)s_trigger.sql" % locals())
             if not exists:
                 trigger = """
                     DELIMITER $$
@@ -634,10 +636,10 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                     DELIMITER ;""" % locals()
 
                 # Recursively create missing directories
-                if not os.path.exists("/tmp/sherlock_trigger"):
-                    os.makedirs("/tmp/sherlock_trigger")
+                if not os.path.exists("/tmp/sherlock_trigger/%(myPid)s" % locals()):
+                    os.makedirs("/tmp/sherlock_trigger/%(myPid)s" % locals())
 
-                pathToWriteFile = "/tmp/sherlock_trigger/%(crossmatchTable)s_trigger.sql" % locals(
+                pathToWriteFile = "/tmp/sherlock_trigger/%(myPid)s/%(crossmatchTable)s_trigger.sql" % locals(
                 )
                 try:
                     self.log.debug("attempting to open the file %s" %
@@ -653,7 +655,8 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
                 directory_script_runner(
                     log=self.log,
-                    pathToScriptDirectory="/tmp/sherlock_trigger",
+                    pathToScriptDirectory="/tmp/sherlock_trigger/%(myPid)s" % locals(
+                    ),
                     databaseName=self.settings[
                         "database settings"]["transients"]["db"],
                     loginPath=self.settings["database settings"][
@@ -668,7 +671,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         )
 
         mysqlData = dataSet.mysql(
-            tableName=crossmatchTable, filepath="/tmp/sherlock/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
+            tableName=crossmatchTable, filepath="/tmp/sherlock/%(myPid)s/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
 
         if self.fast:
             waitForResult = "delete"
@@ -677,7 +680,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
         directory_script_runner(
             log=self.log,
-            pathToScriptDirectory="/tmp/sherlock",
+            pathToScriptDirectory="/tmp/sherlock/%(myPid)s" % locals(),
             databaseName=self.settings[
                 "database settings"]["transients"]["db"],
             loginPath=self.settings["database settings"][
@@ -728,13 +731,13 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         )
 
         # Recursively create missing directories
-        if not os.path.exists("/tmp/sherlock/classifications"):
-            os.makedirs("/tmp/sherlock/classifications")
+        if not os.path.exists("/tmp/sherlock/%(myPid)s/classifications" % locals()):
+            os.makedirs("/tmp/sherlock/%(myPid)s/classifications" % locals())
 
         now = datetime.now()
         now = now.strftime("%Y%m%dt%H%M%S")
         mysqlData = dataSet.mysql(tableName="sherlock_classifications",
-                                  filepath="/tmp/sherlock/classifications/%(now)s.sql" % locals(), createStatement=createStatement)
+                                  filepath="/tmp/sherlock/%(myPid)s/classifications/%(now)s.sql" % locals(), createStatement=createStatement)
 
         if self.fast:
             waitForResult = "delete"
@@ -743,7 +746,8 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
         directory_script_runner(
             log=self.log,
-            pathToScriptDirectory="/tmp/sherlock/classifications",
+            pathToScriptDirectory="/tmp/sherlock/%(myPid)s/classifications" % locals(
+            ),
             databaseName=self.settings[
                 "database settings"]["transients"]["db"],
             loginPath=self.settings["database settings"][
@@ -1042,6 +1046,8 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         self.log.info(
             'starting the ``update_classification_annotations_and_summaries`` method')
 
+        myPid = self.myPid
+
         sqlQuery = u"""
             SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id
         """ % locals()
@@ -1207,8 +1213,8 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             updates.append(update)
 
         # Recursively create missing directories
-        if not os.path.exists("/tmp/sherlock/"):
-            os.makedirs("/tmp/sherlock/")
+        if not os.path.exists("/tmp/sherlock/%(myPid)s" % locals()):
+            os.makedirs("/tmp/sherlock/%(myPid)s" % locals())
 
         dataSet = list_of_dictionaries(
             log=self.log,
@@ -1216,11 +1222,11 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             reDatetime=re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
         )
         mysqlData = dataSet.mysql(
-            tableName="sherlock_classifications", filepath="/tmp/sherlock/annotation_updates.sql")
+            tableName="sherlock_classifications", filepath="/tmp/sherlock/%(myPid)s/annotation_updates.sql" % locals())
 
         directory_script_runner(
             log=self.log,
-            pathToScriptDirectory="/tmp/sherlock/",
+            pathToScriptDirectory="/tmp/sherlock/" + self.myPid,
             databaseName=self.settings[
                 "database settings"]["transients"]["db"],
             loginPath=self.settings["database settings"][
