@@ -664,6 +664,10 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                     waitForResult=False
                 )
 
+        # Recursively create missing directories
+        if not os.path.exists("/tmp/sherlock/%(myPid)s" % locals()):
+            os.makedirs("/tmp/sherlock/%(myPid)s" % locals())
+
         dataSet = list_of_dictionaries(
             log=self.log,
             listOfDictionaries=crossmatches,
