@@ -150,7 +150,7 @@ def main(arguments=None):
         else:
             updateNed = True
 
-        if skipAnnotation:
+        if skipAnnotationFlag:
             updateAnnotations = False
         else:
             updateAnnotations = True
