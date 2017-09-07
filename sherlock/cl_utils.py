@@ -15,8 +15,8 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 Usage:
     sherlock init
     sherlock info [-s <pathToSettingsFile>]
-    sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
-    sherlock [-vNA] match -- <ra> <dec> [<pathToSettingsFile>] 
+    sherlock [-NA] dbmatch [-f --update] [-s <pathToSettingsFile>]
+    sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
     sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
