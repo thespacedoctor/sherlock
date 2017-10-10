@@ -46,7 +46,7 @@ class transient_classifier():
         - ``fast`` -- run in fast mode. This mode may not catch errors in the ingest of data to the crossmatches table but runs twice as fast. Default *False*.
         - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
         - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
-
+        - ``updateAnnotations`` -- update peak magnitudes and human-readable annotation of objects (can take some time - best to run occationally)
 
     **Usage:**
 
@@ -120,7 +120,8 @@ class transient_classifier():
             verbose=0,
             fast=False,
             updateNed=True,
-            daemonMode=False
+            daemonMode=False,
+            updateAnnotations=True
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -135,6 +136,7 @@ class transient_classifier():
         self.updateNed = updateNed
         self.daemonMode = daemonMode
         self.myPid = str(os.getpid())
+        self.updateAnnotations = updateAnnotations
 
         # xt-self-arg-tmpx
 
@@ -301,8 +303,9 @@ class transient_classifier():
                 if self.ra:
                     return classifications, crossmatches
 
-                self.update_peak_magnitudes()
-                self.update_classification_annotations_and_summaries()
+                if self.updateAnnotations:
+                    self.update_peak_magnitudes()
+                    self.update_classification_annotations_and_summaries()
 
         self.log.info('completed the ``classify`` method')
         return None, None
