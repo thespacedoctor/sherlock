@@ -46,7 +46,7 @@ class transient_classifier():
         - ``fast`` -- run in fast mode. This mode may not catch errors in the ingest of data to the crossmatches table but runs twice as fast. Default *False*.
         - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
         - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
-        - ``updateAnnotations`` -- update peak magnitudes and human-readable annotation of objects (can take some time - best to run occationally)
+        - ``updateAnnotations`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
 
     **Usage:**
 
@@ -305,7 +305,8 @@ class transient_classifier():
 
                 if self.updateAnnotations:
                     self.update_peak_magnitudes()
-                    self.update_classification_annotations_and_summaries()
+                self.update_classification_annotations_and_summaries(
+                    self.updateAnnotations)
 
         self.log.info('completed the ``classify`` method')
         return None, None
@@ -1028,11 +1029,12 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
     # use the tab-trigger below for new method
     def update_classification_annotations_and_summaries(
-            self):
+            self,
+            updatePeakMagnitudes=True):
         """*update classification annotations and summaries*
 
         **Key Arguments:**
-            # -
+            - ``updatePeakMagnitudes`` -- update the peak magnitudes in the annotations to give absolute magnitudes. Default *True*
 
         **Return:**
             - None
@@ -1055,9 +1057,14 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
         myPid = self.myPid
 
-        sqlQuery = u"""
-            SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id
-        """ % locals()
+        if updatePeakMagnitudes:
+            sqlQuery = u"""
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id
+            """ % locals()
+        else:
+            sqlQuery = u"""
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and cl.annotation is null
+            """ % locals()
         rows = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
@@ -1129,12 +1136,12 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             elif row["classificationReliability"] in (2, 3):
                 classificationReliability = "possibly associated"
                 n = row["northSeparationArcsec"]
-                if n < 0:
+                if n > 0:
                     nd = "S"
                 else:
                     nd = "N"
                 e = row["eastSeparationArcsec"]
-                if e < 0:
+                if e > 0:
                     ed = "W"
                 else:
                     ed = "E"
@@ -1201,12 +1208,20 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             if distance:
                 distance = "%(distance)s" % locals()
 
-            if distance:
-                absMag = row["transientAbsMag"]
-                absMag = """ A host %(distance)s implies a transient <em>M =</em> %(absMag)s.""" % locals(
-                )
+            if updatePeakMagnitudes:
+                if distance:
+                    absMag = row["transientAbsMag"]
+                    absMag = """ A host %(distance)s implies a transient <em>M =</em> %(absMag)s.""" % locals(
+                    )
+                else:
+                    absMag = ""
             else:
-                absMag = ""
+                if distance:
+                    absMag = row["distance_modulus"]
+                    absMag = """ A host %(distance)s implies a <em>m - M =</em> %(absMag)s.""" % locals(
+                    )
+                else:
+                    absMag = ""
 
             annotation = "The transient is %(classificationReliability)s with <em>%(objectId)s</em>; %(best_mag_filter)s%(best_mag)smag %(objectType)s found in the %(catalogueString)s. It's located %(location)s.%(absMag)s" % locals()
             summary = '%(sep)0.1f" from %(objectType)s in %(catalogue)s' % locals(
