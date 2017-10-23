@@ -585,7 +585,7 @@ class transient_catalogue_crossmatch():
             mag = decimal.Decimal(row[magnitudeLimitFilter])
             if mag and mag < lowerMagnitudeLimit:
                 sep = decimal.Decimal(row["separationArcsec"])
-                if sep < decimal.Decimal(decimal.Decimal(10)**(-decimal.Decimal(0.2) * mag + decimal.Decimal(3.47712))):
+                if sep < decimal.Decimal(decimal.Decimal(10)**(-decimal.Decimal(0.2) * mag + decimal.Decimal(3.47712))) and sep < 20.:
                     brightStarMatches.append(row)
 
         self.log.info('completed the ``_bright_star_match`` method')
