@@ -1230,7 +1230,8 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             update = {
                 "transient_object_id": row["transient_object_id"],
                 "annotation": annotation,
-                "summary": summary
+                "summary": summary,
+                "separationArcsec": sep
             }
             updates.append(update)
 
