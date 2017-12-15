@@ -1,5 +1,5 @@
-sherlock.commonutils.getpackagepath module
-==========================================
+sherlock\.commonutils\.getpackagepath module
+============================================
 
 .. automodule:: sherlock.commonutils.getpackagepath
     :members:

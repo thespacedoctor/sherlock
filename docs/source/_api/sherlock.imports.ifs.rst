@@ -1,5 +1,5 @@
-sherlock.imports.ifs module
-===========================
+sherlock\.imports\.ifs module
+=============================
 
 .. automodule:: sherlock.imports.ifs
     :members:

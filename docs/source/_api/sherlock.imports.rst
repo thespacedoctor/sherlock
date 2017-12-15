@@ -1,5 +1,5 @@
-sherlock.imports package
-========================
+sherlock\.imports package
+=========================
 
 .. automodule:: sherlock.imports
     :members:

@@ -1,5 +1,5 @@
-sherlock.imports.marshall module
-================================
+sherlock\.imports\.marshall module
+==================================
 
 .. automodule:: sherlock.imports.marshall
     :members:

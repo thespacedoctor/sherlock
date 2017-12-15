@@ -1,5 +1,5 @@
-sherlock.database module
-========================
+sherlock\.database module
+=========================
 
 .. automodule:: sherlock.database
     :members:
