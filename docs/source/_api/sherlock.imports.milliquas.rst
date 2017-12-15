@@ -1,5 +1,5 @@
-sherlock.imports.milliquas module
-=================================
+sherlock\.imports\.milliquas module
+===================================
 
 .. automodule:: sherlock.imports.milliquas
     :members:

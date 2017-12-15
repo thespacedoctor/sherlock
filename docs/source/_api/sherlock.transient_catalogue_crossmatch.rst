@@ -1,5 +1,5 @@
-sherlock.transient_catalogue_crossmatch module
-==============================================
+sherlock\.transient\_catalogue\_crossmatch module
+=================================================
 
 .. automodule:: sherlock.transient_catalogue_crossmatch
     :members:

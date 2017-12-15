@@ -1,5 +1,5 @@
-sherlock.catalogue_conesearch module
-====================================
+sherlock\.catalogue\_conesearch module
+======================================
 
 .. automodule:: sherlock.catalogue_conesearch
     :members:

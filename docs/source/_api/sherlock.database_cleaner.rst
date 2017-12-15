@@ -1,5 +1,5 @@
-sherlock.database_cleaner module
-================================
+sherlock\.database\_cleaner module
+==================================
 
 .. automodule:: sherlock.database_cleaner
     :members:

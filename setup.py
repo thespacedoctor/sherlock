@@ -18,7 +18,8 @@ install_requires = [
     'sloancone',
     'numpy',
     'HMpTy',
-    'pymysql'
+    'pymysql',
+    'psutil'
 ]
 
 # READ THE DOCS SERVERS

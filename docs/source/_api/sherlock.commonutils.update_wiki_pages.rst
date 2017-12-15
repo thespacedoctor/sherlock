@@ -1,5 +1,5 @@
-sherlock.commonutils.update_wiki_pages module
-=============================================
+sherlock\.commonutils\.update\_wiki\_pages module
+=================================================
 
 .. automodule:: sherlock.commonutils.update_wiki_pages
     :members:

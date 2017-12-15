@@ -1,5 +1,5 @@
-sherlock.utKit module
-=====================
+sherlock\.utKit module
+======================
 
 .. automodule:: sherlock.utKit
     :members:

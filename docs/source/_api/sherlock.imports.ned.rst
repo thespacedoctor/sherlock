@@ -1,5 +1,5 @@
-sherlock.imports.ned module
-===========================
+sherlock\.imports\.ned module
+=============================
 
 .. automodule:: sherlock.imports.ned
     :members:

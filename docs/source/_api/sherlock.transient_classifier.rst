@@ -1,5 +1,5 @@
-sherlock.transient_classifier module
-====================================
+sherlock\.transient\_classifier module
+======================================
 
 .. automodule:: sherlock.transient_classifier
     :members:

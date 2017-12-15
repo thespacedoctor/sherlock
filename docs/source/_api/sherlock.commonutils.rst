@@ -1,5 +1,5 @@
-sherlock.commonutils package
-============================
+sherlock\.commonutils package
+=============================
 
 .. automodule:: sherlock.commonutils
     :members:
