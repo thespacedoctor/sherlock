@@ -109,7 +109,9 @@ class database():
                 db=dbName,
                 port=port,
                 use_unicode=True,
-                charset='utf8'
+                charset='utf8',
+                client_flag=ms.constants.CLIENT.MULTI_STATEMENT,
+                connect_timeout=3600
             )
             thisConn.autocommit(True)
             dbConns.append(thisConn)
