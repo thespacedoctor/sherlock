@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # sherlock documentation build configuration file, created by
-# sphinx-quickstart on Thu Dec 14 16:18:57 2017.
+# sphinx-quickstart on Wed Jan 10 19:49:07 2018.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -48,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'sherlock'
-copyright = u'2017, Author'
+copyright = u'2018, Author'
 author = u'Author'
 
 # The version info for the project you're documenting, acts as replacement for
