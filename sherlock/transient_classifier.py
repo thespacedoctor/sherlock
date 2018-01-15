@@ -593,7 +593,7 @@ class transient_classifier():
             sqlQuery += u"""
                     update %(transientTable)s set %(transientTableClassCol)s = "%(classification)s"
                         where %(transientTableIdCol)s  = "%(k)s";
-                """ % locals()
+            """ % locals()
 
         writequery(
             log=self.log,
