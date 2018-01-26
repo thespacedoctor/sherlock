@@ -567,6 +567,13 @@ class transient_classifier():
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
         )
+        sqlQuery = """delete from sherlock_classifications where transient_object_id in (%(transientIDs)s);""" % locals(
+        )
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+        )
 
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.transientsDbConn,
@@ -887,7 +894,7 @@ class transient_classifier():
         **Key Arguments:**
             - ``updatePeakMagnitudes`` -- update the peak magnitudes in the annotations to give absolute magnitudes. Default *True*
 
-        **Return:**
+            **Return:**
             - None
 
         **Usage:**
@@ -1256,7 +1263,8 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   PRIMARY KEY (`id`),
   KEY `key_transient_object_id` (`transient_object_id`),
   KEY `key_catalogue_object_id` (`catalogue_object_id`),
-  KEY `idx_separationArcsec` (`separationArcsec`)
+  KEY `idx_separationArcsec` (`separationArcsec`),
+  KEY `idx_rank` (`rank`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 
 
