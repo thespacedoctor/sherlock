@@ -646,7 +646,7 @@ class transient_classifier():
             if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
                     colMaps[xm["catalogue_view_name"]][
-                        "object_type_accuracy"] * 0.1
+                        "object_type_accuracy"] * 0.1 + xm["physical_separation_kpc"] / 10
             else:
                 rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] + 1. - \
                     colMaps[xm["catalogue_view_name"]][
