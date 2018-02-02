@@ -553,7 +553,7 @@ class transient_classifier():
 
         # COMBINE ALL CROSSMATCHES INTO A LIST OF DICTIONARIES TO DUMP INTO
         # DATABASE TABLE
-        transientIDs[:] = [str(c["transient_object_id"])
+        transientIDs[:] = [str(c)
                            for c in classifications.keys()]
         transientIDs = ",".join()
 
