@@ -553,8 +553,8 @@ class transient_classifier():
 
         # COMBINE ALL CROSSMATCHES INTO A LIST OF DICTIONARIES TO DUMP INTO
         # DATABASE TABLE
-        transientIDs[:] = [str(c)
-                           for c in classifications.keys()]
+        transientIDs = [str(c)
+                        for c in classifications.keys()]
         transientIDs = ",".join()
 
         # REMOVE PREVIOUS MATCHES
