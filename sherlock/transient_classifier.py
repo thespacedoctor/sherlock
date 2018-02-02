@@ -197,7 +197,8 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
-        self._create_tables_if_not_exist()
+        # 2018-02-01 KWS This statement still breaks when run on MySQL 5.5.
+        #self._create_tables_if_not_exist()
 
         while remaining:
 
@@ -601,6 +602,8 @@ class transient_classifier():
                     update %(transientTable)s set %(transientTableClassCol)s = "%(classification)s"
                         where %(transientTableIdCol)s  = "%(k)s";
             """ % locals()
+
+            print sqlQuery
 
         writequery(
             log=self.log,
