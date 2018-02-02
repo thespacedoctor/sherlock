@@ -553,10 +553,9 @@ class transient_classifier():
 
         # COMBINE ALL CROSSMATCHES INTO A LIST OF DICTIONARIES TO DUMP INTO
         # DATABASE TABLE
-        # transientIDs = []
-        # transientIDs[:] = [str(c["transient_object_id"])
-        #                    for c in crossmatches]
-        transientIDs = ",".join(classifications.keys())
+        transientIDs[:] = [str(c["transient_object_id"])
+                           for c in classifications.keys()]
+        transientIDs = ",".join()
 
         # REMOVE PREVIOUS MATCHES
         crossmatchTable = "sherlock_crossmatches"
