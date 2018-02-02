@@ -555,7 +555,7 @@ class transient_classifier():
         # DATABASE TABLE
         transientIDs = [str(c)
                         for c in classifications.keys()]
-        transientIDs = ",".join()
+        transientIDs = ",".join(transientIDs)
 
         # REMOVE PREVIOUS MATCHES
         crossmatchTable = "sherlock_crossmatches"
