@@ -197,8 +197,7 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
-        # 2018-02-01 KWS This statement still breaks when run on MySQL 5.5.
-        #self._create_tables_if_not_exist()
+        self._create_tables_if_not_exist()
 
         while remaining:
 
@@ -554,10 +553,10 @@ class transient_classifier():
 
         # COMBINE ALL CROSSMATCHES INTO A LIST OF DICTIONARIES TO DUMP INTO
         # DATABASE TABLE
-        transientIDs = []
-        transientIDs[:] = [str(c["transient_object_id"])
-                           for c in crossmatches]
-        transientIDs = ",".join(transientIDs)
+        # transientIDs = []
+        # transientIDs[:] = [str(c["transient_object_id"])
+        #                    for c in crossmatches]
+        transientIDs = ",".join(classifications.keys())
 
         # REMOVE PREVIOUS MATCHES
         crossmatchTable = "sherlock_crossmatches"
@@ -1310,11 +1309,15 @@ DELIMITER ;""" % locals()
 
             createStatement.append(trigger)
 
-        writequery(
-            log=self.log,
-            sqlQuery=createStatement,
-            dbConn=self.transientsDbConn
-        )
+        try:
+            writequery(
+                log=self.log,
+                sqlQuery=createStatement,
+                dbConn=self.transientsDbConn
+            )
+        except:
+            self.log.info(
+                "Could not create table/trigger (`%(crossmatchTable)s`). Probably already exist." % locals())
 
         self.log.info('completed the ``_create_tables_if_not_exist`` method')
         return None
