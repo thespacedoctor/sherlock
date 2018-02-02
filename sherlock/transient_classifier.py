@@ -601,8 +601,6 @@ class transient_classifier():
                         where %(transientTableIdCol)s  = "%(k)s";
             """ % locals()
 
-            print sqlQuery
-
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
