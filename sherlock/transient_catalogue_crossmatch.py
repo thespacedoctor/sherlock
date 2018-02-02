@@ -729,7 +729,7 @@ class transient_catalogue_crossmatch():
                         continue
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 elif row["direct_distance_scale"] and physical_separation_kpc < physicalRadius:
-                    if row["separationArcsec"] > 300.
+                    if row["separationArcsec"] > 300.:
                         continue
                     thisMatch = True
                     newsearch_name = newsearch_name + " (direct distance)"
