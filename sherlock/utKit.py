@@ -10,6 +10,16 @@ class utKit(utKit):
 
     """
     *Override dryx utKit*
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # Variable Data Atrributes
 

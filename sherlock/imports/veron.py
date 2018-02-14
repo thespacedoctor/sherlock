@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import veron catalogue into sherlock's crossmatch catalogues database*
+*import veron catalogue into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -57,6 +57,16 @@ class veron(_base_importer):
         :width: 800px
         :alt: Veron column selection in Vizier
 
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
+
     """
     # INITIALISATION
 
@@ -100,7 +110,7 @@ class veron(_base_importer):
     ) ENGINE=MyISAM AUTO_INCREMENT=168945 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 """ % locals()
 
-        self._add_data_to_database_table(
+        self.add_data_to_database_table(
             dictList=dictList,
             createStatement=createStatement
         )
@@ -114,6 +124,16 @@ class veron(_base_importer):
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_veron`` method')

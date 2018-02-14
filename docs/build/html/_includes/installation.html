@@ -10,12 +10,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; sherlock 1.2.5 documentation</title>
+  <title>Installation &mdash; sherlock v1.3.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
   
 
   
@@ -41,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 1.2.5 documentation" href="../index.html"/> 
+    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -50,6 +52,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -72,7 +75,7 @@
             
             
               <div class="version">
-                v1.2.5
+                v1.3.3
               </div>
             
           
@@ -93,7 +96,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Getting Started</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command-Line Usage</a></li>
@@ -103,7 +109,6 @@
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
 </ul>
@@ -118,8 +123,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">sherlock</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
       </nav>
 
 
@@ -128,23 +135,40 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
-    <li>Installation</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/_includes/installation.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/_includes/installation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -152,32 +176,33 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">  ∞</a></h1>
-<p>The easiest way to install sherlock is to use <code class="docutils literal"><span class="pre">pip</span></code>:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span>
+<p>Although you can get Sherlock from a simple <code class="docutils literal"><span class="pre">pip</span></code> install, it’s best to install it within a Conda environment under Anaconda. If you’re not familiar with Anaconda, you’ll find a <a class="reference external" href="http://psweb.mp.qub.ac.uk/dry//blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html">good tutorial here</a> to get you up and running.</p>
+<p>Once you have Anaconda installed, go ahead and create a new Conda environment to host Sherlock:</p>
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">sherlock</span> <span class="n">python</span><span class="o">=</span><span class="mf">2.7</span> <span class="n">pip</span>
 </pre></div>
 </div>
-<p>Or you can clone the <a class="reference external" href="https://github.com/thespacedoctor/sherlock">github repo</a> and install from a local version of the code:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">thespacedoctor</span><span class="o">/</span><span class="n">sherlock</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">sherlock</span>
-<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<p>Now activate the environment and install sherlock:</p>
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">activate</span> <span class="n">sherlock</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span>
 </pre></div>
 </div>
-<p>To upgrade to the latest version of sherlock use the command:</p>
+<p>At any point in the future you can upgrade to the latest version of sherlock with the command:</p>
 <div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qub</span><span class="o">-</span><span class="n">sherlock</span> <span class="o">--</span><span class="n">upgrade</span>
 </pre></div>
 </div>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>make a note about how to setup mysql login paths and have them associated with the database setting in the sherlock settings file</li>
-</ul>
-</div>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">mysql_config_editor</span> <span class="nb">set</span> <span class="o">--</span><span class="n">login</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">xxx</span> <span class="o">--</span><span class="n">host</span><span class="o">=</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">--</span><span class="n">user</span><span class="o">=</span><span class="n">myuser</span> <span class="o">--</span><span class="n">password</span> <span class="o">--</span><span class="n">port</span><span class="o">=</span><span class="n">xxx</span>
+<p>If instead you want to clone the <a class="reference external" href="https://github.com/thespacedoctor/sherlock">github repo</a> and install from a local version of the code:</p>
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">thespacedoctor</span><span class="o">/</span><span class="n">sherlock</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">sherlock</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">sherlock</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </div>
 
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
@@ -187,7 +212,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Dave Young.
+        &copy; Copyright 2018, Dave Young.
 
     </p>
   </div>
@@ -209,16 +234,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.2.5',
+            VERSION:'v1.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

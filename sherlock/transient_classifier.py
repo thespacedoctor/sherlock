@@ -113,6 +113,15 @@ class transient_classifier():
 
         By setting ``update=True`` the classifier will update the ``sherlockClassification`` column of the ``transient table`` with new classification and populate the ``sherlock_crossmatches`` table with key details of the crossmatched sources from the catalogues database. By setting ``update=False`` results are printed to stdout but the database is not updated (useful for dry runs and testing new algorithms),
 
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -181,6 +190,16 @@ class transient_classifier():
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
 
         See class docstring for usage.
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
 
         global theseBatches
@@ -331,6 +350,16 @@ class transient_classifier():
 
          **Return:**
             - ``transientsMetadataList``
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.debug(
             'starting the ``_get_transient_metadata_from_database_list`` method')
@@ -363,6 +392,16 @@ class transient_classifier():
 
         **Key Arguments:**
             - ``transientsMetadataList`` -- the list of transient metadata lifted from the database.
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_update_ned_stream`` method')
 
@@ -418,6 +457,16 @@ class transient_classifier():
 
         **Return:**
             - ``updatedCoordinateList`` -- coordinate list with previous queries removed
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_remove_previous_ned_queries`` method')
 
@@ -491,6 +540,16 @@ class transient_classifier():
 
         **Return:**
             - ``crossmatches`` -- a list of dictionaries of the associated sources crossmatched from the catalogues database
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
 
         global theseBatches
@@ -536,6 +595,16 @@ class transient_classifier():
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
             - ``transientsMetadataList`` -- the list of transient metadata lifted from the database.
             - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
 
         self.log.debug('starting the ``_update_transient_database`` method')
@@ -635,6 +704,16 @@ class transient_classifier():
         **Return:**
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches
             - ``crossmatches`` -- the crossmatches annotated with rankings and rank-scores
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_rank_classifications`` method')
 
@@ -684,6 +763,16 @@ class transient_classifier():
         **Key Arguments:**
             - ``crossmatches`` -- the unranked crossmatch classifications
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_print_results_to_stdout`` method')
 
@@ -802,6 +891,16 @@ class transient_classifier():
 
                 usage code
 
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
+
         """
         self.log.info('starting the ``_consolidate_coordinateList`` method')
 
@@ -858,6 +957,16 @@ class transient_classifier():
 
                 usage code
 
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
+
         """
         self.log.info('starting the ``classification_annotations`` method')
 
@@ -907,6 +1016,17 @@ class transient_classifier():
             .. code-block:: python
 
                 usage code
+
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
 
         """
         self.log.info(
@@ -1137,6 +1257,17 @@ class transient_classifier():
 
                 usage code 
 
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
+
         """
         self.log.info('starting the ``update_peak_magnitudes`` method')
 
@@ -1184,6 +1315,16 @@ class transient_classifier():
             .. code-block:: python 
 
                 usage code 
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
 
         """
         self.log.info('starting the ``_create_tables_if_not_exist`` method')

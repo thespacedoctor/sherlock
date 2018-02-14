@@ -9,7 +9,7 @@ sherlock
     :target: https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html
     :alt: Coverage Status
 
-*A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data*.
+*A python package and command-line tools to contextually classify variable/transient astronomical sources. Sherlock mines a library of historical and on-going survey data in an attempt to identify the source of a transient/variable event, and predict the classification of the event based on the associated crossmatched data*.
 
 
 
@@ -35,7 +35,7 @@ Command-Line Usage
     Usage:
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
-        sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
+        sherlock [-NA] dbmatch [-f --update] [-s <pathToSettingsFile>]
         sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
@@ -51,25 +51,18 @@ Command-Line Usage
         wiki                    XXXX
         import                  XXXX
         ned                     use the online NED database as the source catalogue
-        cat                     import a static catalogue into the crossmatch catalogues database
-        stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
+        cat                     import a static catalogue into the sherlock-catalogues database
+        stream                  download/stream new data from a give source catalogue into the sherlock sherlock-catalogues database
         info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching
     
         ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-        cat_name                name of the catalogue being imported. The following catalogues can be imported:
-                                    * ``veron``: Veron AGN/QSO catalogue
-                                        http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258
-                                    * ``milliquas``: Million Quasars Catalog
-                                        http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html
-                                    * ``ned_d``: NED's Master List of Redshift-Independent Extragalactic Distances
-                                        https://ned.ipac.caltech.edu/Library/Distances/
-        stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:
-                                    * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
-                                        http://www.das.uchile.cl/~lgalbany/LG/research.html
+        cat_name                name of the catalogue being imported (veron|milliquas|ned_d)                          
+        stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
     
         -N, --skipNedUpdate     do not update the NED database before classification
+        -A, --skipAnnotation    do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
         -f, --fast              faster but errors in crossmatch table ingest my be misses
         -h, --help              show this help message
         -s, --settings          the settings file
@@ -81,33 +74,39 @@ Command-Line Usage
 Installation
 ============
 
-The easiest way to install sherlock is to use ``pip``:
+Although you can get Sherlock from a simple ``pip`` install, it's best to install it within a Conda environment under Anaconda. If you're not familiar with Anaconda, you'll find a `good tutorial here <http://psweb.mp.qub.ac.uk/dry//blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html>`_ to get you up and running. 
+
+Once you have Anaconda installed, go ahead and create a new Conda environment to host Sherlock:
 
 .. code:: bash
 
+    conda create -n sherlock python=2.7 pip
+
+Now activate the environment and install sherlock:
+
+.. code:: bash
+
+    source activate sherlock
     pip install qub-sherlock
 
-Or you can clone the `github repo <https://github.com/thespacedoctor/sherlock>`__ and install from a local version of the code:
+At any point in the future you can upgrade to the latest version of sherlock with the command:
+
+.. code:: bash
+
+    pip install qub-sherlock --upgrade
+    
+If instead you want to clone the `github repo <https://github.com/thespacedoctor/sherlock>`__ and install from a local version of the code:
 
 .. code:: bash
 
     git clone git@github.com:thespacedoctor/sherlock.git
     cd sherlock
+    source activate sherlock
     python setup.py install
 
-To upgrade to the latest version of sherlock use the command:
 
-.. code:: bash
 
-    pip install qub-sherlock --upgrade
 
-.. todo::
-
-    - make a note about how to setup mysql login paths and have them associated with the database setting in the sherlock settings file
-
-.. code:: bash
-
-    mysql_config_editor set --login-path=xxx --host=127.0.0.1 --user=myuser --password --port=xxx
 
 
 Documentation
@@ -332,10 +331,10 @@ The settings in the settings file relating to the NED stream are:
 
 .. code-block:: yaml
 
-ned stream search radius arcec: 300
-first pass ned search radius arcec: 240
-ned stream refresh rate in days: 90
-```
+    ned stream search radius arcec: 300
+    first pass ned search radius arcec: 240
+    ned stream refresh rate in days: 90
+
 
 To update the NED stream, for each transient coordinates the code does a conesearch on the `tcs_helper_ned_query_history` table to see if a search has already been performed within the designated `ned stream refresh rate in days`. If a match isn't found then NED is queried and the `tcs_helper_ned_query_history` is updated for the transient coordinates.
 
@@ -419,7 +418,7 @@ they are all given the same top level ranking for classification. After this cat
 
 Once the classifications for each individual transient are ranked, a final, ordered classification listing is given to the transient within its original database table. For example `SN/VARIABLE STAR` means the the transient is most likely a SN but may also be a variable star.
 
-A transient is matched against a source in the crossmatch catalogues because it is either synonymous with a point-like catalogue source (e.g. a variable star or an AGN) or it is hosted by the catalogue source (e.g. supernova, nuclear transient).
+A transient is matched against a source in the sherlock-catalogues because it is either synonymous with a point-like catalogue source (e.g. a variable star or an AGN) or it is hosted by the catalogue source (e.g. supernova, nuclear transient).
 
 A synonymous crossmatch is always a simple angular crossmatch with a search radius that reflects the astrometric accuracy of the RMS combined astrometric errors of the transient source location and that of the catalogue being matched against.  
 
@@ -430,7 +429,7 @@ Sherlock's Catalogue Database
 Database Table Naming Scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There's a [strict table naming syntax for the crossmatch-catalogues](Crossmatch-Catalogues Database Scheme) database to help deal with catalogue versioning (as updated versions of out crossmatch catalogues are released) and to help ease the burden of modifying crossmatch algorithms employed.
+There's a [strict table naming syntax for the crossmatch-catalogues](Crossmatch-Catalogues Database Scheme) database to help deal with catalogue versioning (as updated versions of out sherlock-catalogues are released) and to help ease the burden of modifying crossmatch algorithms employed.
 
 [See here for an up-to-date list of the crossmatch-catalogues](Crossmatch Catalogue Tables) and the [views](Crossmatch Catalogue Views) found on those tables.
 
@@ -494,27 +493,27 @@ Updating Catalogues and Adding New Catalogues to the Database
       
 Using the `sherlock-import` command it's possible to **import and update various catalogues and data-streams** including Milliquas, Veron AGN and the NED-D catalogues. [See here for details](Catalogue Importers). 
 
-```bash
-sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
-sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
-```
+.. code-block:: bash
+
+    sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+    sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
 
 The command to **import new versions of catalogues** and **data streams** into the `crossmatch_catalogues` database is:
 
-```python    
-Usage:
-    sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
-    sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
-```
+.. code-block:: python 
+    
+    Usage:
+        sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+        sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
 
 For example:
 
-```bash
-> sherlock-importers cat milliquas ~/Desktop/milliquas.txt 4.5
-1153111 / 1153111 milliquas data added to memory
-1153111 / 1153111 rows inserted into tcs_cat_milliquas_v4_5
-5694 / 5694 htmIds added to tcs_cat_milliquas_v4_5
-```
+.. code-block:: bash
+
+    > sherlock-importers cat milliquas ~/Desktop/milliquas.txt 4.5
+    1153111 / 1153111 milliquas data added to memory
+    1153111 / 1153111 rows inserted into tcs_cat_milliquas_v4_5
+    5694 / 5694 htmIds added to tcs_cat_milliquas_v4_5
 
 The command currently supports imports for the following **catalogues**:
 
@@ -524,13 +523,13 @@ The command currently supports imports for the following **catalogues**:
 
 Using the command:
 
-```bash
-sherlock-importers stream pessto
-```
+.. code-block:: bash
+
+    sherlock-importers stream pessto
 
 will import all of the various **data-streams** added to the PESSTO marshall (ASASSN, CRTS, LSQ, PSST ...).
 
 
-THE COLUMN MAP LIFTED FROM ``tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')
+THE COLUMN MAP LIFTED FROM `tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')
 
 

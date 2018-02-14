@@ -34,7 +34,7 @@ class Mock(MagicMock):
         return Mock()
 
 MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.colors',
-                'matplotlib.pyplot', 'matplotlib.cm', 'matplotlib.path', 'matplotlib.patches', 'matplotlib.projections', 'matplotlib.projections.geo', 'healpy', 'astropy', 'astropy.io', 'pylibmc', 'HMpTy', 'HMpTy.mysql', 'HMpTy.htm', 'ligo', 'ligo.gracedb', 'ligo.gracedb.rest']
+                'matplotlib.pyplot', 'matplotlib.cm', 'matplotlib.path', 'matplotlib.patches', 'matplotlib.projections', 'matplotlib.projections.geo', 'healpy', 'astropy', 'astropy.io', 'pylibmc', 'HMpTy', 'HMpTy.mysql', 'HMpTy.htm', 'ligo', 'ligo.gracedb', 'ligo.gracedb.rest', 'pandas']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
@@ -117,7 +117,7 @@ default_role = 'py:obj'
 pygments_style = 'monokai'
 
 # A list of ignored prefixes for module index sorting.
-# modindex_common_prefix = []
+modindex_common_prefix = ["sherlock."]
 
 
 # -- Options for HTML output ---------------------------------------------
@@ -171,7 +171,7 @@ html_static_path = ['_static']
 # html_additional_pages = {}
 
 # If false, no module index is generated.
-# html_domain_indices = True
+html_domain_indices = True
 
 # If false, no index is generated.
 # html_use_index = True
@@ -364,26 +364,35 @@ def generateAutosummaryIndex():
                 if name in ["numpy"]:
                     continue
                 thisMod = sp + "." + name
-                if thisMod not in allSubpackages and len(name) and name[0] != "_" and name[-5:] != "tests":
+                if thisMod not in allSubpackages and len(name) and name[0:2] != "__" and name[-5:] != "tests" and name != "cl_utils" and name != "utKit":
                     allModules.append(sp + "." + name)
 
     for spm in allSubpackages + allModules:
         for name, obj in inspect.getmembers(__import__(spm, fromlist=[''])):
             if inspect.isclass(obj):
                 thisClass = spm + "." + name
-                if (thisClass == obj.__module__ or spm == obj.__module__) and len(name) and name[0] != "_":
+                if (thisClass == obj.__module__ or spm == obj.__module__) and len(name) and name[0:2] != "__":
                     allClasses.append(thisClass)
             if inspect.isfunction(obj):
                 thisFunction = spm + "." + name
-                if (spm == obj.__module__ or obj.__module__ == thisFunction) and len(name) and name != "main" and name[0] != "_":
+                if (spm == obj.__module__ or obj.__module__ == thisFunction) and len(name) and name != "main" and name[0:2] != "__":
                     allFunctions.append(thisFunction)
 
+    allSubpackages = allSubpackages[1:]
+    allSubpackages.sort(reverse=False)
+    allModules.sort()
+    allClasses.sort()
+    allFunctions.sort()
     allSubpackages = ("\n   ").join(allSubpackages)
     allModules = ("\n   ").join(allModules)
     allClasses = ("\n   ").join(allClasses)
     allFunctions = ("\n   ").join(allFunctions)
 
-    thisText = u"""
+    # FOR SUBPACKAGES USE THE SUBPACKAGE TEMPLATE INSTEAD OF DEFAULT MODULE
+    # TEMPLATE
+    thisText = u""
+    if len(allSubpackages):
+        thisText += """
 Subpackages
 -----------
 
@@ -394,8 +403,12 @@ Subpackages
 
    %(allSubpackages)s 
 
+""" % locals()
+
+    if len(allModules):
+        thisText += """
 Modules
------------
+-------
 
 .. autosummary::
    :toctree: _autosummary
@@ -403,8 +416,12 @@ Modules
 
    %(allModules)s 
 
+""" % locals()
+
+    if len(allClasses):
+        thisText += """
 Classes
------------
+-------
 
 .. autosummary::
    :toctree: _autosummary
@@ -412,14 +429,19 @@ Classes
 
    %(allClasses)s 
 
+""" % locals()
+
+    if len(allFunctions):
+        thisText += """
 Functions
------------
+---------
 
 .. autosummary::
    :toctree: _autosummary
    :nosignatures:
 
    %(allFunctions)s 
+
 """ % locals()
 
     import codecs

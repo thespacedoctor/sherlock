@@ -10,12 +10,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock &mdash; sherlock 1.2.5 documentation</title>
+  <title>sherlock &mdash; sherlock v1.3.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
   
 
   
@@ -41,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 1.2.5 documentation" href="../index.html"/> 
+    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -50,6 +52,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -72,7 +75,7 @@
             
             
               <div class="version">
-                v1.2.5
+                v1.3.3
               </div>
             
           
@@ -93,7 +96,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Getting Started</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command-Line Usage</a></li>
@@ -103,7 +109,6 @@
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
 </ul>
@@ -118,8 +123,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">sherlock</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
       </nav>
 
 
@@ -128,23 +135,40 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
-    <li>sherlock</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>sherlock</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/_includes/description.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/_includes/description.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -154,8 +178,8 @@
 <h1>sherlock<a class="headerlink" href="#sherlock" title="Permalink to this headline">  ∞</a></h1>
 <a class="reference external image-reference" href="http://qub-sherlock.readthedocs.io/en/latest/?badge"><img alt="Documentation Status" src="https://readthedocs.org/projects/qub-sherlock/badge/" /></a>
 <a class="reference external image-reference" href="https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html"><img alt="Coverage Status" src="https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg" /></a>
-<p><em>A python package and command-line tools to contextually classify astronomical transient sources. Sherlock mines a library of historical and on-going survey data to attempt to identify the source of a transient event, and predict the classification of the event based on the associated crossmatched data</em>.</p>
-<p>Here&#8217;s a summary of what&#8217;s included in the python package:</p>
+<p><em>A python package and command-line tools to contextually classify variable/transient astronomical sources. Sherlock mines a library of historical and on-going survey data in an attempt to identify the source of a transient/variable event, and predict the classification of the event based on the associated crossmatched data</em>.</p>
+<p>Here’s a summary of what’s included in the python package:</p>
 <p><strong>Classes</strong></p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -166,38 +190,41 @@
 <tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.catalogue_conesearch.html#sherlock.catalogue_conesearch" title="sherlock.catalogue_conesearch"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.catalogue_conesearch</span></code></a></td>
 <td><em>The worker class for the conesearch module</em></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.database.html#sherlock.database" title="sherlock.database"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.database</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages" title="sherlock.commonutils.update_wiki_pages"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.commonutils.update_wiki_pages</span></code></a></td>
+<td><em>Update sherlock’s github wiki pages with some useful info regarding the crossmatch database catalogue tables</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.database.html#sherlock.database" title="sherlock.database"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.database</span></code></a></td>
 <td><em>the database object for sherlock, setting up ssh tunnels and various database connections</em></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.database_cleaner.html#sherlock.database_cleaner" title="sherlock.database_cleaner"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.database_cleaner</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.database_cleaner.html#sherlock.database_cleaner" title="sherlock.database_cleaner"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.database_cleaner</span></code></a></td>
 <td><em>Clean and maintain the database helper tables used by sherlock</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.imports._base_importer.html#sherlock.imports._base_importer" title="sherlock.imports._base_importer"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports._base_importer</span></code></a></td>
+<td><em>The base importer object used to import new catalgues into sherlock-catalogues database</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.imports.ifs.html#sherlock.imports.ifs" title="sherlock.imports.ifs"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ifs</span></code></a></td>
+<td><em>importer object for the Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue stream</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.imports.marshall.html#sherlock.imports.marshall" title="sherlock.imports.marshall"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.marshall</span></code></a></td>
+<td><em>importer object for the Marshall transient streams (includes multiple on-going transient survey streams)</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.imports.milliquas.html#sherlock.imports.milliquas" title="sherlock.imports.milliquas"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.milliquas</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">Milliquas (Million Quasars Catalog)</a> <em>catagloue</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.imports.ned.html#sherlock.imports.ned" title="sherlock.imports.ned"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ned</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/">NED</a> <em>galaxy stream</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.imports.ned_d.html#sherlock.imports.ned_d" title="sherlock.imports.ned_d"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ned_d</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.imports.veron.html#sherlock.imports.veron" title="sherlock.imports.veron"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.veron</span></code></a></td>
+<td><em>importer object for the</em> <a class="reference external" href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258">VERON AGN catalogue</a></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.transient_catalogue_crossmatch.html#sherlock.transient_catalogue_crossmatch" title="sherlock.transient_catalogue_crossmatch"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.transient_catalogue_crossmatch</span></code></a></td>
 <td><em>crossmatch a list of transients against a suite of catalogues according to given search algorithm</em></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.transient_classifier.html#sherlock.transient_classifier" title="sherlock.transient_classifier"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.transient_classifier</span></code></a></td>
 <td><em>The Sherlock Transient Classifier</em></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages" title="sherlock.commonutils.update_wiki_pages"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.commonutils.update_wiki_pages</span></code></a></td>
-<td>Update sherlock&#8217;s github wiki pages with some useful info regarding the crossmatch database catalogue tables</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.imports.ifs.html#sherlock.imports.ifs" title="sherlock.imports.ifs"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ifs</span></code></a></td>
-<td><em>importer object for the Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue stream</em></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.imports.marshall.html#sherlock.imports.marshall" title="sherlock.imports.marshall"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.marshall</span></code></a></td>
-<td><em>importer object for the Marshall transient streams (includes multiple on-going transient survey streams)</em></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.imports.milliquas.html#sherlock.imports.milliquas" title="sherlock.imports.milliquas"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.milliquas</span></code></a></td>
-<td><em>importer object for the</em> <a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">Milliquas (Million Quasars Catalog)</a> <em>catagloue</em></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.imports.ned.html#sherlock.imports.ned" title="sherlock.imports.ned"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ned</span></code></a></td>
-<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/">NED</a> <em>galaxy stream</em></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.imports.ned_d.html#sherlock.imports.ned_d" title="sherlock.imports.ned_d"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.ned_d</span></code></a></td>
-<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../_autosummary/sherlock.imports.veron.html#sherlock.imports.veron" title="sherlock.imports.veron"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.imports.veron</span></code></a></td>
-<td><em>importer object for the</em> <a class="reference external" href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258">VERON AGN catalogue</a></td>
 </tr>
 </tbody>
 </table>
@@ -209,13 +236,16 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="../_autosummary/sherlock.commonutils.get_crossmatch_catalogues_column_map.html#sherlock.commonutils.get_crossmatch_catalogues_column_map" title="sherlock.commonutils.get_crossmatch_catalogues_column_map"><code class="xref py py-obj docutils literal"><span class="pre">sherlock.commonutils.get_crossmatch_catalogues_column_map</span></code></a></td>
-<td><em>query the crossmatch catalogues helper tables to generate a map of the important columns of each catalogue</em></td>
+<td><em>Query the sherlock-catalogues helper tables to generate a map of the important columns of each catalogue</em></td>
 </tr>
 </tbody>
 </table>
 </div>
 
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
@@ -225,7 +255,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Dave Young.
+        &copy; Copyright 2018, Dave Young.
 
     </p>
   </div>
@@ -247,16 +277,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.2.5',
+            VERSION:'v1.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

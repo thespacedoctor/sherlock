@@ -22,7 +22,6 @@ from fundamentals.mysql import readquery, writequery
 
 
 class database_cleaner():
-
     """*Clean and maintain the database helper tables used by sherlock*
 
     The helper tables list row counts for tables and views and provide the column maps that help sherlock know which catalogue columns relate to which parameters (e.g. RA, DEC etc)
@@ -46,6 +45,16 @@ class database_cleaner():
                 settings=settings
             )
             db.clean()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # Initialisation
 
@@ -75,7 +84,17 @@ class database_cleaner():
         return None
 
     def clean(self):
-        """*clean up and run some maintance tasks on the crossmatch catalogue helper tables
+        """*clean up and run some maintance tasks on the crossmatch catalogue helper tables*
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``get`` method')
 
@@ -90,6 +109,16 @@ class database_cleaner():
     def _updated_row_counts_in_tcs_helper_catalogue_tables_info(
             self):
         """ updated row counts in tcs catalogue tables
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
@@ -147,6 +176,16 @@ class database_cleaner():
     def _update_tcs_helper_catalogue_tables_info_with_new_tables(
             self):
         """update tcs helper catalogue tables info with new tables
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_update_tcs_helper_catalogue_tables_info_with_new_tables`` method')
@@ -215,6 +254,16 @@ class database_cleaner():
     def _clean_up_columns(
             self):
         """clean up columns
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_clean_up_columns`` method')
 
@@ -289,6 +338,16 @@ class database_cleaner():
     def _update_tcs_helper_catalogue_views_info_with_new_views(
             self):
         """ update tcs helper catalogue tables info with new tables
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_update_tcs_helper_catalogue_views_info_with_new_views`` method')

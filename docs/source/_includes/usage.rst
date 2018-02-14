@@ -18,7 +18,7 @@ Command-Line Usage
     Usage:
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
-        sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
+        sherlock [-NA] dbmatch [-f --update] [-s <pathToSettingsFile>]
         sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
@@ -34,25 +34,18 @@ Command-Line Usage
         wiki                    XXXX
         import                  XXXX
         ned                     use the online NED database as the source catalogue
-        cat                     import a static catalogue into the crossmatch catalogues database
-        stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
+        cat                     import a static catalogue into the sherlock-catalogues database
+        stream                  download/stream new data from a give source catalogue into the sherlock sherlock-catalogues database
         info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching
     
         ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-        cat_name                name of the catalogue being imported. The following catalogues can be imported:
-                                    * ``veron``: Veron AGN/QSO catalogue
-                                        http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258
-                                    * ``milliquas``: Million Quasars Catalog
-                                        http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html
-                                    * ``ned_d``: NED's Master List of Redshift-Independent Extragalactic Distances
-                                        https://ned.ipac.caltech.edu/Library/Distances/
-        stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:
-                                    * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
-                                        http://www.das.uchile.cl/~lgalbany/LG/research.html
+        cat_name                name of the catalogue being imported (veron|milliquas|ned_d)                          
+        stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
     
         -N, --skipNedUpdate     do not update the NED database before classification
+        -A, --skipAnnotation    do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
         -f, --fast              faster but errors in crossmatch table ingest my be misses
         -h, --help              show this help message
         -s, --settings          the settings file

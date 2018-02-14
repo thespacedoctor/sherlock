@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy stream into sherlock's crossmatch catalogues database*
+*import Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy stream into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -47,6 +47,16 @@ class ifs(_base_importer):
             settings=settings
         )
         stream.ingest()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -54,6 +64,16 @@ class ifs(_base_importer):
         """ingest the IFS catalogue into the catalogues database
 
         The method first generates a list of python dictionaries from the IFS datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``get`` method')
 
@@ -87,7 +107,7 @@ class ifs(_base_importer):
     ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 """ % locals()
 
-        self._add_data_to_database_table(
+        self.add_data_to_database_table(
             dictList=dictList,
             createStatement=createStatement
         )
@@ -95,12 +115,24 @@ class ifs(_base_importer):
         self.log.info('completed the ``get`` method')
         return None
 
+    thingy = 23
+
     def _create_dictionary_of_IFS(
             self):
         """create a list of dictionaries containing all the rows in the IFS stream
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the IFS stream
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_IFS`` method')

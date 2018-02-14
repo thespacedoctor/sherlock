@@ -53,6 +53,16 @@ class transient_catalogue_crossmatch():
         .. code-block:: python 
 
             classifications = xmatcher.match()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # Initialisation
 
@@ -76,12 +86,22 @@ class transient_catalogue_crossmatch():
 
     def match(self):
         """
-        *match the transients against the crossmatch catalogues according to the search algorithm and return matches alongside the predicted classification(s)*
+        *match the transients against the sherlock-catalogues according to the search algorithm and return matches alongside the predicted classification(s)*
 
         **Return:**
             - ``classification`` -- the crossmatch results and classifications assigned to the transients
 
         See the class docstring for usage.
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``match`` method')
 
@@ -305,6 +325,15 @@ class transient_catalogue_crossmatch():
                     search_name=search_name
                 )
 
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``angular_crossmatch_against_catalogue`` method')
@@ -474,6 +503,16 @@ class transient_catalogue_crossmatch():
 
         **Return:**
             - ``crossmatchDict`` -- the annotated crossmatch dictionary
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_annotate_crossmatch_with_value_added_parameters`` method')
@@ -573,6 +612,16 @@ class transient_catalogue_crossmatch():
 
         **Return:**
             - ``brightStarMatches`` -- the trimmed matched sources (bright stars associations only)
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_bright_star_match`` method')
 
@@ -609,6 +658,16 @@ class transient_catalogue_crossmatch():
 
         **Return:**
             - ``galaxyMatches`` -- the trimmed matched sources (associated galaxies only)
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_galaxy_association_cuts`` method')
 
@@ -665,6 +724,16 @@ class transient_catalogue_crossmatch():
                     searchPara=searchPara,
                     search_name=search_name
                 )
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.debug(
             'starting the ``physical_separation_crossmatch_against_catalogue`` method')

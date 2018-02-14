@@ -10,12 +10,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.cl_utils &mdash; sherlock 1.2.5 documentation</title>
+  <title>sherlock.cl_utils &mdash; sherlock v1.3.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
   
 
   
@@ -41,7 +43,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="sherlock 1.2.5 documentation" href="../../index.html"/>
+    <link rel="top" title="sherlock v1.3.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -51,6 +53,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -73,7 +76,7 @@
             
             
               <div class="version">
-                v1.2.5
+                v1.3.3
               </div>
             
           
@@ -94,7 +97,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Getting Started</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
@@ -104,7 +110,6 @@
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary.html">Subpackages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#classes">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary.html#functions">Functions</a></li>
 </ul>
@@ -119,8 +124,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">sherlock</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sherlock</a>
+        
       </nav>
 
 
@@ -133,19 +140,36 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      
-    <li>sherlock.cl_utils</li>
+        
+      <li>sherlock.cl_utils</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -169,7 +193,7 @@
 <span class="sd">Usage:</span>
 <span class="sd">    sherlock init</span>
 <span class="sd">    sherlock info [-s &lt;pathToSettingsFile&gt;]</span>
-<span class="sd">    sherlock [-N] dbmatch [-f --update] [-s &lt;pathToSettingsFile&gt;]</span>
+<span class="sd">    sherlock [-NA] dbmatch [-f --update] [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;pathToSettingsFile&gt;] </span>
 <span class="sd">    sherlock clean [-s &lt;pathToSettingsFile&gt;]</span>
 <span class="sd">    sherlock wiki [-s &lt;pathToSettingsFile&gt;]</span>
@@ -192,18 +216,11 @@
 <span class="sd">    ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)</span>
 <span class="sd">    dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)</span>
 <span class="sd">    radiusArcsec            radius in arcsec of the footprint to download from the online NED database</span>
-<span class="sd">    cat_name                name of the catalogue being imported. The following catalogues can be imported:</span>
-<span class="sd">                                * ``veron``: Veron AGN/QSO catalogue</span>
-<span class="sd">                                    http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258</span>
-<span class="sd">                                * ``milliquas``: Million Quasars Catalog</span>
-<span class="sd">                                    http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html</span>
-<span class="sd">                                * ``ned_d``: NED&#39;s Master List of Redshift-Independent Extragalactic Distances</span>
-<span class="sd">                                    https://ned.ipac.caltech.edu/Library/Distances/</span>
-<span class="sd">    stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:</span>
-<span class="sd">                                * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)</span>
-<span class="sd">                                    http://www.das.uchile.cl/~lgalbany/LG/research.html</span>
+<span class="sd">    cat_name                name of the catalogue being imported (veron|milliquas|ned_d)                          </span>
+<span class="sd">    stream_name             name of the stream to import into the crossmatch catalogues database (ifs)</span>
 
 <span class="sd">    -N, --skipNedUpdate     do not update the NED database before classification</span>
+<span class="sd">    -A, --skipAnnotation    do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)</span>
 <span class="sd">    -f, --fast              faster but errors in crossmatch table ingest my be misses</span>
 <span class="sd">    -h, --help              show this help message</span>
 <span class="sd">    -s, --settings          the settings file</span>
@@ -235,15 +252,24 @@
 <span class="c1"># from ..__init__ import *</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../_autosummary/sherlock.cl_utils.html#sherlock.cl_utils.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../_api/sherlock.cl_utils.html#sherlock.cl_utils.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command</span>
+
+<span class="sd">    .. todo ::</span>
+
+<span class="sd">        - update key arguments values and definitions with defaults</span>
+<span class="sd">        - update return values and definitions</span>
+<span class="sd">        - update usage examples and text</span>
+<span class="sd">        - update docstring text</span>
+<span class="sd">        - check sublime snippet exists</span>
+<span class="sd">        - clip any useful text to docs mindmap</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># setup the command-line util settings</span>
 
     <span class="n">su</span> <span class="o">=</span> <span class="n">tools</span><span class="p">(</span>
         <span class="n">arguments</span><span class="o">=</span><span class="n">arguments</span><span class="p">,</span>
-        <span class="n">docString</span><span class="o">=</span><span class="n">__doc__</span><span class="p">,</span>
+        <span class="n">docString</span><span class="o">=</span><span class="vm">__doc__</span><span class="p">,</span>
         <span class="n">logLevel</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
         <span class="n">options_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">projectName</span><span class="o">=</span><span class="s2">&quot;sherlock&quot;</span>
@@ -303,6 +329,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">updateNed</span> <span class="o">=</span> <span class="kc">True</span>
 
+        <span class="k">if</span> <span class="n">skipAnnotationFlag</span><span class="p">:</span>
+            <span class="n">updateAnnotations</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">updateAnnotations</span> <span class="o">=</span> <span class="kc">True</span>
+
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">transient_classifier</span><span class="o">.</span><span class="n">transient_classifier</span><span class="p">(</span>
             <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
             <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
@@ -312,7 +343,8 @@
             <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
             <span class="n">update</span><span class="o">=</span><span class="n">updateFlag</span><span class="p">,</span>
             <span class="n">fast</span><span class="o">=</span><span class="n">fastFlag</span><span class="p">,</span>
-            <span class="n">updateNed</span><span class="o">=</span><span class="n">updateNed</span>
+            <span class="n">updateNed</span><span class="o">=</span><span class="n">updateNed</span><span class="p">,</span>
+            <span class="n">updateAnnotations</span><span class="o">=</span><span class="n">updateAnnotations</span>
         <span class="p">)</span>
         <span class="n">classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">()</span>
 
@@ -439,10 +471,13 @@
     <span class="k">return</span></div>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
@@ -452,7 +487,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Dave Young.
+        &copy; Copyright 2018, Dave Young.
 
     </p>
   </div>
@@ -474,16 +509,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.2.5',
+            VERSION:'v1.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

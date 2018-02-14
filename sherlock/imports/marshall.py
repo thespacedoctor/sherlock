@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import marshall stream into sherlock's crossmatch catalogues database*
+*import marshall stream into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -46,6 +46,16 @@ class marshall(_base_importer):
             settings=settings
         )
         stream.ingest()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -55,10 +65,20 @@ class marshall(_base_importer):
         The method first generates a list of python dictionaries from the marshall datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
         See the class docstring for usage
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``get`` method')
 
-        # A YAML DICTIONARY OF CROSSMATCH CATALOGUES TABLE NAME AND THE SELECT
+        # A YAML DICTIONARY OF sherlock-catalogues TABLE NAME AND THE SELECT
         # QUERY TO LIFT THE DATA FROM THE MARSHALL
         yamlFilePath = '/'.join(string.split(__file__, '/')
                                 [:-1]) + "/resources/pessto_marshall_table_selects.yaml"
@@ -91,7 +111,7 @@ class marshall(_base_importer):
             )
 
             tableName = self.dbTableName
-            self._add_data_to_database_table(
+            self.add_data_to_database_table(
                 dictList=dictList
             )
 
@@ -110,6 +130,16 @@ class marshall(_base_importer):
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the marshall stream
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_marshall`` method')

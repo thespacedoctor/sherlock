@@ -56,6 +56,16 @@ class database():
             transientsDbConn = dbConns["transients"]
             cataloguesDbConn = dbConns["catalogues"]
             pmDbConn = dbConns["marshall"]
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -79,6 +89,16 @@ class database():
             - ``pmDbConn`` -- connection to the PESSTO Marshall database
 
         See the class docstring for usage
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``get`` method')
 
@@ -151,6 +171,16 @@ class database():
 
         **Return:**
             - ``sshPort`` -- the port the ssh tunnel is connected via
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_setup_tunnel`` method')
 
@@ -187,6 +217,16 @@ class database():
 
     def _checkServer(self, address, port):
         """Check that the TCP Port we've decided to use for tunnelling is available
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_checkServer`` method')
 

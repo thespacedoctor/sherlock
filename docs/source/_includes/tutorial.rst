@@ -215,10 +215,10 @@ The settings in the settings file relating to the NED stream are:
 
 .. code-block:: yaml
 
-ned stream search radius arcec: 300
-first pass ned search radius arcec: 240
-ned stream refresh rate in days: 90
-```
+    ned stream search radius arcec: 300
+    first pass ned search radius arcec: 240
+    ned stream refresh rate in days: 90
+
 
 To update the NED stream, for each transient coordinates the code does a conesearch on the `tcs_helper_ned_query_history` table to see if a search has already been performed within the designated `ned stream refresh rate in days`. If a match isn't found then NED is queried and the `tcs_helper_ned_query_history` is updated for the transient coordinates.
 
@@ -302,7 +302,7 @@ they are all given the same top level ranking for classification. After this cat
 
 Once the classifications for each individual transient are ranked, a final, ordered classification listing is given to the transient within its original database table. For example `SN/VARIABLE STAR` means the the transient is most likely a SN but may also be a variable star.
 
-A transient is matched against a source in the crossmatch catalogues because it is either synonymous with a point-like catalogue source (e.g. a variable star or an AGN) or it is hosted by the catalogue source (e.g. supernova, nuclear transient).
+A transient is matched against a source in the sherlock-catalogues because it is either synonymous with a point-like catalogue source (e.g. a variable star or an AGN) or it is hosted by the catalogue source (e.g. supernova, nuclear transient).
 
 A synonymous crossmatch is always a simple angular crossmatch with a search radius that reflects the astrometric accuracy of the RMS combined astrometric errors of the transient source location and that of the catalogue being matched against.  
 
@@ -313,7 +313,7 @@ Sherlock's Catalogue Database
 Database Table Naming Scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There's a [strict table naming syntax for the crossmatch-catalogues](Crossmatch-Catalogues Database Scheme) database to help deal with catalogue versioning (as updated versions of out crossmatch catalogues are released) and to help ease the burden of modifying crossmatch algorithms employed.
+There's a [strict table naming syntax for the crossmatch-catalogues](Crossmatch-Catalogues Database Scheme) database to help deal with catalogue versioning (as updated versions of out sherlock-catalogues are released) and to help ease the burden of modifying crossmatch algorithms employed.
 
 [See here for an up-to-date list of the crossmatch-catalogues](Crossmatch Catalogue Tables) and the [views](Crossmatch Catalogue Views) found on those tables.
 
@@ -377,27 +377,27 @@ Updating Catalogues and Adding New Catalogues to the Database
       
 Using the `sherlock-import` command it's possible to **import and update various catalogues and data-streams** including Milliquas, Veron AGN and the NED-D catalogues. [See here for details](Catalogue Importers). 
 
-```bash
-sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
-sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
-```
+.. code-block:: bash
+
+    sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+    sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
 
 The command to **import new versions of catalogues** and **data streams** into the `crossmatch_catalogues` database is:
 
-```python    
-Usage:
-    sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
-    sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
-```
+.. code-block:: python 
+    
+    Usage:
+        sherlock-importers cat <cat_name> <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+        sherlock-importers stream <stream_name> [-s <pathToSettingsFile>]
 
 For example:
 
-```bash
-> sherlock-importers cat milliquas ~/Desktop/milliquas.txt 4.5
-1153111 / 1153111 milliquas data added to memory
-1153111 / 1153111 rows inserted into tcs_cat_milliquas_v4_5
-5694 / 5694 htmIds added to tcs_cat_milliquas_v4_5
-```
+.. code-block:: bash
+
+    > sherlock-importers cat milliquas ~/Desktop/milliquas.txt 4.5
+    1153111 / 1153111 milliquas data added to memory
+    1153111 / 1153111 rows inserted into tcs_cat_milliquas_v4_5
+    5694 / 5694 htmIds added to tcs_cat_milliquas_v4_5
 
 The command currently supports imports for the following **catalogues**:
 
@@ -407,12 +407,12 @@ The command currently supports imports for the following **catalogues**:
 
 Using the command:
 
-```bash
-sherlock-importers stream pessto
-```
+.. code-block:: bash
+
+    sherlock-importers stream pessto
 
 will import all of the various **data-streams** added to the PESSTO marshall (ASASSN, CRTS, LSQ, PSST ...).
 
 
-THE COLUMN MAP LIFTED FROM ``tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')
+THE COLUMN MAP LIFTED FROM `tcs_helper_catalogue_tables_info` TABLE IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')
 

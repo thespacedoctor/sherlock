@@ -10,12 +10,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.imports (subpackage) &mdash; sherlock 1.2.5 documentation</title>
+  <title>sherlock.imports (subpackage) &mdash; sherlock v1.3.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
   
 
   
@@ -41,9 +43,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 1.2.5 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
-        <link rel="next" title="sherlock.cl_utils (module)" href="sherlock.cl_utils.html"/>
+        <link rel="next" title="sherlock.catalogue_conesearch (class)" href="sherlock.catalogue_conesearch.html"/>
         <link rel="prev" title="sherlock.commonutils (subpackage)" href="sherlock.commonutils.html"/> 
 
   
@@ -53,6 +55,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -75,7 +78,7 @@
             
             
               <div class="version">
-                v1.2.5
+                v1.3.3
               </div>
             
           
@@ -96,7 +99,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Getting Started</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
@@ -106,12 +112,10 @@
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html">Subpackages</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="sherlock.html">sherlock (<em>subpackage</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.commonutils.html">sherlock.commonutils (<em>subpackage</em>)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.imports (<em>subpackage</em>)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
 </ul>
@@ -126,8 +130,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">sherlock</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
       </nav>
 
 
@@ -136,45 +142,95 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../autosummary.html">Subpackages</a> &raquo;</li>
-      
-    <li>sherlock.imports (<em>subpackage</em>)</li>
+        
+      <li>sherlock.imports (<em>subpackage</em>)</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/_autosummary/sherlock.imports.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/_autosummary/sherlock.imports.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sherlock-imports-subpackage">
-<h1>sherlock.imports (<em>subpackage</em>)<a class="headerlink" href="#sherlock-imports-subpackage" title="Permalink to this headline">  ∞</a></h1>
-<span class="target" id="module-sherlock.imports"></span></div>
+  <div class="section" id="module-sherlock.imports">
+<span id="sherlock-imports-subpackage"></span><h1>sherlock.imports (<em>subpackage</em>)<a class="headerlink" href="#module-sherlock.imports" title="Permalink to this headline">  ∞</a></h1>
+<p class="rubric">Subpackage Members</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports.ifs.html#sherlock.imports.ifs" title="sherlock.imports.ifs"><code class="xref py py-obj docutils literal"><span class="pre">ifs</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>importer object for the Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue stream</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sherlock.imports.marshall.html#sherlock.imports.marshall" title="sherlock.imports.marshall"><code class="xref py py-obj docutils literal"><span class="pre">marshall</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>importer object for the Marshall transient streams (includes multiple on-going transient survey streams)</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports.milliquas.html#sherlock.imports.milliquas" title="sherlock.imports.milliquas"><code class="xref py py-obj docutils literal"><span class="pre">milliquas</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>importer object for the</em> <a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">Milliquas (Million Quasars Catalog)</a> <em>catagloue</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sherlock.imports.ned.html#sherlock.imports.ned" title="sherlock.imports.ned"><code class="xref py py-obj docutils literal"><span class="pre">ned</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/">NED</a> <em>galaxy stream</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports.ned_d.html#sherlock.imports.ned_d" title="sherlock.imports.ned_d"><code class="xref py py-obj docutils literal"><span class="pre">ned_d</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sherlock.imports.veron.html#sherlock.imports.veron" title="sherlock.imports.veron"><code class="xref py py-obj docutils literal"><span class="pre">veron</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>importer object for the</em> <a class="reference external" href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258">VERON AGN catalogue</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports._base_importer.html#sherlock.imports._base_importer" title="sherlock.imports._base_importer"><code class="xref py py-obj docutils literal"><span class="pre">_base_importer</span></code></a>(log[,&nbsp;settings,&nbsp;…])</td>
+<td><em>The base importer object used to import new catalgues into sherlock-catalogues database</em></td>
+</tr>
+</tbody>
+</table>
+</div>
 
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.cl_utils.html" class="btn btn-neutral float-right" title="sherlock.cl_utils (module)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.catalogue_conesearch.html" class="btn btn-neutral float-right" title="sherlock.catalogue_conesearch (class)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sherlock.commonutils.html" class="btn btn-neutral" title="sherlock.commonutils (subpackage)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sherlock.commonutils.html" class="btn btn-neutral" title="sherlock.commonutils (subpackage)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -183,7 +239,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Dave Young.
+        &copy; Copyright 2018, Dave Young.
 
     </p>
   </div>
@@ -205,16 +261,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.2.5',
+            VERSION:'v1.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
