@@ -553,9 +553,8 @@ class transient_classifier():
 
         # COMBINE ALL CROSSMATCHES INTO A LIST OF DICTIONARIES TO DUMP INTO
         # DATABASE TABLE
-        transientIDs = []
-        transientIDs[:] = [str(c["transient_object_id"])
-                           for c in crossmatches]
+        transientIDs = [str(c)
+                        for c in classifications.keys()]
         transientIDs = ",".join(transientIDs)
 
         # REMOVE PREVIOUS MATCHES
@@ -646,7 +645,7 @@ class transient_classifier():
             if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
                     colMaps[xm["catalogue_view_name"]][
-                        "object_type_accuracy"] * 0.1
+                        "object_type_accuracy"] * 0.1 + xm["physical_separation_kpc"] / 10
             else:
                 rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] + 1. - \
                     colMaps[xm["catalogue_view_name"]][
@@ -1307,11 +1306,15 @@ DELIMITER ;""" % locals()
 
             createStatement.append(trigger)
 
-        writequery(
-            log=self.log,
-            sqlQuery=createStatement,
-            dbConn=self.transientsDbConn
-        )
+        try:
+            writequery(
+                log=self.log,
+                sqlQuery=createStatement,
+                dbConn=self.transientsDbConn
+            )
+        except:
+            self.log.info(
+                "Could not create table/trigger (`%(crossmatchTable)s`). Probably already exist." % locals())
 
         self.log.info('completed the ``_create_tables_if_not_exist`` method')
         return None

@@ -715,16 +715,22 @@ class transient_catalogue_crossmatch():
                 newsearch_name = search_name
 
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
-                if row["major_axis_arcsec"] and row["separationArcsec"] < row["major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]:
-                    if "ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.):
+                # BYPASS NED FAULTY AXES MEASUREMENTS:
+                # https://gist.github.com/search?utf8=%E2%9C%93&q=user%3Athespacedoctor+ned
+                if row["major_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)):
+                    if row["separationArcsec"] < row["major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]:
                         thisMatch = True
                         newsearch_name = newsearch_name + \
                             " (within %s * major axis)" % (
                                 self.settings["galaxy radius stetch factor"],)
                         newAngularSep = row[
                             "major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]
+                    else:
+                        continue
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 elif row["direct_distance_scale"] and physical_separation_kpc < physicalRadius:
+                    if row["separationArcsec"] > 300.:
+                        continue
                     thisMatch = True
                     newsearch_name = newsearch_name + " (direct distance)"
                     newAngularSep = physicalRadius / \
