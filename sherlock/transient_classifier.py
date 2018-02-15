@@ -336,7 +336,7 @@ class transient_classifier():
             if self.ra:
                 return classifications, crossmatches
 
-            if self.updateAnnotations:
+            if self.updateAnnotations and self.settings["database settings"]["transients"]["transient peak magnitude query"]:
                 self.update_peak_magnitudes()
             self.update_classification_annotations_and_summaries(
                 self.updateAnnotations)
