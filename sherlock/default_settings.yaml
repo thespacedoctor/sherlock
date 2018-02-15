@@ -19,6 +19,7 @@ database settings:
         host: XXX
         transient table: XXX
         transient query: 
+        transient peak magnitude query: False
         transient primary id column: XXX
         transient classification column: sherlockClassification
         crossmatchTable: tcs_cross_matches
