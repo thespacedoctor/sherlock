@@ -87,6 +87,7 @@ html:
 
 	rm -rf $(BUILDDIR)/html/todo.html
 	rm -rf $(ASDIR)
+	echo "$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html"
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
@@ -199,7 +200,7 @@ doctest:
 
 buildapi:
 	rm -rf $(APIDIR)
-	sphinx-apidoc -fMeT --full -o source/_api ../ ../setup.py ../sherlock/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
+	SPHINX_APIDOC_OPTIONS='members,private-members,undoc-members,show-inheritance,inherited-members,member-order=bysource' sphinx-apidoc -fMeTPF --ext-mathjax --ext-githubpages --full -o source/_api ../ ../setup.py ../sherlock/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
 	@echo "Auto-generation of API documentation finished. " \
 		"The generated files are in '_api/'"
 

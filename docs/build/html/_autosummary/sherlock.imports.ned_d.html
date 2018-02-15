@@ -10,12 +10,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.imports.ned_d (class) &mdash; sherlock 1.2.5 documentation</title>
+  <title>sherlock.imports.ned_d (class) &mdash; sherlock v1.3.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
   
 
   
@@ -41,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 1.2.5 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
         <link rel="next" title="sherlock.imports.veron (class)" href="sherlock.imports.veron.html"/>
         <link rel="prev" title="sherlock.imports.ned (class)" href="sherlock.imports.ned.html"/> 
@@ -53,6 +55,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -75,7 +78,7 @@
             
             
               <div class="version">
-                v1.2.5
+                v1.3.3
               </div>
             
           
@@ -96,7 +99,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Getting Started</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
@@ -106,21 +112,20 @@
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#classes">Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="sherlock.catalogue_conesearch.html">sherlock.catalogue_conesearch (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.commonutils.update_wiki_pages.html">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.database.html">sherlock.database (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.database_cleaner.html">sherlock.database_cleaner (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_catalogue_crossmatch.html">sherlock.transient_catalogue_crossmatch (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_classifier.html">sherlock.transient_classifier (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.commonutils.update_wiki_pages.html">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports._base_importer.html">sherlock.imports._base_importer (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs.html">sherlock.imports.ifs (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.marshall.html">sherlock.imports.marshall (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.milliquas.html">sherlock.imports.milliquas (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned.html">sherlock.imports.ned (<em>class</em>)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.imports.ned_d (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.veron.html">sherlock.imports.veron (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.utKit.html">sherlock.utKit.utKit (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_catalogue_crossmatch.html">sherlock.transient_catalogue_crossmatch (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_classifier.html">sherlock.transient_classifier (<em>class</em>)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
@@ -136,8 +141,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">sherlock</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
       </nav>
 
 
@@ -146,25 +153,42 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../autosummary.html">Subpackages</a> &raquo;</li>
-      
-    <li>sherlock.imports.ned_d (<em>class</em>)</li>
+        
+      <li>sherlock.imports.ned_d (<em>class</em>)</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/_autosummary/sherlock.imports.ned_d.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/_autosummary/sherlock.imports.ned_d.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -175,15 +199,16 @@
 <dl class="class">
 <dt id="sherlock.imports.ned_d">
 <em class="property">class </em><code class="descclassname">sherlock.imports.</code><code class="descname">ned_d</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d" title="Permalink to this definition">  ∞</a></dt>
-<dd><p><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></p>
+<p><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">dbConn</span></code> &#8211; mysql database connection</li>
-<li><code class="docutils literal"><span class="pre">log</span></code> &#8211; logger</li>
-<li><code class="docutils literal"><span class="pre">settings</span></code> &#8211; the settings dictionary</li>
-<li><code class="docutils literal"><span class="pre">pathToDataFile</span></code> &#8211; path to the ned_d data file</li>
-<li><code class="docutils literal"><span class="pre">version</span></code> &#8211; version of the ned_d catalogue</li>
+<li><code class="docutils literal"><span class="pre">dbConn</span></code> – mysql database connection</li>
+<li><code class="docutils literal"><span class="pre">log</span></code> – logger</li>
+<li><code class="docutils literal"><span class="pre">settings</span></code> – the settings dictionary</li>
+<li><code class="docutils literal"><span class="pre">pathToDataFile</span></code> – path to the ned_d data file</li>
+<li><code class="docutils literal"><span class="pre">version</span></code> – version of the ned_d catalogue</li>
 </ul>
 </dd>
 </dl>
@@ -202,11 +227,18 @@
 </pre></div>
 </div>
 </div></blockquote>
-<dl class="method">
-<dt id="sherlock.imports.ned_d.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.imports.ned_d.__init__" title="Permalink to this definition">  ∞</a></dt>
-<dd></dd></dl>
-
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -214,29 +246,286 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;...])</td>
-<td></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_data_to_database_table</span></code>(dictList[,&nbsp;…])</td>
+<td><em>Import data in the list of dictionaries in the requested database table</em></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../_api/sherlock.imports.ned_d.html#sherlock.imports.ned_d.ned_d.ingest" title="sherlock.imports.ned_d.ned_d.ingest"><code class="xref py py-obj docutils literal"><span class="pre">ingest</span></code></a>()</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ingest</span></code>()</td>
 <td>ingest the ned_d catalogue into the catalogues database</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_add_htmids_to_database_table</span></code>()</td>
+<td><em>Add HTMIDs to database table once all the data has been imported (HTM Levels 10,13,16)</em></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">_clean_up_columns</span></code>()</td>
+<td>clean up columns of the NED table</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_count_galaxies_requiring_metadata</span></code>()</td>
+<td>count galaxies requiring metadata</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">_create_dictionary_of_ned_d</span></code>()</td>
+<td>create a list of dictionaries containing all the rows in the ned_d catalogue</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_get_3000_galaxies_needing_metadata</span></code>()</td>
+<td>get 3000 galaxies needing metadata</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">_get_metadata_for_galaxies</span></code>()</td>
+<td>get metadata for galaxies</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_query_ned_and_add_results_to_database</span></code>(…)</td>
+<td>query ned and add results to database</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">_update_database_helper_table</span></code>()</td>
+<td><em>Update the sherlock catalogues database helper table with the time-stamp of when this catlogue was last updated</em></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_update_sdss_coverage</span></code>()</td>
+<td>update sdss coverage</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="sherlock.imports.ned_d.ingest">
+<code class="descname">ingest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d.ingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d.ingest" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>ingest the ned_d catalogue into the catalogues database</p>
+<p>The method first generates a list of python dictionaries from the ned_d datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table.</p>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._create_dictionary_of_ned_d">
+<code class="descname">_create_dictionary_of_ned_d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d._create_dictionary_of_ned_d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d._create_dictionary_of_ned_d" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>create a list of dictionaries containing all the rows in the ned_d catalogue</p>
+<dl class="docutils">
+<dt><strong>Return:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">dictList</span></code> - a list of dictionaries containing all the rows in the ned_d catalogue</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._clean_up_columns">
+<code class="descname">_clean_up_columns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d._clean_up_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d._clean_up_columns" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>clean up columns of the NED table</p>
+<div class="admonition-todo admonition" id="index-3">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._get_metadata_for_galaxies">
+<code class="descname">_get_metadata_for_galaxies</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d._get_metadata_for_galaxies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d._get_metadata_for_galaxies" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>get metadata for galaxies</p>
+<div class="admonition-todo admonition" id="index-4">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._count_galaxies_requiring_metadata">
+<code class="descname">_count_galaxies_requiring_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d._count_galaxies_requiring_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d._count_galaxies_requiring_metadata" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>count galaxies requiring metadata</p>
+<dl class="docutils">
+<dt><strong>Return:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">self.total</span></code>, <code class="docutils literal"><span class="pre">self.batches</span></code> – total number of galaxies needing metadata &amp; the number of batches required to be sent to NED</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-5">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._get_3000_galaxies_needing_metadata">
+<code class="descname">_get_3000_galaxies_needing_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d._get_3000_galaxies_needing_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d._get_3000_galaxies_needing_metadata" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>get 3000 galaxies needing metadata</p>
+<dl class="docutils">
+<dt><strong>Return:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">len(self.theseIds)</span></code> – the number of NED IDs returned</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-6">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._query_ned_and_add_results_to_database">
+<code class="descname">_query_ned_and_add_results_to_database</code><span class="sig-paren">(</span><em>batchCount</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d._query_ned_and_add_results_to_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d._query_ned_and_add_results_to_database" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>query ned and add results to database</p>
+<dl class="docutils">
+<dt><strong>Key Arguments:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">batchCount</span></code> - the index number of the batch sent to NED</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-7">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._update_sdss_coverage">
+<code class="descname">_update_sdss_coverage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d._update_sdss_coverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d._update_sdss_coverage" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>update sdss coverage</p>
+<div class="admonition-todo admonition" id="index-8">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>update key arguments values and definitions with defaults</li>
+<li>update return values and definitions</li>
+<li>update usage examples and text</li>
+<li>update docstring text</li>
+<li>check sublime snippet exists</li>
+<li>clip any useful text to docs mindmap</li>
+<li>regenerate the docs and check redendering of this docstring</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._add_htmids_to_database_table">
+<code class="descname">_add_htmids_to_database_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.imports.ned_d._add_htmids_to_database_table" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Add HTMIDs to database table once all the data has been imported (HTM Levels 10,13,16)</em></p>
+<p><strong>Usage:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">_add_htmids_to_database_table</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d._update_database_helper_table">
+<code class="descname">_update_database_helper_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.imports.ned_d._update_database_helper_table" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Update the sherlock catalogues database helper table with the time-stamp of when this catlogue was last updated</em></p>
+<p><strong>Usage:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">_update_database_helper_table</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.imports.ned_d.add_data_to_database_table">
+<code class="descname">add_data_to_database_table</code><span class="sig-paren">(</span><em>dictList</em>, <em>createStatement=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sherlock.imports.ned_d.add_data_to_database_table" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Import data in the list of dictionaries in the requested database table</em></p>
+<p>Also adds HTMIDs and updates the sherlock-catalogue database helper table with the time-stamp of when the imported catlogue was last updated</p>
+<dl class="docutils">
+<dt><strong>Key Arguments:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">dictList</span></code> - a list of dictionaries containing all the rows in the catalogue to be imported</li>
+<li><code class="docutils literal"><span class="pre">createStatement</span></code> - the table’s mysql create statement (used to generate table if it does not yet exist in database). Default <em>False</em></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Usage:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">add_data_to_database_table</span><span class="p">(</span>
+    <span class="n">dictList</span><span class="o">=</span><span class="n">dictList</span><span class="p">,</span>
+    <span class="n">createStatement</span><span class="o">=</span><span class="n">createStatement</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition-todo admonition" id="index-9">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>Write a checklist for creating a new sherlock database importer</li>
+</ul>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </div>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.imports.veron.html" class="btn btn-neutral float-right" title="sherlock.imports.veron (class)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.imports.veron.html" class="btn btn-neutral float-right" title="sherlock.imports.veron (class)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sherlock.imports.ned.html" class="btn btn-neutral" title="sherlock.imports.ned (class)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sherlock.imports.ned.html" class="btn btn-neutral" title="sherlock.imports.ned (class)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -245,7 +534,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Dave Young.
+        &copy; Copyright 2018, Dave Young.
 
     </p>
   </div>
@@ -267,16 +556,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.2.5',
+            VERSION:'v1.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

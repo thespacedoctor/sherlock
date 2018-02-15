@@ -6,10 +6,10 @@ sherlock
 [![Coverage Status](https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg)](https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html)
 
 *A python package and command-line tools to contextually classify
-astronomical transient sources. Sherlock mines a library of historical
-and on-going survey data to attempt to identify the source of a
-transient event, and predict the classification of the event based on
-the associated crossmatched data*.
+variable/transient astronomical sources. Sherlock mines a library of
+historical and on-going survey data in an attempt to identify the source
+of a transient/variable event, and predict the classification of the
+event based on the associated crossmatched data*.
 
 Command-Line Usage
 ==================
@@ -28,7 +28,7 @@ Command-Line Usage
     Usage:
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
-        sherlock [-N] dbmatch [-f --update] [-s <pathToSettingsFile>]
+        sherlock [-NA] dbmatch [-f --update] [-s <pathToSettingsFile>]
         sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
@@ -44,25 +44,18 @@ Command-Line Usage
         wiki                    XXXX
         import                  XXXX
         ned                     use the online NED database as the source catalogue
-        cat                     import a static catalogue into the crossmatch catalogues database
-        stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
+        cat                     import a static catalogue into the sherlock-catalogues database
+        stream                  download/stream new data from a give source catalogue into the sherlock sherlock-catalogues database
         info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching
 
         ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-        cat_name                name of the catalogue being imported. The following catalogues can be imported:
-                                    * ``veron``: Veron AGN/QSO catalogue
-                                        http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258
-                                    * ``milliquas``: Million Quasars Catalog
-                                        http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html
-                                    * ``ned_d``: NED's Master List of Redshift-Independent Extragalactic Distances
-                                        https://ned.ipac.caltech.edu/Library/Distances/
-        stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:
-                                    * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
-                                        http://www.das.uchile.cl/~lgalbany/LG/research.html
+        cat_name                name of the catalogue being imported (veron|milliquas|ned_d)                          
+        stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
 
         -N, --skipNedUpdate     do not update the NED database before classification
+        -A, --skipAnnotation    do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
         -f, --fast              faster but errors in crossmatch table ingest my be misses
         -h, --help              show this help message
         -s, --settings          the settings file
@@ -81,32 +74,46 @@ version](http://sherlock.readthedocs.org/en/latest/)).
 Installation
 ============
 
-The easiest way to install sherlock is to use `pip`:
+Although you can get Sherlock from a simple `pip` install, it's best to
+install it within a Conda environment under Anaconda. If you're not
+familiar with Anaconda, you'll find a [good tutorial
+here](http://psweb.mp.qub.ac.uk/dry//blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html)
+to get you up and running.
 
+Once you have Anaconda installed, go ahead and create a new Conda
+environment to host Sherlock:
+
+    conda create -n sherlock python=2.7 pip
+
+Now activate the environment and install sherlock:
+
+    source activate sherlock
     pip install qub-sherlock
 
-Or you can clone the [github
+At any point in the future you can upgrade to the latest version of
+sherlock with the command:
+
+    pip install qub-sherlock --upgrade
+
+If instead you want to clone the [github
 repo](https://github.com/thespacedoctor/sherlock) and install from a
 local version of the code:
 
     git clone git@github.com:thespacedoctor/sherlock.git
     cd sherlock
+    source activate sherlock
     python setup.py install
-
-To upgrade to the latest version of sherlock use the command:
-
-    pip install qub-sherlock --upgrade
-
-    mysql_config_editor set --login-path=xxx --host=127.0.0.1 --user=myuser --password --port=xxx
 
 Development
 -----------
 
 If you want to tinker with the code, then install in development mode.
-This means you can modify the code from your cloned repo:
+This means you can modify the installed code from whereever you clone
+the repo to:
 
     git clone git@github.com:thespacedoctor/sherlock.git
     cd sherlock
+    source activate sherlock
     python setup.py develop
 
 [Pull requests](https://github.com/thespacedoctor/sherlock/pulls) are
@@ -129,7 +136,7 @@ Please report any issues
 License
 =======
 
-Copyright (c) 2018 David Young
+Copyright (c) 2016 David Young
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the

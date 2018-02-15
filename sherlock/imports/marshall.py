@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import marshall stream into sherlock's crossmatch catalogues database*
+*Import the ePESSTO marshall stream into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -28,7 +28,7 @@ from ._base_importer import _base_importer
 class marshall(_base_importer):
 
     """
-    *importer object for the Marshall transient streams (includes multiple on-going transient survey streams)*
+    *Import the ePESSTO Marshall transient streams (includes multiple on-going transient survey streams) into the Sherlock-catalogues database*
 
     **Key Arguments:**
         - ``log`` -- logger
@@ -36,7 +36,7 @@ class marshall(_base_importer):
 
     **Usage:**
 
-      To import/update the marshall catalogue streams in the catalogues' database, run the following:
+      To import/update the marshall catalogue streams in the sherlock-catalogues database, run the following:
 
       .. code-block:: python 
 
@@ -46,19 +46,33 @@ class marshall(_base_importer):
             settings=settings
         )
         stream.ingest()
+
+    .. todo ::
+
+        - check sublime snippet exists
     """
     # INITIALISATION
 
     def ingest(self):
-        """ingest the marshall catalogue into the catalogues database
+        """*Ingest the ePESSTO Marshall transient stream into the catalogues database*
 
         The method first generates a list of python dictionaries from the marshall datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
         See the class docstring for usage
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``get`` method')
 
-        # A YAML DICTIONARY OF CROSSMATCH CATALOGUES TABLE NAME AND THE SELECT
+        # A YAML DICTIONARY OF sherlock-catalogues TABLE NAME AND THE SELECT
         # QUERY TO LIFT THE DATA FROM THE MARSHALL
         yamlFilePath = '/'.join(string.split(__file__, '/')
                                 [:-1]) + "/resources/pessto_marshall_table_selects.yaml"
@@ -91,7 +105,7 @@ class marshall(_base_importer):
             )
 
             tableName = self.dbTableName
-            self._add_data_to_database_table(
+            self.add_data_to_database_table(
                 dictList=dictList
             )
 
@@ -110,6 +124,16 @@ class marshall(_base_importer):
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the marshall stream
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_marshall`` method')
@@ -128,6 +152,8 @@ class marshall(_base_importer):
         count = 0
 
         for row in rows:
+            if "dateCreated" in row:
+                del row["dateCreated"]
             count += 1
             if count > 1:
                 # Cursor up one line and clear line

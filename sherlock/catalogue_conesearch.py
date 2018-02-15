@@ -8,6 +8,8 @@
 
 :Date Created:
     December 16, 2016
+
+:noindex:
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -35,7 +37,7 @@ class catalogue_conesearch():
         - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
         - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
         - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
-        - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G"|)
+        - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
 
     **Usage:**
 
@@ -126,6 +128,15 @@ class catalogue_conesearch():
             0 {'R': 20.1, 'cmSepArcsec': 0.28015184686564643, 'ra': 345.2832267, 'catalogue_object_subtype': u'QR', 'z': 0.777, 'dec': -1.9679629, 'catalogue_object_id': u'PKS 2258-022'}
             2 {'R': 19.2, 'cmSepArcsec': 0.81509715903447644, 'ra': 13.875, 'catalogue_object_subtype': u'Q', 'z': 2.7, 'dec': -25.2672223, 'catalogue_object_id': u'Q 0053-2532'}
 
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # Initialisation
 
@@ -201,6 +212,16 @@ class catalogue_conesearch():
         **Usage:**
 
             See class docstring for usage examples
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``search`` method')
 
