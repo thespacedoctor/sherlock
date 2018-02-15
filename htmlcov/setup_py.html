@@ -90,19 +90,19 @@
 <p id="n21" class="pln"><a href="#n21">21</a></p>
 <p id="n22" class="pln"><a href="#n22">22</a></p>
 <p id="n23" class="pln"><a href="#n23">23</a></p>
-<p id="n24" class="stm mis"><a href="#n24">24</a></p>
-<p id="n25" class="stm mis"><a href="#n25">25</a></p>
+<p id="n24" class="pln"><a href="#n24">24</a></p>
+<p id="n25" class="pln"><a href="#n25">25</a></p>
 <p id="n26" class="stm mis"><a href="#n26">26</a></p>
-<p id="n27" class="pln"><a href="#n27">27</a></p>
+<p id="n27" class="stm mis"><a href="#n27">27</a></p>
 <p id="n28" class="stm mis"><a href="#n28">28</a></p>
-<p id="n29" class="stm mis"><a href="#n29">29</a></p>
+<p id="n29" class="pln"><a href="#n29">29</a></p>
 <p id="n30" class="stm mis"><a href="#n30">30</a></p>
 <p id="n31" class="stm mis"><a href="#n31">31</a></p>
 <p id="n32" class="stm mis"><a href="#n32">32</a></p>
-<p id="n33" class="pln"><a href="#n33">33</a></p>
+<p id="n33" class="stm mis"><a href="#n33">33</a></p>
 <p id="n34" class="stm mis"><a href="#n34">34</a></p>
 <p id="n35" class="pln"><a href="#n35">35</a></p>
-<p id="n36" class="pln"><a href="#n36">36</a></p>
+<p id="n36" class="stm mis"><a href="#n36">36</a></p>
 <p id="n37" class="pln"><a href="#n37">37</a></p>
 <p id="n38" class="pln"><a href="#n38">38</a></p>
 <p id="n39" class="pln"><a href="#n39">39</a></p>
@@ -131,6 +131,8 @@
 <p id="n62" class="pln"><a href="#n62">62</a></p>
 <p id="n63" class="pln"><a href="#n63">63</a></p>
 <p id="n64" class="pln"><a href="#n64">64</a></p>
+<p id="n65" class="pln"><a href="#n65">65</a></p>
+<p id="n66" class="pln"><a href="#n66">66</a></p>
 
             </td>
             <td class="text">
@@ -152,52 +154,54 @@
 <p id="t16" class="pln">    <span class="str">'astrocalc'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
 <p id="t17" class="pln">    <span class="str">'neddy'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
 <p id="t18" class="pln">    <span class="str">'sloancone'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t19" class="pln">    <span class="str">'HMpTy'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t20" class="pln">    <span class="str">'numpy'</span><span class="strut">&nbsp;</span></p>
-<p id="t21" class="pln"><span class="op">]</span><span class="strut">&nbsp;</span></p>
-<p id="t22" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t23" class="pln"><span class="com"># READ THE DOCS SERVERS</span><span class="strut">&nbsp;</span></p>
-<p id="t24" class="stm mis"><span class="nam">exists</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span><span class="op">.</span><span class="nam">exists</span><span class="op">(</span><span class="str">"/home/docs/"</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t25" class="stm mis"><span class="key">if</span> <span class="nam">exists</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t26" class="stm mis">    <span class="nam">c_exclude_list</span> <span class="op">=</span> <span class="op">[</span><span class="str">'healpy'</span><span class="op">,</span> <span class="str">'astropy'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t27" class="pln">                      <span class="str">'numpy'</span><span class="op">,</span> <span class="str">'qub-sherlock'</span><span class="op">,</span> <span class="str">'wcsaxes'</span><span class="op">,</span> <span class="str">'HMpTy'</span><span class="op">,</span> <span class="str">'ligo-gracedb'</span><span class="op">]</span><span class="strut">&nbsp;</span></p>
-<p id="t28" class="stm mis">    <span class="key">for</span> <span class="nam">e</span> <span class="key">in</span> <span class="nam">c_exclude_list</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t29" class="stm mis">        <span class="key">try</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t30" class="stm mis">            <span class="nam">install_requires</span><span class="op">.</span><span class="nam">remove</span><span class="op">(</span><span class="nam">e</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t31" class="stm mis">        <span class="key">except</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t32" class="stm mis">            <span class="key">pass</span><span class="strut">&nbsp;</span></p>
-<p id="t33" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t34" class="stm mis"><span class="nam">setup</span><span class="op">(</span><span class="nam">name</span><span class="op">=</span><span class="str">"qub-sherlock"</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t35" class="pln">      <span class="nam">version</span><span class="op">=</span><span class="nam">__version__</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t36" class="pln">      <span class="nam">description</span><span class="op">=</span><span class="str">"A python package and command-line tools to contextually classify variable/transient astronomical sources. Sherlock mines a library of historical and on-going survey data in an attempt to identify the source of a transient/variable event, and predict the classification of the event based on the associated crossmatched data"</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t37" class="pln">      <span class="nam">long_description</span><span class="op">=</span><span class="nam">readme</span><span class="op">(</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t38" class="pln">      <span class="nam">classifiers</span><span class="op">=</span><span class="op">[</span><span class="strut">&nbsp;</span></p>
-<p id="t39" class="pln">          <span class="str">'Development Status :: 4 - Beta'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t40" class="pln">          <span class="str">'License :: OSI Approved :: MIT License'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t41" class="pln">          <span class="str">'Programming Language :: Python :: 2.7'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t42" class="pln">          <span class="str">'Topic :: Utilities'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t43" class="pln">      <span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t44" class="pln">      <span class="nam">keywords</span><span class="op">=</span><span class="op">[</span><span class="str">'transients, astronomy, classifier, catalogues'</span><span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t45" class="pln">      <span class="nam">url</span><span class="op">=</span><span class="str">'https://github.com/thespacedoctor/sherlock'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t46" class="pln">      <span class="nam">download_url</span><span class="op">=</span><span class="str">'https://github.com/thespacedoctor/sherlock/archive/v%(__version__)s.zip'</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
-<p id="t47" class="pln">      <span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t48" class="pln">      <span class="nam">author</span><span class="op">=</span><span class="str">'David Young'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t49" class="pln">      <span class="nam">author_email</span><span class="op">=</span><span class="str">'davidrobertyoung@gmail.com'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t50" class="pln">      <span class="nam">license</span><span class="op">=</span><span class="str">'MIT'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t51" class="pln">      <span class="nam">packages</span><span class="op">=</span><span class="nam">find_packages</span><span class="op">(</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t52" class="pln">      <span class="nam">package_data</span><span class="op">=</span><span class="op">{</span><span class="str">'sherlock'</span><span class="op">:</span> <span class="op">[</span><span class="strut">&nbsp;</span></p>
-<p id="t53" class="pln">          <span class="str">'resources/*/*'</span><span class="op">,</span> <span class="str">'resources/*.*'</span><span class="op">]</span><span class="op">}</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t54" class="pln">      <span class="nam">include_package_data</span><span class="op">=</span><span class="nam">True</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t55" class="pln">      <span class="nam">install_requires</span><span class="op">=</span><span class="nam">install_requires</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t56" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t57" class="pln">      <span class="nam">test_suite</span><span class="op">=</span><span class="str">'nose2.collector.collector'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t58" class="pln">      <span class="nam">tests_require</span><span class="op">=</span><span class="op">[</span><span class="str">'nose2'</span><span class="op">,</span> <span class="str">'cov-core'</span><span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t59" class="pln">      <span class="nam">entry_points</span><span class="op">=</span><span class="op">{</span><span class="strut">&nbsp;</span></p>
-<p id="t60" class="pln">          <span class="str">'console_scripts'</span><span class="op">:</span> <span class="op">[</span><span class="strut">&nbsp;</span></p>
-<p id="t61" class="pln">              <span class="str">'sherlock=sherlock.cl_utils:main'</span><span class="strut">&nbsp;</span></p>
-<p id="t62" class="pln">          <span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t63" class="pln">      <span class="op">}</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t64" class="pln">      <span class="nam">zip_safe</span><span class="op">=</span><span class="nam">False</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t19" class="pln">    <span class="str">'numpy'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t20" class="pln">    <span class="str">'HMpTy'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t21" class="pln">    <span class="str">'pymysql'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t22" class="pln">    <span class="str">'psutil'</span><span class="strut">&nbsp;</span></p>
+<p id="t23" class="pln"><span class="op">]</span><span class="strut">&nbsp;</span></p>
+<p id="t24" class="pln"><span class="strut">&nbsp;</span></p>
+<p id="t25" class="pln"><span class="com"># READ THE DOCS SERVERS</span><span class="strut">&nbsp;</span></p>
+<p id="t26" class="stm mis"><span class="nam">exists</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span><span class="op">.</span><span class="nam">exists</span><span class="op">(</span><span class="str">"/home/docs/"</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t27" class="stm mis"><span class="key">if</span> <span class="nam">exists</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t28" class="stm mis">    <span class="nam">c_exclude_list</span> <span class="op">=</span> <span class="op">[</span><span class="str">'healpy'</span><span class="op">,</span> <span class="str">'astropy'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t29" class="pln">                      <span class="str">'numpy'</span><span class="op">,</span> <span class="str">'qub-sherlock'</span><span class="op">,</span> <span class="str">'wcsaxes'</span><span class="op">,</span> <span class="str">'HMpTy'</span><span class="op">,</span> <span class="str">'ligo-gracedb'</span><span class="op">]</span><span class="strut">&nbsp;</span></p>
+<p id="t30" class="stm mis">    <span class="key">for</span> <span class="nam">e</span> <span class="key">in</span> <span class="nam">c_exclude_list</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t31" class="stm mis">        <span class="key">try</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t32" class="stm mis">            <span class="nam">install_requires</span><span class="op">.</span><span class="nam">remove</span><span class="op">(</span><span class="nam">e</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t33" class="stm mis">        <span class="key">except</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t34" class="stm mis">            <span class="key">pass</span><span class="strut">&nbsp;</span></p>
+<p id="t35" class="pln"><span class="strut">&nbsp;</span></p>
+<p id="t36" class="stm mis"><span class="nam">setup</span><span class="op">(</span><span class="nam">name</span><span class="op">=</span><span class="str">"qub-sherlock"</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t37" class="pln">      <span class="nam">version</span><span class="op">=</span><span class="nam">__version__</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t38" class="pln">      <span class="nam">description</span><span class="op">=</span><span class="str">"A python package and command-line tools to contextually classify variable/transient astronomical sources. Sherlock mines a library of historical and on-going survey data in an attempt to identify the source of a transient/variable event, and predict the classification of the event based on the associated crossmatched data"</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t39" class="pln">      <span class="nam">long_description</span><span class="op">=</span><span class="nam">readme</span><span class="op">(</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t40" class="pln">      <span class="nam">classifiers</span><span class="op">=</span><span class="op">[</span><span class="strut">&nbsp;</span></p>
+<p id="t41" class="pln">          <span class="str">'Development Status :: 4 - Beta'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t42" class="pln">          <span class="str">'License :: OSI Approved :: MIT License'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t43" class="pln">          <span class="str">'Programming Language :: Python :: 2.7'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t44" class="pln">          <span class="str">'Topic :: Utilities'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t45" class="pln">      <span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t46" class="pln">      <span class="nam">keywords</span><span class="op">=</span><span class="op">[</span><span class="str">'transients, astronomy, classifier, catalogues'</span><span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t47" class="pln">      <span class="nam">url</span><span class="op">=</span><span class="str">'https://github.com/thespacedoctor/sherlock'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t48" class="pln">      <span class="nam">download_url</span><span class="op">=</span><span class="str">'https://github.com/thespacedoctor/sherlock/archive/v%(__version__)s.zip'</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
+<p id="t49" class="pln">      <span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t50" class="pln">      <span class="nam">author</span><span class="op">=</span><span class="str">'David Young'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t51" class="pln">      <span class="nam">author_email</span><span class="op">=</span><span class="str">'davidrobertyoung@gmail.com'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t52" class="pln">      <span class="nam">license</span><span class="op">=</span><span class="str">'MIT'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t53" class="pln">      <span class="nam">packages</span><span class="op">=</span><span class="nam">find_packages</span><span class="op">(</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t54" class="pln">      <span class="nam">package_data</span><span class="op">=</span><span class="op">{</span><span class="str">'sherlock'</span><span class="op">:</span> <span class="op">[</span><span class="strut">&nbsp;</span></p>
+<p id="t55" class="pln">          <span class="str">'resources/*/*'</span><span class="op">,</span> <span class="str">'resources/*.*'</span><span class="op">]</span><span class="op">}</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t56" class="pln">      <span class="nam">include_package_data</span><span class="op">=</span><span class="nam">True</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t57" class="pln">      <span class="nam">install_requires</span><span class="op">=</span><span class="nam">install_requires</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t58" class="pln"><span class="strut">&nbsp;</span></p>
+<p id="t59" class="pln">      <span class="nam">test_suite</span><span class="op">=</span><span class="str">'nose2.collector.collector'</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t60" class="pln">      <span class="nam">tests_require</span><span class="op">=</span><span class="op">[</span><span class="str">'nose2'</span><span class="op">,</span> <span class="str">'cov-core'</span><span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t61" class="pln">      <span class="nam">entry_points</span><span class="op">=</span><span class="op">{</span><span class="strut">&nbsp;</span></p>
+<p id="t62" class="pln">          <span class="str">'console_scripts'</span><span class="op">:</span> <span class="op">[</span><span class="strut">&nbsp;</span></p>
+<p id="t63" class="pln">              <span class="str">'sherlock=sherlock.cl_utils:main'</span><span class="strut">&nbsp;</span></p>
+<p id="t64" class="pln">          <span class="op">]</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t65" class="pln">      <span class="op">}</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t66" class="pln">      <span class="nam">zip_safe</span><span class="op">=</span><span class="nam">False</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 
             </td>
         </tr>
@@ -207,8 +211,8 @@
 <div id="footer">
     <div class="content">
         <p>
-            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.3.4</a>,
-            created at 2017-02-01 21:50
+            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4.2</a>,
+            created at 2018-02-15 12:42
         </p>
     </div>
 </div>

@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import marshall stream into sherlock-catalogues database*
+*Import the ePESSTO marshall stream into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -28,7 +28,7 @@ from ._base_importer import _base_importer
 class marshall(_base_importer):
 
     """
-    *importer object for the Marshall transient streams (includes multiple on-going transient survey streams)*
+    *Import the ePESSTO Marshall transient streams (includes multiple on-going transient survey streams) into the Sherlock-catalogues database*
 
     **Key Arguments:**
         - ``log`` -- logger
@@ -36,7 +36,7 @@ class marshall(_base_importer):
 
     **Usage:**
 
-      To import/update the marshall catalogue streams in the catalogues' database, run the following:
+      To import/update the marshall catalogue streams in the sherlock-catalogues database, run the following:
 
       .. code-block:: python 
 
@@ -49,18 +49,12 @@ class marshall(_base_importer):
 
     .. todo ::
 
-        - update key arguments values and definitions with defaults
-        - update return values and definitions
-        - update usage examples and text
-        - update docstring text
         - check sublime snippet exists
-        - clip any useful text to docs mindmap
-        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
     def ingest(self):
-        """ingest the marshall catalogue into the catalogues database
+        """*Ingest the ePESSTO Marshall transient stream into the catalogues database*
 
         The method first generates a list of python dictionaries from the marshall datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
@@ -158,6 +152,8 @@ class marshall(_base_importer):
         count = 0
 
         for row in rows:
+            if "dateCreated" in row:
+                del row["dateCreated"]
             count += 1
             if count > 1:
                 # Cursor up one line and clear line

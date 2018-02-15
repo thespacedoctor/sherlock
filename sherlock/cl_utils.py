@@ -15,7 +15,7 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 Usage:
     sherlock init
     sherlock info [-s <pathToSettingsFile>]
-    sherlock [-NA] dbmatch [-f --update] [-s <pathToSettingsFile>]
+    sherlock [-NA] dbmatch [--update] [-s <pathToSettingsFile>]
     sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
     sherlock clean [-s <pathToSettingsFile>]
     sherlock wiki [-s <pathToSettingsFile>]
@@ -43,7 +43,6 @@ Options:
 
     -N, --skipNedUpdate     do not update the NED database before classification
     -A, --skipAnnotation    do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
-    -f, --fast              faster but errors in crossmatch table ingest my be misses
     -h, --help              show this help message
     -s, --settings          the settings file
     -v, --verbose           print more details to stdout
@@ -165,7 +164,6 @@ def main(arguments=None):
             name=False,
             verbose=verbose,
             update=updateFlag,
-            fast=fastFlag,
             updateNed=updateNed,
             updateAnnotations=updateAnnotations
         )

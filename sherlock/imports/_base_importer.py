@@ -172,7 +172,7 @@ class _base_importer():
             )
 
         insert_list_of_dictionaries_into_database_tables(
-            dbConn=self.dbConn,
+            dbConn=self.cataloguesDbConn,
             log=self.log,
             dictList=dictList,
             dbTableName=dbTableName,

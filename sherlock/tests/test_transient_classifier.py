@@ -33,6 +33,8 @@ stream = file(
     pathToInputDir + "/example_settings2.yaml", 'r')
 stream = file(
     "/Users/Dave/Dropbox/config/dave-macbook/sherlock/sherlock_mac_marshall.yaml")
+stream = file(
+    "/Users/Dave/Desktop/sherlock_ps1_mops.yaml")
 settings = yaml.load(stream)
 stream.close()
 
@@ -73,7 +75,7 @@ class test_transient_classifier(unittest.TestCase):
             update=True,
             fast=True
         )
-        this.update_peak_magnitudes()
+        # this.update_peak_magnitudes()
         this.update_classification_annotations_and_summaries()
 
     def test_transient_classifier_function(self):
@@ -83,7 +85,8 @@ class test_transient_classifier(unittest.TestCase):
             log=log,
             settings=settings,
             update=True,
-            fast=True
+            updateNed=False,
+            oneRun=True
         )
         this.classify()
 

@@ -203,6 +203,7 @@ class transient_catalogue_crossmatch():
                 # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
                 if catalogueMatches:
                     allCatalogueMatches = allCatalogueMatches + catalogueMatches
+                    catalogueMatches = []
 
         # ANNOTATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER

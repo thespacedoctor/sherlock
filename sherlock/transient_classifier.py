@@ -33,6 +33,7 @@ from fundamentals.mysql import database
 import psutil
 from fundamentals import fmultiprocess
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+from sherlock import transient_catalogue_crossmatch
 
 theseBatches = []
 crossmatchArray = []
@@ -50,10 +51,10 @@ class transient_classifier():
         - ``dec`` -- declination of a single transient source. Default *False*
         - ``name`` -- the ID of a single transient source. Default *False*
         - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
-        - ``fast`` -- run in fast mode. This mode may not catch errors in the ingest of data to the crossmatches table but runs twice as fast. Default *False*.
         - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
         - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
         - ``updateAnnotations`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
+        - ``oneRun`` -- only process one batch of transients, usful for unit testing. Default *False*
 
     **Usage:**
 
@@ -134,10 +135,10 @@ class transient_classifier():
             dec=False,
             name=False,
             verbose=0,
-            fast=False,
             updateNed=True,
             daemonMode=False,
-            updateAnnotations=True
+            updateAnnotations=True,
+            oneRun=False
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -148,11 +149,11 @@ class transient_classifier():
         self.name = name
         self.cl = False
         self.verbose = verbose
-        self.fast = fast
         self.updateNed = updateNed
         self.daemonMode = daemonMode
         self.myPid = str(os.getpid())
         self.updateAnnotations = updateAnnotations
+        self.oneRun = oneRun
 
         # xt-self-arg-tmpx
 
@@ -209,6 +210,9 @@ class transient_classifier():
 
         remaining = 1
 
+        import time
+        start_time = time.time()
+
         # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
         # REDSHIFT, MAG ETC
         colMaps = get_crossmatch_catalogues_column_map(
@@ -216,7 +220,13 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
+        print "%d seconds to generate colMaps" % (time.time() - start_time,)
+        start_time = time.time()
+
         self._create_tables_if_not_exist()
+
+        print "%d seconds to create table" % (time.time() - start_time,)
+        start_time = time.time()
 
         while remaining:
 
@@ -238,11 +248,19 @@ class transient_classifier():
                     sqlQuery=sqlQuery,
                     dbConn=self.transientsDbConn,
                 )
+
+                print "%d seconds count remaining transients" % (time.time() - start_time,)
+                start_time = time.time()
+
                 remaining = rows[0]["count(*)"]
                 print "%(remaining)s transient sources requiring a classification remain" % locals()
 
                 # A LIST OF DICTIONARIES OF TRANSIENT METADATA
                 transientsMetadataList = self._get_transient_metadata_from_database_list()
+
+                print "%d seconds get transient data from database" % (time.time() - start_time,)
+                start_time = time.time()
+
                 count = len(transientsMetadataList)
                 print "  now classifying the next %(count)s transient sources" % locals()
 
@@ -267,6 +285,9 @@ class transient_classifier():
                     'ra': self.ra
                 }
                 transientsMetadataList = [transient]
+                remaining = 0
+
+            if self.oneRun:
                 remaining = 0
 
             if len(transientsMetadataList) == 0:
@@ -306,8 +327,14 @@ class transient_classifier():
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
                                             inputArray=range(len(theseBatches)), colMaps=colMaps)
 
+            print "%d seconds to do crossmatching" % (time.time() - start_time,)
+            start_time = time.time()
+
             results = fmultiprocess(log=self.log, function=self._rank_classifications,
                                     inputArray=range(len(theseBatches)), colMaps=colMaps,)
+
+            print "%d seconds to rank crossmatches" % (time.time() - start_time,)
+            start_time = time.time()
 
             crossmatches = [d for r in results for d in r[1]]
             classifications = {k: v for r in results for k, v in r[0].items()}
@@ -333,6 +360,9 @@ class transient_classifier():
                     colMaps=colMaps
                 )
 
+            print "%d seconds to add crossmatches & classifications to database" % (time.time() - start_time,)
+            start_time = time.time()
+
             if self.ra:
                 return classifications, crossmatches
 
@@ -340,6 +370,9 @@ class transient_classifier():
                 self.update_peak_magnitudes()
             self.update_classification_annotations_and_summaries(
                 self.updateAnnotations)
+
+            print "%d to add annotations to classifications" % (time.time() - start_time,)
+            start_time = time.time()
 
         self.log.info('completed the ``classify`` method')
         return None, None
@@ -566,7 +599,6 @@ class transient_classifier():
             dbSettings=self.settings["database settings"]["static catalogues"]
         ).connect()
 
-        from sherlock import transient_catalogue_crossmatch
         self.allClassifications = []
 
         cm = transient_catalogue_crossmatch(
@@ -627,8 +659,7 @@ class transient_classifier():
         transientIDs = ",".join(transientIDs)
 
         # REMOVE PREVIOUS MATCHES
-        crossmatchTable = "sherlock_crossmatches"
-        sqlQuery = """delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);""" % locals(
+        sqlQuery = """delete from sherlock_crossmatches where transient_object_id in (%(transientIDs)s);""" % locals(
         )
         writequery(
             log=self.log,
@@ -643,17 +674,18 @@ class transient_classifier():
             dbConn=self.transientsDbConn,
         )
 
-        insert_list_of_dictionaries_into_database_tables(
-            dbConn=self.transientsDbConn,
-            log=self.log,
-            dictList=crossmatches,
-            dbTableName=crossmatchTable,
-            dateModified=True,
-            batchSize=10000,
-            replace=True,
-            dbSettings=self.settings["database settings"][
-                "transients"]
-        )
+        if len(crossmatches):
+            insert_list_of_dictionaries_into_database_tables(
+                dbConn=self.transientsDbConn,
+                log=self.log,
+                dictList=crossmatches,
+                dbTableName="sherlock_crossmatches",
+                dateModified=True,
+                batchSize=10000,
+                replace=True,
+                dbSettings=self.settings["database settings"][
+                    "transients"]
+            )
 
         sqlQuery = ""
         inserts = []
