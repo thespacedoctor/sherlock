@@ -56,19 +56,13 @@ class marshall(_base_importer):
     def ingest(self):
         """*Ingest the ePESSTO Marshall transient stream into the catalogues database*
 
-        The method first generates a list of python dictionaries from the marshall datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
+        The method first creates the tables for the various marshall feeder surveys in the sherlock-catalogues database (if they do not yet exist). Then the marshall database is queried for each transient survey and the results imported into the sherlock-catalogues tables,
 
         See the class docstring for usage
 
         .. todo ::
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            - convert the directory_script_runner to 'load in file'
         """
         self.log.info('starting the ``get`` method')
 
@@ -124,16 +118,6 @@ class marshall(_base_importer):
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the marshall stream
-
-        .. todo ::
-
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_marshall`` method')

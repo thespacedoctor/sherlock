@@ -190,7 +190,7 @@ Documentation <span class="k">for</span> sherlock can be found here: http://sher
 Usage:
     sherlock init
     sherlock info <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
-    sherlock <span class="o">[</span>-NA<span class="o">]</span> dbmatch <span class="o">[</span>-f --update<span class="o">]</span> <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock <span class="o">[</span>-NA<span class="o">]</span> dbmatch <span class="o">[</span>--update<span class="o">]</span> <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
     sherlock <span class="o">[</span>-vN<span class="o">]</span> match -- &lt;ra&gt; &lt;dec&gt; <span class="o">[</span>&lt;pathToSettingsFile&gt;<span class="o">]</span>
     sherlock clean <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
     sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
@@ -218,7 +218,6 @@ Options:
 
     -N, --skipNedUpdate     <span class="k">do</span> not update the NED database before classification
     -A, --skipAnnotation    <span class="k">do</span> not update the peak magnitudes and human readable text annotations of objects <span class="o">(</span>can eat up some <span class="nb">time</span><span class="o">)</span>
-    -f, --fast              faster but errors in crossmatch table ingest my be misses
     -h, --help              show this <span class="nb">help</span> message
     -s, --settings          the settings file
     -v, --verbose           print more details to stdout

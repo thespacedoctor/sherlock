@@ -210,9 +210,6 @@ class transient_classifier():
 
         remaining = 1
 
-        import time
-        start_time = time.time()
-
         # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
         # REDSHIFT, MAG ETC
         colMaps = get_crossmatch_catalogues_column_map(
@@ -220,13 +217,25 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
-        print "%d seconds to generate colMaps" % (time.time() - start_time,)
-        start_time = time.time()
-
         self._create_tables_if_not_exist()
 
-        print "%d seconds to create table" % (time.time() - start_time,)
+        import time
         start_time = time.time()
+
+        # COUNT SEARCHES
+        sa = self.settings["search algorithm"]
+        searchCount = 0
+        brightnessFilters = ["bright", "faint", "general"]
+        for search_name, searchPara in sa.iteritems():
+            for bf in brightnessFilters:
+                if bf in searchPara:
+                    searchCount += 1
+
+        largeBatchSize = int(50000 / searchCount)
+        miniBatchSize = int(largeBatchSize / searchCount)
+        self.largeBatchSize = largeBatchSize
+
+        print "BATCH SIZE = %(miniBatchSize)s" % locals()
 
         while remaining:
 
@@ -243,23 +252,23 @@ class transient_classifier():
                     sqlQuery = sqlQuery.replace(
                         "where", "where %(thisInt)s=%(thisInt)s and " % locals())
 
-                rows = readquery(
-                    log=self.log,
-                    sqlQuery=sqlQuery,
-                    dbConn=self.transientsDbConn,
-                )
+                if remaining == 1 or remaining < largeBatchSize:
+                    rows = readquery(
+                        log=self.log,
+                        sqlQuery=sqlQuery,
+                        dbConn=self.transientsDbConn,
+                    )
+                    remaining = rows[0]["count(*)"]
+                else:
+                    remaining = remaining - largeBatchSize
 
-                print "%d seconds count remaining transients" % (time.time() - start_time,)
-                start_time = time.time()
-
-                remaining = rows[0]["count(*)"]
                 print "%(remaining)s transient sources requiring a classification remain" % locals()
+
+                # START THE TIME TO TRACK CLASSIFICATION SPPED
+                start_time = time.time()
 
                 # A LIST OF DICTIONARIES OF TRANSIENT METADATA
                 transientsMetadataList = self._get_transient_metadata_from_database_list()
-
-                print "%d seconds get transient data from database" % (time.time() - start_time,)
-                start_time = time.time()
 
                 count = len(transientsMetadataList)
                 print "  now classifying the next %(count)s transient sources" % locals()
@@ -307,37 +316,26 @@ class transient_classifier():
                 )
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
-            batchSize = 25
-
             total = len(transientsMetadataList[1:])
-            batches = int(total / batchSize)
+            batches = int(total / miniBatchSize)
 
             start = 0
             end = 0
             theseBatches = []
             for i in range(batches + 1):
-                end = end + batchSize
-                start = i * batchSize
+                end = end + miniBatchSize
+                start = i * miniBatchSize
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
-
-            count = 1
 
             # DEFINE AN INPUT ARRAY
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
                                             inputArray=range(len(theseBatches)), colMaps=colMaps)
 
-            print "%d seconds to do crossmatching" % (time.time() - start_time,)
-            start_time = time.time()
-
-            results = fmultiprocess(log=self.log, function=self._rank_classifications,
-                                    inputArray=range(len(theseBatches)), colMaps=colMaps,)
-
-            print "%d seconds to rank crossmatches" % (time.time() - start_time,)
-            start_time = time.time()
-
-            crossmatches = [d for r in results for d in r[1]]
-            classifications = {k: v for r in results for k, v in r[0].items()}
+            flat_list = [
+                item for sublist in crossmatchArray for item in sublist]
+            classifications, crossmatches = self._rank_classifications(
+                flat_list, colMaps)
 
             for t in transientsMetadataList:
                 if t["id"] not in classifications:
@@ -360,9 +358,6 @@ class transient_classifier():
                     colMaps=colMaps
                 )
 
-            print "%d seconds to add crossmatches & classifications to database" % (time.time() - start_time,)
-            start_time = time.time()
-
             if self.ra:
                 return classifications, crossmatches
 
@@ -371,8 +366,8 @@ class transient_classifier():
             self.update_classification_annotations_and_summaries(
                 self.updateAnnotations)
 
-            print "%d to add annotations to classifications" % (time.time() - start_time,)
-            start_time = time.time()
+            classificationRate = count / (time.time() - start_time)
+            print "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals()
 
         self.log.info('completed the ``classify`` method')
         return None, None
@@ -398,8 +393,7 @@ class transient_classifier():
             'starting the ``_get_transient_metadata_from_database_list`` method')
 
         sqlQuery = self.settings["database settings"][
-            "transients"]["transient query"] + " limit " + str(self.settings["database settings"][
-                "transients"]["classificationBatchSize"])
+            "transients"]["transient query"] + " limit " + str(self.largeBatchSize)
 
         thisInt = randint(0, 100)
         if "where" in sqlQuery:
@@ -568,8 +562,9 @@ class transient_classifier():
         """run the transients through the crossmatch algorithm in the settings file
 
          **Key Arguments:**
-            - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
             - ``transientsMetadataListIndex`` -- the list of transient metadata lifted from the database.
+            - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
+
 
         **Return:**
             - ``crossmatches`` -- a list of dictionaries of the associated sources crossmatched from the catalogues database
@@ -725,13 +720,13 @@ class transient_classifier():
 
     def _rank_classifications(
             self,
-            crossmatchArrayIndex,
+            crossmatchArray,
             colMaps):
         """*rank the classifications returned from the catalogue crossmatcher, annotate the results with a classification rank-number (most likely = 1) and a rank-score (weight of classification)*
 
         **Key Arguments:**
             - ``crossmatchArrayIndex`` -- the index of list of unranked crossmatch classifications
-            - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
+            - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
 
         **Return:**
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches
@@ -749,8 +744,7 @@ class transient_classifier():
         """
         self.log.info('starting the ``_rank_classifications`` method')
 
-        global crossmatchArray
-        crossmatches = crossmatchArray[crossmatchArrayIndex]
+        crossmatches = crossmatchArray
 
         for xm in crossmatches:
             if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
@@ -784,6 +778,7 @@ class transient_classifier():
             classifications[transient_object_id] = transClass
 
         self.log.info('completed the ``_rank_classifications`` method')
+
         return classifications, crossmatches
 
     def _print_results_to_stdout(
