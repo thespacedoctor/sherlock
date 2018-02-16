@@ -25,7 +25,7 @@ from fundamentals.mysql import readquery
 class update_wiki_pages():
 
     """
-    Update sherlock's github wiki pages with some useful info regarding the crossmatch database catalogue tables
+    *Update sherlock's github wiki pages with some useful info regarding the crossmatch database catalogue tables*
 
     **Key Arguments:**
         - ``log`` -- logger
@@ -43,6 +43,11 @@ class update_wiki_pages():
                 settings=settings
             )
             wiki.update() 
+
+    .. todo ::
+
+        - create a new script for updating sherlock wiki with the snippet above, remove wiki command from cl-utils and add stand alone scripts to the sherlock repo (cleans up the usage and docs for sherlock)
+        - harvest text from wiki pages and then delete them: https://github.com/thespacedoctor/sherlock/wiki
     """
     # INITIALISATION
 
@@ -57,7 +62,6 @@ class update_wiki_pages():
         self.settings = settings
 
         # INITIAL ACTIONS
-        # SETUP ALL DATABASE CONNECTIONS
         # SETUP ALL DATABASE CONNECTIONS
         from sherlock import database
         db = database(
@@ -113,12 +117,12 @@ class update_wiki_pages():
         mdContent = mdContent.encode("utf-8", "ignore")
 
         self.log.info('completed the ``update`` method')
-        return update_wiki_pages
+        return
 
     def _get_table_infos(
             self,
             trimmed=False):
-        """query the crossmatch catalogues database table metadata
+        """query the sherlock-catalogues database table metadata
         """
         self.log.info('starting the ``_get_table_infos`` method')
 
@@ -148,7 +152,7 @@ class update_wiki_pages():
     def _get_view_infos(
             self,
             trimmed=False):
-        """query the crossmatch catalogues database view metadata
+        """query the sherlock-catalogues database view metadata
         """
         self.log.info('starting the ``_get_view_infos`` method')
 
@@ -178,7 +182,7 @@ class update_wiki_pages():
     def _get_stream_view_infos(
             self,
             trimmed=False):
-        """query the crossmatch catalogues database streamed data tables' metadata
+        """query the sherlock-catalogues database streamed data tables' metadata
         """
         self.log.info('starting the ``_get_stream_view_infos`` method')
 
@@ -214,9 +218,9 @@ class update_wiki_pages():
         """generate markdown format tables from the database query results
 
         **Key Arguments:**
-            - ``tableData`` -- the crossmatch catalogues database table metadata.
-            - ``viewData`` -- the crossmatch catalogues database view metadata.
-            - ``streamData`` -- the crossmatch catalogues database streamed data tables' metadata.
+            - ``tableData`` -- the sherlock-catalogues database table metadata.
+            - ``viewData`` -- the sherlock-catalogues database view metadata.
+            - ``streamData`` -- the sherlock-catalogues database streamed data tables' metadata.
 
         **Return:**
             - ``mdContent`` -- the content of the markdown file
@@ -300,8 +304,8 @@ class update_wiki_pages():
         self.mdView = header + rows
 
         header = u"""
-| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |"""
+| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |  
+| :--- | :--- | :--- | :--- | :--- |  """
 
         rows = u""
         for ti in streamData:

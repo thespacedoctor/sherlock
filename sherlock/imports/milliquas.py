@@ -53,6 +53,16 @@ class milliquas(_base_importer):
             catalogueName="milliquas"
         )
         catalogue.ingest()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -60,6 +70,16 @@ class milliquas(_base_importer):
         """ingest the milliquas catalogue into the catalogues database
 
         The method first generates a list of python dictionaries from the milliquas datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
+
+        .. todo ::
+
+          - update key arguments values and definitions with defaults
+          - update return values and definitions
+          - update usage examples and text
+          - update docstring text
+          - check sublime snippet exists
+          - clip any useful text to docs mindmap
+          - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``get`` method')
 
@@ -100,7 +120,7 @@ CREATE TABLE `%(tableName)s` (
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 """ % locals()
 
-        self._add_data_to_database_table(
+        self.add_data_to_database_table(
             dictList=dictList,
             createStatement=createStatement
         )
@@ -114,6 +134,16 @@ CREATE TABLE `%(tableName)s` (
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the milliquas catalogue
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_milliquas`` method')

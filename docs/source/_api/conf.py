@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # sherlock documentation build configuration file, created by
-# sphinx-quickstart on Wed Jan 10 19:49:07 2018.
+# sphinx-quickstart on Fri Feb 16 17:02:50 2018.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -32,7 +32,9 @@
 # ones.
 extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.todo',
-    'sphinx.ext.viewcode']
+    'sphinx.ext.mathjax',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -104,11 +106,8 @@ html_static_path = ['_static']
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
     '**': [
-        'about.html',
-        'navigation.html',
         'relations.html',  # needs 'show_related': True theme option to display
         'searchbox.html',
-        'donate.html',
     ]
 }
 

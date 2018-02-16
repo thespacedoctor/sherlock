@@ -10,12 +10,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.commonutils.update_wiki_pages (class) &mdash; sherlock 1.2.5 documentation</title>
+  <title>sherlock.commonutils.update_wiki_pages (class) &mdash; sherlock v1.3.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
   
 
   
@@ -41,10 +43,10 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 1.2.5 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
-        <link rel="next" title="sherlock.imports.ifs (class)" href="sherlock.imports.ifs.html"/>
-        <link rel="prev" title="sherlock.transient_classifier (class)" href="sherlock.transient_classifier.html"/> 
+        <link rel="next" title="sherlock.database (class)" href="sherlock.database.html"/>
+        <link rel="prev" title="sherlock.catalogue_conesearch (class)" href="sherlock.catalogue_conesearch.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -53,6 +55,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -75,7 +78,7 @@
             
             
               <div class="version">
-                v1.2.5
+                v1.3.3
               </div>
             
           
@@ -96,7 +99,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Getting Started</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_includes/index.html#command-line-usage">Command-Line Usage</a></li>
@@ -106,21 +112,20 @@
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#classes">Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="sherlock.catalogue_conesearch.html">sherlock.catalogue_conesearch (<em>class</em>)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.database.html">sherlock.database (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.database_cleaner.html">sherlock.database_cleaner (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_catalogue_crossmatch.html">sherlock.transient_catalogue_crossmatch (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_classifier.html">sherlock.transient_classifier (<em>class</em>)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.commonutils.update_wiki_pages (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports._base_importer.html">sherlock.imports._base_importer (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs.html">sherlock.imports.ifs (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.marshall.html">sherlock.imports.marshall (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.milliquas.html">sherlock.imports.milliquas (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned.html">sherlock.imports.ned (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_d.html">sherlock.imports.ned_d (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.veron.html">sherlock.imports.veron (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.utKit.html">sherlock.utKit.utKit (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_catalogue_crossmatch.html">sherlock.transient_catalogue_crossmatch (<em>class</em>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_classifier.html">sherlock.transient_classifier (<em>class</em>)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
@@ -136,8 +141,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">sherlock</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
       </nav>
 
 
@@ -146,25 +153,42 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../autosummary.html">Subpackages</a> &raquo;</li>
-      
-    <li>sherlock.commonutils.update_wiki_pages (<em>class</em>)</li>
+        
+      <li>sherlock.commonutils.update_wiki_pages (<em>class</em>)</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/_autosummary/sherlock.commonutils.update_wiki_pages.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/_autosummary/sherlock.commonutils.update_wiki_pages.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -175,18 +199,18 @@
 <dl class="class">
 <dt id="sherlock.commonutils.update_wiki_pages">
 <em class="property">class </em><code class="descclassname">sherlock.commonutils.</code><code class="descname">update_wiki_pages</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages" title="Permalink to this definition">  ∞</a></dt>
-<dd><p>Update sherlock&#8217;s github wiki pages with some useful info regarding the crossmatch database catalogue tables</p>
+<dd><p><em>Update sherlock’s github wiki pages with some useful info regarding the crossmatch database catalogue tables</em></p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">log</span></code> &#8211; logger</li>
-<li><code class="docutils literal"><span class="pre">settings</span></code> &#8211; the settings dictionary</li>
+<li><code class="docutils literal"><span class="pre">log</span></code> – logger</li>
+<li><code class="docutils literal"><span class="pre">settings</span></code> – the settings dictionary</li>
 </ul>
 </dd>
 </dl>
 <p><strong>Usage:</strong></p>
 <blockquote>
-<div><p>To trigger an update of sherlock&#8217;s wiki pages to give an overview of the crossmatch table database tables run the following:</p>
+<div><p>To trigger an update of sherlock’s wiki pages to give an overview of the crossmatch table database tables run the following:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sherlock.commonutils</span> <span class="kn">import</span> <span class="n">update_wiki_pages</span>
 <span class="n">wiki</span> <span class="o">=</span> <span class="n">update_wiki_pages</span><span class="p">(</span>
     <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
@@ -196,11 +220,13 @@
 </pre></div>
 </div>
 </div></blockquote>
-<dl class="method">
-<dt id="sherlock.commonutils.update_wiki_pages.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages.__init__" title="Permalink to this definition">  ∞</a></dt>
-<dd></dd></dl>
-
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>create a new script for updating sherlock wiki with the snippet above, remove wiki command from cl-utils and add stand alone scripts to the sherlock repo (cleans up the usage and docs for sherlock)</li>
+<li>harvest text from wiki pages and then delete them: <a class="reference external" href="https://github.com/thespacedoctor/sherlock/wiki">https://github.com/thespacedoctor/sherlock/wiki</a></li>
+</ul>
+</div>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -208,29 +234,111 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code>(log[,&nbsp;settings])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../_api/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages.update_wiki_pages.update" title="sherlock.commonutils.update_wiki_pages.update_wiki_pages.update"><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></a>()</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>()</td>
 <td>Update wiki pages</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">_create_md_tables</span></code>(tableData,&nbsp;viewData,&nbsp;…)</td>
+<td>generate markdown format tables from the database query results</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_get_stream_view_infos</span></code>([trimmed])</td>
+<td>query the sherlock-catalogues database streamed data tables’ metadata</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">_get_table_infos</span></code>([trimmed])</td>
+<td>query the sherlock-catalogues database table metadata</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_get_view_infos</span></code>([trimmed])</td>
+<td>query the sherlock-catalogues database view metadata</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">_update_github</span></code>()</td>
+<td>commit the changes and push them to github</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_write_wiki_pages</span></code>(mdContent)</td>
+<td>write the markdown formated content of the database tables’ metadata to local wiki pages</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="sherlock.commonutils.update_wiki_pages.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages.update" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>Update wiki pages</p>
+<p>See class docstring for usage</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.commonutils.update_wiki_pages._get_table_infos">
+<code class="descname">_get_table_infos</code><span class="sig-paren">(</span><em>trimmed=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages._get_table_infos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages._get_table_infos" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>query the sherlock-catalogues database table metadata</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.commonutils.update_wiki_pages._get_view_infos">
+<code class="descname">_get_view_infos</code><span class="sig-paren">(</span><em>trimmed=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages._get_view_infos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages._get_view_infos" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>query the sherlock-catalogues database view metadata</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.commonutils.update_wiki_pages._get_stream_view_infos">
+<code class="descname">_get_stream_view_infos</code><span class="sig-paren">(</span><em>trimmed=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages._get_stream_view_infos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages._get_stream_view_infos" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>query the sherlock-catalogues database streamed data tables’ metadata</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.commonutils.update_wiki_pages._create_md_tables">
+<code class="descname">_create_md_tables</code><span class="sig-paren">(</span><em>tableData</em>, <em>viewData</em>, <em>streamData</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages._create_md_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages._create_md_tables" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>generate markdown format tables from the database query results</p>
+<dl class="docutils">
+<dt><strong>Key Arguments:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">tableData</span></code> – the sherlock-catalogues database table metadata.</li>
+<li><code class="docutils literal"><span class="pre">viewData</span></code> – the sherlock-catalogues database view metadata.</li>
+<li><code class="docutils literal"><span class="pre">streamData</span></code> – the sherlock-catalogues database streamed data tables’ metadata.</li>
+</ul>
+</dd>
+<dt><strong>Return:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">mdContent</span></code> – the content of the markdown file</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.commonutils.update_wiki_pages._write_wiki_pages">
+<code class="descname">_write_wiki_pages</code><span class="sig-paren">(</span><em>mdContent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages._write_wiki_pages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages._write_wiki_pages" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>write the markdown formated content of the database tables’ metadata to local wiki pages</p>
+<dl class="docutils">
+<dt><strong>Key Arguments:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">mdContent</span></code> – the content of the markdown file</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sherlock.commonutils.update_wiki_pages._update_github">
+<code class="descname">_update_github</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/commonutils/update_wiki_pages.html#update_wiki_pages._update_github"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.commonutils.update_wiki_pages._update_github" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>commit the changes and push them to github</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sherlock.imports.ifs.html" class="btn btn-neutral float-right" title="sherlock.imports.ifs (class)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sherlock.database.html" class="btn btn-neutral float-right" title="sherlock.database (class)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sherlock.transient_classifier.html" class="btn btn-neutral" title="sherlock.transient_classifier (class)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sherlock.catalogue_conesearch.html" class="btn btn-neutral" title="sherlock.catalogue_conesearch (class)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -239,7 +347,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Dave Young.
+        &copy; Copyright 2018, Dave Young.
 
     </p>
   </div>
@@ -261,16 +369,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.2.5',
+            VERSION:'v1.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*query the crossmatch catalogues helper tables to generate a map of the important columns of each catalogue*
+*Query the sherlock-catalogues helper tables to generate a map of the important columns of each catalogue*
 
 :Author:
     David Young
@@ -20,17 +20,24 @@ from fundamentals.mysql import readquery
 def get_crossmatch_catalogues_column_map(
         dbConn,
         log):
-    """*query the crossmatch catalogues helper tables to generate a map of the important columns of each catalogue*
+    """*Query the sherlock-catalogues helper tables to generate a map of the important columns of each catalogue*
 
-    Note the work must be done to manually map the inhomogeneous column-names from the crossmatch catalogues to an internal homogeneous name-set which includes ra, dec, redshift, object name etc.
-    The maps are set in the two helper tables called `tcs_helper_catalogue_views_info` and `tcs_helper_catalogue_views_info`. 
+    Within your sherlock-catalogues database you need to manually map the inhomogeneous column-names from the sherlock-catalogues to an internal homogeneous name-set which includes *ra*, *dec*, *redshift*, *object name*, *magnitude*, *filter* etc.
+    The column-name map is set within the two database helper tables called `tcs_helper_catalogue_views_info` and `tcs_helper_catalogue_views_info`. See the *'Checklist for Adding A New Reference Catalogue to the Sherlock Catalogues Database'* for more information.
+
+    .. todo::
+
+        - write a checklist for adding a new catalogue to the sherlock database and reference it from here (use the image below of the tcs_helper_catalogue_views_info table)
+
+    .. image:: https://farm5.staticflickr.com/4604/38429536400_eafa991580_o.png
+        :width: 200 px
 
     **Key Arguments:**
-        - ``dbConn`` -- the crossatch catalogues database connection
+        - ``dbConn`` -- the sherlock-catalogues database connection
         - ``log`` -- logger
 
     **Return:**
-        - ``colMaps`` -- dictionary of dictionaries {view_name: {columnMap}}
+        - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
 
     **Usage:**
 

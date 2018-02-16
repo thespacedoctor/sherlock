@@ -10,12 +10,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Command-Line Usage &mdash; sherlock 1.2.5 documentation</title>
+  <title>Command-Line Usage &mdash; sherlock v1.3.3 documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
   
 
   
@@ -41,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock 1.2.5 documentation" href="../index.html"/> 
+    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -50,6 +52,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -72,7 +75,7 @@
             
             
               <div class="version">
-                v1.2.5
+                v1.3.3
               </div>
             
           
@@ -93,7 +96,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Getting Started</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command-Line Usage</a></li>
@@ -103,7 +109,6 @@
 <p class="caption"><span class="caption-text">Python Package Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Subpackages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#modules">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
 </ul>
@@ -118,8 +123,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">sherlock</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
       </nav>
 
 
@@ -128,23 +135,40 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
-    <li>Command-Line Usage</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Command-Line Usage</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/_includes/usage.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/_includes/usage.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -152,11 +176,11 @@
             
   <div class="section" id="command-line-usage">
 <h1>Command-Line Usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">  ∞</a></h1>
-<div class="highlight-bash"><div class="highlight"><pre><span></span># SHERLOCK #
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># SHERLOCK #</span>
 : INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
-=============================================================================================
+<span class="o">=============================================================================================</span>
 
-Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en/stable
+Documentation <span class="k">for</span> sherlock can be found here: http://sherlock.readthedocs.org/en/stable
 
 .. todo ::
 
@@ -165,44 +189,36 @@ Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en
 
 Usage:
     sherlock init
-    sherlock info [-s &lt;pathToSettingsFile&gt;]
-    sherlock [-N] dbmatch [-f --update] [-s &lt;pathToSettingsFile&gt;]
-    sherlock [-vN] match -- &lt;ra&gt; &lt;dec&gt; [&lt;pathToSettingsFile&gt;]
-    sherlock clean [-s &lt;pathToSettingsFile&gt;]
-    sherlock wiki [-s &lt;pathToSettingsFile&gt;]
-    sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; [-s &lt;pathToSettingsFile&gt;]
-    sherlock import cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; [-s &lt;pathToSettingsFile&gt;]
-    sherlock import stream &lt;stream_name&gt; [-s &lt;pathToSettingsFile&gt;]
+    sherlock info <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock <span class="o">[</span>-NA<span class="o">]</span> dbmatch <span class="o">[</span>--update<span class="o">]</span> <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock <span class="o">[</span>-vN<span class="o">]</span> match -- &lt;ra&gt; &lt;dec&gt; <span class="o">[</span>&lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock clean <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock import cat &lt;cat_name&gt; &lt;pathToDataFile&gt; &lt;cat_version&gt; <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock import stream &lt;stream_name&gt; <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
 
 Options:
-    init                    setup the sherlock settings file for the first time
+    init                    setup the sherlock settings file <span class="k">for</span> the first <span class="nb">time</span>
     match                   XXXX
     dbmatch                 database match
     clean                   XXXX
     wiki                    XXXX
     import                  XXXX
-    ned                     use the online NED database as the source catalogue
-    cat                     import a static catalogue into the crossmatch catalogues database
-    stream                  download/stream new data from a give source catalogue into the sherlock crossmatch catalogues database
-    info                    print an overview of the current catalogues, views and streams in the sherlock database ready for crossmatching
+    ned                     use the online NED database as the <span class="nb">source</span> catalogue
+    cat                     import a static catalogue into the sherlock-catalogues database
+    stream                  download/stream new data from a give <span class="nb">source</span> catalogue into the sherlock sherlock-catalogues database
+    info                    print an overview of the current catalogues, views and streams in the sherlock database ready <span class="k">for</span> crossmatching
 
-    ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
-    dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
+    ra                      the right-ascension coordinate with which to perform a conesearch <span class="o">(</span>sexegesimal or decimal degrees<span class="o">)</span>
+    dec                     the declination coordinate with which to perform a conesearch <span class="o">(</span>sexegesimal or decimal degrees<span class="o">)</span>
     radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-    cat_name                name of the catalogue being imported. The following catalogues can be imported:
-                                * ``veron``: Veron AGN/QSO catalogue
-                                    http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258
-                                * ``milliquas``: Million Quasars Catalog
-                                    http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html
-                                * ``ned_d``: NED&#39;s Master List of Redshift-Independent Extragalactic Distances
-                                    https://ned.ipac.caltech.edu/Library/Distances/
-    stream_name             name of the stream to import into the crossmatch catalogues database. The following streams can be imported:
-                                * ``ifs``: Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue (L. Galbany)
-                                    http://www.das.uchile.cl/~lgalbany/LG/research.html
+    cat_name                name of the catalogue being imported <span class="o">(</span>veron<span class="p">|</span>milliquas<span class="p">|</span>ned_d<span class="o">)</span>
+    stream_name             name of the stream to import into the sherlock-catalogues database <span class="o">(</span>ifs<span class="o">)</span>
 
-    -N, --skipNedUpdate     do not update the NED database before classification
-    -f, --fast              faster but errors in crossmatch table ingest my be misses
-    -h, --help              show this help message
+    -N, --skipNedUpdate     <span class="k">do</span> not update the NED database before classification
+    -A, --skipAnnotation    <span class="k">do</span> not update the peak magnitudes and human readable text annotations of objects <span class="o">(</span>can eat up some <span class="nb">time</span><span class="o">)</span>
+    -h, --help              show this <span class="nb">help</span> message
     -s, --settings          the settings file
     -v, --verbose           print more details to stdout
     -l, --transientlistId   the id of the transient list to classify
@@ -213,6 +229,9 @@ Options:
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
@@ -221,7 +240,7 @@ Options:
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Dave Young.
+        &copy; Copyright 2018, Dave Young.
 
     </p>
   </div>
@@ -243,16 +262,17 @@ Options:
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.2.5',
+            VERSION:'v1.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
