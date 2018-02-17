@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*The base importer for sherlock imports*
+*The base importer for sherlock catalogue imports*
 
 :Author:
     David Young
@@ -33,16 +33,25 @@ from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 class _base_importer():
 
     """
-    The base importer object used to import new catalgues into sherlock's crossmatch catalogues database
+    *The base importer object used to import new catalgues into sherlock-catalogues database*
 
     **Key Arguments:**
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
-        - ``pathToDataFIle`` -- path to the _base_importer data file
-        - ``version`` -- version of the _base_importer catalogue
-        - ``catalogueName`` -- name of the catalogue
+        - ``pathToDataFIle`` -- path to the file containing the data to import
+        - ``version`` -- version number of the catalogue to be imported (e.g. DR12)
+        - ``catalogueName`` -- name of the catalogue to be imported
         - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
-        - ``radiusArcsec`` - - the radius in arcsec with which to perform the initial NED conesearch. Default * False*
+        - ``radiusArcsec`` -- the radius in arcsec with which to perform the initial NED conesearch. Default *False*
+
+    **Usage:**
+
+        To use this base class to write a new importer, create your class like so:
+
+            .. code-block:: python 
+
+                class newImporter(_base_importer):
+                    ...
     """
     # INITIALISATION
 
@@ -122,26 +131,32 @@ class _base_importer():
 
         return None
 
-    def _add_data_to_database_table(
+    def add_data_to_database_table(
             self,
             dictList,
             createStatement=False):
-        """use the mysql sucker built into fundamentals package to import data into the crsossmatch catalogues mysql database (via insert scripts)
+        """*Import data in the list of dictionaries in the requested database table*
+
+        Also adds HTMIDs and updates the sherlock-catalogue database helper table with the time-stamp of when the imported catlogue was last updated
 
         **Key Arguments:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the milliquas catalogue
-            - ``createStatement`` - the table's mysql create statement (used to generate table if it does not yet exist in database)
+            - ``dictList`` - a list of dictionaries containing all the rows in the catalogue to be imported
+            - ``createStatement`` - the table's mysql create statement (used to generate table if it does not yet exist in database). Default *False*
 
         **Usage:**
 
             .. code-block:: python 
 
-                self._add_data_to_database_table(
+                self.add_data_to_database_table(
                     dictList=dictList,
                     createStatement=createStatement
                 )
+
+        .. todo ::
+
+            - Write a checklist for creating a new sherlock database importer
         """
-        self.log.info('starting the ``_add_data_to_database_table`` method')
+        self.log.info('starting the ``add_data_to_database_table`` method')
 
         if len(dictList) == 0:
             return
@@ -149,41 +164,41 @@ class _base_importer():
         myPid = self.myPid
         dbTableName = self.dbTableName
 
-        # RECURSIVELY CREATE MISSING DIRECTORIES
-        now = datetime.now()
-        now = now.strftime("%Y%m%dt%H%M%S")
-        if not os.path.exists("/tmp/myinserts/%(myPid)s/%(now)s" % locals()):
-            os.makedirs("/tmp/myinserts/%(myPid)s/%(now)s" % locals())
-        dataSet = list_of_dictionaries(
-            log=self.log,
-            listOfDictionaries=dictList,
-            reDatetime=self.reDatetime
-        )
+        if createStatement:
+            writequery(
+                log=self.log,
+                sqlQuery=createStatement,
+                dbConn=self.cataloguesDbConn,
+            )
 
-        filepath = "/tmp/myinserts/%(myPid)s/%(now)s/%(dbTableName)s-%(now)s.sql" % locals()
-        mysqlData = dataSet.mysql(
-            tableName=self.dbTableName, filepath=filepath, createStatement=createStatement)
-
-        directory_script_runner(
+        insert_list_of_dictionaries_into_database_tables(
+            dbConn=self.cataloguesDbConn,
             log=self.log,
-            pathToScriptDirectory="/tmp/myinserts/%(myPid)s/%(now)s" % locals(),
-            databaseName=self.settings["database settings"][
-                "static catalogues"]["db"],
-            loginPath=self.settings["database settings"][
-                "static catalogues"]["loginPath"],
-            successRule="delete",
-            failureRule="failed"
+            dictList=dictList,
+            dbTableName=dbTableName,
+            uniqueKeyList=[],
+            dateModified=True,
+            batchSize=2500,
+            replace=True,
+            dbSettings=self.settings["database settings"][
+                "static catalogues"]
         )
 
         self._add_htmids_to_database_table()
         self._update_database_helper_table()
 
-        self.log.info('completed the ``_add_data_to_database_table`` method')
+        self.log.info('completed the ``add_data_to_database_table`` method')
         return None
 
     def _add_htmids_to_database_table(
             self):
-        """add htmids to database table once all the data has been imported
+        """*Add HTMIDs to database table once all the data has been imported (HTM Levels 10,13,16)*
+
+        **Usage:**
+
+            .. code-block:: python 
+
+                self._add_htmids_to_database_table()
         """
         self.log.info('starting the ``add_htmids_to_database_table`` method')
 
@@ -205,7 +220,13 @@ class _base_importer():
 
     def _update_database_helper_table(
             self):
-        """ update database helper table
+        """*Update the sherlock catalogues database helper table with the time-stamp of when this catlogue was last updated*
+
+        **Usage:**
+
+            .. code-block:: python 
+
+                self._update_database_helper_table()
         """
         self.log.info('starting the ``_update_database_helper_table`` method')
 

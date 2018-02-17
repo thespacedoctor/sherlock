@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import ned stream into sherlock's crossmatch catalogues database*
+*import ned stream into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -55,6 +55,16 @@ class ned(_base_importer):
             radiusArcsec=180
         )
         stream.ingest()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -68,6 +78,16 @@ class ned(_base_importer):
             .. code-block:: python
 
                 ned.ingest()
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``ingest`` method')
 
@@ -123,7 +143,7 @@ class ned(_base_importer):
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
 """ % locals()
 
-        self._add_data_to_database_table(
+        self.add_data_to_database_table(
             dictList=dictList,
             createStatement=createStatement
         )
@@ -140,6 +160,16 @@ class ned(_base_importer):
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the ned stream
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_ned`` method')
@@ -166,6 +196,16 @@ class ned(_base_importer):
     def _update_ned_query_history(
             self):
         """*update the database helper table to give details of the ned cone searches performed*
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_update_ned_query_history`` method')
 
@@ -258,6 +298,16 @@ class ned(_base_importer):
     def _download_ned_source_metadata(
             self):
         """query NED using the names of the NED sources in our local database to retrieve extra metadata
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_download_ned_source_metadata`` method')
 
@@ -290,6 +340,16 @@ class ned(_base_importer):
 
         **Return:**
             - ``len(self.theseIds)`` -- the number of NED IDs returned
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_get_ned_sources_needing_metadata`` method')
@@ -322,6 +382,17 @@ class ned(_base_importer):
 
         **Key Arguments:**
             - ``batchCount`` - the index number of the batch sent to NED
+
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_do_ned_namesearch_queries_and_add_resulting_metadata_to_database`` method')
@@ -384,7 +455,7 @@ class ned(_base_importer):
 
                 dictList.append(row)
 
-        self._add_data_to_database_table(
+        self.add_data_to_database_table(
             dictList=dictList,
             createStatement="""SET SESSION sql_mode="";"""
         )
@@ -424,6 +495,16 @@ class ned(_base_importer):
 
         **Return:**
             - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_count_ned_sources_in_database_requiring_metadata`` method')

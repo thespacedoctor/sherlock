@@ -85,19 +85,17 @@
 <p id="n16" class="pln"><a href="#n16">16</a></p>
 <p id="n17" class="pln"><a href="#n17">17</a></p>
 <p id="n18" class="pln"><a href="#n18">18</a></p>
-<p id="n19" class="pln"><a href="#n19">19</a></p>
-<p id="n20" class="pln"><a href="#n20">20</a></p>
-<p id="n21" class="stm mis"><a href="#n21">21</a></p>
+<p id="n19" class="stm mis"><a href="#n19">19</a></p>
+<p id="n20" class="stm mis"><a href="#n20">20</a></p>
+<p id="n21" class="pln"><a href="#n21">21</a></p>
 <p id="n22" class="stm mis"><a href="#n22">22</a></p>
-<p id="n23" class="pln"><a href="#n23">23</a></p>
-<p id="n24" class="stm mis"><a href="#n24">24</a></p>
 
             </td>
             <td class="text">
 <p id="t1" class="pln"><span class="com">#!/usr/local/bin/python</span><span class="strut">&nbsp;</span></p>
 <p id="t2" class="pln"><span class="com"># encoding: utf-8</span><span class="strut">&nbsp;</span></p>
 <p id="t3" class="stm mis"><span class="str">"""</span><span class="strut">&nbsp;</span></p>
-<p id="t4" class="pln"><span class="str">*Get common file and folder paths for the host package*</span><span class="strut">&nbsp;</span></p>
+<p id="t4" class="pln"><span class="str">*Get common file and folder paths for the host package - used in unit testing code*</span><span class="strut">&nbsp;</span></p>
 <p id="t5" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t6" class="pln"><span class="str">:Author:</span><span class="strut">&nbsp;</span></p>
 <p id="t7" class="pln"><span class="str">    David Young</span><span class="strut">&nbsp;</span></p>
@@ -110,14 +108,12 @@
 <p id="t14" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t15" class="stm mis"><span class="key">def</span> <span class="nam">getpackagepath</span><span class="op">(</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t16" class="pln">    <span class="str">"""</span><span class="strut">&nbsp;</span></p>
-<p id="t17" class="pln"><span class="str">     *Get the root path for this python package*</span><span class="strut">&nbsp;</span></p>
-<p id="t18" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t19" class="pln"><span class="str">    *Used in unit testing code*</span><span class="strut">&nbsp;</span></p>
-<p id="t20" class="pln"><span class="str">    """</span><span class="strut">&nbsp;</span></p>
-<p id="t21" class="stm mis">    <span class="nam">moduleDirectory</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span><span class="op">.</span><span class="nam">dirname</span><span class="op">(</span><span class="nam">__file__</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t22" class="stm mis">    <span class="nam">packagePath</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span><span class="op">.</span><span class="nam">dirname</span><span class="op">(</span><span class="nam">__file__</span><span class="op">)</span> <span class="op">+</span> <span class="str">"/../"</span><span class="strut">&nbsp;</span></p>
-<p id="t23" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t24" class="stm mis">    <span class="key">return</span> <span class="nam">packagePath</span><span class="strut">&nbsp;</span></p>
+<p id="t17" class="pln"><span class="str">     *Get the root path for this python package - used in unit testing code*</span><span class="strut">&nbsp;</span></p>
+<p id="t18" class="pln"><span class="str">    """</span><span class="strut">&nbsp;</span></p>
+<p id="t19" class="stm mis">    <span class="nam">moduleDirectory</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span><span class="op">.</span><span class="nam">dirname</span><span class="op">(</span><span class="nam">__file__</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t20" class="stm mis">    <span class="nam">packagePath</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span><span class="op">.</span><span class="nam">dirname</span><span class="op">(</span><span class="nam">__file__</span><span class="op">)</span> <span class="op">+</span> <span class="str">"/../"</span><span class="strut">&nbsp;</span></p>
+<p id="t21" class="pln"><span class="strut">&nbsp;</span></p>
+<p id="t22" class="stm mis">    <span class="key">return</span> <span class="nam">packagePath</span><span class="strut">&nbsp;</span></p>
 
             </td>
         </tr>
@@ -127,8 +123,8 @@
 <div id="footer">
     <div class="content">
         <p>
-            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.3.4</a>,
-            created at 2017-02-01 21:50
+            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4.2</a>,
+            created at 2018-02-15 12:42
         </p>
     </div>
 </div>

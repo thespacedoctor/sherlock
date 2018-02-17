@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy stream into sherlock's crossmatch catalogues database*
+*Import Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy stream into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -18,6 +18,7 @@ import glob
 import pickle
 import codecs
 import string
+import requests
 import re
 from docopt import docopt
 from astrocalc.coords import unit_conversion
@@ -28,16 +29,15 @@ from ._base_importer import _base_importer
 class ifs(_base_importer):
 
     """
-    *importer object for the Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue stream*
+    *Importer for the Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue stream*
 
     **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
 
     **Usage:**
 
-      To import the IFS catalogue stream, run the following:
+      To import the IFS catalogue stream into the sherlock-catalogues database, run the following:
 
       .. code-block:: python 
 
@@ -47,13 +47,21 @@ class ifs(_base_importer):
             settings=settings
         )
         stream.ingest()
+
+    .. todo ::
+
+        - check sublime snippet exists
     """
     # INITIALISATION
 
     def ingest(self):
-        """ingest the IFS catalogue into the catalogues database
+        """*Import the IFS catalogue into the sherlock-catalogues database*
 
         The method first generates a list of python dictionaries from the IFS datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
+
+        **Usage:**
+
+            See class docstring for usage
         """
         self.log.info('starting the ``get`` method')
 
@@ -87,7 +95,7 @@ class ifs(_base_importer):
     ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 """ % locals()
 
-        self._add_data_to_database_table(
+        self.add_data_to_database_table(
             dictList=dictList,
             createStatement=createStatement
         )
@@ -97,39 +105,36 @@ class ifs(_base_importer):
 
     def _create_dictionary_of_IFS(
             self):
-        """create a list of dictionaries containing all the rows in the IFS stream
+        """*Generate the list of dictionaries containing all the rows in the IFS stream*
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the IFS stream
+
+        **Usage:**
+
+            .. code-block:: python 
+
+                from sherlock.imports import IFS
+                stream = IFS(
+                    log=log,
+                    settings=settings
+                )
+                dictList = stream._create_dictionary_of_IFS()
         """
         self.log.info(
             'starting the ``_create_dictionary_of_IFS`` method')
 
-        localUrls = multiobject_download(
-            urlList=[self.settings["ifs galaxies url"]],
-            downloadDirectory="/tmp",
-            log=self.log,
-            timeStamp=True,
-            timeout=180,
-            concurrentDownloads=2,
-            resetFilename=False,
-            credentials=False,  # { 'username' : "...", "password", "..." }
-            longTime=True,
-            indexFilenames=False
-        )
-        urlDoc = localUrls[0]
-
-        pathToReadFile = urlDoc
+        # GRAB THE CONTENT OF THE IFS CSV
         try:
-            self.log.debug("attempting to open the file %s" %
-                           (pathToReadFile,))
-            readFile = codecs.open(pathToReadFile, encoding='utf-8', mode='r')
-            thisData = readFile.readlines()
-            readFile.close()
-        except IOError, e:
-            message = 'could not open the file %s' % (pathToReadFile,)
-            self.log.critical(message)
-            raise IOError(message)
+            response = requests.get(
+                url=self.settings["ifs galaxies url"],
+            )
+            thisData = response.content
+            thisData = thisData.split("\n")
+            status_code = response.status_code
+        except requests.exceptions.RequestException:
+            print 'HTTP Request failed'
+            sys.exit(0)
 
         dictList = []
         columns = ["name", "raDeg", "decDeg", "z"]

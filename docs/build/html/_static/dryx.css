@@ -3,3 +3,7 @@
     height: 100%;
     max-width: 1500px;
 }
+
+code span.pre {
+    color: #dc322f;
+}

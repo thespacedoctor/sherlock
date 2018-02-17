@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import ned_d catalogue into sherlock's crossmatch catalogues database*
+*import ned_d catalogue into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -56,6 +56,16 @@ class ned_d(_base_importer):
             catalogueName="ned_d"
         )
         catalogue.ingest()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -63,6 +73,16 @@ class ned_d(_base_importer):
         """ingest the ned_d catalogue into the catalogues database
 
         The method first generates a list of python dictionaries from the ned_d datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``get`` method')
 
@@ -146,7 +166,7 @@ class ned_d(_base_importer):
                         (`%(tableName)s`.`master_row` = 1));
         """ % locals()
 
-        self._add_data_to_database_table(
+        self.add_data_to_database_table(
             dictList=dictList,
             createStatement=createStatement
         )
@@ -164,6 +184,16 @@ class ned_d(_base_importer):
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the ned_d catalogue
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_ned_d`` method')
@@ -250,6 +280,16 @@ class ned_d(_base_importer):
     def _clean_up_columns(
             self):
         """clean up columns of the NED table
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_clean_up_columns`` method')
 
@@ -289,6 +329,16 @@ class ned_d(_base_importer):
     def _get_metadata_for_galaxies(
             self):
         """get metadata for galaxies
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_get_metadata_for_galaxies`` method')
 
@@ -304,7 +354,7 @@ class ned_d(_base_importer):
             self._get_3000_galaxies_needing_metadata()
             dictList = self._query_ned_and_add_results_to_database(thisCount)
 
-            self._add_data_to_database_table(
+            self.add_data_to_database_table(
                 dictList=dictList,
                 createStatement=False
             )
@@ -320,6 +370,16 @@ class ned_d(_base_importer):
 
         **Return:**
             - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_count_galaxies_requiring_metadata`` method')
@@ -351,6 +411,16 @@ class ned_d(_base_importer):
 
         **Return:**
             - ``len(self.theseIds)`` -- the number of NED IDs returned
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_get_3000_galaxies_needing_metadata`` method')
@@ -383,6 +453,16 @@ class ned_d(_base_importer):
 
         **Key Arguments:**
             - ``batchCount`` - the index number of the batch sent to NED
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_query_ned_and_add_results_to_database`` method')
@@ -479,6 +559,16 @@ class ned_d(_base_importer):
     def _update_sdss_coverage(
             self):
         """ update sdss coverage
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.info('starting the ``_update_sdss_coverage`` method')
 
