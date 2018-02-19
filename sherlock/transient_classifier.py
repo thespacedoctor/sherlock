@@ -219,7 +219,7 @@ class transient_classifier():
         )
 
         # 2018-02-05 KWS commented out again!! It doesn't work MySQL 5.5.
-        #self._create_tables_if_not_exist()
+        # self._create_tables_if_not_exist()
 
         import time
         start_time = time.time()
@@ -236,8 +236,6 @@ class transient_classifier():
         largeBatchSize = int(50000 / searchCount)
         miniBatchSize = int(largeBatchSize / searchCount)
         self.largeBatchSize = largeBatchSize
-
-        print "BATCH SIZE = %(miniBatchSize)s" % locals()
 
         while remaining:
 
@@ -330,10 +328,13 @@ class transient_classifier():
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
 
+            print "BATCH SIZE = %(total)s" % locals()
+            print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
+
             # DEFINE AN INPUT ARRAY
             cores = psutil.cpu_count()
-            if cores > 12:
-                cores = 12
+            if cores > 2:
+                cores = 2
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
                                             inputArray=range(len(theseBatches)), poolSize=cores, colMaps=colMaps)
 
