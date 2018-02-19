@@ -233,7 +233,7 @@ class transient_classifier():
                 if bf in searchPara:
                     searchCount += 1
 
-        largeBatchSize = int(4000 / searchCount)
+        largeBatchSize = int(10000 / searchCount)
         miniBatchSize = int(largeBatchSize / searchCount)
         self.largeBatchSize = largeBatchSize
 
