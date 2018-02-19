@@ -236,7 +236,7 @@ class transient_classifier():
         largeBatchSize = int(50000 / searchCount)
         miniBatchSize = int(largeBatchSize / searchCount)
         denominator = searchCount
-        while miniBatchSize > 20000:
+        while miniBatchSize > 7000:
             denominator += 1
             miniBatchSize = int(largeBatchSize / denominator)
         self.largeBatchSize = largeBatchSize
