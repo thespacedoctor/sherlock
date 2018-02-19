@@ -235,6 +235,10 @@ class transient_classifier():
 
         largeBatchSize = int(50000 / searchCount)
         miniBatchSize = int(largeBatchSize / searchCount)
+        denominator = searchCount
+        while miniBatchSize > 20000:
+            denominator += 1
+            miniBatchSize = int(largeBatchSize / denominator)
         self.largeBatchSize = largeBatchSize
 
         while remaining:
@@ -333,11 +337,11 @@ class transient_classifier():
             print "MINI BATCH SIZE = %(batchPlusOne)s x %(miniBatchSize)s" % locals()
 
             # DEFINE AN INPUT ARRAY
-            cores = psutil.cpu_count()
-            if cores > 8:
-                cores = 8
+            # cores = psutil.cpu_count()
+            # if cores > 8:
+            #     cores = 8
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
-                                            inputArray=range(len(theseBatches)), poolSize=cores, colMaps=colMaps)
+                                            inputArray=range(len(theseBatches)), poolSize=None, colMaps=colMaps)
 
             flat_list = [
                 item for sublist in crossmatchArray for item in sublist]
