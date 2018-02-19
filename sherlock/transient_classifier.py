@@ -34,6 +34,7 @@ import psutil
 from fundamentals import fmultiprocess
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 from sherlock import transient_catalogue_crossmatch
+import psutil
 
 theseBatches = []
 crossmatchArray = []
@@ -330,8 +331,11 @@ class transient_classifier():
                 theseBatches.append(thisBatch)
 
             # DEFINE AN INPUT ARRAY
+            cores = psutil.cpu_count()
+            if cores > 12:
+                cores = 12
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
-                                            inputArray=range(len(theseBatches)), colMaps=colMaps)
+                                            inputArray=range(len(theseBatches)), poolSize=cores, colMaps=colMaps)
 
             flat_list = [
                 item for sublist in crossmatchArray for item in sublist]
