@@ -708,11 +708,16 @@ class transient_classifier():
                         where %(transientTableIdCol)s  = "%(k)s";
             """ % locals()
 
+        print sqlQuery[0:1000]
+
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
         )
+
+        print "FINISHED SQLQUERY"
+        sys.exit(0)
 
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.transientsDbConn,
