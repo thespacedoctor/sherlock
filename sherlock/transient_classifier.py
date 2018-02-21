@@ -152,7 +152,6 @@ class transient_classifier():
         self.verbose = verbose
         self.updateNed = updateNed
         self.daemonMode = daemonMode
-        self.myPid = str(os.getpid())
         self.updateAnnotations = updateAnnotations
         self.oneRun = oneRun
 
@@ -340,8 +339,16 @@ class transient_classifier():
             # cores = psutil.cpu_count()
             # if cores > 8:
             #     cores = 8
+
+            start_time2 = time.time()
+
+            print "START CROSSMATCH"
+
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
                                             inputArray=range(len(theseBatches)), poolSize=None, colMaps=colMaps)
+
+            print "FINISH CROSSMATCH/START RANKING: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
 
             flat_list = [
                 item for sublist in crossmatchArray for item in sublist]
@@ -361,6 +368,8 @@ class transient_classifier():
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
+            print "FINISH RANKING/START UPDATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
             if self.update and not self.ra:
                 self._update_transient_database(
                     crossmatches=crossmatches,
@@ -369,6 +378,9 @@ class transient_classifier():
                     colMaps=colMaps
                 )
 
+            print "FINISH UPDATING TRANSIENT DB/START ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
+
             if self.ra:
                 return classifications, crossmatches
 
@@ -376,6 +388,9 @@ class transient_classifier():
                 self.update_peak_magnitudes()
             self.update_classification_annotations_and_summaries(
                 self.updateAnnotations)
+
+            print "FINISH ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
 
             classificationRate = count / (time.time() - start_time)
             print "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals()
@@ -647,7 +662,6 @@ class transient_classifier():
 
         self.log.debug('starting the ``_update_transient_database`` method')
 
-        myPid = self.myPid
         now = datetime.now()
         now = now.strftime("%Y-%m-%d_%H-%M-%S-%f")
 
@@ -1070,7 +1084,9 @@ class transient_classifier():
         self.log.info(
             'starting the ``update_classification_annotations_and_summaries`` method')
 
-        myPid = self.myPid
+        import time
+        start_time = time.time()
+        print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
 
         if updatePeakMagnitudes:
             sqlQuery = u"""
@@ -1078,14 +1094,18 @@ class transient_classifier():
             """ % locals()
         else:
             sqlQuery = u"""
-                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and cl.annotation is null
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and cl.summary is null
             """ % locals()
+
         rows = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
             quiet=False
         )
+
+        print "FINISHED COLLECTING TRANSIENTS WITH NO ANNOTATIONS/GENERATING ANNOTATIONS: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
         from astrocalc.coords import unit_conversion
         # ASTROCALC UNIT CONVERTER OBJECT
@@ -1250,6 +1270,9 @@ class transient_classifier():
             }
             updates.append(update)
 
+        print "FINISHED GENERATING ANNOTATIONS/ADDING ANNOTATIONS TO TRANSIENT DATABASE: %d" % (time.time() - start_time,)
+        start_time = time.time()
+
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.transientsDbConn,
             log=self.log,
@@ -1261,12 +1284,18 @@ class transient_classifier():
             dbSettings=self.settings["database settings"]["transients"]
         )
 
-        sqlQuery = """update sherlock_classifications  set annotation = "The transient location is not matched against any known catalogued source", summary = "No catalogued match" where classification = 'ORPHAN' """ % locals()
+        print "FINISHED ADDING ANNOTATIONS TO TRANSIENT DATABASE/UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
+        start_time = time.time()
+
+        sqlQuery = """update sherlock_classifications  set annotation = "The transient location is not matched against any known catalogued source", summary = "No catalogued match" where classification = 'ORPHAN'  and summary is null """ % locals()
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
         )
+
+        print "FINISHED UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
         self.log.info(
             'completed the ``update_classification_annotations_and_summaries`` method')
@@ -1457,10 +1486,20 @@ CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
   `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
   `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated` varchar(45) DEFAULT '0',
-  PRIMARY KEY (`transient_object_id`)
+  PRIMARY KEY (`transient_object_id`),
+  KEY `idx_summary` (`summary`),
+  KEY `idx_classification` (`classification`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+DELIMITER $$
+CREATE TRIGGER `sherlock_classifications_BEFORE_INSERT` BEFORE INSERT ON `sherlock_classifications` FOR EACH ROW
+BEGIN
+    IF new.classification = "ORPHAN" THEN
+    SET new.annotation = "The transient location is not matched against any known catalogued source", new.summary = "No catalogued match";
+    END IF;
+END$$
+DELIMITER ;
 """ % locals()
 
         # A FIX FOR MYSQL VERSIONS < 5.6
