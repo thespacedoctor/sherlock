@@ -662,6 +662,11 @@ class transient_classifier():
 
         self.log.debug('starting the ``_update_transient_database`` method')
 
+        import time
+        start_time = time.time()
+        print "UPDATING TRANSIENTS DATABASE WITH RESULTS"
+        print "DELETING OLD RESULTS"
+
         now = datetime.now()
         now = now.strftime("%Y-%m-%d_%H-%M-%S-%f")
 
@@ -694,6 +699,9 @@ class transient_classifier():
             dbConn=self.transientsDbConn,
         )
 
+        print "FINISHED DELETING OLD RESULTS/ADDING TO CROSSMATCHES: %d" % (time.time() - start_time,)
+        start_time = time.time()
+
         if len(crossmatches):
             insert_list_of_dictionaries_into_database_tables(
                 dbConn=self.transientsDbConn,
@@ -707,6 +715,9 @@ class transient_classifier():
                     "transients"]
             )
 
+        print "FINISHED ADDING TO CROSSMATCHES/UPDATING CLASSIFICATIONS IN TRANSIENT TABLE: %d" % (time.time() - start_time,)
+        start_time = time.time()
+
         sqlQuery = ""
         inserts = []
         for k, v in classifications.iteritems():
@@ -716,17 +727,8 @@ class transient_classifier():
             }
             inserts.append(thisInsert)
 
-            classification = v[0]
-            sqlQuery += u"""
-                    update %(transientTable)s set %(transientTableClassCol)s = "%(classification)s"
-                        where %(transientTableIdCol)s  = "%(k)s";
-            """ % locals()
-
-        writequery(
-            log=self.log,
-            sqlQuery=sqlQuery,
-            dbConn=self.transientsDbConn,
-        )
+        print "FINISHED UPDATING CLASSIFICATIONS IN TRANSIENT TABLE/UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.transientsDbConn,
@@ -739,6 +741,9 @@ class transient_classifier():
             dbSettings=self.settings["database settings"][
                 "transients"]
         )
+
+        print "FINISHED UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
         self.log.debug('completed the ``_update_transient_database`` method')
         return None
@@ -1084,9 +1089,9 @@ class transient_classifier():
         self.log.info(
             'starting the ``update_classification_annotations_and_summaries`` method')
 
-        import time
-        start_time = time.time()
-        print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
+        # import time
+        # start_time = time.time()
+        # print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
 
         if updatePeakMagnitudes:
             sqlQuery = u"""
@@ -1104,8 +1109,8 @@ class transient_classifier():
             quiet=False
         )
 
-        print "FINISHED COLLECTING TRANSIENTS WITH NO ANNOTATIONS/GENERATING ANNOTATIONS: %d" % (time.time() - start_time,)
-        start_time = time.time()
+        # print "FINISHED COLLECTING TRANSIENTS WITH NO ANNOTATIONS/GENERATING ANNOTATIONS: %d" % (time.time() - start_time,)
+        # start_time = time.time()
 
         from astrocalc.coords import unit_conversion
         # ASTROCALC UNIT CONVERTER OBJECT
@@ -1270,8 +1275,8 @@ class transient_classifier():
             }
             updates.append(update)
 
-        print "FINISHED GENERATING ANNOTATIONS/ADDING ANNOTATIONS TO TRANSIENT DATABASE: %d" % (time.time() - start_time,)
-        start_time = time.time()
+        # print "FINISHED GENERATING ANNOTATIONS/ADDING ANNOTATIONS TO TRANSIENT DATABASE: %d" % (time.time() - start_time,)
+        # start_time = time.time()
 
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.transientsDbConn,
@@ -1284,8 +1289,8 @@ class transient_classifier():
             dbSettings=self.settings["database settings"]["transients"]
         )
 
-        print "FINISHED ADDING ANNOTATIONS TO TRANSIENT DATABASE/UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
-        start_time = time.time()
+        # print "FINISHED ADDING ANNOTATIONS TO TRANSIENT DATABASE/UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
+        # start_time = time.time()
 
         sqlQuery = """update sherlock_classifications  set annotation = "The transient location is not matched against any known catalogued source", summary = "No catalogued match" where classification = 'ORPHAN'  and summary is null """ % locals()
         writequery(
@@ -1294,8 +1299,8 @@ class transient_classifier():
             dbConn=self.transientsDbConn,
         )
 
-        print "FINISHED UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
-        start_time = time.time()
+        # print "FINISHED UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
+        # start_time = time.time()
 
         self.log.info(
             'completed the ``update_classification_annotations_and_summaries`` method')
@@ -1395,6 +1400,13 @@ class transient_classifier():
 
         """
         self.log.info('starting the ``_create_tables_if_not_exist`` method')
+
+        transientTable = self.settings["database settings"][
+            "transients"]["transient table"]
+        transientTableClassCol = self.settings["database settings"][
+            "transients"]["transient classification column"]
+        transientTableIdCol = self.settings["database settings"][
+            "transients"]["transient primary id column"]
 
         crossmatchTable = "sherlock_crossmatches"
         createStatement = """
@@ -1500,6 +1512,15 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE  TRIGGER `sherlock_classifications_AFTER_INSERT` AFTER INSERT ON `sherlock_classifications` FOR EACH ROW
+BEGIN
+    update `%(transientTable)s` set `%(transientTableClassCol)s` = new.classification
+                        where `%(transientTableIdCol)s`  = new.transient_object_id;
+END
+DELIMITER ;
+
 """ % locals()
 
         # A FIX FOR MYSQL VERSIONS < 5.6
