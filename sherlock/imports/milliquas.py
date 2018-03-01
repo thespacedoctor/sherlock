@@ -29,7 +29,7 @@ from ._base_importer import _base_importer
 class milliquas(_base_importer):
 
     """
-    *importer object for the* `Milliquas (Million Quasars Catalog) <http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html>`_ *catagloue*
+    *Import the* `Milliquas (Million Quasars Catalog) <http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html>`_ *catagloue into the sherlock-catalogues database*
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -37,6 +37,7 @@ class milliquas(_base_importer):
         - ``settings`` -- the settings dictionary
         - ``pathToDataFIle`` -- path to the milliquas data file
         - ``version`` -- version of the milliquas catalogue
+        - ``catalogueName`` -- name of the catalogue to be imported (milliquas)
 
     **Usage:**
 
@@ -56,30 +57,20 @@ class milliquas(_base_importer):
 
     .. todo ::
 
-        - update key arguments values and definitions with defaults
-        - update return values and definitions
-        - update usage examples and text
-        - update docstring text
+        - abstract this module out into its own stand alone script
+        - update millisquas to v5.2
         - check sublime snippet exists
-        - clip any useful text to docs mindmap
-        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
     def ingest(self):
-        """ingest the milliquas catalogue into the catalogues database
+        """Ingest the milliquas catalogue into the sherlock catalogues database
 
         The method first generates a list of python dictionaries from the milliquas datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
-        .. todo ::
+        **Usage:**
 
-          - update key arguments values and definitions with defaults
-          - update return values and definitions
-          - update usage examples and text
-          - update docstring text
-          - check sublime snippet exists
-          - clip any useful text to docs mindmap
-          - regenerate the docs and check redendering of this docstring
+            See class docstring for usage
         """
         self.log.info('starting the ``get`` method')
 
@@ -134,16 +125,6 @@ CREATE TABLE `%(tableName)s` (
 
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the milliquas catalogue
-
-        .. todo ::
-
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
         """
         self.log.info(
             'starting the ``_create_dictionary_of_milliquas`` method')

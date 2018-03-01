@@ -1,56 +1,204 @@
 version: 1
+
 database settings:
+     
     static catalogues:
-        db: XXX
-        host: XXX
-        user: XXX
-        password: XXX
-        tunnel: 
-            remote user: XXX
-            remote ip: XXX
-            remote datbase host: XXX
-            port: XXX
-        loginPath: XXX
+        db: sherlock_catalogues_quickstart
+        host: 127.0.0.1
+        user: root
+        password: root
+        tunnel: False
+        # tunnel: 
+        #     remote user: username
+        #     remote ip: mymachine.uni.ac.uk
+        #     remote datbase host: myhost
+        #     port: 5002
 
     transients:
-        user: XXX
-        password: XXX
-        db: XXX
-        host: XXX
-        transient table: XXX
-        transient query: 
-        transient peak magnitude query: False
-        transient primary id column: XXX
+        db: transient_survey_quickstart
+        user: root
+        password: root
+        host: 127.0.0.1
+        transient table: transient_detections
+        transient count: "select count(*) from transient_detections where sherlockClassification is null"
+        transient query: "select transientId as 'id', transientId as 'alt_id', raDeg 'ra', decDeg 'dec', transientId 'name', sherlockClassification as 'object_classification' from transient_detections where sherlockClassification is null "
+        transient peak magnitude query: "select transientId as 'id', magnitude as 'mag' from transient_detections where magnitude is not null"
+        transient primary id column: transientId
         transient classification column: sherlockClassification
-        crossmatchTable: tcs_cross_matches
+        crossmatchTable: sherlock_crossmatches
         tunnel: False
-        loginPath: XXX
+
 
     pessto marshall:
-        user: XXX
-        password: XXX
-        db: XXX
-        host: XXX
+        user: username
+        password: pass
+        db: pessto_marshall
+        host: 127.0.0.1
         tunnel: False
 
-# ADD A SEARCH ALGORITHM HERE
-search algorithm:
-    
-
-# ADD ANY SUPPLEMENTARY SEARCHES HERE - SOURCES ARE MATCHED BUT DO NOT MODIFY THE FINAL CLASSIFICATION OF THE TRANSIENT
-supplementary search:
-    
-
-# IFS GALAXY STREAM
+# IFS Galaxies
 ifs galaxies url: "https://raw.githubusercontent.com/lgalbany/lgalbany.github.io/master/GALBANY_PESSTO_ENV"
-
-# MISCELLANEOUS SETTINGS
-ned stream search radius arcec: 300
+ned stream search radius arcec: 900
 first pass ned search radius arcec: 240
 ned stream refresh rate in days: 90
 galaxy radius stetch factor: 1.2
+synonym radius arcsec: 1.5
 
 
+search algorithm:
+    2mass star:
+        database table: tcs_view_star_2mass_psc_final
+        mag column: J
+        faint:
+            mag limit: 19.5
+            angular radius arcsec: 2.5
+            annotation: SN
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+    2mass galaxy:
+        database table: tcs_view_galaxy_2mass_xsc_final
+        mag column: J
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 35.
+            synonym: NT
+            association: SN
+        faint:
+            mag limit: 20.5
+            angular radius arcsec: 6.
+            association: SN
+        general:
+            angular radius arcsec: 35.
+            synonym: NT
+            association: SN
+    gaia star:
+        database table: tcs_view_star_gaia_dr1
+        mag column: G
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        general:
+            angular radius arcsec: 2.5
+            annotation: VS
+    milliquas agn:
+        database table: tcs_view_agn_milliquas_v4_8
+        general:
+            angular radius arcsec: 2.5
+            synonym: AGN
+            association: AGN
+    ned_d spec galaxy:
+        database table: tcs_view_galaxy_ned_d_v13_1_0
+        general:
+            physical radius kpc: 30.0
+            angular radius arcsec: 6000.
+            or within semi major axis: True
+            synonym: NT
+            association: SN
+    ned spec galaxy:
+        database table: tcs_view_galaxy_ned_stream
+        general:
+            physical radius kpc: 30.0
+            angular radius arcsec: 240.0
+            or within semi major axis: True
+            synonym: NT
+            association: SN
+    ned phot galaxy:
+        database table: tcs_view_galaxy_ned_stream
+        mag column: unkMag
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 35.
+            synonym: NT
+            association: SN
+        faint:
+            mag limit: 20.
+            angular radius arcsec: 6.
+            association: SN
+        general:
+            angular radius arcsec: 35.
+            synonym: NT
+            association: SN
+    ned phot galaxy-like:
+        database table: tcs_view_galaxy_like_ned_stream
+        general:
+            angular radius arcsec: 10.
+            annotation: SN
+    sdss agn:
+        database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
+        general:
+            angular radius arcsec: 2.5
+            synonym: AGN
+            association: AGN
+    ned agn:
+        database table: tcs_view_agn_ned_stream
+        general:
+            angular radius arcsec: 2.5
+            synonym: AGN
+            association: AGN
+    sdss star:
+        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
+        mag column: _r
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        faint:
+            mag limit: 21.0
+            angular radius arcsec: 2.5
+            annotation: SN
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+    sdss phot galaxy:
+        database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
+        mag column: _r
+        bright:
+            mag limit: 15.
+            angular radius arcsec: 35.
+            association: SN
+        faint:
+            mag limit: 20.
+            angular radius arcsec: 6.
+            association: SN
+        general:
+            angular radius arcsec: 35.
+            synonym: NT
+            association: SN
+    sdss spec sn:
+        database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
+        general:
+            physical radius kpc: 30.0
+            angular radius arcsec: 240.0
+            or within semi major axis: True
+            synonym: NT
+            association: SN
+    ned spec unknown:
+        database table: tcs_view_other_ned_stream
+        general:
+            physical radius kpc: 30.0
+            angular radius arcsec: 240.0
+            synonym: UNCLEAR
+            association: UNCLEAR
+    ned phot unknown:
+        database table: tcs_view_other_ned_stream
+        general:
+            angular radius arcsec: 20.
+            annotation: UNCLEAR
+    ned star:
+        database table: tcs_view_star_ned_stream
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+
+
+        
 logging settings:
     formatters:
         file_style:
@@ -69,23 +217,13 @@ logging settings:
             formatter: console_style
             stream: ext://sys.stdout
         file:
-            class: logging.handlers.GroupWriteRotatingFileHandler
+            class: logging.FileHandler
             level: WARNING
             formatter: file_style
             filename: /Users/Dave/.config/sherlock/sherlock.log
-            mode: w+
-            maxBytes: 102400
-            backupCount: 1
+            mode: w
     root:
         level: WARNING
         handlers: [file,console]
-
-
-
-
-
-
-
-
 
 
