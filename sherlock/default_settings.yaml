@@ -29,13 +29,6 @@ database settings:
         tunnel: False
 
 
-    pessto marshall:
-        user: username
-        password: pass
-        db: pessto_marshall
-        host: 127.0.0.1
-        tunnel: False
-
 # IFS Galaxies
 ifs galaxies url: "https://raw.githubusercontent.com/lgalbany/lgalbany.github.io/master/GALBANY_PESSTO_ENV"
 ned stream search radius arcec: 900

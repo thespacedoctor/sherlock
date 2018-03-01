@@ -106,8 +106,13 @@ class database():
             "database settings"]["transients"]
         catalogueSettings = self.settings[
             "database settings"]["static catalogues"]
-        marshallSettings = self.settings[
-            "database settings"]["pessto marshall"]
+        if "pessto marshall" in self.settings[
+                "database settings"]:
+            marshallSettings = self.settings[
+                "database settings"]["pessto marshall"]
+        else:
+            marshallSettings = self.settings[
+                "database settings"]["transients"]
 
         dbConns = []
         for dbSettings in [transientSettings, catalogueSettings, marshallSettings]:
