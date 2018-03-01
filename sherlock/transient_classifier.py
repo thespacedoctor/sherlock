@@ -1325,9 +1325,9 @@ class transient_classifier():
                 - write a command-line tool for this method
                 - update package tutorial with command-line tool info if needed
 
-            .. code-block:: python 
+            .. code-block:: python
 
-                usage code 
+                usage code
 
 
         .. todo ::
@@ -1347,8 +1347,8 @@ class transient_classifier():
             "transients"]["transient peak magnitude query"]
 
         sqlQuery = """UPDATE sherlock_crossmatches s,
-            (%(sqlQuery)s) t 
-        SET 
+            (%(sqlQuery)s) t
+        SET
             s.transientAbsMag = ROUND(t.mag - IFNULL(direct_distance_modulus,
                             distance_modulus),
                     2)
@@ -1384,9 +1384,9 @@ class transient_classifier():
                 - write a command-line tool for this method
                 - update package tutorial with command-line tool info if needed
 
-            .. code-block:: python 
+            .. code-block:: python
 
-                usage code 
+                usage code
 
         .. todo ::
 
@@ -1503,35 +1503,17 @@ CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
   KEY `idx_classification` (`classification`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-DELIMITER $$
-CREATE TRIGGER `sherlock_classifications_BEFORE_INSERT` BEFORE INSERT ON `sherlock_classifications` FOR EACH ROW
-BEGIN
-    IF new.classification = "ORPHAN" THEN
-    SET new.annotation = "The transient location is not matched against any known catalogued source", new.summary = "No catalogued match";
-    END IF;
-END$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE  TRIGGER `sherlock_classifications_AFTER_INSERT` AFTER INSERT ON `sherlock_classifications` FOR EACH ROW
-BEGIN
-    update `%(transientTable)s` set `%(transientTableClassCol)s` = new.classification
-                        where `%(transientTableIdCol)s`  = new.transient_object_id;
-END
-DELIMITER ;
-
 """ % locals()
 
         # A FIX FOR MYSQL VERSIONS < 5.6
+        triggers = []
         if float(self.dbVersions["transients"][:3]) < 5.6:
             createStatement = createStatement.replace(
                 "`dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateLastModified` datetime DEFAULT NULL,")
             createStatement = createStatement.replace(
                 "`dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateCreated` datetime DEFAULT NULL,")
 
-            trigger = """
-DELIMITER $$
+            triggers.append("""
 CREATE TRIGGER dateCreated
 BEFORE INSERT ON `%(crossmatchTable)s`
 FOR EACH ROW
@@ -1540,20 +1522,43 @@ BEGIN
       SET NEW.dateCreated = NOW();
       SET NEW.dateLastModified = NOW();
    END IF;
-END$$
-DELIMITER ;""" % locals()
-
-            createStatement.append(trigger)
+END""" % locals())
 
         try:
             writequery(
                 log=self.log,
                 sqlQuery=createStatement,
-                dbConn=self.transientsDbConn
+                dbConn=self.transientsDbConn,
+                Force=True
             )
         except:
             self.log.info(
-                "Could not create table/trigger (`%(crossmatchTable)s`). Probably already exist." % locals())
+                "Could not create table (`%(crossmatchTable)s`). Probably already exist." % locals())
+
+        triggers.append("""CREATE TRIGGER `sherlock_classifications_BEFORE_INSERT` BEFORE INSERT ON `sherlock_classifications` FOR EACH ROW
+BEGIN
+    IF new.classification = "ORPHAN" THEN
+        SET new.annotation = "The transient location is not matched against any known catalogued source", new.summary = "No catalogued match";
+    END IF;
+END""" % locals())
+
+        triggers.append("""CREATE TRIGGER `sherlock_classifications_AFTER_INSERT` AFTER INSERT ON `sherlock_classifications` FOR EACH ROW
+BEGIN
+    update `%(transientTable)s` set `%(transientTableClassCol)s` = new.classification
+                        where `%(transientTableIdCol)s`  = new.transient_object_id;
+END""" % locals())
+
+        for t in triggers:
+            try:
+                writequery(
+                    log=self.log,
+                    sqlQuery=t,
+                    dbConn=self.transientsDbConn,
+                    Force=True
+                )
+            except:
+                self.log.info(
+                    "Could not create trigger (`%(crossmatchTable)s`). Probably already exist." % locals())
 
         self.log.info('completed the ``_create_tables_if_not_exist`` method')
         return None
