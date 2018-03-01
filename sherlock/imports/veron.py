@@ -59,6 +59,8 @@ class veron(_base_importer):
 
     .. todo ::
 
+        - abstract this module out into its own stand alone script
+        - add ppmxl to stand-alone import scripts
         - update key arguments values and definitions with defaults
         - update return values and definitions
         - update usage examples and text

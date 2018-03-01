@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import ned stream into sherlock-catalogues database*
+*Import ned stream into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -23,6 +23,7 @@ from datetime import datetime, date, time
 from docopt import docopt
 from neddy import namesearch, conesearch
 from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 from astrocalc.coords import unit_conversion
 from fundamentals.renderer import list_of_dictionaries
 from fundamentals.mysql import directory_script_runner, readquery, writequery
@@ -32,7 +33,17 @@ from ._base_importer import _base_importer
 class ned(_base_importer):
 
     """
-    *importer object for the* `NED <https://ned.ipac.caltech.edu/>`_ *galaxy stream*
+    *Using a list of coordinates, query the online* `NED <https://ned.ipac.caltech.edu/>`_ *database and import sources found within a given search radius of each of the loctions into the sherlock-catalogues database*
+
+    The code:
+
+        1. Uses the list of transient coordinates and queries NED (conesearch) for the results within the given search radius
+        2. Creates the `tcs_cat_ned_stream` table if it doesn't exist
+        3. Adds the resulting matched NED IDs/Names to the `tcs_cat_ned_stream` table
+        4. Updates the NED query history table
+        5. Queris NED via NED IDs (object search) for the remaining source metadata to be added to the `tcs_cat_ned_stream` table
+
+    Note it's up to the user to filter the input coordinate list by checking whether or not the same area of the sky has been imported into the `tcs_cat_ned_stream` table recently (by checking the `tcs_helper_ned_query_history` table)
 
     **Key Arguments:**
         - ``dbConn`` -- mysql database connection
@@ -58,18 +69,23 @@ class ned(_base_importer):
 
     .. todo ::
 
-        - update key arguments values and definitions with defaults
-        - update return values and definitions
-        - update usage examples and text
-        - update docstring text
+        - test this code is still working after changes
+        - add option to filter coordinate list via the `tcs_helper_ned_query_history` table
         - check sublime snippet exists
         - clip any useful text to docs mindmap
-        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
     def ingest(self):
-        """perform conesearches of the online NED database and import the results into a local database table
+        """*Perform conesearches of the online NED database and import the results into a the sherlock-database*
+
+        The code:
+
+            1. uses the list of transient coordinates and queries NED for the results within the given search radius
+            2. Creates the `tcs_cat_ned_stream` table if it doesn't exist
+            3. Adds the resulting NED IDs/Names to the `tcs_cat_ned_stream` table
+            4. Updates the NED query history table
+            5. Queris NED via NED IDs for the remaining source metadata to be added to the `tcs_cat_ned_stream` table
 
         **Usage:**
 
@@ -77,14 +93,10 @@ class ned(_base_importer):
 
             .. code-block:: python
 
-                ned.ingest()
+                stream.ingest()
 
         .. todo ::
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
             - check sublime snippet exists
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
@@ -156,25 +168,22 @@ class ned(_base_importer):
 
     def _create_dictionary_of_ned(
             self):
-        """create a list of dictionaries containing all the rows in the ned stream
+        """*Create a list of dictionaries containing all the object ids (NED names) in the ned stream*
 
         **Return:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the ned stream
+            - ``dictList`` - a list of dictionaries containing all the object ids (NED names) in the ned stream
 
-        .. todo ::
+        **Usage:**
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            .. code-block:: python
+
+                dictList = stream._create_dictionary_of_ned()
         """
         self.log.info(
             'starting the ``_create_dictionary_of_ned`` method')
 
-        # GET THE NAMES (UNIQUE IDS) OF THE SOURCES WITHIN THE CONESEARCH
+        # GET THE NAMES (UNIQUE IDS) OF THE SOURCES WITHIN THE CONESEARCH FROM
+        # NED
         names, searchParams = conesearch(
             log=self.log,
             radiusArcsec=self.radiusArcsec,
@@ -195,17 +204,13 @@ class ned(_base_importer):
 
     def _update_ned_query_history(
             self):
-        """*update the database helper table to give details of the ned cone searches performed*
+        """*Update the database helper table to give details of the ned cone searches performed*
 
-        .. todo ::
+        *Usage:*
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            .. code-block:: python
+
+                stream._update_ned_query_history()
         """
         self.log.info('starting the ``_update_ned_query_history`` method')
 
@@ -215,27 +220,6 @@ class ned(_base_importer):
         converter = unit_conversion(
             log=self.log
         )
-
-        createStatement = """CREATE TABLE IF NOT EXISTS `tcs_helper_ned_query_history` (
-  `primaryId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `raDeg` double DEFAULT NULL,
-  `decDeg` double DEFAULT NULL,
-  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
-  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated` varchar(45) DEFAULT '0',
-  `arcsecRadius` int(11) DEFAULT NULL,
-  `dateQueried` datetime DEFAULT CURRENT_TIMESTAMP,
-  `htm16ID` bigint(20) DEFAULT NULL,
-  `htm13ID` int(11) DEFAULT NULL,
-  `htm10ID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`primaryId`),
-  KEY `idx_htm16ID` (`htm16ID`),
-  KEY `dateQueried` (`dateQueried`),
-  KEY `dateHtm16` (`dateQueried`,`htm16ID`),
-  KEY `idx_htm10ID` (`htm10ID`),
-  KEY `idx_htm13ID` (`htm13ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-        """
 
         # UPDATE THE DATABASE HELPER TABLE TO GIVE DETAILS OF THE NED CONE
         # SEARCHES PERFORMED
@@ -257,29 +241,45 @@ class ned(_base_importer):
         if len(dataList) == 0:
             return None
 
-        dataSet = list_of_dictionaries(
+        # CREATE TABLE IF NOT EXIST
+        createStatement = """CREATE TABLE IF NOT EXISTS `tcs_helper_ned_query_history` (
+  `primaryId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `raDeg` double DEFAULT NULL,
+  `decDeg` double DEFAULT NULL,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated` varchar(45) DEFAULT '0',
+  `arcsecRadius` int(11) DEFAULT NULL,
+  `dateQueried` datetime DEFAULT CURRENT_TIMESTAMP,
+  `htm16ID` bigint(20) DEFAULT NULL,
+  `htm13ID` int(11) DEFAULT NULL,
+  `htm10ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`primaryId`),
+  KEY `idx_htm16ID` (`htm16ID`),
+  KEY `dateQueried` (`dateQueried`),
+  KEY `dateHtm16` (`dateQueried`,`htm16ID`),
+  KEY `idx_htm10ID` (`htm10ID`),
+  KEY `idx_htm13ID` (`htm13ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        """
+        writequery(
             log=self.log,
-            listOfDictionaries=dataList,
-            reDatetime=self.reDatetime
+            sqlQuery=createStatement,
+            dbConn=self.cataloguesDbConn
         )
-        # Recursively create missing directories
-        myPid = self.myPid
-        if not os.path.exists("/tmp/ned-inserts/" + myPid):
-            os.makedirs("/tmp/ned-inserts/" + myPid)
-        now = datetime.now()
-        now = now.strftime("%Y%m%dt%H%M%S")
-        mysqlData = dataSet.mysql(
-            tableName="tcs_helper_ned_query_history", filepath="/tmp/ned-inserts/%(myPid)s/ned-updates-%(now)s.sql" % locals(), createStatement=createStatement)
 
-        directory_script_runner(
+        # USE dbSettings TO ACTIVATE MULTIPROCESSING
+        insert_list_of_dictionaries_into_database_tables(
+            dbConn=self.cataloguesDbConn,
             log=self.log,
-            pathToScriptDirectory="/tmp/ned-inserts/" + self.myPid,
-            databaseName=self.settings["database settings"][
-                "static catalogues"]["db"],
-            loginPath=self.settings["database settings"][
-                "static catalogues"]["loginPath"],
-            successRule="delete",
-            failureRule="failed"
+            dictList=dataList,
+            dbTableName="tcs_helper_ned_query_history",
+            uniqueKeyList=[],
+            dateModified=True,
+            batchSize=10000,
+            replace=True,
+            dbSettings=self.settings["database settings"][
+                "static catalogues"]
         )
 
         # INDEX THE TABLE FOR LATER SEARCHES
@@ -297,17 +297,13 @@ class ned(_base_importer):
 
     def _download_ned_source_metadata(
             self):
-        """query NED using the names of the NED sources in our local database to retrieve extra metadata
+        """*Query NED using the names of the NED sources in our local database to retrieve extra metadata*
 
-        .. todo ::
+        *Usage:*
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            .. code-block:: python
+
+                stream._download_ned_source_metadata()
         """
         self.log.info('starting the ``_download_ned_source_metadata`` method')
 
@@ -336,20 +332,16 @@ class ned(_base_importer):
 
     def _get_ned_sources_needing_metadata(
             self):
-        """get the names of 50000 or less NED sources that still require metabase in the database
+        """*Get the names of 50000 or less NED sources that still require metabase in the database*
 
         **Return:**
             - ``len(self.theseIds)`` -- the number of NED IDs returned
 
-        .. todo ::
+        *Usage:*
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            .. code-block:: python
+
+                numberSources = stream._get_ned_sources_needing_metadata()
         """
         self.log.info(
             'starting the ``_get_ned_sources_needing_metadata`` method')
@@ -378,21 +370,16 @@ class ned(_base_importer):
     def _do_ned_namesearch_queries_and_add_resulting_metadata_to_database(
             self,
             batchCount):
-        """ query ned and add results to database
+        """*Query NED via name searcha and add result metadata to database*
 
         **Key Arguments:**
-            - ``batchCount`` - the index number of the batch sent to NED
+            - ``batchCount`` - the index number of the batch sent to NED (only needed for printing to STDOUT to give user idea of progress)
 
+        *Usage:*
 
-        .. todo ::
+            .. code-block:: python
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+                numberSources = stream._do_ned_namesearch_queries_and_add_resulting_metadata_to_database(batchCount=10)
         """
         self.log.info(
             'starting the ``_do_ned_namesearch_queries_and_add_resulting_metadata_to_database`` method')
@@ -491,20 +478,16 @@ class ned(_base_importer):
 
     def _count_ned_sources_in_database_requiring_metadata(
             self):
-        """count the sources in the NED table requiring metadata
+        """*Count the sources in the NED table requiring metadata*
 
         **Return:**
             - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
 
-        .. todo ::
+        *Usage:*
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
-            - update docstring text
-            - check sublime snippet exists
-            - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            .. code-block:: python
+
+                totalRemaining, numberOfBatches = stream._count_ned_sources_in_database_requiring_metadata()
         """
         self.log.info(
             'starting the ``_count_ned_sources_in_database_requiring_metadata`` method')

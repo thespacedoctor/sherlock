@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # encoding: utf-8
 """
-*import ned_d catalogue into sherlock-catalogues database*
+*Import ned_d catalogue into sherlock-catalogues database*
 
 :Author:
     David Young
@@ -32,53 +32,49 @@ from ._base_importer import _base_importer
 class ned_d(_base_importer):
 
     """
-    *importer object for the* `NED-D <https://ned.ipac.caltech.edu/Library/Distances/>`_ *galaxy catalogue*
+    *Import the * `NED-D <https://ned.ipac.caltech.edu/Library/Distances/>`_ *galaxy catalogue in to the sherlock-catalogues database*
 
     **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
         - ``pathToDataFile`` -- path to the ned_d data file
         - ``version`` -- version of the ned_d catalogue
+        - ``catalogueName`` -- the name of the catalogue
 
     **Usage:**
 
-      To import the ned_d catalogue catalogue, run the following:
+        To import the ned_d catalogue catalogue, run the following:
 
-      .. code-block:: python 
+        .. code-block:: python 
 
-        from sherlock.imports import ned_d
-        catalogue = ned_d(
-            log=log,
-            settings=settings,
-            pathToDataFile="/path/to/ned_d.txt",
-            version="1.0",
-            catalogueName="ned_d"
-        )
-        catalogue.ingest()
+            from sherlock.imports import ned_d
+            catalogue = ned_d(
+                log=log,
+                settings=settings,
+                pathToDataFile="/path/to/ned_d.txt",
+                version="1.0",
+                catalogueName="ned_d"
+            )
+            catalogue.ingest()
 
     .. todo ::
 
-        - update key arguments values and definitions with defaults
-        - update return values and definitions
-        - update usage examples and text
-        - update docstring text
-        - check sublime snippet exists
-        - clip any useful text to docs mindmap
-        - regenerate the docs and check redendering of this docstring
+        - abstract this module out into its own stand alone script
     """
     # INITIALISATION
 
     def ingest(self):
-        """ingest the ned_d catalogue into the catalogues database
+        """Import the ned_d catalogue into the catalogues database
 
         The method first generates a list of python dictionaries from the ned_d datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
+        **Usage:**
+
+            See class docstring for usage
+
         .. todo ::
 
-            - update key arguments values and definitions with defaults
-            - update return values and definitions
-            - update usage examples and text
+
             - update docstring text
             - check sublime snippet exists
             - clip any useful text to docs mindmap

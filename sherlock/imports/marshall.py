@@ -49,6 +49,7 @@ class marshall(_base_importer):
 
     .. todo ::
 
+        - abstract this module out into its own stand alone script
         - check sublime snippet exists
     """
     # INITIALISATION

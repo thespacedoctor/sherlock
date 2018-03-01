@@ -218,7 +218,7 @@ class transient_classifier():
         )
 
         # 2018-02-05 KWS commented out again!! It doesn't work MySQL 5.5.
-        # self._create_tables_if_not_exist()
+        self._create_tables_if_not_exist()
 
         import time
         start_time = time.time()
