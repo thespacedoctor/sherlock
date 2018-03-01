@@ -111,35 +111,37 @@ class database():
             marshallSettings = self.settings[
                 "database settings"]["pessto marshall"]
         else:
-            marshallSettings = self.settings[
-                "database settings"]["transients"]
+            marshallSettings = False
 
         dbConns = []
         for dbSettings in [transientSettings, catalogueSettings, marshallSettings]:
             port = False
-            if dbSettings["tunnel"]:
+            if dbSettings and dbSettings["tunnel"]:
                 port = self._setup_tunnel(
                     tunnelParameters=dbSettings["tunnel"]
                 )
 
-            # SETUP A DATABASE CONNECTION FOR THE STATIC CATALOGUES
-            host = dbSettings["host"]
-            user = dbSettings["user"]
-            passwd = dbSettings["password"]
-            dbName = dbSettings["db"]
-            thisConn = ms.connect(
-                host=host,
-                user=user,
-                passwd=passwd,
-                db=dbName,
-                port=port,
-                use_unicode=True,
-                charset='utf8',
-                client_flag=ms.constants.CLIENT.MULTI_STATEMENTS,
-                connect_timeout=3600
-            )
-            thisConn.autocommit(True)
-            dbConns.append(thisConn)
+            if dbSettings:
+                # SETUP A DATABASE CONNECTION FOR THE STATIC CATALOGUES
+                host = dbSettings["host"]
+                user = dbSettings["user"]
+                passwd = dbSettings["password"]
+                dbName = dbSettings["db"]
+                thisConn = ms.connect(
+                    host=host,
+                    user=user,
+                    passwd=passwd,
+                    db=dbName,
+                    port=port,
+                    use_unicode=True,
+                    charset='utf8',
+                    client_flag=ms.constants.CLIENT.MULTI_STATEMENTS,
+                    connect_timeout=3600
+                )
+                thisConn.autocommit(True)
+                dbConns.append(thisConn)
+            else:
+                dbConns.append(None)
 
         # CREATE A DICTIONARY OF DATABASES
         dbConns = {
@@ -150,17 +152,20 @@ class database():
 
         dbVersions = {}
         for k, v in dbConns.iteritems():
-            sqlQuery = u"""
-                SELECT VERSION() as v;
-            """ % locals()
-            rows = readquery(
-                log=self.log,
-                sqlQuery=sqlQuery,
-                dbConn=v,
-                quiet=False
-            )
-            version = rows[0]['v']
-            dbVersions[k] = version
+            if v:
+                sqlQuery = u"""
+                    SELECT VERSION() as v;
+                """ % locals()
+                rows = readquery(
+                    log=self.log,
+                    sqlQuery=sqlQuery,
+                    dbConn=v,
+                    quiet=False
+                )
+                version = rows[0]['v']
+                dbVersions[k] = version
+            else:
+                dbVersions[k] = None
 
         self.log.debug('completed the ``get`` method')
         return dbConns, dbVersions
