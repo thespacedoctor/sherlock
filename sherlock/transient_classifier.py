@@ -232,7 +232,12 @@ class transient_classifier():
                 if bf in searchPara:
                     searchCount += 1
 
+        cpuCount = psutil.cpu_count()
+        if searchCount > cpuCount:
+            searchCount = cpuCount
+
         largeBatchSize = int(50000 / searchCount)
+
         miniBatchSize = int(largeBatchSize / searchCount)
         denominator = searchCount
         while miniBatchSize > 7000:
@@ -320,7 +325,7 @@ class transient_classifier():
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList[1:])
-            batches = int(total / miniBatchSize)
+            batches = int((total / miniBatchSize) - 0.5)
 
             start = 0
             end = 0
