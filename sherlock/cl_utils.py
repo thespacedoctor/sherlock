@@ -38,7 +38,7 @@ Options:
     ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
     dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
     radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-    cat_name                name of the catalogue being imported (veron|milliquas|ned_d)                          
+    cat_name                name of the catalogue being imported (veron|ned_d)                          
     stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
 
     -N, --skipNedUpdate     do not update the NED database before classification
@@ -62,7 +62,6 @@ from fundamentals.renderer import list_of_dictionaries
 from database_cleaner import database_cleaner
 from commonutils import update_wiki_pages
 from subprocess import Popen, PIPE, STDOUT
-from sherlock.imports import milliquas
 from sherlock.imports import veron as veronImporter
 from sherlock.imports import marshall as marshallImporter
 from sherlock.imports import ifs as ifsImporter
@@ -92,7 +91,7 @@ def main(arguments=None):
     su = tools(
         arguments=arguments,
         docString=__doc__,
-        logLevel="DEBUG",
+        logLevel="WARNING",
         options_first=False,
         projectName="sherlock"
     )
@@ -191,15 +190,7 @@ def main(arguments=None):
         )
         ned.ingest()
     if iimport and cat:
-        if cat_name == "milliquas":
-            catalogue = milliquas(
-                log=log,
-                settings=settings,
-                pathToDataFile=pathToDataFile,
-                version=cat_version,
-                catalogueName=cat_name
-            )
-            catalogue.ingest()
+
         if cat_name == "veron":
             catalogue = veronImporter(
                 log=log,

@@ -102,6 +102,10 @@ class database_cleaner():
         self._updated_row_counts_in_tcs_helper_catalogue_tables_info()
         self._clean_up_columns()
         self._update_tcs_helper_catalogue_views_info_with_new_views()
+        self._clean_up_columns()
+        self._updated_row_counts_in_tcs_helper_catalogue_tables_info()
+
+        print "`tcs_helper_catalogue_tables_info` & `tcs_helper_catalogue_views_info` database tables updated"
 
         self.log.info('completed the ``get`` method')
         return None
@@ -124,7 +128,7 @@ class database_cleaner():
             'starting the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
 
         sqlQuery = u"""
-            select * from tcs_helper_catalogue_tables_info where table_name like "%%stream" or number_of_rows is null and legacy_table = 0
+            select * from tcs_helper_catalogue_tables_info where table_name like "%%stream" or (number_of_rows is null and legacy_table = 0)
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -145,10 +149,8 @@ class database_cleaner():
                 dbConn=self.cataloguesDbConn,
             )
 
-        print "Row counts updated in `tcs_helper_catalogue_tables_info` database table"
-
         sqlQuery = u"""
-            select * from tcs_helper_catalogue_views_info where view_name like "%%stream" or number_of_rows is null and legacy_view = 0
+            select * from tcs_helper_catalogue_views_info where (number_of_rows is null and legacy_view = 0)
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -159,6 +161,7 @@ class database_cleaner():
 
         for row in rows:
             tbName = row["view_name"]
+            print tbName
 
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set number_of_rows = (select count(*) as count from %(tbName)s) where view_name = "%(tbName)s"
@@ -205,7 +208,7 @@ class database_cleaner():
             highestId = 1
 
         sqlQuery = u"""
-            SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='crossmatch_catalogues' and TABLE_NAME like "tcs_cat%%";
+            SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA like '%%catalogues%%' and TABLE_NAME like "tcs_cat%%";
         """ % locals()
         tablesInDatabase = readquery(
             log=self.log,
@@ -215,7 +218,7 @@ class database_cleaner():
         )
 
         sqlQuery = u"""
-            SELECT table_name FROM tcs_helper_catalogue_tables_info;
+            SELECT table_name, old_table_name FROM tcs_helper_catalogue_tables_info;
         """ % locals()
         tableList = readquery(
             log=self.log,
@@ -224,8 +227,15 @@ class database_cleaner():
             quiet=False
         )
         tbList = []
+        oldList = []
         for tb in tableList:
-            tbList.append(tb["table_name"])
+            oldList.append(tb["old_table_name"])
+
+        for tb in tableList:
+            if tb["old_table_name"] not in tbList:
+                tbList.append(tb["old_table_name"])
+            if tb["table_name"] not in tbList:
+                tbList.append(tb["table_name"])
 
         for tb in tablesInDatabase:
             if tb["TABLE_NAME"] not in tbList:
@@ -284,7 +294,7 @@ class database_cleaner():
 
         # VIEW OBJECT TYPES
         sqlQuery = u"""
-            SELECT view_name FROM crossmatch_catalogues.tcs_helper_catalogue_views_info where legacy_view = 0 and object_type is null;
+            SELECT view_name FROM tcs_helper_catalogue_views_info where legacy_view = 0 and object_type is null;
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -308,7 +318,7 @@ class database_cleaner():
 
         # MASTER TABLE ID FOR VIEWS
         sqlQuery = u"""
-            SELECT view_name FROM crossmatch_catalogues.tcs_helper_catalogue_views_info where legacy_view = 0 and table_id is null;
+            SELECT view_name FROM tcs_helper_catalogue_views_info where legacy_view = 0 and table_id is null;
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -367,7 +377,7 @@ class database_cleaner():
             highestId = 1
 
         sqlQuery = u"""
-            SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='VIEW' AND TABLE_SCHEMA='crossmatch_catalogues' and TABLE_NAME like "tcs_view%%" and TABLE_NAME not like "%%helper%%";
+            SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='VIEW' AND TABLE_SCHEMA like '%%catalogues%%' and TABLE_NAME like "tcs_view%%" and TABLE_NAME not like "%%helper%%";
         """ % locals()
         tablesInDatabase = readquery(
             log=self.log,

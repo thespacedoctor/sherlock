@@ -9,25 +9,77 @@ http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html
     David Young
 
 :Date Created:
-    November 18, 2016
+    March  6, 2018
+
+Usage:
+    sherlock_catalogue_importer_milliquas.py <pathToDataFile> <cat_version> [-s <pathToSettingsFile>]
+
+Options:
+    pathToDataFile        path to the plain text milliquas catalogue downloaded from "http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html"
+    cat_version           current version number of the catalogue
+    pathToSettingsFile    path to the sherlock settings file containing details of the sherlock catalogues database connection
+
+    -h, --help            show this help message
+    -v, --version         show version
+    -s, --settings        the settings file
 """
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
-os.environ['TERM'] = 'vt100'
+from fundamentals import tools
 import readline
 import glob
 import pickle
 import codecs
 import string
-
 import re
 from docopt import docopt
-from ._base_importer import _base_importer
+from sherlock.imports import _base_importer
 
 
-class milliquas(_base_importer):
+def main(arguments=None):
+    """
+    *The main function used when ``sherlock_catalogue_importer_milliquas.py`` is run as a single script from the cl*
+    """
 
+    # SETUP THE COMMAND-LINE UTIL SETTINGS
+    su = tools(
+        arguments=arguments,
+        docString=__doc__,
+        logLevel="WARNING",
+        options_first=False,
+        projectName=False
+    )
+    arguments, settings, log, dbConn = su.setup()
+
+    # UNPACK REMAINING CL ARGUMENTS USING `EXEC` TO SETUP THE VARIABLE NAMES
+    # AUTOMATICALLY
+    for arg, val in arguments.iteritems():
+        if arg[0] == "-":
+            varname = arg.replace("-", "") + "Flag"
+        else:
+            varname = arg.replace("<", "").replace(">", "")
+        if isinstance(val, str) or isinstance(val, unicode):
+            exec(varname + " = '%s'" % (val,))
+        else:
+            exec(varname + " = %s" % (val,))
+        if arg == "--dbConn":
+            dbConn = val
+        log.debug('%s = %s' % (varname, val,))
+
+    catalogue = importer(
+        log=log,
+        settings=settings,
+        pathToDataFile=pathToDataFile,
+        version=cat_version,
+        catalogueName="milliquas"
+    )
+    catalogue.ingest()
+
+    return
+
+
+class importer(_base_importer):
     """
     *Import the* `Milliquas (Million Quasars Catalog) <http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html>`_ *catagloue into the sherlock-catalogues database*
 
@@ -38,28 +90,6 @@ class milliquas(_base_importer):
         - ``pathToDataFIle`` -- path to the milliquas data file
         - ``version`` -- version of the milliquas catalogue
         - ``catalogueName`` -- name of the catalogue to be imported (milliquas)
-
-    **Usage:**
-
-      To import the plain text milliquas catalogue, run the following:
-
-      .. code-block:: python 
-
-        from sherlock.imports import milliquas
-        catalogue = milliquas(
-            log=log,
-            settings=settings,
-            pathToDataFile="/path/to/milliquas.txt",
-            version="1.0",
-            catalogueName="milliquas"
-        )
-        catalogue.ingest()
-
-    .. todo ::
-
-        - abstract this module out into its own stand alone script
-        - update millisquas to v5.2
-        - check sublime snippet exists
     """
     # INITIALISATION
 
@@ -158,5 +188,5 @@ CREATE TABLE `%(tableName)s` (
             'completed the ``_create_dictionary_of_milliquas`` method')
         return dictList
 
-    # use the tab-trigger below for new method
-    # xt-class-method
+if __name__ == '__main__':
+    main()

@@ -1,4 +1,3 @@
-from milliquas import milliquas
 from ifs import ifs
 from veron import veron
 from marshall import marshall
