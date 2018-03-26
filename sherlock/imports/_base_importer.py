@@ -172,13 +172,6 @@ class _base_importer():
                 dbConn=self.cataloguesDbConn,
             )
 
-        con = raw_input(
-            "Do you have indexes added to the magnitude, distance and classification columns of the `%(dbTableName)s` table? (y/n)" % locals())
-
-        if con != "y":
-            print "Go and add them then!"
-            return None
-
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.cataloguesDbConn,
             log=self.log,
