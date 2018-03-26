@@ -101,7 +101,7 @@ class ned(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``ingest`` method')
+        self.log.debug('starting the ``ingest`` method')
 
         if not self.radiusArcsec:
             self.log.error(
@@ -163,7 +163,7 @@ class ned(_base_importer):
         self._update_ned_query_history()
         self._download_ned_source_metadata()
 
-        self.log.info('completed the ``ingest`` method')
+        self.log.debug('completed the ``ingest`` method')
         return None
 
     def _create_dictionary_of_ned(
@@ -179,7 +179,7 @@ class ned(_base_importer):
 
                 dictList = stream._create_dictionary_of_ned()
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_create_dictionary_of_ned`` method')
 
         # GET THE NAMES (UNIQUE IDS) OF THE SOURCES WITHIN THE CONESEARCH FROM
@@ -198,7 +198,7 @@ class ned(_base_importer):
         dictList = []
         dictList[:] = [{"ned_name": n} for n in names]
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_create_dictionary_of_ned`` method')
         return dictList
 
@@ -212,7 +212,7 @@ class ned(_base_importer):
 
                 stream._update_ned_query_history()
         """
-        self.log.info('starting the ``_update_ned_query_history`` method')
+        self.log.debug('starting the ``_update_ned_query_history`` method')
 
         myPid = self.myPid
 
@@ -292,7 +292,7 @@ class ned(_base_importer):
             primaryIdColumnName="primaryId"
         )
 
-        self.log.info('completed the ``_update_ned_query_history`` method')
+        self.log.debug('completed the ``_update_ned_query_history`` method')
         return None
 
     def _download_ned_source_metadata(
@@ -305,7 +305,7 @@ class ned(_base_importer):
 
                 stream._download_ned_source_metadata()
         """
-        self.log.info('starting the ``_download_ned_source_metadata`` method')
+        self.log.debug('starting the ``_download_ned_source_metadata`` method')
 
         self.dbTableName = "tcs_cat_ned_stream"
 
@@ -327,7 +327,8 @@ class ned(_base_importer):
                 thisCount)
             self._count_ned_sources_in_database_requiring_metadata()
 
-        self.log.info('completed the ``_download_ned_source_metadata`` method')
+        self.log.debug(
+            'completed the ``_download_ned_source_metadata`` method')
         return None
 
     def _get_ned_sources_needing_metadata(
@@ -343,7 +344,7 @@ class ned(_base_importer):
 
                 numberSources = stream._get_ned_sources_needing_metadata()
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_get_ned_sources_needing_metadata`` method')
 
         tableName = self.dbTableName
@@ -362,7 +363,7 @@ class ned(_base_importer):
         self.theseIds = []
         self.theseIds[:] = [r["ned_name"] for r in rows]
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_get_ned_sources_needing_metadata`` method')
 
         return len(self.theseIds)
@@ -381,7 +382,7 @@ class ned(_base_importer):
 
                 numberSources = stream._do_ned_namesearch_queries_and_add_resulting_metadata_to_database(batchCount=10)
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_do_ned_namesearch_queries_and_add_resulting_metadata_to_database`` method')
 
         # ASTROCALC UNIT CONVERTER OBJECT
@@ -472,7 +473,7 @@ class ned(_base_importer):
             dbConn=self.cataloguesDbConn,
         )
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_do_ned_namesearch_queries_and_add_resulting_metadata_to_database`` method')
         return None
 
@@ -489,7 +490,7 @@ class ned(_base_importer):
 
                 totalRemaining, numberOfBatches = stream._count_ned_sources_in_database_requiring_metadata()
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_count_ned_sources_in_database_requiring_metadata`` method')
 
         tableName = self.dbTableName
@@ -509,7 +510,7 @@ class ned(_base_importer):
         if self.total == 0:
             self.batches = 0
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_count_ned_sources_in_database_requiring_metadata`` method')
         return self.total, self.batches
 

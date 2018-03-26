@@ -206,7 +206,7 @@ class transient_classifier():
         global theseBatches
         global crossmatchArray
 
-        self.log.info('starting the ``classify`` method')
+        self.log.debug('starting the ``classify`` method')
 
         remaining = 1
 
@@ -400,7 +400,7 @@ class transient_classifier():
             classificationRate = count / (time.time() - start_time)
             print "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals()
 
-        self.log.info('completed the ``classify`` method')
+        self.log.debug('completed the ``classify`` method')
         return None, None
 
     def _get_transient_metadata_from_database_list(
@@ -461,7 +461,7 @@ class transient_classifier():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_update_ned_stream`` method')
+        self.log.debug('starting the ``_update_ned_stream`` method')
 
         coordinateList = []
         for i in transientsMetadataList:
@@ -502,7 +502,7 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
-        self.log.info('completed the ``_update_ned_stream`` method')
+        self.log.debug('completed the ``_update_ned_stream`` method')
         return None
 
     def _remove_previous_ned_queries(
@@ -526,7 +526,7 @@ class transient_classifier():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_remove_previous_ned_queries`` method')
+        self.log.debug('starting the ``_remove_previous_ned_queries`` method')
 
         # 1 DEGREE QUERY RADIUS
         radius = 60. * 60.
@@ -583,7 +583,7 @@ class transient_classifier():
             if i not in curatedMatchIndices:
                 updatedCoordinateList.append(v)
 
-        self.log.info('completed the ``_remove_previous_ned_queries`` method')
+        self.log.debug('completed the ``_remove_previous_ned_queries`` method')
         return updatedCoordinateList
 
     def _crossmatch_transients_against_catalogues(
@@ -777,7 +777,7 @@ class transient_classifier():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_rank_classifications`` method')
+        self.log.debug('starting the ``_rank_classifications`` method')
 
         crossmatches = crossmatchArray
 
@@ -812,7 +812,7 @@ class transient_classifier():
         if transient_object_id != None:
             classifications[transient_object_id] = transClass
 
-        self.log.info('completed the ``_rank_classifications`` method')
+        self.log.debug('completed the ``_rank_classifications`` method')
 
         return classifications, crossmatches
 
@@ -836,7 +836,7 @@ class transient_classifier():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_print_results_to_stdout`` method')
+        self.log.debug('starting the ``_print_results_to_stdout`` method')
 
         if self.verbose == 0:
             return
@@ -928,7 +928,7 @@ class transient_classifier():
 
         print tableData
 
-        self.log.info('completed the ``_print_results_to_stdout`` method')
+        self.log.debug('completed the ``_print_results_to_stdout`` method')
         return None
 
     def _consolidate_coordinateList(
@@ -964,7 +964,7 @@ class transient_classifier():
             - regenerate the docs and check redendering of this docstring
 
         """
-        self.log.info('starting the ``_consolidate_coordinateList`` method')
+        self.log.debug('starting the ``_consolidate_coordinateList`` method')
 
         raList = []
         raList[:] = np.array([c[0] for c in coordinateList])
@@ -994,7 +994,7 @@ class transient_classifier():
         for aSet in allMatches:
             updatedCoordianteList.append(aSet[0])
 
-        self.log.info('completed the ``_consolidate_coordinateList`` method')
+        self.log.debug('completed the ``_consolidate_coordinateList`` method')
         return updatedCoordianteList
 
     def classification_annotations(
@@ -1030,7 +1030,7 @@ class transient_classifier():
             - regenerate the docs and check redendering of this docstring
 
         """
-        self.log.info('starting the ``classification_annotations`` method')
+        self.log.debug('starting the ``classification_annotations`` method')
 
         from fundamentals.mysql import readquery
         sqlQuery = u"""
@@ -1052,7 +1052,7 @@ class transient_classifier():
 
             print xm["catalogue_object_id"]
 
-        self.log.info('completed the ``classification_annotations`` method')
+        self.log.debug('completed the ``classification_annotations`` method')
         return None
 
     # use the tab-trigger below for new method
@@ -1091,7 +1091,7 @@ class transient_classifier():
             - regenerate the docs and check redendering of this docstring
 
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``update_classification_annotations_and_summaries`` method')
 
         # import time
@@ -1307,7 +1307,7 @@ class transient_classifier():
         # print "FINISHED UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
         # start_time = time.time()
 
-        self.log.info(
+        self.log.debug(
             'completed the ``update_classification_annotations_and_summaries`` method')
         return None
 
@@ -1346,7 +1346,7 @@ class transient_classifier():
             - regenerate the docs and check redendering of this docstring
 
         """
-        self.log.info('starting the ``update_peak_magnitudes`` method')
+        self.log.debug('starting the ``update_peak_magnitudes`` method')
 
         sqlQuery = self.settings["database settings"][
             "transients"]["transient peak magnitude query"]
@@ -1368,7 +1368,7 @@ class transient_classifier():
             dbConn=self.transientsDbConn,
         )
 
-        self.log.info('completed the ``update_peak_magnitudes`` method')
+        self.log.debug('completed the ``update_peak_magnitudes`` method')
         return None
 
     def _create_tables_if_not_exist(
@@ -1404,7 +1404,7 @@ class transient_classifier():
             - regenerate the docs and check redendering of this docstring
 
         """
-        self.log.info('starting the ``_create_tables_if_not_exist`` method')
+        self.log.debug('starting the ``_create_tables_if_not_exist`` method')
 
         transientTable = self.settings["database settings"][
             "transients"]["transient table"]
@@ -1565,7 +1565,7 @@ END""" % locals())
                 self.log.info(
                     "Could not create trigger (`%(crossmatchTable)s`). Probably already exist." % locals())
 
-        self.log.info('completed the ``_create_tables_if_not_exist`` method')
+        self.log.debug('completed the ``_create_tables_if_not_exist`` method')
         return None
 
     # use the tab-trigger below for new method

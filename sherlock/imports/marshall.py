@@ -65,7 +65,7 @@ class marshall(_base_importer):
 
             - convert the directory_script_runner to 'load in file'
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         # A YAML DICTIONARY OF sherlock-catalogues TABLE NAME AND THE SELECT
         # QUERY TO LIFT THE DATA FROM THE MARSHALL
@@ -104,7 +104,7 @@ class marshall(_base_importer):
                 dictList=dictList
             )
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return None
 
     def _create_dictionary_of_marshall(
@@ -120,7 +120,7 @@ class marshall(_base_importer):
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the marshall stream
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_create_dictionary_of_marshall`` method')
 
         dictList = []
@@ -146,7 +146,7 @@ class marshall(_base_importer):
             print "%(count)s / %(totalCount)s `%(tableName)s` data added to memory" % locals()
             dictList.append(dict(row))
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_create_dictionary_of_marshall`` method')
         return dictList
 

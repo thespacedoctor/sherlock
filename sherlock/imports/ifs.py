@@ -64,7 +64,7 @@ class ifs(_base_importer):
 
             See class docstring for usage
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         self.primaryIdColumnName = "primaryId"
         self.raColName = "raDeg"
@@ -101,7 +101,7 @@ class ifs(_base_importer):
             createStatement=createStatement
         )
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return None
 
     def _create_dictionary_of_IFS(
@@ -122,7 +122,7 @@ class ifs(_base_importer):
                 )
                 dictList = stream._create_dictionary_of_IFS()
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_create_dictionary_of_IFS`` method')
 
         # GRAB THE CONTENT OF THE IFS CSV
@@ -176,7 +176,7 @@ class ifs(_base_importer):
                     thisDict["z"] = None
                 dictList.append(thisDict)
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_create_dictionary_of_IFS`` method')
         return dictList
 

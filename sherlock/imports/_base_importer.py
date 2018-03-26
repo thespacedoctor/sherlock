@@ -157,7 +157,7 @@ class _base_importer():
 
             - Write a checklist for creating a new sherlock database importer
         """
-        self.log.info('starting the ``add_data_to_database_table`` method')
+        self.log.debug('starting the ``add_data_to_database_table`` method')
 
         if len(dictList) == 0:
             return
@@ -172,6 +172,13 @@ class _base_importer():
                 dbConn=self.cataloguesDbConn,
             )
 
+        con = raw_input(
+            "Do you have indexes added to the magnitude, distance and classification columns of the `%(dbTableName)s` table? (y/n)" % locals())
+
+        if con != "y":
+            print "Go and add them then!"
+            return None
+
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.cataloguesDbConn,
             log=self.log,
@@ -179,6 +186,7 @@ class _base_importer():
             dbTableName=dbTableName,
             uniqueKeyList=[],
             dateModified=True,
+            dateCreated=True,
             batchSize=10000,
             replace=True,
             dbSettings=self.settings["database settings"][
@@ -206,7 +214,7 @@ class _base_importer():
 
 """ % locals()
 
-        self.log.info('completed the ``add_data_to_database_table`` method')
+        self.log.debug('completed the ``add_data_to_database_table`` method')
         return None
 
     def _add_htmids_to_database_table(
@@ -219,7 +227,7 @@ class _base_importer():
 
                 self._add_htmids_to_database_table()
         """
-        self.log.info('starting the ``add_htmids_to_database_table`` method')
+        self.log.debug('starting the ``add_htmids_to_database_table`` method')
 
         tableName = self.dbTableName
 
@@ -234,7 +242,7 @@ class _base_importer():
             primaryIdColumnName=self.primaryIdColumnName
         )
 
-        self.log.info('completed the ``add_htmids_to_database_table`` method')
+        self.log.debug('completed the ``add_htmids_to_database_table`` method')
         return None
 
     def _update_database_helper_table(
@@ -247,7 +255,7 @@ class _base_importer():
 
                 self._update_database_helper_table()
         """
-        self.log.info('starting the ``_update_database_helper_table`` method')
+        self.log.debug('starting the ``_update_database_helper_table`` method')
 
         tableName = self.dbTableName
 
@@ -261,7 +269,8 @@ class _base_importer():
             dbConn=self.cataloguesDbConn,
         )
 
-        self.log.info('completed the ``_update_database_helper_table`` method')
+        self.log.debug(
+            'completed the ``_update_database_helper_table`` method')
         return None
 
     # use the tab-trigger below for new method

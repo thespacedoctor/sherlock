@@ -181,7 +181,7 @@ search algorithm:
     ned_d spec galaxy:
         database table: tcs_view_galaxy_ned_d_v13_1_0
         general:
-            physical radius kpc: 30.0
+            physical radius kpc: 50.0
             angular radius arcsec: 240.0
             or within semi major axis: True
             synonym: NT
@@ -189,7 +189,7 @@ search algorithm:
     ned spec galaxy:
         database table: tcs_view_galaxy_ned_stream
         general:
-            physical radius kpc: 30.0
+            physical radius kpc: 50.0
             angular radius arcsec: 240.0
             or within semi major axis: True
             synonym: NT
@@ -261,7 +261,7 @@ search algorithm:
     sdss spec sn:
         database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
         general:
-            physical radius kpc: 30.0
+            physical radius kpc: 50.0
             angular radius arcsec: 240.0
             or within semi major axis: True
             synonym: NT
@@ -269,7 +269,7 @@ search algorithm:
     ned spec unknown:
         database table: tcs_view_other_ned_stream
         general:
-            physical radius kpc: 30.0
+            physical radius kpc: 50.0
             angular radius arcsec: 240.0
             synonym: UNCLEAR
             association: UNCLEAR

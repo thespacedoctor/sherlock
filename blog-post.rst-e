@@ -9,7 +9,7 @@ sherlock
     :target: https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html
     :alt: Coverage Status
 
-*A python package and command-line tools to contextually classify variable/transient astronomical sources. Sherlock mines a library of historical and on-going survey data in an attempt to identify the source of a transient/variable event, and predict the classification of the event based on the associated crossmatched data*.
+*A python package with command-line tools for contextually classifying variable/transient astronomical sources. Sherlock mines a library of historical and on-going astronomical survey data in an attempt to identify sources transient/variable events, and predict their classifications based on the associated crossmatched data*.
 
 
 
@@ -116,7 +116,7 @@ Documentation for sherlock is hosted by `Read the Docs <http://sherlock.readthed
 Sherlock Tutorial
 =================
 
-Before you begin using sherlock you will need to populate some custom settings within the sherlock settings file.
+Before you begin using sherlock you will need to populate some custom parameters within the sherlock settings file.
 
 To setup the default settings file at ``~/.config/sherlock/sherlock.yaml`` run the command:
 
@@ -124,7 +124,7 @@ To setup the default settings file at ``~/.config/sherlock/sherlock.yaml`` run t
     
     sherlock init
 
-This should create and open the settings file; follow the instructions in the file to populate the missing settings values (usually given an ``XXX`` placeholder). 
+This should create and open a new config file; follow the instructions in the file to populate the missing parameters values (usually given an ``XXX`` placeholder). 
 
 
 .. todo::
@@ -133,15 +133,6 @@ This should create and open the settings file; follow the instructions in the fi
 
 Initialisation and Setup
 ------------------------
-
-Before you begin you will need to run the following code once to set a login-path for each of your mysql servers:
-
-.. code-block:: bash 
-
-    mysql_config_editor set --login-path=<uniqueLoginName> --host=localhost --user=<myUsername> --password --port=<port>
-
-This stores your credentials in an encrypted file located at '~/.mylogin.cnf'.
-Use `mysql_config_editor print --all` to see all of the login-paths set.
 
 Populating Sherlock's Settings File
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

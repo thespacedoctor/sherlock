@@ -51,7 +51,7 @@ def get_crossmatch_catalogues_column_map(
                 dbConn=cataloguesDbConn
             )
     """
-    log.info('starting the ``get_crossmatch_catalogues_column_map`` function')
+    log.debug('starting the ``get_crossmatch_catalogues_column_map`` function')
 
     # GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE
     sqlQuery = u"""
@@ -73,5 +73,5 @@ def get_crossmatch_catalogues_column_map(
     for row in rows:
         colMaps[row["view_name"]] = row
 
-    log.info('completed the ``get_crossmatch_catalogues_column_map`` function')
+    log.debug('completed the ``get_crossmatch_catalogues_column_map`` function')
     return colMaps

@@ -35,7 +35,7 @@ if exists:
 
 setup(name="qub-sherlock",
       version=__version__,
-      description="A python package and command-line tools to contextually classify variable/transient astronomical sources. Sherlock mines a library of historical and on-going survey data in an attempt to identify the source of a transient/variable event, and predict the classification of the event based on the associated crossmatched data",
+      description="A python package with command-line tools for contextually classifying variable/transient astronomical sources. Sherlock mines a library of historical and on-going astronomical survey data in an attempt to identify sources transient/variable events, and predict their classifications based on the associated crossmatched data",
       long_description=readme(),
       classifiers=[
           'Development Status :: 4 - Beta',

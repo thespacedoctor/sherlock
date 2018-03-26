@@ -96,7 +96,7 @@ class database_cleaner():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         self._update_tcs_helper_catalogue_tables_info_with_new_tables()
         self._updated_row_counts_in_tcs_helper_catalogue_tables_info()
@@ -107,7 +107,7 @@ class database_cleaner():
 
         print "`tcs_helper_catalogue_tables_info` & `tcs_helper_catalogue_views_info` database tables updated"
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return None
 
     def _updated_row_counts_in_tcs_helper_catalogue_tables_info(
@@ -124,7 +124,7 @@ class database_cleaner():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
 
         sqlQuery = u"""
@@ -172,7 +172,7 @@ class database_cleaner():
                 dbConn=self.cataloguesDbConn,
             )
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
         return None
 
@@ -190,7 +190,7 @@ class database_cleaner():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_update_tcs_helper_catalogue_tables_info_with_new_tables`` method')
 
         sqlQuery = u"""
@@ -257,7 +257,7 @@ class database_cleaner():
                 )
                 highestId += 1
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_update_tcs_helper_catalogue_tables_info_with_new_tables`` method')
         return None
 
@@ -275,7 +275,7 @@ class database_cleaner():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_clean_up_columns`` method')
+        self.log.debug('starting the ``_clean_up_columns`` method')
 
         sqlQueries = [
             "update tcs_helper_catalogue_tables_info set old_table_name = table_name where old_table_name is null;",
@@ -342,7 +342,7 @@ class database_cleaner():
                 dbConn=self.cataloguesDbConn,
             )
 
-        self.log.info('completed the ``_clean_up_columns`` method')
+        self.log.debug('completed the ``_clean_up_columns`` method')
         return None
 
     def _update_tcs_helper_catalogue_views_info_with_new_views(
@@ -359,7 +359,7 @@ class database_cleaner():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_update_tcs_helper_catalogue_views_info_with_new_views`` method')
 
         sqlQuery = u"""
@@ -419,7 +419,7 @@ class database_cleaner():
                 )
                 highestId += 1
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_update_tcs_helper_catalogue_views_info_with_new_views`` method')
         return None
 

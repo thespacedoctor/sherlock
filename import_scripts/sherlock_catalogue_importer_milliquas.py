@@ -102,7 +102,7 @@ class importer(_base_importer):
 
             See class docstring for usage
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         dictList = self._create_dictionary_of_milliquas()
 
@@ -146,7 +146,7 @@ CREATE TABLE `%(tableName)s` (
             createStatement=createStatement
         )
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return None
 
     def _create_dictionary_of_milliquas(
@@ -156,7 +156,7 @@ CREATE TABLE `%(tableName)s` (
         **Return:**
             - ``dictList`` - a list of dictionaries containing all the rows in the milliquas catalogue
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_create_dictionary_of_milliquas`` method')
 
         dictList = []
@@ -184,7 +184,7 @@ CREATE TABLE `%(tableName)s` (
                 thisDict[k] = v
             dictList.append(thisDict)
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_create_dictionary_of_milliquas`` method')
         return dictList
 

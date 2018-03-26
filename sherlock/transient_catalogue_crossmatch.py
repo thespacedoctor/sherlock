@@ -18,6 +18,7 @@ from fundamentals import tools
 from sherlock.catalogue_conesearch import catalogue_conesearch
 from astrocalc.distances import converter
 from astrocalc.coords import separations
+import time
 
 
 class transient_catalogue_crossmatch():
@@ -103,7 +104,7 @@ class transient_catalogue_crossmatch():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``match`` method')
+        self.log.debug('starting the ``match`` method')
 
         classifications = []
 
@@ -129,10 +130,10 @@ class transient_catalogue_crossmatch():
                     continue
                 if "synonym" not in searchPara[bf] or searchPara[bf]["synonym"] == False:
                     continue
-                self.log.info("""  searching: %(search_name)s""" % locals())
+                self.log.debug("""  searching: %(search_name)s""" % locals())
                 if "physical radius kpc" in searchPara[bf]:
                     # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
                     catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
                         objectList=self.transients,
@@ -143,7 +144,7 @@ class transient_catalogue_crossmatch():
                     )
                 else:
                     # THE ANGULAR SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'Crossmatching against %(search_name)s' % locals())
                     # RENAMED from searchCatalogue
                     catalogueMatches = self.angular_crossmatch_against_catalogue(
@@ -168,7 +169,7 @@ class transient_catalogue_crossmatch():
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         for search_name, searchPara in sa.iteritems():
-            self.log.info("""  searching: %(search_name)s""" % locals())
+            self.log.debug("""  searching: %(search_name)s""" % locals())
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -177,7 +178,7 @@ class transient_catalogue_crossmatch():
                 if "physical radius kpc" in searchPara[bf]:
 
                     # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
                     catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
                         objectList=nonSynonymTransients,
@@ -188,7 +189,7 @@ class transient_catalogue_crossmatch():
                     )
                 else:
                     # THE ANGULAR SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'Crossmatching against %(search_name)s' % locals())
 
                     # RENAMED from searchCatalogue
@@ -215,10 +216,10 @@ class transient_catalogue_crossmatch():
                     continue
                 if "annotation" not in searchPara[bf] or searchPara[bf]["annotation"] == False:
                     continue
-                self.log.info("""  searching: %(search_name)s""" % locals())
+                self.log.debug("""  searching: %(search_name)s""" % locals())
                 if "physical radius kpc" in searchPara[bf]:
                     # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
                     if bf in searchPara:
                         catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
@@ -230,7 +231,7 @@ class transient_catalogue_crossmatch():
                         )
                 else:
                     # THE ANGULAR SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'Crossmatching against %(search_name)s' % locals())
                     # RENAMED from searchCatalogue
                     if bf in searchPara:
@@ -246,7 +247,7 @@ class transient_catalogue_crossmatch():
                 if catalogueMatches:
                     allCatalogueMatches = allCatalogueMatches + catalogueMatches
 
-        self.log.info('completed the ``match`` method')
+        self.log.debug('completed the ``match`` method')
         return allCatalogueMatches
 
     def angular_crossmatch_against_catalogue(
@@ -336,8 +337,13 @@ class transient_catalogue_crossmatch():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``angular_crossmatch_against_catalogue`` method')
+
+        self.log.info("STARTING %s SEARCH" %
+                      (search_name,))
+
+        start_time = time.time()
 
         # DEFAULTS
 
@@ -484,8 +490,12 @@ class transient_catalogue_crossmatch():
                     nearestMatches.append(c)
             catalogueMatches = nearestMatches
 
-        self.log.info(
+        self.log.debug(
             'completed the ``angular_crossmatch_against_catalogue`` method')
+
+        self.log.info("FINISHED %s SEARCH IN %0.5f s" %
+                      (search_name, time.time() - start_time,))
+
         return catalogueMatches
 
     def _annotate_crossmatch_with_value_added_parameters(
@@ -515,7 +525,7 @@ class transient_catalogue_crossmatch():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_annotate_crossmatch_with_value_added_parameters`` method')
 
         redshift = None
@@ -593,7 +603,7 @@ class transient_catalogue_crossmatch():
 
         crossmatchDict["physical_separation_kpc"] = physical_separation_kpc
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_annotate_crossmatch_with_value_added_parameters`` method')
         return crossmatchDict
 
@@ -624,7 +634,7 @@ class transient_catalogue_crossmatch():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_bright_star_match`` method')
+        self.log.debug('starting the ``_bright_star_match`` method')
 
         import decimal
         decimal.getcontext().prec = 10
@@ -638,7 +648,7 @@ class transient_catalogue_crossmatch():
                 if sep < decimal.Decimal(decimal.Decimal(10)**(-decimal.Decimal(0.2) * mag + decimal.Decimal(3.7))) and sep < 20.:
                     brightStarMatches.append(row)
 
-        self.log.info('completed the ``_bright_star_match`` method')
+        self.log.debug('completed the ``_bright_star_match`` method')
         return brightStarMatches
 
     def _galaxy_association_cuts(
@@ -670,7 +680,7 @@ class transient_catalogue_crossmatch():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_galaxy_association_cuts`` method')
+        self.log.debug('starting the ``_galaxy_association_cuts`` method')
 
         import decimal
         decimal.getcontext().prec = 10
@@ -687,7 +697,7 @@ class transient_catalogue_crossmatch():
                     if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal((decimal.Decimal(25.) - mag) / decimal.Decimal(6.)))):
                         galaxyMatches.append(row)
 
-        self.log.info('completed the ``_galaxy_association_cuts`` method')
+        self.log.debug('completed the ``_galaxy_association_cuts`` method')
         return galaxyMatches
 
     def physical_separation_crossmatch_against_catalogue(
@@ -738,6 +748,8 @@ class transient_catalogue_crossmatch():
         """
         self.log.debug(
             'starting the ``physical_separation_crossmatch_against_catalogue`` method')
+
+        start_time = time.time()
 
         bf = brightnessFilter
         # SETUP PARAMETERS
@@ -815,7 +827,7 @@ class transient_catalogue_crossmatch():
                     row["physical_separation_kpc"] = physical_separation_kpc
                     row["original_search_radius_arcsec"] = newAngularSep
                     if physical_separation_kpc:
-                        self.log.info(
+                        self.log.debug(
                             "\t\tPhysical separation = %.2f kpc" % (physical_separation_kpc,))
                     row["search_name"] = newsearch_name
                     matchSubset.append(row)
@@ -834,6 +846,9 @@ class transient_catalogue_crossmatch():
             matchedObjects = matchSubset
         self.log.debug(
             'completed the ``physical_separation_crossmatch_against_catalogue`` method')
+
+        self.log.info("FINISHED %s SEARCH IN %0.5f s" %
+                      (search_name, time.time() - start_time,))
 
         return matchedObjects
 

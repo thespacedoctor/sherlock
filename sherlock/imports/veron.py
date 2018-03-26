@@ -77,7 +77,7 @@ class veron(_base_importer):
 
         See class docstring for usage.
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         dictList = self._create_dictionary_of_veron()
 
@@ -117,7 +117,7 @@ class veron(_base_importer):
             createStatement=createStatement
         )
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return None
 
     def _create_dictionary_of_veron(
@@ -137,7 +137,7 @@ class veron(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_create_dictionary_of_veron`` method')
 
         dictList = []
@@ -203,7 +203,7 @@ class veron(_base_importer):
                 thisDict[k] = v
             dictList.append(thisDict)
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_create_dictionary_of_veron`` method')
         return dictList
 
