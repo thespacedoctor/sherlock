@@ -353,8 +353,6 @@ class transient_classifier():
             print "BATCH SIZE = %(total)s" % locals()
             print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
 
-            sys.exit(0)
-
             # DEFINE AN INPUT ARRAY
             # cores = psutil.cpu_count()
             # if cores > 8:
