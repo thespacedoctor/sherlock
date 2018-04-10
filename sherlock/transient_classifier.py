@@ -825,7 +825,7 @@ class transient_classifier():
         for xm in crossmatches:
             index = "%(catalogue_table_name)s%(catalogue_object_id)s" % xm
             # IF WE HAVE HIT A NEW SOURCE
-            if xm["transient_object_id"] == 15640516:
+            if xm["transient_object_id"] == "15640516":
                 print "FOUND SN2017hxu"
             if transient_object_id != xm["transient_object_id"]:
                 # RESET INDEX
