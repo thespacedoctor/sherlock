@@ -335,6 +335,7 @@ class transient_classifier():
             for i in range(batches + 1):
                 end = end + miniBatchSize
                 start = i * miniBatchSize
+                print start
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
 
