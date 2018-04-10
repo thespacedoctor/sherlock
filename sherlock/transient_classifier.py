@@ -332,8 +332,8 @@ class transient_classifier():
             print total
             print "miniBatchSize"
             print miniBatchSize
-            print "total / miniBatchSize"
-            print total / miniBatchSize
+            print "float(total) / float(miniBatchSize)"
+            print float(total) / float(miniBatchSize)
             print "batches"
             print batches
 
@@ -417,6 +417,8 @@ class transient_classifier():
 
             classificationRate = count / (time.time() - start_time)
             print "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals()
+
+            sys.exit(0)
 
         self.log.debug('completed the ``classify`` method')
         return None, None
