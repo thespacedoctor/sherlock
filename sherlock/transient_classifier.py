@@ -329,6 +329,8 @@ class transient_classifier():
             batches = int((total / miniBatchSize) - 0.5)
 
             print total
+            print miniBatchSize
+            print total / miniBatchSize
             print batches
 
             start = 0
@@ -435,8 +437,6 @@ class transient_classifier():
         if "where" in sqlQuery:
             sqlQuery = sqlQuery.replace(
                 "where", "where %(thisInt)s=%(thisInt)s and " % locals())
-
-        print sqlQuery
 
         transientsMetadataList = readquery(
             log=self.log,
