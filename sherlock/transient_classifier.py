@@ -237,13 +237,15 @@ class transient_classifier():
             searchCount = cpuCount
 
         largeBatchSize = int(50000 / searchCount)
-
+	print "large batch size ", str(largeBatchSize)
         miniBatchSize = int(largeBatchSize / searchCount)
         denominator = searchCount
         while miniBatchSize > 7000:
             denominator += 1
             miniBatchSize = int(largeBatchSize / denominator)
         self.largeBatchSize = largeBatchSize
+        print "mini batch size ", str(miniBatchSize)
+
 
         while remaining:
 
@@ -333,6 +335,7 @@ class transient_classifier():
             for i in range(batches + 1):
                 end = end + miniBatchSize
                 start = i * miniBatchSize
+                print start
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
 
