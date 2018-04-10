@@ -827,6 +827,8 @@ class transient_classifier():
             # IF WE HAVE HIT A NEW SOURCE
             if xm["transient_object_id"] == "15640516":
                 print "FOUND SN2017hxu"
+            else:
+                print xm["transient_object_id"]
             if transient_object_id != xm["transient_object_id"]:
                 # RESET INDEX
                 uniqueIndexCheck = []
