@@ -326,7 +326,7 @@ class transient_classifier():
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList[1:])
-            batches = int((total / miniBatchSize) - 0.5)
+            batches = int((float(total) / float(miniBatchSize)) + 0.5)
 
             print total
             print miniBatchSize
@@ -336,7 +336,7 @@ class transient_classifier():
             start = 0
             end = 0
             theseBatches = []
-            for i in range(batches + 1):
+            for i in range(batches):
                 end = end + miniBatchSize
                 start = i * miniBatchSize
                 print start
@@ -344,8 +344,7 @@ class transient_classifier():
                 theseBatches.append(thisBatch)
 
             print "BATCH SIZE = %(total)s" % locals()
-            batchPlusOne = batches + 1
-            print "MINI BATCH SIZE = %(batchPlusOne)s x %(miniBatchSize)s" % locals()
+            print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
 
             # DEFINE AN INPUT ARRAY
             # cores = psutil.cpu_count()
