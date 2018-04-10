@@ -325,7 +325,7 @@ class transient_classifier():
                 )
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
-            total = len(transientsMetadataList[1:])
+            total = len(transientsMetadataList)
             batches = int((float(total) / float(miniBatchSize)) + 0.5)
 
             print "total"
@@ -336,6 +336,9 @@ class transient_classifier():
             print float(total) / float(miniBatchSize)
             print "batches"
             print batches
+
+            if batches == 0:
+                batches = 1
 
             start = 0
             end = 0
@@ -816,21 +819,38 @@ class transient_classifier():
             crossmatches, key=itemgetter('transient_object_id'))
 
         transient_object_id = None
+        uniqueIndexCheck = []
         classifications = {}
+        crossmatchesKeep = []
         for xm in crossmatches:
+            index = "%(catalogue_table_name)s%(catalogue_object_id)s" % xm
+            # IF WE HAVE HIT A NEW SOURCE
             if transient_object_id != xm["transient_object_id"]:
+                # RESET INDEX
+                uniqueIndexCheck = []
                 if transient_object_id != None:
                     classifications[transient_object_id] = transClass
                 transClass = []
                 rank = 0
                 transient_object_id = xm["transient_object_id"]
-            rank += 1
-            transClass.append(xm["association_type"])
-            xm["rank"] = rank
+            if index not in uniqueIndexCheck:
+                uniqueIndexCheck.append(index)
+                rank += 1
+                transClass.append(xm["association_type"])
+                xm["rank"] = rank
+                crossmatchesKeep.append(xm)
+
+        crossmatches = crossmatchesKeep
+
+        # APPEND THE FINAL CLASSIFICATION MISSED IN LOOP ABOVE
         if transient_object_id != None:
             classifications[transient_object_id] = transClass
 
         self.log.debug('completed the ``_rank_classifications`` method')
+
+        print classifications
+
+        print crossmatches
 
         return classifications, crossmatches
 
