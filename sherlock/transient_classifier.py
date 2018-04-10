@@ -375,6 +375,9 @@ class transient_classifier():
             classifications, crossmatches = self._rank_classifications(
                 flat_list, colMaps)
 
+            print "print len(classifications)"
+            print len(classifications)
+
             for t in transientsMetadataList:
                 if t["id"] not in classifications:
                     classifications[t["id"]] = ["ORPHAN"]
