@@ -848,10 +848,6 @@ class transient_classifier():
 
         self.log.debug('completed the ``_rank_classifications`` method')
 
-        print classifications
-
-        print crossmatches
-
         return classifications, crossmatches
 
     def _print_results_to_stdout(
