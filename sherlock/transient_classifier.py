@@ -237,7 +237,7 @@ class transient_classifier():
             searchCount = cpuCount
 
         largeBatchSize = int(50000 / searchCount)
-	print "large batch size ", str(largeBatchSize)
+        print "large batch size ", str(largeBatchSize)
         miniBatchSize = int(largeBatchSize / searchCount)
         denominator = searchCount
         while miniBatchSize > 7000:
@@ -245,7 +245,6 @@ class transient_classifier():
             miniBatchSize = int(largeBatchSize / denominator)
         self.largeBatchSize = largeBatchSize
         print "mini batch size ", str(miniBatchSize)
-
 
         while remaining:
 
@@ -328,6 +327,9 @@ class transient_classifier():
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList[1:])
             batches = int((total / miniBatchSize) - 0.5)
+
+            print total
+            print batches
 
             start = 0
             end = 0
@@ -433,6 +435,8 @@ class transient_classifier():
         if "where" in sqlQuery:
             sqlQuery = sqlQuery.replace(
                 "where", "where %(thisInt)s=%(thisInt)s and " % locals())
+
+        print sqlQuery
 
         transientsMetadataList = readquery(
             log=self.log,
