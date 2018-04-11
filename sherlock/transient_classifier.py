@@ -237,14 +237,14 @@ class transient_classifier():
             searchCount = cpuCount
 
         largeBatchSize = int(50000 / searchCount)
-        print "large batch size ", str(largeBatchSize)
+        # print "large batch size ", str(largeBatchSize)
         miniBatchSize = int(largeBatchSize / searchCount)
         denominator = searchCount
         while miniBatchSize > 7000:
             denominator += 1
             miniBatchSize = int(largeBatchSize / denominator)
         self.largeBatchSize = largeBatchSize
-        print "mini batch size ", str(miniBatchSize)
+        # print "mini batch size ", str(miniBatchSize)
 
         while remaining:
 
@@ -328,15 +328,6 @@ class transient_classifier():
             total = len(transientsMetadataList)
             batches = int((float(total) / float(miniBatchSize)) + 0.5)
 
-            print "total"
-            print total
-            print "miniBatchSize"
-            print miniBatchSize
-            print "float(total) / float(miniBatchSize)"
-            print float(total) / float(miniBatchSize)
-            print "batches"
-            print batches
-
             if batches == 0:
                 batches = 1
 
@@ -347,14 +338,11 @@ class transient_classifier():
                 end = end + miniBatchSize
                 start = i * miniBatchSize
                 thisBatch = transientsMetadataList[start:end]
-                print "start, end, len(thisBatch)"
-                print start, end, len(thisBatch)
                 theseBatches.append(thisBatch)
 
-            print "theseBatches", len(theseBatches)
-
-            print "BATCH SIZE = %(total)s" % locals()
-            print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
+            # print "BATCH SIZE = %(total)s" % locals()
+            # print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" %
+            # locals()
 
             # DEFINE AN INPUT ARRAY
             # cores = psutil.cpu_count()
@@ -375,9 +363,6 @@ class transient_classifier():
                 item for sublist in crossmatchArray for item in sublist]
             classifications, crossmatches = self._rank_classifications(
                 flat_list, colMaps)
-
-            print "print len(classifications)"
-            print len(classifications)
 
             for t in transientsMetadataList:
                 if t["id"] not in classifications:
