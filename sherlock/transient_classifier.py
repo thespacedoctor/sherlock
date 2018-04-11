@@ -419,8 +419,6 @@ class transient_classifier():
             classificationRate = count / (time.time() - start_time)
             print "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals()
 
-            sys.exit(0)
-
         self.log.debug('completed the ``classify`` method')
         return None, None
 
