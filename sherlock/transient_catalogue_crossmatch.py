@@ -413,10 +413,12 @@ class transient_catalogue_crossmatch():
             lowerMagnitudeLimit=lowerMagnitudeLimit,
             magnitudeLimitFilter=magnitudeLimitFilter
         )
+
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
         indices, catalogueMatches = cs.search()
         count = 1
         annotatedcatalogueMatches = []
+
         for i, xm in zip(indices, catalogueMatches):
 
             # CALCULATE PHYSICAL PARAMETERS ... IF WE CAN
@@ -493,8 +495,8 @@ class transient_catalogue_crossmatch():
         self.log.debug(
             'completed the ``angular_crossmatch_against_catalogue`` method')
 
-        self.log.info("FINISHED %s SEARCH IN %0.5f s" %
-                      (search_name, time.time() - start_time,))
+        self.log.debug("FINISHED %s SEARCH IN %0.5f s" %
+                       (search_name, time.time() - start_time,))
 
         return catalogueMatches
 
@@ -847,8 +849,8 @@ class transient_catalogue_crossmatch():
         self.log.debug(
             'completed the ``physical_separation_crossmatch_against_catalogue`` method')
 
-        self.log.info("FINISHED %s SEARCH IN %0.5f s" %
-                      (search_name, time.time() - start_time,))
+        self.log.debug("FINISHED %s SEARCH IN %0.5f s" %
+                       (search_name, time.time() - start_time,))
 
         return matchedObjects
 

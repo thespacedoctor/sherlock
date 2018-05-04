@@ -642,6 +642,7 @@ class transient_classifier():
 
         self.log.debug(
             'completed the ``_crossmatch_transients_against_catalogues`` method')
+
         return crossmatches
 
     def _update_transient_database(
@@ -790,6 +791,10 @@ class transient_classifier():
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1 + xm["physical_separation_kpc"] / 10
+            elif (xm["association_type"] == "BS"):
+                rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] - \
+                    colMaps[xm["catalogue_view_name"]][
+                        "object_type_accuracy"] * 0.1
             else:
                 rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] + 1. - \
                     colMaps[xm["catalogue_view_name"]][
@@ -1521,6 +1526,7 @@ CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
   `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated` varchar(45) DEFAULT '0',
   PRIMARY KEY (`transient_object_id`),
+  KEY `key_transient_object_id` (`transient_object_id`),
   KEY `idx_summary` (`summary`),
   KEY `idx_classification` (`classification`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
