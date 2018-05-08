@@ -340,9 +340,8 @@ class transient_classifier():
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
 
-            # print "BATCH SIZE = %(total)s" % locals()
-            # print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" %
-            # locals()
+            print "BATCH SIZE = %(total)s" % locals()
+            print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
 
             # DEFINE AN INPUT ARRAY
             # cores = psutil.cpu_count()
