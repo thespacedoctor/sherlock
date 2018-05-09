@@ -223,7 +223,7 @@ class catalogue_conesearch():
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``search`` method')
+        self.log.debug('starting the ``search`` method')
 
         # ACCOUNT FOR TYPE OF SEARCH
         sqlWhere = False
@@ -285,7 +285,7 @@ class catalogue_conesearch():
         uniqueMatchDicts = []
         uniqueMatchDicts[:] = [copy.copy(d) for d in matches.list]
 
-        self.log.info('completed the ``search`` method')
+        self.log.debug('completed the ``search`` method')
         return matchIndies, uniqueMatchDicts
 
     # xt-class-method

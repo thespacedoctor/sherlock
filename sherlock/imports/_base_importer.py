@@ -23,6 +23,7 @@ import pickle
 import codecs
 import re
 import string
+from sherlock.database_cleaner import database_cleaner
 from datetime import datetime, date, time
 from docopt import docopt
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, directory_script_runner, writequery
@@ -156,7 +157,7 @@ class _base_importer():
 
             - Write a checklist for creating a new sherlock database importer
         """
-        self.log.info('starting the ``add_data_to_database_table`` method')
+        self.log.debug('starting the ``add_data_to_database_table`` method')
 
         if len(dictList) == 0:
             return
@@ -178,16 +179,35 @@ class _base_importer():
             dbTableName=dbTableName,
             uniqueKeyList=[],
             dateModified=True,
-            batchSize=2500,
+            dateCreated=True,
+            batchSize=10000,
             replace=True,
             dbSettings=self.settings["database settings"][
                 "static catalogues"]
         )
 
         self._add_htmids_to_database_table()
+
+        cleaner = database_cleaner(
+            log=self.log,
+            settings=self.settings
+        )
+        cleaner._update_tcs_helper_catalogue_tables_info_with_new_tables()
+
         self._update_database_helper_table()
 
-        self.log.info('completed the ``add_data_to_database_table`` method')
+        print """Now:
+
+- [ ] edit the `%(dbTableName)s` row in the sherlock catalogues database adding relevant column mappings, catalogue version number etc
+- [ ] retire any previous version of this catlogue in the database. Renaming the catalogue-table by appending `legacy_` and also change the name in the `tcs_helper_catalogue_tables_info` table
+- [ ] dupliate views from the previous catalogue version to point towards the new version and then delete the old views
+- [ ] run the command `sherlock clean [-s <pathToSettingsFile>]` to clean up helper tables
+- [ ] switch out the old catalogue table/views in your sherlock search algorithms in the yaml settings files
+- [ ] run a test batch of transients to make sure catalogue is installed as expected
+
+""" % locals()
+
+        self.log.debug('completed the ``add_data_to_database_table`` method')
         return None
 
     def _add_htmids_to_database_table(
@@ -200,7 +220,7 @@ class _base_importer():
 
                 self._add_htmids_to_database_table()
         """
-        self.log.info('starting the ``add_htmids_to_database_table`` method')
+        self.log.debug('starting the ``add_htmids_to_database_table`` method')
 
         tableName = self.dbTableName
 
@@ -215,7 +235,7 @@ class _base_importer():
             primaryIdColumnName=self.primaryIdColumnName
         )
 
-        self.log.info('completed the ``add_htmids_to_database_table`` method')
+        self.log.debug('completed the ``add_htmids_to_database_table`` method')
         return None
 
     def _update_database_helper_table(
@@ -228,7 +248,7 @@ class _base_importer():
 
                 self._update_database_helper_table()
         """
-        self.log.info('starting the ``_update_database_helper_table`` method')
+        self.log.debug('starting the ``_update_database_helper_table`` method')
 
         tableName = self.dbTableName
 
@@ -242,7 +262,8 @@ class _base_importer():
             dbConn=self.cataloguesDbConn,
         )
 
-        self.log.info('completed the ``_update_database_helper_table`` method')
+        self.log.debug(
+            'completed the ``_update_database_helper_table`` method')
         return None
 
     # use the tab-trigger below for new method

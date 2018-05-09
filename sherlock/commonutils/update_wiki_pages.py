@@ -94,7 +94,7 @@ class update_wiki_pages():
 
         See class docstring for usage
         """
-        self.log.info('starting the ``update`` method')
+        self.log.debug('starting the ``update`` method')
 
         if "sherlock wiki root" not in self.settings:
             print "Sherlock wiki settings not found in settings file"
@@ -116,7 +116,7 @@ class update_wiki_pages():
         # RECODE INTO ASCII
         mdContent = mdContent.encode("utf-8", "ignore")
 
-        self.log.info('completed the ``update`` method')
+        self.log.debug('completed the ``update`` method')
         return
 
     def _get_table_infos(
@@ -124,7 +124,7 @@ class update_wiki_pages():
             trimmed=False):
         """query the sherlock-catalogues database table metadata
         """
-        self.log.info('starting the ``_get_table_infos`` method')
+        self.log.debug('starting the ``_get_table_infos`` method')
 
         sqlQuery = u"""
             SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" and table_name not like "%%stream"  order by number_of_rows desc;
@@ -146,7 +146,7 @@ class update_wiki_pages():
                 cleanTable.append(orow)
             tableInfo = cleanTable
 
-        self.log.info('completed the ``_get_table_infos`` method')
+        self.log.debug('completed the ``_get_table_infos`` method')
         return tableInfo
 
     def _get_view_infos(
@@ -154,7 +154,7 @@ class update_wiki_pages():
             trimmed=False):
         """query the sherlock-catalogues database view metadata
         """
-        self.log.info('starting the ``_get_view_infos`` method')
+        self.log.debug('starting the ``_get_view_infos`` method')
 
         sqlQuery = u"""
             SELECT v.*, t.description as "master table" FROM crossmatch_catalogues.tcs_helper_catalogue_views_info as v,  crossmatch_catalogues.tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like "legacy%%" and t.id=v.table_id order by number_of_rows desc
@@ -176,7 +176,7 @@ class update_wiki_pages():
                 cleanTable.append(orow)
             viewInfo = cleanTable
 
-        self.log.info('completed the ``_get_view_infos`` method')
+        self.log.debug('completed the ``_get_view_infos`` method')
         return viewInfo
 
     def _get_stream_view_infos(
@@ -184,7 +184,7 @@ class update_wiki_pages():
             trimmed=False):
         """query the sherlock-catalogues database streamed data tables' metadata
         """
-        self.log.info('starting the ``_get_stream_view_infos`` method')
+        self.log.debug('starting the ``_get_stream_view_infos`` method')
 
         sqlQuery = u"""
             SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%"  and table_name like "%%stream" order by number_of_rows desc;
@@ -206,7 +206,7 @@ class update_wiki_pages():
                 cleanTable.append(orow)
             streamInfo = cleanTable
 
-        self.log.info('completed the ``_get_stream_view_infos`` method')
+        self.log.debug('completed the ``_get_stream_view_infos`` method')
         return streamInfo
 
     def _create_md_tables(
@@ -225,7 +225,7 @@ class update_wiki_pages():
         **Return:**
             - ``mdContent`` -- the content of the markdown file
         """
-        self.log.info('starting the ``_create_md_tables`` method')
+        self.log.debug('starting the ``_create_md_tables`` method')
 
         header = u"""
 | <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Vizier</sub> | <sub>NED</sub> | <sub>Objects</sub> | <sub>Weight (1-10)</sub> |
@@ -351,7 +351,7 @@ class update_wiki_pages():
 
         mdContent = header + rows
 
-        self.log.info('completed the ``_create_md_tables`` method')
+        self.log.debug('completed the ``_create_md_tables`` method')
         return mdContent
 
     def _write_wiki_pages(
@@ -362,7 +362,7 @@ class update_wiki_pages():
         **Key Arguments:**
             - ``mdContent`` -- the content of the markdown file
         """
-        self.log.info('starting the ``_write_wiki_pages`` method')
+        self.log.debug('starting the ``_write_wiki_pages`` method')
 
         pathToWriteFile = self.settings[
             "sherlock wiki root"] + "/Crossmatch-Catalogue Tables.md"
@@ -397,14 +397,14 @@ class update_wiki_pages():
         writeFile.write(lastUpdated + mdContent)
         writeFile.close()
 
-        self.log.info('completed the ``_write_wiki_pages`` method')
+        self.log.debug('completed the ``_write_wiki_pages`` method')
         return None
 
     def _update_github(
             self):
         """commit the changes and push them to github
         """
-        self.log.info('starting the ``_update_github`` method')
+        self.log.debug('starting the ``_update_github`` method')
 
         from subprocess import Popen, PIPE, STDOUT
         gdir = self.settings["sherlock wiki root"]
@@ -414,7 +414,7 @@ class update_wiki_pages():
         print output
         self.log.debug('output: %(output)s' % locals())
 
-        self.log.info('completed the ``_update_github`` method')
+        self.log.debug('completed the ``_update_github`` method')
         return None
 
     # use the tab-trigger below for new method

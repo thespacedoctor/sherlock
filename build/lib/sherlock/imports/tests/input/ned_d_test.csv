@@ -1,0 +1,27 @@
+"Header Lines",13,,,,,,,,,,,,,
+"Name","NED-D",,,,,,,,,,,,,
+"Version","10.1.0",,,,,,,,,,,,,
+"Version Date","2015-02-17",,,,,,,,,,,,,
+"Compiled By","I. Steer",,,,,,,,,,,,,
+"NED Version","N25.2.1",,,,,,,,,,,,,
+"NED Version Date","2015-02-28",,,,,,,,,,,,,
+"URI","http://ned.ipac.caltech.edu/Library/Distances/NED25.2.1-D-10.1.0-20150217.csv",,,,,,,,,,,,,
+"Content-Type","text/csv",,,,,,,,,,,,,
+"Content Format","http://tools.ietf.org/html/rfc4180",,,,,,,,,,,,,
+"Acknowledgement","This research has made use of the NASA/IPAC Extragalactic Database (NED) which is operated by the Jet Propulsion Laboratory, California Institute of Technology, under contract with the National Aeronautics and Space Administration.",,,,,,,,,,,,,
+"Copyright","(C) 2012,2013,2014,2015 California Institute of Technology - All Rights Reserved",,,,,,,,,,,,,
+"Exclusion Code","D","G","Galaxy ID","m-M","err","D (Mpc)","Method","REFCODE","SN ID","redshift (z)","Hubble const.","Adopted LMC modulus","Date (Yr. - 1980)","Notes"
+"RN","1","1","SDSS-II SN 13651","41.64","0.17","1700","SNIa SDSS","2014arXiv1401.3317S","SDSS-II SN 13651","0.249917","70.0","","34","SDSS CANDIDATE SN: type AGN; MLCS2K2"
+"RN","2","1","SDSS-II SN 13651","42.10","0.21","2110","SNIa SDSS","2014arXiv1401.3317S","SDSS-II SN 13651","0.249917","70.0","","34","SDSS CANDIDATE SN: type AGN; SALT 2"
+"RN","999999","1","SDSS-II SN 13651","41.64","0.17","1700","SNIa SDSS","2014arXiv1401.3317S","SDSS-II SN 13651","0.249917","70.0","","34","SDSS-II SN 13651, SDSS CANDIDATE SN: type AGN; MLCS2K2"
+"RN","999999","1","SDSS-II SN 13651","42.10","0.21","2110","SNIa SDSS","2014arXiv1401.3317S","SDSS-II SN 13651","0.249917","70.0","","34","SDSS-II SN 13651, SDSS CANDIDATE SN: type AGN; SALT 2"
+"","3","2","UGC 12889","34.16","0.40","68.0","Tully-Fisher","2007A&A...465...71T","","","","","27","mean"
+"","4","2","UGC 12889","34.66","0.45","85.6","Tully-Fisher","2007A&A...465...71T","","","","","27","K"
+"","5","2","UGC 12889","34.68","0.47","86.1","Tully-Fisher","2007A&A...465...71T","","","","","27","H"
+"","6","2","UGC 12889","34.70","0.46","86.9","Tully-Fisher","2007A&A...465...71T","","","","","27","J"
+"","7","3","KUG 2357+228","33.73","0.37","55.8","Tully-Fisher","2009ApJS..182..474S","","","","","29",""
+"","8","3","KUG 2357+228","34.11","0.31","66.3","Tully-Fisher","2009ApJS..182..474S","","","","","29","Malmquist cor."
+"","9","4","SDSS-II SN 14480","40.19","0.30","1090","SNIa","2011ApJ...738..162S","SDSS-II SN 14480","","70.0","","31","SN photometric redshift distance, z photo =0.298 +/- 0.054"
+"R","10","4","SDSS-II SN 14480","41.20","0.33","1300","SNIa","2014arXiv1401.3317S","SDSS-II SN 14480","0.330796","70.0","","34","SDSS CANDIDATE SN: type zSNIa; SALT 2"
+"R","11","4","SDSS-II SN 14480","41.30","0.32","1370","SNIa","2014arXiv1401.3317S","SDSS-II SN 14480","0.330796","70.0","","34","SDSS CANDIDATE SN: type zSNIa; MLCS2K2"
+"","12","4","SDSS-II SN 14480","41.07","0.22","1640","SNIa","2013ApJ...763...88C","SDSS-II SN 14480","","70.0","","33","SALT 2"

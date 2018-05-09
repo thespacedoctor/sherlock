@@ -1,0 +1,288 @@
+version: 1
+
+database settings:
+
+    db: dryx_unit_testing
+    host: localhost
+    user: unittesting
+    password: utpass
+    loginPath: unittesting
+            
+    static catalogues:
+        db: crossmatch_catalogues
+        host: 127.0.0.1
+        user: pessto
+        password: p355t0
+        tunnel: 
+            remote user: dry
+            remote ip: psweb.mp.qub.ac.uk
+            remote datbase host: psdb3
+            port: 9002
+        loginPath: psdb3
+
+    transients:
+        db: dryx_unit_testing
+        host: localhost
+        user: unittesting
+        password: utpass
+        loginPath: unittesting
+        tunnel: False
+        transient query: "select id as 'id', id as 'alt_id', ra_psf 'ra', dec_psf 'dec', id 'name', sherlockClassification as 'object_classification'
+            from G270580_candidates"
+        transient primary id column: id
+        transient classification column: sherlockClassification
+        crossmatchTable: tcs_cross_matches
+        transient table: G270580_candidates
+
+    pessto marshall:
+        user: pessto
+        password: p355t0
+        db: pessto_marshall_sandbox
+        host: 127.0.0.1
+        tunnel: False
+
+galaxy radius stetch factor: 1.2
+
+
+htmLevel: 16 # 16 or 20
+ned stream search radius arcec: 300
+first pass ned search radius arcec: 240
+ned stream refresh rate in days: 90
+galaxy radius stetch factor: 1.2
+synonym radius arcsec: 0.5
+
+# SSH TUNNEL - if a tunnel is required to connect to the database(s) then add setup here
+# Note only one tunnel is setup - may need to change this to 2 tunnels in the future if 
+# code, static catalogue database and transient database are all on seperate machines.
+ssh tunnel:
+    remote user: dry
+    remote ip: psweb.mp.qub.ac.uk
+    remote datbase host: psdb3
+    port: 9002
+    use tunnel: True
+
+search algorithm:
+    sdss bright stars:
+        angular radius arcsec: 10.0
+        transient classification: BS
+        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
+        bright mag column: _r
+        bright limit: 14.
+        match nearest source only: False
+    2mass bright stars:
+        angular radius arcsec: 10.0
+        transient classification: BS
+        database table: tcs_view_star_2mass_psc_final
+        bright mag column: J
+        bright limit: 14.
+        match nearest source only: False
+    gsc bright stars:
+        angular radius arcsec: 10.0
+        transient classification: BS
+        database table: tcs_view_star_guide_star_catalogue_v2_3
+        bright mag column: B
+        bright limit: 14.
+        match nearest source only: False
+    gaia:
+        angular radius arcsec: 1.0
+        transient classification: VARIABLESTAR
+        database table: tcs_view_star_gaia_dr1
+        match nearest source only: False
+    downes cv:
+        angular radius arcsec: 0.5
+        transient classification: CV
+        database table: tcs_view_cv_downes_cataclysmic_variables_final
+        match nearest source only: False
+    ritter binaries:
+        angular radius arcsec: 0.5
+        transient classification: CV
+        database table: tcs_view_cb_ritter_cataclysmic_binaries_v7_21
+        match nearest source only: False
+    sdss qso:
+        angular radius arcsec: 2.0
+        transient classification: AGN
+        database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
+        match nearest source only: False
+    milliquas:
+        angular radius arcsec: 2.0
+        transient classification: AGN
+        database table: tcs_view_agn_milliquas_v4_5
+        match nearest source only: False
+    veron:
+        angular radius arcsec: 2.0
+        transient classification: AGN
+        database table: tcs_view_agn_veron_v13
+        match nearest source only: False
+    ned_d spec nt:
+        angular radius arcsec: 3.0
+        physical radius kpc: 0.5
+        transient classification: NT
+        database table: tcs_view_galaxy_ned_d_v10_2_0
+        match nearest source only: False
+    ned qso:
+        angular radius arcsec: 2.0
+        transient classification: AGN
+        database table: tcs_view_agn_ned_stream
+        match nearest source only: False
+    ned phot nt:
+        angular radius arcsec: 0.5
+        transient classification: NT
+        database table: tcs_view_galaxy_ned_stream
+        match nearest source only: False
+    ned spec nt:
+        angular radius arcsec: 3.0
+        physical radius kpc: 0.5
+        transient classification: NT
+        database table: tcs_view_galaxy_ned_stream
+        match nearest source only: False
+    ned_d spec sn:
+        angular radius arcsec: 240.0
+        physical radius kpc: 30.0
+        or within semi major axis: True
+        transient classification: SN
+        database table: tcs_view_galaxy_ned_d_v13_1_0
+        match nearest source only: False
+    sdss spec nt:
+        angular radius arcsec: 3.0
+        physical radius kpc: 0.5
+        transient classification: NT
+        database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
+        match nearest source only: False
+    sdss phot nt: 
+        angular radius arcsec: 0.5
+        transient classification: NT
+        database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
+        match nearest source only: False
+    ned spec sn:
+        angular radius arcsec: 240.0
+        physical radius kpc: 30.0
+        or within semi major axis: True
+        transient classification: SN
+        database table: tcs_view_galaxy_ned_stream
+        match nearest source only: False
+    sdss spec sn:
+        angular radius arcsec: 240.0
+        physical radius kpc: 30.0
+        or within semi major axis: True
+        transient classification: SN
+        database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
+        match nearest source only: False
+    ned phot sn:
+        angular radius arcsec: 20.0
+        transient classification: SN
+        database table: tcs_view_galaxy_ned_stream
+        match nearest source only: False
+    sdss phot sn:
+        angular radius arcsec: 20.0
+        transient classification: SN
+        database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
+        match nearest source only: False
+    sdss faint stars sn:
+        angular radius arcsec: 1.0
+        transient classification: SN
+        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
+        faint mag column: _r
+        faint limit: 21.0
+        match nearest source only: False
+    2mass faint stars sn:
+        angular radius arcsec: 1.0
+        transient classification: SN
+        database table: tcs_view_star_2mass_psc_final
+        faint mag column: J
+        faint limit: 18.0
+        match nearest source only: False
+    gsc faint stars sn:
+        angular radius arcsec: 6.0
+        transient classification: SN
+        database table: tcs_view_star_guide_star_catalogue_v2_3
+        faint mag column: B
+        faint limit: 18.0
+        match nearest source only: False
+    ps1 ubercal star:
+        angular radius arcsec: 1.0
+        transient classification: VARIABLESTAR
+        database table: tcs_view_star_ps1_ubercal_stars_v1
+        match nearest source only: False
+    sdss star:
+        angular radius arcsec: 1.0
+        transient classification: VARIABLESTAR
+        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
+        match nearest source only: False
+    2mass star:
+        angular radius arcsec: 1.0
+        transient classification: VARIABLESTAR
+        database table: tcs_view_star_2mass_psc_final
+        match nearest source only: False
+    gsc star:
+        angular radius arcsec: 1.0
+        transient classification: VARIABLESTAR
+        database table: tcs_view_star_guide_star_catalogue_v2_3
+        match nearest source only: False
+    ned spec other:
+        angular radius arcsec: 240.0
+        physical radius kpc: 30.0
+        or within semi major axis: True
+        transient classification: "?"
+        database table: tcs_view_other_ned_stream
+        match nearest source only: False
+    ned phot other:
+        # angular radius arcsec: 20.0
+        angular radius arcsec: 240.0
+        transient classification: "?"
+        database table: tcs_view_other_ned_stream
+        match nearest source only: False
+    ifs galaxies phot:
+        angular radius arcsec: 20.0
+        transient classification: SN
+        database table: tcs_view_galaxy_ifs_stream
+        match nearest source only: False
+    ifs galaxies phot sn:
+        angular radius arcsec: 20.0
+        transient classification: SN
+        database table: tcs_view_galaxy_ifs_stream
+        match nearest source only: False
+    ifs galaxies spec sn:
+        angular radius arcsec: 240.0
+        physical radius kpc: 30.0
+        transient classification: SN
+        database table: tcs_view_galaxy_ifs_stream
+        match nearest source only: False
+
+
+supplementary search:
+    kepler galaxy:
+        angular radius arcsec: 30.0
+        transient classification: KEPLER
+        database table: tcs_view_galaxy_kepler_k2
+        match nearest source only: False
+
+sherlock wiki root: /Users/Dave/gh-wikis/sherlock.wiki/
+
+logging settings:
+    formatters:
+        file_style:
+            format: '* %(asctime)s - %(name)s - %(levelname)s (%(pathname)s > %(funcName)s > %(lineno)d) - %(message)s  '
+            datefmt: '%Y/%m/%d %H:%M:%S'
+        console_style:
+            format: '* %(asctime)s - %(levelname)s: %(pathname)s:%(funcName)s:%(lineno)d > %(message)s'
+            datefmt: '%H:%M:%S'
+        html_style:
+            format: '<div id="row" class="%(levelname)s"><span class="date">%(asctime)s</span>   <span class="label">file:</span><span class="filename">%(filename)s</span>   <span class="label">method:</span><span class="funcName">%(funcName)s</span>   <span class="label">line#:</span><span class="lineno">%(lineno)d</span> <span class="pathname">%(pathname)s</span>  <div class="right"><span class="message">%(message)s</span><span class="levelname">%(levelname)s</span></div></div>'
+            datefmt: '%Y-%m-%d <span class= "time">%H:%M <span class= "seconds">%Ss</span></span>'
+    handlers:
+        console:
+            class: logging.StreamHandler
+            level: INFO
+            formatter: console_style
+            stream: ext://sys.stdout
+        file:
+            class: logging.FileHandler
+            level: DEBUG
+            formatter: file_style
+            filename: /Users/Dave/.config/sherlock/sherlock.log
+            mode: w+
+    root:
+        level: WARNING
+        handlers: [file,console]
+
+

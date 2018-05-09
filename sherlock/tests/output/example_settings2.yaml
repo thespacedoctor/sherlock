@@ -137,7 +137,7 @@ search algorithm:
         match nearest source only: False
     ned_d spec sn:
         angular radius arcsec: 240.0
-        physical radius kpc: 30.0
+        physical radius kpc: 50.0
         or within semi major axis: True
         transient classification: SN
         database table: tcs_view_galaxy_ned_d_v13_1_0
@@ -155,14 +155,14 @@ search algorithm:
         match nearest source only: False
     ned spec sn:
         angular radius arcsec: 240.0
-        physical radius kpc: 30.0
+        physical radius kpc: 50.0
         or within semi major axis: True
         transient classification: SN
         database table: tcs_view_galaxy_ned_stream
         match nearest source only: False
     sdss spec sn:
         angular radius arcsec: 240.0
-        physical radius kpc: 30.0
+        physical radius kpc: 50.0
         or within semi major axis: True
         transient classification: SN
         database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
@@ -220,7 +220,7 @@ search algorithm:
         match nearest source only: False
     ned spec other:
         angular radius arcsec: 240.0
-        physical radius kpc: 30.0
+        physical radius kpc: 50.0
         or within semi major axis: True
         transient classification: "?"
         database table: tcs_view_other_ned_stream
@@ -243,7 +243,7 @@ search algorithm:
         match nearest source only: False
     ifs galaxies spec sn:
         angular radius arcsec: 240.0
-        physical radius kpc: 30.0
+        physical radius kpc: 50.0
         transient classification: SN
         database table: tcs_view_galaxy_ifs_stream
         match nearest source only: False

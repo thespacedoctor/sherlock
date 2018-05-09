@@ -80,7 +80,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``get`` method')
+        self.log.debug('starting the ``get`` method')
 
         dictList = self._create_dictionary_of_ned_d()
         self.primaryIdColumnName = "primaryId"
@@ -171,7 +171,7 @@ class ned_d(_base_importer):
         self._get_metadata_for_galaxies()
         self._update_sdss_coverage()
 
-        self.log.info('completed the ``get`` method')
+        self.log.debug('completed the ``get`` method')
         return None
 
     def _create_dictionary_of_ned_d(
@@ -191,7 +191,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_create_dictionary_of_ned_d`` method')
 
         count = 0
@@ -269,7 +269,7 @@ class ned_d(_base_importer):
 
         csvFile.close()
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_create_dictionary_of_ned_d`` method')
         return dictList
 
@@ -287,7 +287,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_clean_up_columns`` method')
+        self.log.debug('starting the ``_clean_up_columns`` method')
 
         tableName = self.dbTableName
 
@@ -319,7 +319,7 @@ class ned_d(_base_importer):
             dbConn=self.cataloguesDbConn,
         )
 
-        self.log.info('completed the ``_clean_up_columns`` method')
+        self.log.debug('completed the ``_clean_up_columns`` method')
         return None
 
     def _get_metadata_for_galaxies(
@@ -336,7 +336,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_get_metadata_for_galaxies`` method')
+        self.log.debug('starting the ``_get_metadata_for_galaxies`` method')
 
         total, batches = self._count_galaxies_requiring_metadata()
         print "%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals()
@@ -357,7 +357,7 @@ class ned_d(_base_importer):
 
             self._count_galaxies_requiring_metadata()
 
-        self.log.info('completed the ``_get_metadata_for_galaxies`` method')
+        self.log.debug('completed the ``_get_metadata_for_galaxies`` method')
         return None
 
     def _count_galaxies_requiring_metadata(
@@ -377,7 +377,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_count_galaxies_requiring_metadata`` method')
 
         tableName = self.dbTableName
@@ -397,7 +397,7 @@ class ned_d(_base_importer):
         if self.total == 0:
             self.batches = 0
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_count_galaxies_requiring_metadata`` method')
         return self.total, self.batches
 
@@ -418,7 +418,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_get_3000_galaxies_needing_metadata`` method')
 
         tableName = self.dbTableName
@@ -437,7 +437,7 @@ class ned_d(_base_importer):
         for row in rows:
             self.theseIds[row["primary_ned_id"]] = row["primaryId"]
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_get_3000_galaxies_needing_metadata`` method')
 
         return len(self.theseIds)
@@ -460,7 +460,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_query_ned_and_add_results_to_database`` method')
 
         tableName = self.dbTableName
@@ -548,7 +548,7 @@ class ned_d(_base_importer):
                     "primaryID": self.theseIds[thisDict["input_name"]]
                 })
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_query_ned_and_add_results_to_database`` method')
         return dictList
 
@@ -566,7 +566,7 @@ class ned_d(_base_importer):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_update_sdss_coverage`` method')
+        self.log.debug('starting the ``_update_sdss_coverage`` method')
 
         tableName = self.dbTableName
 
@@ -632,7 +632,7 @@ class ned_d(_base_importer):
                 dbConn=self.cataloguesDbConn,
             )
 
-        self.log.info('completed the ``_update_sdss_coverage`` method')
+        self.log.debug('completed the ``_update_sdss_coverage`` method')
         return None
 
     # use the tab-trigger below for new method
