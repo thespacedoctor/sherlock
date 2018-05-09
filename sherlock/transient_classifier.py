@@ -1510,7 +1510,7 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   KEY `key_catalogue_object_id` (`catalogue_object_id`),
   KEY `idx_separationArcsec` (`separationArcsec`),
   KEY `idx_rank` (`rank`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 
 
 CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
@@ -1528,7 +1528,7 @@ CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
   KEY `key_transient_object_id` (`transient_object_id`),
   KEY `idx_summary` (`summary`),
   KEY `idx_classification` (`classification`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 """ % locals()
 
