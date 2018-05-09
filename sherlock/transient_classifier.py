@@ -326,7 +326,7 @@ class transient_classifier():
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList)
-            batches = int((float(total) / float(miniBatchSize)) + 0.5)
+            batches = int((float(total) / float(miniBatchSize)) + 1.)
 
             if batches == 0:
                 batches = 1
