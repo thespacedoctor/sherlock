@@ -236,14 +236,10 @@ class transient_classifier():
         if searchCount > cpuCount:
             searchCount = cpuCount
 
-        largeBatchSize = int(50000 / searchCount)
-        # print "large batch size ", str(largeBatchSize)
-        miniBatchSize = int(largeBatchSize / searchCount)
-        denominator = searchCount
-        while miniBatchSize > 7000:
-            denominator += 1
-            miniBatchSize = int(largeBatchSize / denominator)
+        largeBatchSize = 50000
+        miniBatchSize = 100
         self.largeBatchSize = largeBatchSize
+
         # print "mini batch size ", str(miniBatchSize)
 
         while remaining:
