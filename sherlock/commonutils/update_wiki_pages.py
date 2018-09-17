@@ -103,18 +103,13 @@ class update_wiki_pages():
         staticTableInfo = self._get_table_infos()
         viewInfo = self._get_view_infos()
         streamedTableInfo = self._get_stream_view_infos()
-        mdContent = self._create_md_tables(
+        self._create_md_tables(
             tableData=staticTableInfo,
             viewData=viewInfo,
             streamData=streamedTableInfo
         )
-        self._write_wiki_pages(
-            mdContent=mdContent
-        )
+        self._write_wiki_pages()
         self._update_github()
-
-        # RECODE INTO ASCII
-        mdContent = mdContent.encode("utf-8", "ignore")
 
         self.log.debug('completed the ``update`` method')
         return
@@ -223,7 +218,7 @@ class update_wiki_pages():
             - ``streamData`` -- the sherlock-catalogues database streamed data tables' metadata.
 
         **Return:**
-            - ``mdContent`` -- the content of the markdown file
+            - None
         """
         self.log.debug('starting the ``_create_md_tables`` method')
 
@@ -274,7 +269,7 @@ class update_wiki_pages():
             rows += u"""
 | <sub>%(table_name)s</sub> | <sub>[%(description)s](%(url)s)</sub> | <sub>[%(reference_text)s](%(reference_url)s)</sub> | <sub>%(newNumber)s</sub> | <sub>%(vizier_link)s</sub> | <sub>%(in_ned)s</sub> | <sub>%(object_types)s</sub> | <sub>%(weight)s</sub> |""" % locals()
 
-        mdContent = header + rows
+        self.mdTables = header + rows
 
         header = u"""
 | <sub>View Name</sub> | <sub>Number Rows</sub> | <sub>Object Type</sub> |
@@ -301,7 +296,7 @@ class update_wiki_pages():
             rows += u"""
 | <sub>%(view_name)s</sub> | <sub>%(newNumber)s</sub> | <sub>%(object_type)s</sub> |""" % locals()
 
-        self.mdView = header + rows
+        self.mdViews = header + rows
 
         header = u"""
 | <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |  
@@ -349,18 +344,14 @@ class update_wiki_pages():
             rows += u"""
 | <sub>%(table_name)s</sub> | <sub>[%(description)s](%(url)s)</sub> | <sub>[%(reference_text)s](%(reference_url)s)</sub> | <sub>%(newNumber)s</sub> | <sub>%(object_types)s</sub> |""" % locals()
 
-        mdContent = header + rows
+        self.mdStreams = header + rows
 
         self.log.debug('completed the ``_create_md_tables`` method')
-        return mdContent
+        return
 
     def _write_wiki_pages(
-            self,
-            mdContent):
+            self):
         """write the markdown formated content of the database tables' metadata to local wiki pages
-
-        **Key Arguments:**
-            - ``mdContent`` -- the content of the markdown file
         """
         self.log.debug('starting the ``_write_wiki_pages`` method')
 
@@ -372,7 +363,7 @@ class update_wiki_pages():
         lastUpdated = """Last Updated %(now)s
 """ % locals()
 
-        writeFile.write(lastUpdated + mdContent)
+        writeFile.write(lastUpdated + self.mdTables)
         writeFile.close()
 
         pathToWriteFile = self.settings[
@@ -383,7 +374,7 @@ class update_wiki_pages():
         lastUpdated = """Last Updated %(now)s
 """ % locals()
 
-        writeFile.write(lastUpdated + self.mdView)
+        writeFile.write(lastUpdated + self.mdViews)
         writeFile.close()
 
         pathToWriteFile = self.settings[
@@ -394,7 +385,7 @@ class update_wiki_pages():
         lastUpdated = """Last Updated %(now)s
 """ % locals()
 
-        writeFile.write(lastUpdated + mdContent)
+        writeFile.write(lastUpdated + self.mdStreams)
         writeFile.close()
 
         self.log.debug('completed the ``_write_wiki_pages`` method')

@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.imports.ned_d (class) &mdash; sherlock v1.3.3 documentation</title>
+  <title>sherlock.imports.ned_d (class) &mdash; sherlock v1.4.4 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock v1.4.4 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
         <link rel="next" title="sherlock.imports.veron (class)" href="sherlock.imports.veron.html"/>
         <link rel="prev" title="sherlock.imports.ned (class)" href="sherlock.imports.ned.html"/> 
@@ -78,7 +78,7 @@
             
             
               <div class="version">
-                v1.3.3
+                v1.4.4
               </div>
             
           
@@ -120,7 +120,6 @@
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports._base_importer.html">sherlock.imports._base_importer (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs.html">sherlock.imports.ifs (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.marshall.html">sherlock.imports.marshall (<em>class</em>)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.milliquas.html">sherlock.imports.milliquas (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned.html">sherlock.imports.ned (<em>class</em>)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">sherlock.imports.ned_d (<em>class</em>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sherlock.imports.veron.html">sherlock.imports.veron (<em>class</em>)</a></li>
@@ -200,15 +199,15 @@
 <dt id="sherlock.imports.ned_d">
 <em class="property">class </em><code class="descclassname">sherlock.imports.</code><code class="descname">ned_d</code><span class="sig-paren">(</span><em>log</em>, <em>settings=False</em>, <em>pathToDataFile=False</em>, <em>version=False</em>, <em>catalogueName=''</em>, <em>coordinateList=[]</em>, <em>radiusArcsec=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d" title="Permalink to this definition">  ∞</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></p>
-<p><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></p>
+<p><em>Import the * `NED-D &lt;https://ned.ipac.caltech.edu/Library/Distances/&gt;`_ *galaxy catalogue in to the sherlock-catalogues database</em></p>
 <dl class="docutils">
 <dt><strong>Key Arguments:</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">dbConn</span></code> – mysql database connection</li>
 <li><code class="docutils literal"><span class="pre">log</span></code> – logger</li>
 <li><code class="docutils literal"><span class="pre">settings</span></code> – the settings dictionary</li>
 <li><code class="docutils literal"><span class="pre">pathToDataFile</span></code> – path to the ned_d data file</li>
 <li><code class="docutils literal"><span class="pre">version</span></code> – version of the ned_d catalogue</li>
+<li><code class="docutils literal"><span class="pre">catalogueName</span></code> – the name of the catalogue</li>
 </ul>
 </dd>
 </dl>
@@ -230,13 +229,7 @@
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
-<li>update key arguments values and definitions with defaults</li>
-<li>update return values and definitions</li>
-<li>update usage examples and text</li>
-<li>update docstring text</li>
-<li>check sublime snippet exists</li>
-<li>clip any useful text to docs mindmap</li>
-<li>regenerate the docs and check redendering of this docstring</li>
+<li>abstract this module out into its own stand alone script</li>
 </ul>
 </div>
 <p class="rubric">Methods</p>
@@ -250,7 +243,7 @@
 <td><em>Import data in the list of dictionaries in the requested database table</em></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ingest</span></code>()</td>
-<td>ingest the ned_d catalogue into the catalogues database</td>
+<td>Import the ned_d catalogue into the catalogues database</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">_add_htmids_to_database_table</span></code>()</td>
 <td><em>Add HTMIDs to database table once all the data has been imported (HTM Levels 10,13,16)</em></td>
@@ -284,14 +277,14 @@
 <dl class="method">
 <dt id="sherlock.imports.ned_d.ingest">
 <code class="descname">ingest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sherlock/imports/ned_d.html#ned_d.ingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned_d.ingest" title="Permalink to this definition">  ∞</a></dt>
-<dd><p>ingest the ned_d catalogue into the catalogues database</p>
+<dd><p>Import the ned_d catalogue into the catalogues database</p>
 <p>The method first generates a list of python dictionaries from the ned_d datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table.</p>
+<p><strong>Usage:</strong></p>
+<blockquote>
+<div>See class docstring for usage</div></blockquote>
 <div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
-<li>update key arguments values and definitions with defaults</li>
-<li>update return values and definitions</li>
-<li>update usage examples and text</li>
 <li>update docstring text</li>
 <li>check sublime snippet exists</li>
 <li>clip any useful text to docs mindmap</li>
@@ -556,7 +549,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'v1.3.3',
+            VERSION:'v1.4.4',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

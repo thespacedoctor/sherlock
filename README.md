@@ -5,11 +5,11 @@ sherlock
 
 [![Coverage Status](https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg)](https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html)
 
-*A python package and command-line tools to contextually classify
+*A python package with command-line tools for contextually classifying
 variable/transient astronomical sources. Sherlock mines a library of
-historical and on-going survey data in an attempt to identify the source
-of a transient/variable event, and predict the classification of the
-event based on the associated crossmatched data*.
+historical and on-going astronomical survey data in an attempt to
+identify sources transient/variable events, and predict their
+classifications based on the associated crossmatched data*.
 
 Command-Line Usage
 ==================

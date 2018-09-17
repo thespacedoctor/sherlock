@@ -316,6 +316,7 @@ class transient_classifier():
             # FROM THE LOCATIONS OF THE TRANSIENTS, CHECK IF OUR LOCAL NED DATABASE
             # NEEDS UPDATED
             if self.updateNed:
+
                 self._update_ned_stream(
                     transientsMetadataList=transientsMetadataList
                 )

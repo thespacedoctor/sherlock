@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; sherlock v1.3.3 documentation</title>
+  <title>Installation &mdash; sherlock v1.4.4 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock v1.4.4 documentation" href="../index.html"/>
         <link rel="next" title="Subpackages" href="../autosummary.html"/>
         <link rel="prev" title="sherlock" href="../index.html"/> 
 
@@ -77,7 +77,7 @@
             
             
               <div class="version">
-                v1.3.3
+                v1.4.4
               </div>
             
           
@@ -302,7 +302,7 @@ Options:
     ra                      the right-ascension coordinate with which to perform a conesearch <span class="o">(</span>sexegesimal or decimal degrees<span class="o">)</span>
     dec                     the declination coordinate with which to perform a conesearch <span class="o">(</span>sexegesimal or decimal degrees<span class="o">)</span>
     radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-    cat_name                name of the catalogue being imported <span class="o">(</span>veron<span class="p">|</span>milliquas<span class="p">|</span>ned_d<span class="o">)</span>
+    cat_name                name of the catalogue being imported <span class="o">(</span>veron<span class="p">|</span>ned_d<span class="o">)</span>
     stream_name             name of the stream to import into the sherlock-catalogues database <span class="o">(</span>ifs<span class="o">)</span>
 
     -N, --skipNedUpdate     <span class="k">do</span> not update the NED database before classification
@@ -321,12 +321,12 @@ Options:
 </div>
 <div class="section" id="sherlock-tutorial">
 <h1>Sherlock Tutorial<a class="headerlink" href="#sherlock-tutorial" title="Permalink to this headline">  ∞</a></h1>
-<p>Before you begin using sherlock you will need to populate some custom settings within the sherlock settings file.</p>
+<p>Before you begin using sherlock you will need to populate some custom parameters within the sherlock settings file.</p>
 <p>To setup the default settings file at <code class="docutils literal"><span class="pre">~/.config/sherlock/sherlock.yaml</span></code> run the command:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>sherlock init
 </pre></div>
 </div>
-<p>This should create and open the settings file; follow the instructions in the file to populate the missing settings values (usually given an <code class="docutils literal"><span class="pre">XXX</span></code> placeholder).</p>
+<p>This should create and open a new config file; follow the instructions in the file to populate the missing parameters values (usually given an <code class="docutils literal"><span class="pre">XXX</span></code> placeholder).</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <ul class="last simple">
@@ -335,12 +335,6 @@ Options:
 </div>
 <div class="section" id="initialisation-and-setup">
 <h2>Initialisation and Setup<a class="headerlink" href="#initialisation-and-setup" title="Permalink to this headline">  ∞</a></h2>
-<p>Before you begin you will need to run the following code once to set a login-path for each of your mysql servers:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>mysql_config_editor <span class="nb">set</span> --login-path<span class="o">=</span>&lt;uniqueLoginName&gt; --host<span class="o">=</span>localhost --user<span class="o">=</span>&lt;myUsername&gt; --password --port<span class="o">=</span>&lt;port&gt;
-</pre></div>
-</div>
-<p>This stores your credentials in an encrypted file located at ‘~/.mylogin.cnf’.
-Use <code class="xref py py-obj docutils literal"><span class="pre">mysql_config_editor</span> <span class="pre">print</span> <span class="pre">--all</span></code> to see all of the login-paths set.</p>
 <div class="section" id="populating-sherlock-s-settings-file">
 <h3>Populating Sherlock’s Settings File<a class="headerlink" href="#populating-sherlock-s-settings-file" title="Permalink to this headline">  ∞</a></h3>
 <p>The settings file now contains every option required to change the way the code runs, including database settings and the actual search algorithm.</p>
@@ -727,7 +721,7 @@ sherlock-importers stream &lt;stream_name&gt; <span class="o">[</span>-s &lt;pat
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'v1.3.3',
+            VERSION:'v1.4.4',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.imports (subpackage) &mdash; sherlock v1.3.3 documentation</title>
+  <title>sherlock.imports (subpackage) &mdash; sherlock v1.4.4 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock v1.3.3 documentation" href="../index.html"/>
+    <link rel="top" title="sherlock v1.4.4 documentation" href="../index.html"/>
         <link rel="up" title="Subpackages" href="../autosummary.html"/>
         <link rel="next" title="sherlock.catalogue_conesearch (class)" href="sherlock.catalogue_conesearch.html"/>
         <link rel="prev" title="sherlock.commonutils (subpackage)" href="sherlock.commonutils.html"/> 
@@ -78,7 +78,7 @@
             
             
               <div class="version">
-                v1.3.3
+                v1.4.4
               </div>
             
           
@@ -198,19 +198,16 @@
 <tr class="row-even"><td><a class="reference internal" href="sherlock.imports.marshall.html#sherlock.imports.marshall" title="sherlock.imports.marshall"><code class="xref py py-obj docutils literal"><span class="pre">marshall</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
 <td><em>Import the ePESSTO Marshall transient streams (includes multiple on-going transient survey streams) into the Sherlock-catalogues database</em></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports.milliquas.html#sherlock.imports.milliquas" title="sherlock.imports.milliquas"><code class="xref py py-obj docutils literal"><span class="pre">milliquas</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
-<td><em>importer object for the</em> <a class="reference external" href="http://heasarc.gsfc.nasa.gov/w3browse/all/milliquas.html">Milliquas (Million Quasars Catalog)</a> <em>catagloue</em></td>
+<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports.ned.html#sherlock.imports.ned" title="sherlock.imports.ned"><code class="xref py py-obj docutils literal"><span class="pre">ned</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>Using a list of coordinates, query the online</em> <a class="reference external" href="https://ned.ipac.caltech.edu/">NED</a> <em>database and import sources found within a given search radius of each of the loctions into the sherlock-catalogues database</em></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="sherlock.imports.ned.html#sherlock.imports.ned" title="sherlock.imports.ned"><code class="xref py py-obj docutils literal"><span class="pre">ned</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
-<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/">NED</a> <em>galaxy stream</em></td>
+<tr class="row-even"><td><a class="reference internal" href="sherlock.imports.ned_d.html#sherlock.imports.ned_d" title="sherlock.imports.ned_d"><code class="xref py py-obj docutils literal"><span class="pre">ned_d</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<td><em>Import the * `NED-D &lt;https://ned.ipac.caltech.edu/Library/Distances/&gt;`_ *galaxy catalogue in to the sherlock-catalogues database</em></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports.ned_d.html#sherlock.imports.ned_d" title="sherlock.imports.ned_d"><code class="xref py py-obj docutils literal"><span class="pre">ned_d</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
-<td><em>importer object for the</em> <a class="reference external" href="https://ned.ipac.caltech.edu/Library/Distances/">NED-D</a> <em>galaxy catalogue</em></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="sherlock.imports.veron.html#sherlock.imports.veron" title="sherlock.imports.veron"><code class="xref py py-obj docutils literal"><span class="pre">veron</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports.veron.html#sherlock.imports.veron" title="sherlock.imports.veron"><code class="xref py py-obj docutils literal"><span class="pre">veron</span></code></a>(log[,&nbsp;settings,&nbsp;pathToDataFile,&nbsp;…])</td>
 <td><em>importer object for the</em> <a class="reference external" href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258">VERON AGN catalogue</a></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="sherlock.imports._base_importer.html#sherlock.imports._base_importer" title="sherlock.imports._base_importer"><code class="xref py py-obj docutils literal"><span class="pre">_base_importer</span></code></a>(log[,&nbsp;settings,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="sherlock.imports._base_importer.html#sherlock.imports._base_importer" title="sherlock.imports._base_importer"><code class="xref py py-obj docutils literal"><span class="pre">_base_importer</span></code></a>(log[,&nbsp;settings,&nbsp;…])</td>
 <td><em>The base importer object used to import new catalgues into sherlock-catalogues database</em></td>
 </tr>
 </tbody>
@@ -261,7 +258,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'v1.3.3',
+            VERSION:'v1.4.4',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

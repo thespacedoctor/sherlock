@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sherlock.commonutils.update_wiki_pages &mdash; sherlock v1.3.3 documentation</title>
+  <title>sherlock.commonutils.update_wiki_pages &mdash; sherlock v1.4.4 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="sherlock v1.3.3 documentation" href="../../../index.html"/>
+    <link rel="top" title="sherlock v1.4.4 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                v1.3.3
+                v1.4.4
               </div>
             
           
@@ -272,7 +272,7 @@
 
 <span class="sd">        See class docstring for usage</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``update`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``update`` method&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s2">&quot;sherlock wiki root&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">:</span>
             <span class="nb">print</span> <span class="s2">&quot;Sherlock wiki settings not found in settings file&quot;</span>
@@ -294,7 +294,7 @@
         <span class="c1"># RECODE INTO ASCII</span>
         <span class="n">mdContent</span> <span class="o">=</span> <span class="n">mdContent</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``update`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``update`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages._get_table_infos"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages._get_table_infos">[docs]</a>    <span class="k">def</span> <span class="nf">_get_table_infos</span><span class="p">(</span>
@@ -302,7 +302,7 @@
             <span class="n">trimmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;query the sherlock-catalogues database table metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
 
         <span class="n">sqlQuery</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; and table_name not like &quot;</span><span class="si">%%</span><span class="s2">stream&quot;  order by number_of_rows desc;</span>
@@ -324,7 +324,7 @@
                 <span class="n">cleanTable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orow</span><span class="p">)</span>
             <span class="n">tableInfo</span> <span class="o">=</span> <span class="n">cleanTable</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_table_infos`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tableInfo</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages._get_view_infos"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages._get_view_infos">[docs]</a>    <span class="k">def</span> <span class="nf">_get_view_infos</span><span class="p">(</span>
@@ -332,7 +332,7 @@
             <span class="n">trimmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;query the sherlock-catalogues database view metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
 
         <span class="n">sqlQuery</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            SELECT v.*, t.description as &quot;master table&quot; FROM crossmatch_catalogues.tcs_helper_catalogue_views_info as v,  crossmatch_catalogues.tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot; and t.id=v.table_id order by number_of_rows desc</span>
@@ -354,7 +354,7 @@
                 <span class="n">cleanTable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orow</span><span class="p">)</span>
             <span class="n">viewInfo</span> <span class="o">=</span> <span class="n">cleanTable</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_view_infos`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">viewInfo</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages._get_stream_view_infos"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages._get_stream_view_infos">[docs]</a>    <span class="k">def</span> <span class="nf">_get_stream_view_infos</span><span class="p">(</span>
@@ -362,7 +362,7 @@
             <span class="n">trimmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;query the sherlock-catalogues database streamed data tables&#39; metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
 
         <span class="n">sqlQuery</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like &quot;legacy</span><span class="si">%%</span><span class="s2">&quot;  and table_name like &quot;</span><span class="si">%%</span><span class="s2">stream&quot; order by number_of_rows desc;</span>
@@ -384,7 +384,7 @@
                 <span class="n">cleanTable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orow</span><span class="p">)</span>
             <span class="n">streamInfo</span> <span class="o">=</span> <span class="n">cleanTable</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_get_stream_view_infos`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">streamInfo</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages._create_md_tables"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages._create_md_tables">[docs]</a>    <span class="k">def</span> <span class="nf">_create_md_tables</span><span class="p">(</span>
@@ -403,7 +403,7 @@
 <span class="sd">        **Return:**</span>
 <span class="sd">            - ``mdContent`` -- the content of the markdown file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
 
         <span class="n">header</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">| &lt;sub&gt;Table Name&lt;/sub&gt; | &lt;sub&gt;Description&lt;/sub&gt; | &lt;sub&gt;Reference&lt;/sub&gt; | &lt;sub&gt;Number Rows&lt;/sub&gt; | &lt;sub&gt;Vizier&lt;/sub&gt; | &lt;sub&gt;NED&lt;/sub&gt; | &lt;sub&gt;Objects&lt;/sub&gt; | &lt;sub&gt;Weight (1-10)&lt;/sub&gt; |</span>
@@ -529,7 +529,7 @@
 
         <span class="n">mdContent</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">mdContent</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages._write_wiki_pages"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages._write_wiki_pages">[docs]</a>    <span class="k">def</span> <span class="nf">_write_wiki_pages</span><span class="p">(</span>
@@ -540,7 +540,7 @@
 <span class="sd">        **Key Arguments:**</span>
 <span class="sd">            - ``mdContent`` -- the content of the markdown file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>
 
         <span class="n">pathToWriteFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span>
             <span class="s2">&quot;sherlock wiki root&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/Crossmatch-Catalogue Tables.md&quot;</span>
@@ -575,14 +575,14 @@
         <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="n">mdContent</span><span class="p">)</span>
         <span class="n">writeFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages._update_github"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages._update_github">[docs]</a>    <span class="k">def</span> <span class="nf">_update_github</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;commit the changes and push them to github</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;starting the ``_update_github`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_update_github`` method&#39;</span><span class="p">)</span>
 
         <span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">STDOUT</span>
         <span class="n">gdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;sherlock wiki root&quot;</span><span class="p">]</span>
@@ -592,7 +592,7 @@
         <span class="nb">print</span> <span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;output: </span><span class="si">%(output)s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">())</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;completed the ``_update_github`` method&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_update_github`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div></div>
 
     <span class="c1"># use the tab-trigger below for new method</span>
@@ -633,7 +633,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'v1.3.3',
+            VERSION:'v1.4.4',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
