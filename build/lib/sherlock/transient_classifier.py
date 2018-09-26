@@ -29,6 +29,15 @@ from HMpTy.mysql import conesearch
 from HMpTy.htm import sets
 from sherlock.imports import ned
 from sherlock.commonutils import get_crossmatch_catalogues_column_map
+from fundamentals.mysql import database
+import psutil
+from fundamentals import fmultiprocess
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+from sherlock import transient_catalogue_crossmatch
+import psutil
+
+theseBatches = []
+crossmatchArray = []
 
 
 class transient_classifier():
@@ -43,10 +52,10 @@ class transient_classifier():
         - ``dec`` -- declination of a single transient source. Default *False*
         - ``name`` -- the ID of a single transient source. Default *False*
         - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
-        - ``fast`` -- run in fast mode. This mode may not catch errors in the ingest of data to the crossmatches table but runs twice as fast. Default *False*.
         - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
         - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
-
+        - ``updateAnnotations`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
+        - ``oneRun`` -- only process one batch of transients, usful for unit testing. Default *False*
 
     **Usage:**
 
@@ -106,6 +115,15 @@ class transient_classifier():
 
         By setting ``update=True`` the classifier will update the ``sherlockClassification`` column of the ``transient table`` with new classification and populate the ``sherlock_crossmatches`` table with key details of the crossmatched sources from the catalogues database. By setting ``update=False`` results are printed to stdout but the database is not updated (useful for dry runs and testing new algorithms),
 
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # INITIALISATION
 
@@ -118,9 +136,10 @@ class transient_classifier():
             dec=False,
             name=False,
             verbose=0,
-            fast=False,
             updateNed=True,
-            daemonMode=False
+            daemonMode=False,
+            updateAnnotations=True,
+            oneRun=False
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -131,10 +150,10 @@ class transient_classifier():
         self.name = name
         self.cl = False
         self.verbose = verbose
-        self.fast = fast
         self.updateNed = updateNed
         self.daemonMode = daemonMode
-        self.myPid = str(os.getpid())
+        self.updateAnnotations = updateAnnotations
+        self.oneRun = oneRun
 
         # xt-self-arg-tmpx
 
@@ -172,10 +191,57 @@ class transient_classifier():
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
 
         See class docstring for usage.
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``classify`` method')
+
+        global theseBatches
+        global crossmatchArray
+
+        self.log.debug('starting the ``classify`` method')
 
         remaining = 1
+
+        # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
+        # REDSHIFT, MAG ETC
+        colMaps = get_crossmatch_catalogues_column_map(
+            log=self.log,
+            dbConn=self.cataloguesDbConn
+        )
+
+        # 2018-02-05 KWS commented out again!! It doesn't work MySQL 5.5.
+        self._create_tables_if_not_exist()
+
+        import time
+        start_time = time.time()
+
+        # COUNT SEARCHES
+        sa = self.settings["search algorithm"]
+        searchCount = 0
+        brightnessFilters = ["bright", "faint", "general"]
+        for search_name, searchPara in sa.iteritems():
+            for bf in brightnessFilters:
+                if bf in searchPara:
+                    searchCount += 1
+
+        cpuCount = psutil.cpu_count()
+        if searchCount > cpuCount:
+            searchCount = cpuCount
+
+        largeBatchSize = 50000
+        miniBatchSize = 100
+        self.largeBatchSize = largeBatchSize
+
+        # print "mini batch size ", str(miniBatchSize)
+
         while remaining:
 
             # IF A TRANSIENT HAS NOT BEEN PASSED IN VIA THE COMMAND-LINE, THEN
@@ -191,16 +257,24 @@ class transient_classifier():
                     sqlQuery = sqlQuery.replace(
                         "where", "where %(thisInt)s=%(thisInt)s and " % locals())
 
-                rows = readquery(
-                    log=self.log,
-                    sqlQuery=sqlQuery,
-                    dbConn=self.transientsDbConn,
-                )
-                remaining = rows[0]["count(*)"]
+                if remaining == 1 or remaining < largeBatchSize:
+                    rows = readquery(
+                        log=self.log,
+                        sqlQuery=sqlQuery,
+                        dbConn=self.transientsDbConn,
+                    )
+                    remaining = rows[0]["count(*)"]
+                else:
+                    remaining = remaining - largeBatchSize
+
                 print "%(remaining)s transient sources requiring a classification remain" % locals()
+
+                # START THE TIME TO TRACK CLASSIFICATION SPPED
+                start_time = time.time()
 
                 # A LIST OF DICTIONARIES OF TRANSIENT METADATA
                 transientsMetadataList = self._get_transient_metadata_from_database_list()
+
                 count = len(transientsMetadataList)
                 print "  now classifying the next %(count)s transient sources" % locals()
 
@@ -227,6 +301,9 @@ class transient_classifier():
                 transientsMetadataList = [transient]
                 remaining = 0
 
+            if self.oneRun:
+                remaining = 0
+
             if len(transientsMetadataList) == 0:
                 if self.daemonMode == False:
                     remaining = 0
@@ -236,75 +313,94 @@ class transient_classifier():
                     print "No remaining transients need classified, will try again in 5 mins"
                     time.sleep("10")
 
-            # THE COLUMN MAPS - WHICH COLUMNS IN THE CATALOGUE TABLES = RA, DEC,
-            # REDSHIFT, MAG ETC
-            colMaps = get_crossmatch_catalogues_column_map(
-                log=self.log,
-                dbConn=self.cataloguesDbConn
-            )
-
             # FROM THE LOCATIONS OF THE TRANSIENTS, CHECK IF OUR LOCAL NED DATABASE
             # NEEDS UPDATED
             if self.updateNed:
+
                 self._update_ned_stream(
                     transientsMetadataList=transientsMetadataList
                 )
 
-            batchSize = 100
-            total = len(transientsMetadataList[1:])
-            batches = int(total / batchSize)
+            # SOME TESTING SHOWED THAT 25 IS GOOD
+            total = len(transientsMetadataList)
+            batches = int((float(total) / float(miniBatchSize)) + 1.)
+
+            if batches == 0:
+                batches = 1
 
             start = 0
             end = 0
             theseBatches = []
-            for i in range(batches + 1):
-                end = end + batchSize
-                start = i * batchSize
+            for i in range(batches):
+                end = end + miniBatchSize
+                start = i * miniBatchSize
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
 
-            count = 1
-            for batch in theseBatches:
-                count += 1
-                # RUN THE CROSSMATCH CLASSIFIER FOR ALL TRANSIENTS
-                crossmatches = self._crossmatch_transients_against_catalogues(
-                    colMaps=colMaps,
-                    transientsMetadataList=batch
-                )
+            print "BATCH SIZE = %(total)s" % locals()
+            print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
 
-                classifications, crossmatches = self._rank_classifications(
-                    colMaps=colMaps,
+            # DEFINE AN INPUT ARRAY
+            # cores = psutil.cpu_count()
+            # if cores > 8:
+            #     cores = 8
+
+            start_time2 = time.time()
+
+            print "START CROSSMATCH"
+
+            crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
+                                            inputArray=range(len(theseBatches)), poolSize=None, colMaps=colMaps)
+
+            print "FINISH CROSSMATCH/START RANKING: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
+
+            flat_list = [
+                item for sublist in crossmatchArray for item in sublist]
+            classifications, crossmatches = self._rank_classifications(
+                flat_list, colMaps)
+
+            for t in transientsMetadataList:
+                if t["id"] not in classifications:
+                    classifications[t["id"]] = ["ORPHAN"]
+
+            if self.cl:
+                self._print_results_to_stdout(
+                    classifications=classifications,
                     crossmatches=crossmatches
                 )
 
-                if self.cl:
-                    self._print_results_to_stdout(
-                        classifications=classifications,
-                        crossmatches=crossmatches
-                    )
+            # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
+            # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
+            # TABLE)
+            print "FINISH RANKING/START UPDATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
+            if self.update and not self.ra:
+                self._update_transient_database(
+                    crossmatches=crossmatches,
+                    classifications=classifications,
+                    transientsMetadataList=transientsMetadataList,
+                    colMaps=colMaps
+                )
 
-                for t in batch:
-                    if t["id"] not in classifications:
-                        classifications[t["id"]] = ["ORPHAN"]
+            print "FINISH UPDATING TRANSIENT DB/START ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
 
-                # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
-                # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
-                # TABLE)
-                if self.update and not self.ra:
-                    self._update_transient_database(
-                        crossmatches=crossmatches,
-                        classifications=classifications,
-                        transientsMetadataList=batch,
-                        colMaps=colMaps
-                    )
+            if self.ra:
+                return classifications, crossmatches
 
-                if self.ra:
-                    return classifications, crossmatches
-
+            if self.updateAnnotations and self.settings["database settings"]["transients"]["transient peak magnitude query"]:
                 self.update_peak_magnitudes()
-                self.update_classification_annotations_and_summaries()
+            self.update_classification_annotations_and_summaries(
+                self.updateAnnotations)
 
-        self.log.info('completed the ``classify`` method')
+            print "FINISH ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            start_time2 = time.time()
+
+            classificationRate = count / (time.time() - start_time)
+            print "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals()
+
+        self.log.debug('completed the ``classify`` method')
         return None, None
 
     def _get_transient_metadata_from_database_list(
@@ -313,13 +409,22 @@ class transient_classifier():
 
          **Return:**
             - ``transientsMetadataList``
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.debug(
             'starting the ``_get_transient_metadata_from_database_list`` method')
 
         sqlQuery = self.settings["database settings"][
-            "transients"]["transient query"] + " limit " + str(self.settings["database settings"][
-                "transients"]["classificationBatchSize"])
+            "transients"]["transient query"] + " limit " + str(self.largeBatchSize)
 
         thisInt = randint(0, 100)
         if "where" in sqlQuery:
@@ -345,8 +450,18 @@ class transient_classifier():
 
         **Key Arguments:**
             - ``transientsMetadataList`` -- the list of transient metadata lifted from the database.
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_update_ned_stream`` method')
+        self.log.debug('starting the ``_update_ned_stream`` method')
 
         coordinateList = []
         for i in transientsMetadataList:
@@ -387,7 +502,7 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
-        self.log.info('completed the ``_update_ned_stream`` method')
+        self.log.debug('completed the ``_update_ned_stream`` method')
         return None
 
     def _remove_previous_ned_queries(
@@ -400,8 +515,18 @@ class transient_classifier():
 
         **Return:**
             - ``updatedCoordinateList`` -- coordinate list with previous queries removed
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_remove_previous_ned_queries`` method')
+        self.log.debug('starting the ``_remove_previous_ned_queries`` method')
 
         # 1 DEGREE QUERY RADIUS
         radius = 60. * 60.
@@ -458,31 +583,53 @@ class transient_classifier():
             if i not in curatedMatchIndices:
                 updatedCoordinateList.append(v)
 
-        self.log.info('completed the ``_remove_previous_ned_queries`` method')
+        self.log.debug('completed the ``_remove_previous_ned_queries`` method')
         return updatedCoordinateList
 
     def _crossmatch_transients_against_catalogues(
             self,
-            colMaps,
-            transientsMetadataList):
+            transientsMetadataListIndex,
+            colMaps):
         """run the transients through the crossmatch algorithm in the settings file
 
          **Key Arguments:**
-            - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
-            - ``transientsMetadataList`` -- the list of transient metadata lifted from the database.
+            - ``transientsMetadataListIndex`` -- the list of transient metadata lifted from the database.
+            - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
+
 
         **Return:**
             - ``crossmatches`` -- a list of dictionaries of the associated sources crossmatched from the catalogues database
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
+
+        global theseBatches
+
         self.log.debug(
             'starting the ``_crossmatch_transients_against_catalogues`` method')
 
-        from sherlock import transient_catalogue_crossmatch
+        # SETUP ALL DATABASE CONNECTIONS
+
+        transientsMetadataList = theseBatches[transientsMetadataListIndex]
+
+        dbConn = database(
+            log=self.log,
+            dbSettings=self.settings["database settings"]["static catalogues"]
+        ).connect()
+
         self.allClassifications = []
 
         cm = transient_catalogue_crossmatch(
             log=self.log,
-            dbConn=self.cataloguesDbConn,
+            dbConn=dbConn,
             transients=transientsMetadataList,
             settings=self.settings,
             colMaps=colMaps
@@ -491,6 +638,7 @@ class transient_classifier():
 
         self.log.debug(
             'completed the ``_crossmatch_transients_against_catalogues`` method')
+
         return crossmatches
 
     def _update_transient_database(
@@ -506,11 +654,25 @@ class transient_classifier():
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
             - ``transientsMetadataList`` -- the list of transient metadata lifted from the database.
             - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
 
         self.log.debug('starting the ``_update_transient_database`` method')
 
-        myPid = self.myPid
+        import time
+        start_time = time.time()
+        print "UPDATING TRANSIENTS DATABASE WITH RESULTS"
+        print "DELETING OLD RESULTS"
+
         now = datetime.now()
         now = now.strftime("%Y-%m-%d_%H-%M-%S-%f")
 
@@ -520,179 +682,47 @@ class transient_classifier():
             "transients"]["transient classification column"]
         transientTableIdCol = self.settings["database settings"][
             "transients"]["transient primary id column"]
-        crossmatchTable = "sherlock_crossmatches"
-
-        # RECURSIVELY CREATE MISSING DIRECTORIES
-        if not os.path.exists("/tmp/sherlock"):
-            os.makedirs("/tmp/sherlock")
 
         # COMBINE ALL CROSSMATCHES INTO A LIST OF DICTIONARIES TO DUMP INTO
         # DATABASE TABLE
-        transientIDs = []
-        transientIDs[:] = [str(c["transient_object_id"])
-                           for c in crossmatches]
+        transientIDs = [str(c)
+                        for c in classifications.keys()]
         transientIDs = ",".join(transientIDs)
 
-        createStatement = """
-CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
-  `transient_object_id` bigint(20) unsigned DEFAULT NULL,
-  `catalogue_object_id` varchar(30) DEFAULT NULL,
-  `catalogue_table_id` smallint(5) unsigned DEFAULT NULL,
-  `separationArcsec` double DEFAULT NULL,
-  `northSeparationArcsec` DOUBLE DEFAULT NULL,
-  `eastSeparationArcsec` DOUBLE DEFAULT NULL,
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `z` double DEFAULT NULL,
-  `scale` double DEFAULT NULL,
-  `distance` double DEFAULT NULL,
-  `distance_modulus` double DEFAULT NULL,
-  `photoZ` double DEFAULT NULL,
-  `photoZErr` double DEFAULT NULL,
-  `association_type` varchar(45) DEFAULT NULL,
-  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
-  `physical_separation_kpc` double DEFAULT NULL,
-  `catalogue_object_type` varchar(45) DEFAULT NULL,
-  `catalogue_object_subtype` varchar(45) DEFAULT NULL,
-  `association_rank` int(11) DEFAULT NULL,
-  `catalogue_table_name` varchar(100) DEFAULT NULL,
-  `catalogue_view_name` varchar(100) DEFAULT NULL,
-  `rank` int(11) DEFAULT NULL,
-  `rankScore` double DEFAULT NULL,
-  `search_name` varchar(100) DEFAULT NULL,
-  `major_axis_arcsec` double DEFAULT NULL,
-  `direct_distance` double DEFAULT NULL,
-  `direct_distance_scale` double DEFAULT NULL,
-  `direct_distance_modulus` double DEFAULT NULL,
-  `raDeg` double DEFAULT NULL,
-  `decDeg` double DEFAULT NULL,
-  `original_search_radius_arcsec` double DEFAULT NULL,
-  `catalogue_view_id` int(11) DEFAULT NULL,
-  `U` double DEFAULT NULL,
-  `UErr` double DEFAULT NULL,
-  `B` double DEFAULT NULL,
-  `BErr` double DEFAULT NULL,
-  `V` double DEFAULT NULL,
-  `VErr` double DEFAULT NULL,
-  `R` double DEFAULT NULL,
-  `RErr` double DEFAULT NULL,
-  `I` double DEFAULT NULL,
-  `IErr` double DEFAULT NULL,
-  `J` double DEFAULT NULL,
-  `JErr` double DEFAULT NULL,
-  `H` double DEFAULT NULL,
-  `HErr` double DEFAULT NULL,
-  `K` double DEFAULT NULL,
-  `KErr` double DEFAULT NULL,
-  `_u` double DEFAULT NULL,
-  `_uErr` double DEFAULT NULL,
-  `_g` double DEFAULT NULL,
-  `_gErr` double DEFAULT NULL,
-  `_r` double DEFAULT NULL,
-  `_rErr` double DEFAULT NULL,
-  `_i` double DEFAULT NULL,
-  `_iErr` double DEFAULT NULL,
-  `_z` double DEFAULT NULL,
-  `_zErr` double DEFAULT NULL,
-  `_y` double DEFAULT NULL,
-  `_yErr` double DEFAULT NULL,
-  `G` double DEFAULT NULL,
-  `GErr` double DEFAULT NULL,
-  `unkMag` double DEFAULT NULL,
-  `unkMagErr` double DEFAULT NULL,
-  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated` TINYINT NULL DEFAULT 0,
-  `classificationReliability` TINYINT NULL DEFAULT NULL,
-  `transientAbsMag` DOUBLE NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `key_transient_object_id` (`transient_object_id`),
-  KEY `key_catalogue_object_id` (`catalogue_object_id`),
-  KEY `idx_separationArcsec` (`separationArcsec`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
-
-delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
-""" % locals()
-
-        # A FIX FOR MYSQL VERSIONS < 5.6
-        if float(self.dbVersions["transients"][:3]) < 5.6:
-            createStatement = createStatement.replace(
-                "`dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateLastModified` datetime DEFAULT NULL,")
-            createStatement = createStatement.replace(
-                "`dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateCreated` datetime DEFAULT NULL,")
-
-            exists = os.path.exists(
-                "/tmp/sherlock_trigger/%(myPid)s/%(crossmatchTable)s_trigger.sql" % locals())
-            if not exists:
-                trigger = """
-                    DELIMITER $$
-                    CREATE TRIGGER dateCreated
-                    BEFORE INSERT ON `%(crossmatchTable)s`
-                    FOR EACH ROW
-                    BEGIN
-                       IF NEW.dateCreated IS NULL THEN
-                          SET NEW.dateCreated = NOW();
-                          SET NEW.dateLastModified = NOW();
-                       END IF;
-                    END$$
-                    DELIMITER ;""" % locals()
-
-                # Recursively create missing directories
-                if not os.path.exists("/tmp/sherlock_trigger/%(myPid)s" % locals()):
-                    os.makedirs("/tmp/sherlock_trigger/%(myPid)s" % locals())
-
-                pathToWriteFile = "/tmp/sherlock_trigger/%(myPid)s/%(crossmatchTable)s_trigger.sql" % locals(
-                )
-                try:
-                    self.log.debug("attempting to open the file %s" %
-                                   (pathToWriteFile,))
-                    writeFile = codecs.open(
-                        pathToWriteFile, encoding='utf-8', mode='w')
-                except IOError, e:
-                    message = 'could not open the file %s' % (pathToWriteFile,)
-                    self.log.critical(message)
-                    raise IOError(message)
-                writeFile.write(trigger)
-                writeFile.close()
-
-                directory_script_runner(
-                    log=self.log,
-                    pathToScriptDirectory="/tmp/sherlock_trigger/%(myPid)s" % locals(
-                    ),
-                    databaseName=self.settings[
-                        "database settings"]["transients"]["db"],
-                    loginPath=self.settings["database settings"][
-                        "transients"]["loginPath"],
-                    waitForResult=False
-                )
-
-        # Recursively create missing directories
-        if not os.path.exists("/tmp/sherlock/%(myPid)s" % locals()):
-            os.makedirs("/tmp/sherlock/%(myPid)s" % locals())
-
-        dataSet = list_of_dictionaries(
+        # REMOVE PREVIOUS MATCHES
+        sqlQuery = """delete from sherlock_crossmatches where transient_object_id in (%(transientIDs)s);""" % locals(
+        )
+        writequery(
             log=self.log,
-            listOfDictionaries=crossmatches,
-            reDatetime=self.reDatetime
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+        )
+        sqlQuery = """delete from sherlock_classifications where transient_object_id in (%(transientIDs)s);""" % locals(
+        )
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
         )
 
-        mysqlData = dataSet.mysql(
-            tableName=crossmatchTable, filepath="/tmp/sherlock/%(myPid)s/%(now)s_cm_results.sql" % locals(), createStatement=createStatement)
+        print "FINISHED DELETING OLD RESULTS/ADDING TO CROSSMATCHES: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
-        if self.fast:
-            waitForResult = "delete"
-        else:
-            waitForResult = True
+        if len(crossmatches):
+            insert_list_of_dictionaries_into_database_tables(
+                dbConn=self.transientsDbConn,
+                log=self.log,
+                dictList=crossmatches,
+                dbTableName="sherlock_crossmatches",
+                dateModified=True,
+                batchSize=10000,
+                replace=True,
+                dbSettings=self.settings["database settings"][
+                    "transients"]
+            )
 
-        directory_script_runner(
-            log=self.log,
-            pathToScriptDirectory="/tmp/sherlock/%(myPid)s" % locals(),
-            databaseName=self.settings[
-                "database settings"]["transients"]["db"],
-            loginPath=self.settings["database settings"][
-                "transients"]["loginPath"],
-            waitForResult=waitForResult,
-            successRule="delete",
-            failureRule="failed"
-        )
+        print "FINISHED ADDING TO CROSSMATCHES/UPDATING CLASSIFICATIONS IN TRANSIENT TABLE: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
         sqlQuery = ""
         inserts = []
@@ -703,86 +733,62 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             }
             inserts.append(thisInsert)
 
-            classification = v[0]
-            sqlQuery += u"""
-                    update %(transientTable)s set %(transientTableClassCol)s = "%(classification)s"
-                        where %(transientTableIdCol)s  = "%(k)s";
-                """ % locals()
+        print "FINISHED UPDATING CLASSIFICATIONS IN TRANSIENT TABLE/UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
-        writequery(
-            log=self.log,
-            sqlQuery=sqlQuery,
+        insert_list_of_dictionaries_into_database_tables(
             dbConn=self.transientsDbConn,
-        )
-
-        createStatement = """CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
-  `transient_object_id` bigint(20) NOT NULL,
-  `classification` varchar(45) DEFAULT NULL,
-  `annotation` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,
-  `summary` VARCHAR(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `matchVerified` TINYINT NULL DEFAULT NULL,
-  `developmentComment` VARCHAR(100) NULL,
-  `dateLastModified` datetime DEFAULT NULL,
-  `dateCreated` datetime DEFAULT NULL,
-  `updated` varchar(45) DEFAULT '0',
-  PRIMARY KEY (`transient_object_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-"""
-        dataSet = list_of_dictionaries(
             log=self.log,
-            listOfDictionaries=inserts,
-            reDatetime=re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
+            dictList=inserts,
+            dbTableName="sherlock_classifications",
+            dateModified=True,
+            batchSize=10000,
+            replace=True,
+            dbSettings=self.settings["database settings"][
+                "transients"]
         )
 
-        # Recursively create missing directories
-        if not os.path.exists("/tmp/sherlock/%(myPid)s/classifications" % locals()):
-            os.makedirs("/tmp/sherlock/%(myPid)s/classifications" % locals())
-
-        now = datetime.now()
-        now = now.strftime("%Y%m%dt%H%M%S")
-        mysqlData = dataSet.mysql(tableName="sherlock_classifications",
-                                  filepath="/tmp/sherlock/%(myPid)s/classifications/%(now)s.sql" % locals(), createStatement=createStatement)
-
-        if self.fast:
-            waitForResult = "delete"
-        else:
-            waitForResult = True
-
-        directory_script_runner(
-            log=self.log,
-            pathToScriptDirectory="/tmp/sherlock/%(myPid)s/classifications" % locals(
-            ),
-            databaseName=self.settings[
-                "database settings"]["transients"]["db"],
-            loginPath=self.settings["database settings"][
-                "transients"]["loginPath"],
-            waitForResult=waitForResult,
-            successRule="delete",
-            failureRule="failed"
-        )
+        print "FINISHED UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,)
+        start_time = time.time()
 
         self.log.debug('completed the ``_update_transient_database`` method')
         return None
 
     def _rank_classifications(
             self,
-            crossmatches,
+            crossmatchArray,
             colMaps):
         """*rank the classifications returned from the catalogue crossmatcher, annotate the results with a classification rank-number (most likely = 1) and a rank-score (weight of classification)*
 
         **Key Arguments:**
-            - ``crossmatches`` -- the unranked crossmatch classifications
-            - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
+            - ``crossmatchArrayIndex`` -- the index of list of unranked crossmatch classifications
+            - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
 
         **Return:**
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches
             - ``crossmatches`` -- the crossmatches annotated with rankings and rank-scores
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_rank_classifications`` method')
+        self.log.debug('starting the ``_rank_classifications`` method')
+
+        crossmatches = crossmatchArray
 
         for xm in crossmatches:
             if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
+                    colMaps[xm["catalogue_view_name"]][
+                        "object_type_accuracy"] * 0.1 + xm["physical_separation_kpc"] / 10
+            elif (xm["association_type"] == "BS"):
+                rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1
             else:
@@ -797,21 +803,35 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             crossmatches, key=itemgetter('transient_object_id'))
 
         transient_object_id = None
+        uniqueIndexCheck = []
         classifications = {}
+        crossmatchesKeep = []
         for xm in crossmatches:
+            index = "%(catalogue_table_name)s%(catalogue_object_id)s" % xm
+            # IF WE HAVE HIT A NEW SOURCE
             if transient_object_id != xm["transient_object_id"]:
+                # RESET INDEX
+                uniqueIndexCheck = []
                 if transient_object_id != None:
                     classifications[transient_object_id] = transClass
                 transClass = []
                 rank = 0
                 transient_object_id = xm["transient_object_id"]
-            rank += 1
-            transClass.append(xm["association_type"])
-            xm["rank"] = rank
+            if index not in uniqueIndexCheck:
+                uniqueIndexCheck.append(index)
+                rank += 1
+                transClass.append(xm["association_type"])
+                xm["rank"] = rank
+                crossmatchesKeep.append(xm)
+
+        crossmatches = crossmatchesKeep
+
+        # APPEND THE FINAL CLASSIFICATION MISSED IN LOOP ABOVE
         if transient_object_id != None:
             classifications[transient_object_id] = transClass
 
-        self.log.info('completed the ``_rank_classifications`` method')
+        self.log.debug('completed the ``_rank_classifications`` method')
+
         return classifications, crossmatches
 
     def _print_results_to_stdout(
@@ -823,8 +843,18 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         **Key Arguments:**
             - ``crossmatches`` -- the unranked crossmatch classifications
             - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_print_results_to_stdout`` method')
+        self.log.debug('starting the ``_print_results_to_stdout`` method')
 
         if self.verbose == 0:
             return
@@ -916,7 +946,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
         print tableData
 
-        self.log.info('completed the ``_print_results_to_stdout`` method')
+        self.log.debug('completed the ``_print_results_to_stdout`` method')
         return None
 
     def _consolidate_coordinateList(
@@ -941,8 +971,18 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
                 usage code
 
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
+
         """
-        self.log.info('starting the ``_consolidate_coordinateList`` method')
+        self.log.debug('starting the ``_consolidate_coordinateList`` method')
 
         raList = []
         raList[:] = np.array([c[0] for c in coordinateList])
@@ -972,7 +1012,7 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
         for aSet in allMatches:
             updatedCoordianteList.append(aSet[0])
 
-        self.log.info('completed the ``_consolidate_coordinateList`` method')
+        self.log.debug('completed the ``_consolidate_coordinateList`` method')
         return updatedCoordianteList
 
     def classification_annotations(
@@ -997,8 +1037,18 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
                 usage code
 
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
+
         """
-        self.log.info('starting the ``classification_annotations`` method')
+        self.log.debug('starting the ``classification_annotations`` method')
 
         from fundamentals.mysql import readquery
         sqlQuery = u"""
@@ -1020,18 +1070,19 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
             print xm["catalogue_object_id"]
 
-        self.log.info('completed the ``classification_annotations`` method')
+        self.log.debug('completed the ``classification_annotations`` method')
         return None
 
     # use the tab-trigger below for new method
     def update_classification_annotations_and_summaries(
-            self):
+            self,
+            updatePeakMagnitudes=True):
         """*update classification annotations and summaries*
 
         **Key Arguments:**
-            # -
+            - ``updatePeakMagnitudes`` -- update the peak magnitudes in the annotations to give absolute magnitudes. Default *True*
 
-        **Return:**
+            **Return:**
             - None
 
         **Usage:**
@@ -1046,21 +1097,43 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
 
                 usage code
 
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
+
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``update_classification_annotations_and_summaries`` method')
 
-        myPid = self.myPid
+        # import time
+        # start_time = time.time()
+        # print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
 
-        sqlQuery = u"""
-            SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id
-        """ % locals()
+        if updatePeakMagnitudes:
+            sqlQuery = u"""
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id
+            """ % locals()
+        else:
+            sqlQuery = u"""
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and cl.summary is null
+            """ % locals()
+
         rows = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
             quiet=False
         )
+
+        # print "FINISHED COLLECTING TRANSIENTS WITH NO ANNOTATIONS/GENERATING ANNOTATIONS: %d" % (time.time() - start_time,)
+        # start_time = time.time()
 
         from astrocalc.coords import unit_conversion
         # ASTROCALC UNIT CONVERTER OBJECT
@@ -1126,12 +1199,12 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             elif row["classificationReliability"] in (2, 3):
                 classificationReliability = "possibly associated"
                 n = row["northSeparationArcsec"]
-                if n < 0:
+                if n > 0:
                     nd = "S"
                 else:
                     nd = "N"
                 e = row["eastSeparationArcsec"]
-                if e < 0:
+                if e > 0:
                     ed = "W"
                 else:
                     ed = "E"
@@ -1198,12 +1271,20 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             if distance:
                 distance = "%(distance)s" % locals()
 
-            if distance:
-                absMag = row["transientAbsMag"]
-                absMag = """ A host %(distance)s implies a transient <em>M =</em> %(absMag)s.""" % locals(
-                )
+            if updatePeakMagnitudes:
+                if distance:
+                    absMag = row["transientAbsMag"]
+                    absMag = """ A host %(distance)s implies a transient <em>M =</em> %(absMag)s.""" % locals(
+                    )
+                else:
+                    absMag = ""
             else:
-                absMag = ""
+                if distance:
+                    absMag = row["distance_modulus"]
+                    absMag = """ A host %(distance)s implies a <em>m - M =</em> %(absMag)s.""" % locals(
+                    )
+                else:
+                    absMag = ""
 
             annotation = "The transient is %(classificationReliability)s with <em>%(objectId)s</em>; %(best_mag_filter)s%(best_mag)smag %(objectType)s found in the %(catalogueString)s. It's located %(location)s.%(absMag)s" % locals()
             summary = '%(sep)0.1f" from %(objectType)s in %(catalogue)s' % locals(
@@ -1212,43 +1293,39 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             update = {
                 "transient_object_id": row["transient_object_id"],
                 "annotation": annotation,
-                "summary": summary
+                "summary": summary,
+                "separationArcsec": sep
             }
             updates.append(update)
 
-        # Recursively create missing directories
-        if not os.path.exists("/tmp/sherlock/%(myPid)s" % locals()):
-            os.makedirs("/tmp/sherlock/%(myPid)s" % locals())
+        # print "FINISHED GENERATING ANNOTATIONS/ADDING ANNOTATIONS TO TRANSIENT DATABASE: %d" % (time.time() - start_time,)
+        # start_time = time.time()
 
-        dataSet = list_of_dictionaries(
+        insert_list_of_dictionaries_into_database_tables(
+            dbConn=self.transientsDbConn,
             log=self.log,
-            listOfDictionaries=updates,
-            reDatetime=re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
-        )
-        mysqlData = dataSet.mysql(
-            tableName="sherlock_classifications", filepath="/tmp/sherlock/%(myPid)s/annotation_updates.sql" % locals())
-
-        directory_script_runner(
-            log=self.log,
-            pathToScriptDirectory="/tmp/sherlock/" + self.myPid,
-            databaseName=self.settings[
-                "database settings"]["transients"]["db"],
-            loginPath=self.settings["database settings"][
-                "transients"]["loginPath"],
-            waitForResult=True,
-            successRule="delete",
-            failureRule="failed"
+            dictList=updates,
+            dbTableName="sherlock_classifications",
+            dateModified=True,
+            batchSize=10000,
+            replace=True,
+            dbSettings=self.settings["database settings"]["transients"]
         )
 
-        from fundamentals.mysql import writequery
-        sqlQuery = """update sherlock_classifications  set annotation = "The transient location is not matched against any known catalogued source", summary = "No catalogued match" where classification = 'ORPHAN' """ % locals()
+        # print "FINISHED ADDING ANNOTATIONS TO TRANSIENT DATABASE/UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
+        # start_time = time.time()
+
+        sqlQuery = """update sherlock_classifications  set annotation = "The transient location is not matched against any known catalogued source", summary = "No catalogued match" where classification = 'ORPHAN'  and summary is null """ % locals()
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
         )
 
-        self.log.info(
+        # print "FINISHED UPDATING ORPHAN ANNOTATIONS: %d" % (time.time() - start_time,)
+        # start_time = time.time()
+
+        self.log.debug(
             'completed the ``update_classification_annotations_and_summaries`` method')
         return None
 
@@ -1271,19 +1348,30 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
                 - write a command-line tool for this method
                 - update package tutorial with command-line tool info if needed
 
-            .. code-block:: python 
+            .. code-block:: python
 
-                usage code 
+                usage code
+
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
 
         """
-        self.log.info('starting the ``update_peak_magnitudes`` method')
+        self.log.debug('starting the ``update_peak_magnitudes`` method')
 
         sqlQuery = self.settings["database settings"][
             "transients"]["transient peak magnitude query"]
 
         sqlQuery = """UPDATE sherlock_crossmatches s,
-            (%(sqlQuery)s) t 
-        SET 
+            (%(sqlQuery)s) t
+        SET
             s.transientAbsMag = ROUND(t.mag - IFNULL(direct_distance_modulus,
                             distance_modulus),
                     2)
@@ -1298,7 +1386,205 @@ delete from %(crossmatchTable)s where transient_object_id in (%(transientIDs)s);
             dbConn=self.transientsDbConn,
         )
 
-        self.log.info('completed the ``update_peak_magnitudes`` method')
+        self.log.debug('completed the ``update_peak_magnitudes`` method')
+        return None
+
+    def _create_tables_if_not_exist(
+            self):
+        """*create the sherlock helper tables if they don't yet exist*
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Usage:**
+            ..  todo::
+
+                - add usage info
+                - create a sublime snippet for usage
+                - write a command-line tool for this method
+                - update package tutorial with command-line tool info if needed
+
+            .. code-block:: python
+
+                usage code
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
+
+        """
+        self.log.debug('starting the ``_create_tables_if_not_exist`` method')
+
+        transientTable = self.settings["database settings"][
+            "transients"]["transient table"]
+        transientTableClassCol = self.settings["database settings"][
+            "transients"]["transient classification column"]
+        transientTableIdCol = self.settings["database settings"][
+            "transients"]["transient primary id column"]
+
+        crossmatchTable = "sherlock_crossmatches"
+        createStatement = """
+CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
+  `transient_object_id` bigint(20) unsigned DEFAULT NULL,
+  `catalogue_object_id` varchar(30) DEFAULT NULL,
+  `catalogue_table_id` smallint(5) unsigned DEFAULT NULL,
+  `separationArcsec` double DEFAULT NULL,
+  `northSeparationArcsec` DOUBLE DEFAULT NULL,
+  `eastSeparationArcsec` DOUBLE DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `z` double DEFAULT NULL,
+  `scale` double DEFAULT NULL,
+  `distance` double DEFAULT NULL,
+  `distance_modulus` double DEFAULT NULL,
+  `photoZ` double DEFAULT NULL,
+  `photoZErr` double DEFAULT NULL,
+  `association_type` varchar(45) DEFAULT NULL,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `physical_separation_kpc` double DEFAULT NULL,
+  `catalogue_object_type` varchar(45) DEFAULT NULL,
+  `catalogue_object_subtype` varchar(45) DEFAULT NULL,
+  `association_rank` int(11) DEFAULT NULL,
+  `catalogue_table_name` varchar(100) DEFAULT NULL,
+  `catalogue_view_name` varchar(100) DEFAULT NULL,
+  `rank` int(11) DEFAULT NULL,
+  `rankScore` double DEFAULT NULL,
+  `search_name` varchar(100) DEFAULT NULL,
+  `major_axis_arcsec` double DEFAULT NULL,
+  `direct_distance` double DEFAULT NULL,
+  `direct_distance_scale` double DEFAULT NULL,
+  `direct_distance_modulus` double DEFAULT NULL,
+  `raDeg` double DEFAULT NULL,
+  `decDeg` double DEFAULT NULL,
+  `original_search_radius_arcsec` double DEFAULT NULL,
+  `catalogue_view_id` int(11) DEFAULT NULL,
+  `U` double DEFAULT NULL,
+  `UErr` double DEFAULT NULL,
+  `B` double DEFAULT NULL,
+  `BErr` double DEFAULT NULL,
+  `V` double DEFAULT NULL,
+  `VErr` double DEFAULT NULL,
+  `R` double DEFAULT NULL,
+  `RErr` double DEFAULT NULL,
+  `I` double DEFAULT NULL,
+  `IErr` double DEFAULT NULL,
+  `J` double DEFAULT NULL,
+  `JErr` double DEFAULT NULL,
+  `H` double DEFAULT NULL,
+  `HErr` double DEFAULT NULL,
+  `K` double DEFAULT NULL,
+  `KErr` double DEFAULT NULL,
+  `_u` double DEFAULT NULL,
+  `_uErr` double DEFAULT NULL,
+  `_g` double DEFAULT NULL,
+  `_gErr` double DEFAULT NULL,
+  `_r` double DEFAULT NULL,
+  `_rErr` double DEFAULT NULL,
+  `_i` double DEFAULT NULL,
+  `_iErr` double DEFAULT NULL,
+  `_z` double DEFAULT NULL,
+  `_zErr` double DEFAULT NULL,
+  `_y` double DEFAULT NULL,
+  `_yErr` double DEFAULT NULL,
+  `G` double DEFAULT NULL,
+  `GErr` double DEFAULT NULL,
+  `unkMag` double DEFAULT NULL,
+  `unkMagErr` double DEFAULT NULL,
+  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated` TINYINT NULL DEFAULT 0,
+  `classificationReliability` TINYINT NULL DEFAULT NULL,
+  `transientAbsMag` DOUBLE NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `key_transient_object_id` (`transient_object_id`),
+  KEY `key_catalogue_object_id` (`catalogue_object_id`),
+  KEY `idx_separationArcsec` (`separationArcsec`),
+  KEY `idx_rank` (`rank`)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+
+
+CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
+  `transient_object_id` bigint(20) NOT NULL,
+  `classification` varchar(45) DEFAULT NULL,
+  `annotation` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,
+  `summary` VARCHAR(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `separationArcsec` DOUBLE DEFAULT NULL,
+  `matchVerified` TINYINT NULL DEFAULT NULL,
+  `developmentComment` VARCHAR(100) NULL,
+  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated` varchar(45) DEFAULT '0',
+  PRIMARY KEY (`transient_object_id`),
+  KEY `key_transient_object_id` (`transient_object_id`),
+  KEY `idx_summary` (`summary`),
+  KEY `idx_classification` (`classification`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+""" % locals()
+
+        # A FIX FOR MYSQL VERSIONS < 5.6
+        triggers = []
+        if float(self.dbVersions["transients"][:3]) < 5.6:
+            createStatement = createStatement.replace(
+                "`dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateLastModified` datetime DEFAULT NULL,")
+            createStatement = createStatement.replace(
+                "`dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,", "`dateCreated` datetime DEFAULT NULL,")
+
+            triggers.append("""
+CREATE TRIGGER dateCreated
+BEFORE INSERT ON `%(crossmatchTable)s`
+FOR EACH ROW
+BEGIN
+   IF NEW.dateCreated IS NULL THEN
+      SET NEW.dateCreated = NOW();
+      SET NEW.dateLastModified = NOW();
+   END IF;
+END""" % locals())
+
+        try:
+            writequery(
+                log=self.log,
+                sqlQuery=createStatement,
+                dbConn=self.transientsDbConn,
+                Force=True
+            )
+        except:
+            self.log.info(
+                "Could not create table (`%(crossmatchTable)s`). Probably already exist." % locals())
+
+        triggers.append("""CREATE TRIGGER `sherlock_classifications_BEFORE_INSERT` BEFORE INSERT ON `sherlock_classifications` FOR EACH ROW
+BEGIN
+    IF new.classification = "ORPHAN" THEN
+        SET new.annotation = "The transient location is not matched against any known catalogued source", new.summary = "No catalogued match";
+    END IF;
+END""" % locals())
+
+        triggers.append("""CREATE TRIGGER `sherlock_classifications_AFTER_INSERT` AFTER INSERT ON `sherlock_classifications` FOR EACH ROW
+BEGIN
+    update `%(transientTable)s` set `%(transientTableClassCol)s` = new.classification
+                        where `%(transientTableIdCol)s`  = new.transient_object_id;
+END""" % locals())
+
+        for t in triggers:
+            try:
+                writequery(
+                    log=self.log,
+                    sqlQuery=t,
+                    dbConn=self.transientsDbConn,
+                    Force=True
+                )
+            except:
+                self.log.info(
+                    "Could not create trigger (`%(crossmatchTable)s`). Probably already exist." % locals())
+
+        self.log.debug('completed the ``_create_tables_if_not_exist`` method')
         return None
 
     # use the tab-trigger below for new method

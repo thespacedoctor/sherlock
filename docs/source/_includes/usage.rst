@@ -8,7 +8,7 @@ Command-Line Usage
     : INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
     =============================================================================================
     
-    Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en/stable
+    Documentation for sherlock can be found here: http://qub-sherlock.readthedocs.org/en/stable
     
     .. todo ::
     

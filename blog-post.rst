@@ -25,7 +25,7 @@ Command-Line Usage
     : INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
     =============================================================================================
     
-    Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en/stable
+    Documentation for sherlock can be found here: http://qub-sherlock.readthedocs.org/en/stable
     
     .. todo ::
     
@@ -73,7 +73,7 @@ Command-Line Usage
 Installation
 ============
 
-Although you can get Sherlock from a simple ``pip`` install, it's best to install it within a Conda environment under Anaconda. If you're not familiar with Anaconda, you'll find a `good tutorial here <http://psweb.mp.qub.ac.uk/dry//blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html>`_ to get you up and running. 
+Although you can get Sherlock from a simple ``pip`` install, it's best to install it within a Conda environment under Anaconda. If you're not familiar with Anaconda, you'll find a `good tutorial here <http://astronotes.co.uk/blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html>`_ to get you up and running. 
 
 Once you have Anaconda installed, go ahead and create a new Conda environment to host Sherlock:
 
@@ -111,7 +111,7 @@ If instead you want to clone the `github repo <https://github.com/thespacedoctor
 Documentation
 =============
 
-Documentation for sherlock is hosted by `Read the Docs <http://sherlock.readthedocs.org/en/stable/>`__ (last `stable version <http://sherlock.readthedocs.org/en/stable/>`__ and `latest version <http://sherlock.readthedocs.org/en/latest/>`__).
+Documentation for sherlock is hosted by `Read the Docs <http://qub-sherlock.readthedocs.org/en/stable/>`__ (last `stable version <http://qub-sherlock.readthedocs.org/en/stable/>`__ and `latest version <http://qub-sherlock.readthedocs.org/en/latest/>`__).
 
 Sherlock Tutorial
 =================
@@ -301,7 +301,7 @@ if a synonym match is found within the first search stage the second
 search stage for associations is skipped as it becomes irrelevant. For
 example consider the image below (transients marked in red):
 
-.. figure:: https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px
+figure:: https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px
 
 The first stage search should match transients A, C and E as synonyms
 (NT, VS, VS), these transients are then removed from a further
