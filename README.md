@@ -18,7 +18,7 @@ Command-Line Usage
     : INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
     =============================================================================================
 
-    Documentation for sherlock can be found here: http://sherlock.readthedocs.org/en/stable
+    Documentation for sherlock can be found here: http://qub-sherlock.readthedocs.org/en/stable
 
     .. todo ::
 
@@ -51,7 +51,7 @@ Command-Line Usage
         ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-        cat_name                name of the catalogue being imported (veron|milliquas|ned_d)                          
+        cat_name                name of the catalogue being imported (veron|ned_d)                          
         stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
 
         -N, --skipNedUpdate     do not update the NED database before classification
@@ -66,9 +66,9 @@ Documentation
 =============
 
 Documentation for sherlock is hosted by [Read the
-Docs](http://sherlock.readthedocs.org/en/stable/) (last [stable
-version](http://sherlock.readthedocs.org/en/stable/) and [latest
-version](http://sherlock.readthedocs.org/en/latest/)).
+Docs](http://qub-sherlock.readthedocs.org/en/stable/) (last [stable
+version](http://qub-sherlock.readthedocs.org/en/stable/) and [latest
+version](http://qub-sherlock.readthedocs.org/en/latest/)).
 
 Installation
 ============
@@ -76,7 +76,7 @@ Installation
 Although you can get Sherlock from a simple `pip` install, it's best to
 install it within a Conda environment under Anaconda. If you're not
 familiar with Anaconda, you'll find a [good tutorial
-here](http://psweb.mp.qub.ac.uk/dry//blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html)
+here](http://astronotes.co.uk/blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html)
 to get you up and running.
 
 Once you have Anaconda installed, go ahead and create a new Conda
@@ -135,7 +135,7 @@ Please report any issues
 License
 =======
 
-Copyright (c) 2016 David Young
+Copyright (c) 2018 David Young
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the

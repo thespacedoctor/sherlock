@@ -1,7 +1,7 @@
 Installation
 ============
 
-Although you can get Sherlock from a simple ``pip`` install, it's best to install it within a Conda environment under Anaconda. If you're not familiar with Anaconda, you'll find a `good tutorial here <http://psweb.mp.qub.ac.uk/dry//blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html>`_ to get you up and running. 
+Although you can get Sherlock from a simple ``pip`` install, it's best to install it within a Conda environment under Anaconda. If you're not familiar with Anaconda, you'll find a `good tutorial here <http://astronotes.co.uk/blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html>`_ to get you up and running. 
 
 Once you have Anaconda installed, go ahead and create a new Conda environment to host Sherlock:
 

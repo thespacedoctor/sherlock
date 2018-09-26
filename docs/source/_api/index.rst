@@ -1,5 +1,5 @@
 .. sherlock documentation master file, created by
-   sphinx-quickstart on Mon Jul 23 14:21:05 2018.
+   sphinx-quickstart on Wed Sep 26 07:50:29 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 

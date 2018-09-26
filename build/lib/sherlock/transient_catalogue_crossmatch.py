@@ -18,6 +18,7 @@ from fundamentals import tools
 from sherlock.catalogue_conesearch import catalogue_conesearch
 from astrocalc.distances import converter
 from astrocalc.coords import separations
+import time
 
 
 class transient_catalogue_crossmatch():
@@ -53,6 +54,16 @@ class transient_catalogue_crossmatch():
         .. code-block:: python 
 
             classifications = xmatcher.match()
+
+    .. todo ::
+
+        - update key arguments values and definitions with defaults
+        - update return values and definitions
+        - update usage examples and text
+        - update docstring text
+        - check sublime snippet exists
+        - clip any useful text to docs mindmap
+        - regenerate the docs and check redendering of this docstring
     """
     # Initialisation
 
@@ -76,14 +87,24 @@ class transient_catalogue_crossmatch():
 
     def match(self):
         """
-        *match the transients against the crossmatch catalogues according to the search algorithm and return matches alongside the predicted classification(s)*
+        *match the transients against the sherlock-catalogues according to the search algorithm and return matches alongside the predicted classification(s)*
 
         **Return:**
             - ``classification`` -- the crossmatch results and classifications assigned to the transients
 
         See the class docstring for usage.
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``match`` method')
+        self.log.debug('starting the ``match`` method')
 
         classifications = []
 
@@ -109,10 +130,10 @@ class transient_catalogue_crossmatch():
                     continue
                 if "synonym" not in searchPara[bf] or searchPara[bf]["synonym"] == False:
                     continue
-                self.log.info("""  searching: %(search_name)s""" % locals())
+                self.log.debug("""  searching: %(search_name)s""" % locals())
                 if "physical radius kpc" in searchPara[bf]:
                     # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
                     catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
                         objectList=self.transients,
@@ -123,7 +144,7 @@ class transient_catalogue_crossmatch():
                     )
                 else:
                     # THE ANGULAR SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'Crossmatching against %(search_name)s' % locals())
                     # RENAMED from searchCatalogue
                     catalogueMatches = self.angular_crossmatch_against_catalogue(
@@ -148,7 +169,7 @@ class transient_catalogue_crossmatch():
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         for search_name, searchPara in sa.iteritems():
-            self.log.info("""  searching: %(search_name)s""" % locals())
+            self.log.debug("""  searching: %(search_name)s""" % locals())
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -157,7 +178,7 @@ class transient_catalogue_crossmatch():
                 if "physical radius kpc" in searchPara[bf]:
 
                     # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
                     catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
                         objectList=nonSynonymTransients,
@@ -168,7 +189,7 @@ class transient_catalogue_crossmatch():
                     )
                 else:
                     # THE ANGULAR SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'Crossmatching against %(search_name)s' % locals())
 
                     # RENAMED from searchCatalogue
@@ -183,6 +204,7 @@ class transient_catalogue_crossmatch():
                 # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
                 if catalogueMatches:
                     allCatalogueMatches = allCatalogueMatches + catalogueMatches
+                    catalogueMatches = []
 
         # ANNOTATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
@@ -194,10 +216,10 @@ class transient_catalogue_crossmatch():
                     continue
                 if "annotation" not in searchPara[bf] or searchPara[bf]["annotation"] == False:
                     continue
-                self.log.info("""  searching: %(search_name)s""" % locals())
+                self.log.debug("""  searching: %(search_name)s""" % locals())
                 if "physical radius kpc" in searchPara[bf]:
                     # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
                     if bf in searchPara:
                         catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
@@ -209,7 +231,7 @@ class transient_catalogue_crossmatch():
                         )
                 else:
                     # THE ANGULAR SEPARATION SEARCHES
-                    self.log.info(
+                    self.log.debug(
                         'Crossmatching against %(search_name)s' % locals())
                     # RENAMED from searchCatalogue
                     if bf in searchPara:
@@ -225,7 +247,7 @@ class transient_catalogue_crossmatch():
                 if catalogueMatches:
                     allCatalogueMatches = allCatalogueMatches + catalogueMatches
 
-        self.log.info('completed the ``match`` method')
+        self.log.debug('completed the ``match`` method')
         return allCatalogueMatches
 
     def angular_crossmatch_against_catalogue(
@@ -305,9 +327,23 @@ class transient_catalogue_crossmatch():
                     search_name=search_name
                 )
 
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``angular_crossmatch_against_catalogue`` method')
+
+        self.log.info("STARTING %s SEARCH" %
+                      (search_name,))
+
+        start_time = time.time()
 
         # DEFAULTS
 
@@ -377,10 +413,12 @@ class transient_catalogue_crossmatch():
             lowerMagnitudeLimit=lowerMagnitudeLimit,
             magnitudeLimitFilter=magnitudeLimitFilter
         )
+
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
         indices, catalogueMatches = cs.search()
         count = 1
         annotatedcatalogueMatches = []
+
         for i, xm in zip(indices, catalogueMatches):
 
             # CALCULATE PHYSICAL PARAMETERS ... IF WE CAN
@@ -454,8 +492,12 @@ class transient_catalogue_crossmatch():
                     nearestMatches.append(c)
             catalogueMatches = nearestMatches
 
-        self.log.info(
+        self.log.debug(
             'completed the ``angular_crossmatch_against_catalogue`` method')
+
+        self.log.debug("FINISHED %s SEARCH IN %0.5f s" %
+                       (search_name, time.time() - start_time,))
+
         return catalogueMatches
 
     def _annotate_crossmatch_with_value_added_parameters(
@@ -474,8 +516,18 @@ class transient_catalogue_crossmatch():
 
         **Return:**
             - ``crossmatchDict`` -- the annotated crossmatch dictionary
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_annotate_crossmatch_with_value_added_parameters`` method')
 
         redshift = None
@@ -553,7 +605,7 @@ class transient_catalogue_crossmatch():
 
         crossmatchDict["physical_separation_kpc"] = physical_separation_kpc
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_annotate_crossmatch_with_value_added_parameters`` method')
         return crossmatchDict
 
@@ -573,8 +625,18 @@ class transient_catalogue_crossmatch():
 
         **Return:**
             - ``brightStarMatches`` -- the trimmed matched sources (bright stars associations only)
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_bright_star_match`` method')
+        self.log.debug('starting the ``_bright_star_match`` method')
 
         import decimal
         decimal.getcontext().prec = 10
@@ -585,10 +647,10 @@ class transient_catalogue_crossmatch():
             mag = decimal.Decimal(row[magnitudeLimitFilter])
             if mag and mag < lowerMagnitudeLimit:
                 sep = decimal.Decimal(row["separationArcsec"])
-                if sep < decimal.Decimal(decimal.Decimal(10)**(-decimal.Decimal(0.2) * mag + decimal.Decimal(3.47712))):
+                if sep < decimal.Decimal(decimal.Decimal(10)**(-decimal.Decimal(0.2) * mag + decimal.Decimal(3.7))) and sep < 20.:
                     brightStarMatches.append(row)
 
-        self.log.info('completed the ``_bright_star_match`` method')
+        self.log.debug('completed the ``_bright_star_match`` method')
         return brightStarMatches
 
     def _galaxy_association_cuts(
@@ -609,8 +671,18 @@ class transient_catalogue_crossmatch():
 
         **Return:**
             - ``galaxyMatches`` -- the trimmed matched sources (associated galaxies only)
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
-        self.log.info('starting the ``_galaxy_association_cuts`` method')
+        self.log.debug('starting the ``_galaxy_association_cuts`` method')
 
         import decimal
         decimal.getcontext().prec = 10
@@ -627,7 +699,7 @@ class transient_catalogue_crossmatch():
                     if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal((decimal.Decimal(25.) - mag) / decimal.Decimal(6.)))):
                         galaxyMatches.append(row)
 
-        self.log.info('completed the ``_galaxy_association_cuts`` method')
+        self.log.debug('completed the ``_galaxy_association_cuts`` method')
         return galaxyMatches
 
     def physical_separation_crossmatch_against_catalogue(
@@ -665,9 +737,21 @@ class transient_catalogue_crossmatch():
                     searchPara=searchPara,
                     search_name=search_name
                 )
+
+        .. todo ::
+
+            - update key arguments values and definitions with defaults
+            - update return values and definitions
+            - update usage examples and text
+            - update docstring text
+            - check sublime snippet exists
+            - clip any useful text to docs mindmap
+            - regenerate the docs and check redendering of this docstring
         """
         self.log.debug(
             'starting the ``physical_separation_crossmatch_against_catalogue`` method')
+
+        start_time = time.time()
 
         bf = brightnessFilter
         # SETUP PARAMETERS
@@ -715,16 +799,22 @@ class transient_catalogue_crossmatch():
                 newsearch_name = search_name
 
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
-                if row["major_axis_arcsec"] and row["separationArcsec"] < row["major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]:
-                    if "ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.):
+                # BYPASS NED FAULTY AXES MEASUREMENTS:
+                # https://gist.github.com/search?utf8=%E2%9C%93&q=user%3Athespacedoctor+ned
+                if row["major_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)):
+                    if row["separationArcsec"] < row["major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]:
                         thisMatch = True
                         newsearch_name = newsearch_name + \
                             " (within %s * major axis)" % (
                                 self.settings["galaxy radius stetch factor"],)
                         newAngularSep = row[
                             "major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]
+                    else:
+                        continue
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 elif row["direct_distance_scale"] and physical_separation_kpc < physicalRadius:
+                    if row["separationArcsec"] > 300.:
+                        continue
                     thisMatch = True
                     newsearch_name = newsearch_name + " (direct distance)"
                     newAngularSep = physicalRadius / \
@@ -739,7 +829,7 @@ class transient_catalogue_crossmatch():
                     row["physical_separation_kpc"] = physical_separation_kpc
                     row["original_search_radius_arcsec"] = newAngularSep
                     if physical_separation_kpc:
-                        self.log.info(
+                        self.log.debug(
                             "\t\tPhysical separation = %.2f kpc" % (physical_separation_kpc,))
                     row["search_name"] = newsearch_name
                     matchSubset.append(row)
@@ -758,6 +848,9 @@ class transient_catalogue_crossmatch():
             matchedObjects = matchSubset
         self.log.debug(
             'completed the ``physical_separation_crossmatch_against_catalogue`` method')
+
+        self.log.debug("FINISHED %s SEARCH IN %0.5f s" %
+                       (search_name, time.time() - start_time,))
 
         return matchedObjects
 

@@ -186,7 +186,7 @@ if a synonym match is found within the first search stage the second
 search stage for associations is skipped as it becomes irrelevant. For
 example consider the image below (transients marked in red):
 
-.. figure:: https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px
+figure:: https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px
 
 The first stage search should match transients A, C and E as synonyms
 (NT, VS, VS), these transients are then removed from a further

@@ -219,7 +219,7 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">  ∞</a></h1>
-<p>Although you can get Sherlock from a simple <code class="docutils literal"><span class="pre">pip</span></code> install, it’s best to install it within a Conda environment under Anaconda. If you’re not familiar with Anaconda, you’ll find a <a class="reference external" href="http://psweb.mp.qub.ac.uk/dry//blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html">good tutorial here</a> to get you up and running.</p>
+<p>Although you can get Sherlock from a simple <code class="docutils literal"><span class="pre">pip</span></code> install, it’s best to install it within a Conda environment under Anaconda. If you’re not familiar with Anaconda, you’ll find a <a class="reference external" href="http://astronotes.co.uk/blog/2017/10/04/An-Astronomer's-Guide-to-dotstar-Conda.html">good tutorial here</a> to get you up and running.</p>
 <p>Once you have Anaconda installed, go ahead and create a new Conda environment to host Sherlock:</p>
 <div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">sherlock</span> <span class="n">python</span><span class="o">=</span><span class="mf">2.7</span> <span class="n">pip</span>
 </pre></div>
@@ -269,7 +269,7 @@ are welcomed!</p>
 : INFERING TRANSIENT-SOURCE CLASSIFICATIONS FROM SPATIALLY CROSS-MATCHED CATALOGUED SOURCES :
 <span class="o">=============================================================================================</span>
 
-Documentation <span class="k">for</span> sherlock can be found here: http://sherlock.readthedocs.org/en/stable
+Documentation <span class="k">for</span> sherlock can be found here: http://qub-sherlock.readthedocs.org/en/stable
 
 .. todo ::
 
@@ -317,7 +317,7 @@ Options:
 </div>
 <div class="section" id="documentation">
 <h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">  ∞</a></h1>
-<p>Documentation for sherlock is hosted by <a class="reference external" href="http://sherlock.readthedocs.org/en/stable/">Read the Docs</a> (last <a class="reference external" href="http://sherlock.readthedocs.org/en/stable/">stable version</a> and <a class="reference external" href="http://sherlock.readthedocs.org/en/latest/">latest version</a>).</p>
+<p>Documentation for sherlock is hosted by <a class="reference external" href="http://qub-sherlock.readthedocs.org/en/stable/">Read the Docs</a> (last <a class="reference external" href="http://qub-sherlock.readthedocs.org/en/stable/">stable version</a> and <a class="reference external" href="http://qub-sherlock.readthedocs.org/en/latest/">latest version</a>).</p>
 </div>
 <div class="section" id="sherlock-tutorial">
 <h1>Sherlock Tutorial<a class="headerlink" href="#sherlock-tutorial" title="Permalink to this headline">  ∞</a></h1>
@@ -478,9 +478,7 @@ synonym matches and then for associations. For an individual transient
 if a synonym match is found within the first search stage the second
 search stage for associations is skipped as it becomes irrelevant. For
 example consider the image below (transients marked in red):</p>
-<div class="figure">
-<img alt="https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px" src="https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px" />
-</div>
+<p>figure:: <a class="reference external" href="https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px">https://farm3.staticflickr.com/2772/33007793206_6dd3e34a21_o.jpg%20title=%22Sherlock%20synonyms%20and%20associations%22%20width=600px</a></p>
 <p>The first stage search should match transients A, C and E as synonyms
 (NT, VS, VS), these transients are then removed from a further
 association search. The second stage search then flags B as associated
