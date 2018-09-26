@@ -281,18 +281,13 @@
         <span class="n">staticTableInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_table_infos</span><span class="p">()</span>
         <span class="n">viewInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_view_infos</span><span class="p">()</span>
         <span class="n">streamedTableInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_stream_view_infos</span><span class="p">()</span>
-        <span class="n">mdContent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_md_tables</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_md_tables</span><span class="p">(</span>
             <span class="n">tableData</span><span class="o">=</span><span class="n">staticTableInfo</span><span class="p">,</span>
             <span class="n">viewData</span><span class="o">=</span><span class="n">viewInfo</span><span class="p">,</span>
             <span class="n">streamData</span><span class="o">=</span><span class="n">streamedTableInfo</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_write_wiki_pages</span><span class="p">(</span>
-            <span class="n">mdContent</span><span class="o">=</span><span class="n">mdContent</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_wiki_pages</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_github</span><span class="p">()</span>
-
-        <span class="c1"># RECODE INTO ASCII</span>
-        <span class="n">mdContent</span> <span class="o">=</span> <span class="n">mdContent</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``update`` method&#39;</span><span class="p">)</span>
         <span class="k">return</span></div>
@@ -401,7 +396,7 @@
 <span class="sd">            - ``streamData`` -- the sherlock-catalogues database streamed data tables&#39; metadata.</span>
 
 <span class="sd">        **Return:**</span>
-<span class="sd">            - ``mdContent`` -- the content of the markdown file</span>
+<span class="sd">            - None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
 
@@ -452,7 +447,7 @@
             <span class="n">rows</span> <span class="o">+=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">| &lt;sub&gt;</span><span class="si">%(table_name)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(description)s</span><span class="s2">](</span><span class="si">%(url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(reference_text)s</span><span class="s2">](</span><span class="si">%(reference_url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(newNumber)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(vizier_link)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(in_ned)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(object_types)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(weight)s</span><span class="s2">&lt;/sub&gt; |&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
-        <span class="n">mdContent</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdTables</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
 
         <span class="n">header</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">| &lt;sub&gt;View Name&lt;/sub&gt; | &lt;sub&gt;Number Rows&lt;/sub&gt; | &lt;sub&gt;Object Type&lt;/sub&gt; |</span>
@@ -479,7 +474,7 @@
             <span class="n">rows</span> <span class="o">+=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">| &lt;sub&gt;</span><span class="si">%(view_name)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(newNumber)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(object_type)s</span><span class="s2">&lt;/sub&gt; |&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">mdView</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdViews</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
 
         <span class="n">header</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">| &lt;sub&gt;Table Name&lt;/sub&gt; | &lt;sub&gt;Description&lt;/sub&gt; | &lt;sub&gt;Reference&lt;/sub&gt; | &lt;sub&gt;Number Rows&lt;/sub&gt; | &lt;sub&gt;Objects&lt;/sub&gt; |  </span>
@@ -527,18 +522,14 @@
             <span class="n">rows</span> <span class="o">+=</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">| &lt;sub&gt;</span><span class="si">%(table_name)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(description)s</span><span class="s2">](</span><span class="si">%(url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;[</span><span class="si">%(reference_text)s</span><span class="s2">](</span><span class="si">%(reference_url)s</span><span class="s2">)&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(newNumber)s</span><span class="s2">&lt;/sub&gt; | &lt;sub&gt;</span><span class="si">%(object_types)s</span><span class="s2">&lt;/sub&gt; |&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
-        <span class="n">mdContent</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdStreams</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_create_md_tables`` method&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">mdContent</span></div>
+        <span class="k">return</span></div>
 
 <div class="viewcode-block" id="update_wiki_pages._write_wiki_pages"><a class="viewcode-back" href="../../../_autosummary/sherlock.commonutils.update_wiki_pages.html#sherlock.commonutils.update_wiki_pages._write_wiki_pages">[docs]</a>    <span class="k">def</span> <span class="nf">_write_wiki_pages</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">mdContent</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;write the markdown formated content of the database tables&#39; metadata to local wiki pages</span>
-
-<span class="sd">        **Key Arguments:**</span>
-<span class="sd">            - ``mdContent`` -- the content of the markdown file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;starting the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>
 
@@ -550,7 +541,7 @@
         <span class="n">lastUpdated</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Last Updated </span><span class="si">%(now)s</span><span class="s2"></span>
 <span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
-        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="n">mdContent</span><span class="p">)</span>
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdTables</span><span class="p">)</span>
         <span class="n">writeFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="n">pathToWriteFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span>
@@ -561,7 +552,7 @@
         <span class="n">lastUpdated</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Last Updated </span><span class="si">%(now)s</span><span class="s2"></span>
 <span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
-        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdView</span><span class="p">)</span>
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdViews</span><span class="p">)</span>
         <span class="n">writeFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="n">pathToWriteFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span>
@@ -572,7 +563,7 @@
         <span class="n">lastUpdated</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Last Updated </span><span class="si">%(now)s</span><span class="s2"></span>
 <span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">locals</span><span class="p">()</span>
 
-        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="n">mdContent</span><span class="p">)</span>
+        <span class="n">writeFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lastUpdated</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdStreams</span><span class="p">)</span>
         <span class="n">writeFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;completed the ``_write_wiki_pages`` method&#39;</span><span class="p">)</span>

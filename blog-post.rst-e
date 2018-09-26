@@ -58,7 +58,7 @@ Command-Line Usage
         ra                      the right-ascension coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         dec                     the declination coordinate with which to perform a conesearch (sexegesimal or decimal degrees)
         radiusArcsec            radius in arcsec of the footprint to download from the online NED database
-        cat_name                name of the catalogue being imported (veron|milliquas|ned_d)                          
+        cat_name                name of the catalogue being imported (veron|ned_d)                          
         stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
     
         -N, --skipNedUpdate     do not update the NED database before classification
