@@ -7,7 +7,7 @@ Once you have Anaconda installed, go ahead and create a new Conda environment to
 
 .. code:: bash
 
-    conda create -n sherlock python=2.7 pip
+    conda create -n sherlock python=2.7 pip numpy
 
 Now activate the environment and install sherlock:
 
