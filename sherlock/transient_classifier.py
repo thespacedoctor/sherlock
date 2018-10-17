@@ -783,7 +783,7 @@ class transient_classifier():
         crossmatches = crossmatchArray
 
         for xm in crossmatches:
-            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
+            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN") and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None):
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1 + xm["physical_separation_kpc"] / 10
