@@ -42,7 +42,7 @@ Options:
     stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
 
     -N, --skipNedUpdate     do not update the NED database before classification
-    -A, --skipAnnotation    do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
+    -A, --skipMagUpdate     do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
     -h, --help              show this help message
     -s, --settings          the settings file
     -v, --verbose           print more details to stdout
@@ -150,10 +150,10 @@ def main(arguments=None):
         else:
             updateNed = True
 
-        if skipAnnotationFlag:
-            updateAnnotations = False
+        if skipMagUpdateFlag:
+            updatePeakMags = False
         else:
-            updateAnnotations = True
+            updatePeakMags = True
 
         classifier = transient_classifier.transient_classifier(
             log=log,
@@ -164,7 +164,7 @@ def main(arguments=None):
             verbose=verbose,
             update=updateFlag,
             updateNed=updateNed,
-            updateAnnotations=updateAnnotations
+            updatePeakMags=updatePeakMags
         )
         classifier.classify()
 

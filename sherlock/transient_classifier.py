@@ -54,7 +54,7 @@ class transient_classifier():
         - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
         - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
         - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
-        - ``updateAnnotations`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
+        - ``updatePeakMags`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
         - ``oneRun`` -- only process one batch of transients, usful for unit testing. Default *False*
 
     **Usage:**
@@ -138,7 +138,7 @@ class transient_classifier():
             verbose=0,
             updateNed=True,
             daemonMode=False,
-            updateAnnotations=True,
+            updatePeakMags=True,
             oneRun=False
     ):
         self.log = log
@@ -152,7 +152,7 @@ class transient_classifier():
         self.verbose = verbose
         self.updateNed = updateNed
         self.daemonMode = daemonMode
-        self.updateAnnotations = updateAnnotations
+        self.updatePeakMags = updatePeakMags
         self.oneRun = oneRun
 
         # xt-self-arg-tmpx
@@ -389,10 +389,10 @@ class transient_classifier():
             if self.ra:
                 return classifications, crossmatches
 
-            if self.updateAnnotations and self.settings["database settings"]["transients"]["transient peak magnitude query"]:
+            if self.updatePeakMags and self.settings["database settings"]["transients"]["transient peak magnitude query"]:
                 self.update_peak_magnitudes()
             self.update_classification_annotations_and_summaries(
-                self.updateAnnotations)
+                self.updatePeakMags)
 
             print "FINISH ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
             start_time2 = time.time()
