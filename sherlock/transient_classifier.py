@@ -1271,6 +1271,12 @@ class transient_classifier():
             if distance:
                 distance = "%(distance)s" % locals()
 
+            distance_modulus = None
+            if row["direct_distance_modulus"]:
+                distance_modulus = row["direct_distance_modulus"]
+            elif row["distance_modulus"]:
+                distance_modulus = row["distance_modulus"]
+
             if updatePeakMagnitudes:
                 if distance:
                     absMag = row["transientAbsMag"]
@@ -1279,8 +1285,8 @@ class transient_classifier():
                 else:
                     absMag = ""
             else:
-                if distance:
-                    absMag = row["distance_modulus"]
+                if distance and distance_modulus:
+                    absMag = "%(distance_modulus)0.2f" % locals()
                     absMag = """ A host %(distance)s implies a <em>m - M =</em> %(absMag)s.""" % locals(
                     )
                 else:
