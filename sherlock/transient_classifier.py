@@ -1565,6 +1565,20 @@ END""" % locals())
             self.log.info(
                 "Could not create table (`%(crossmatchTable)s`). Probably already exist." % locals())
 
+        sqlQuery = u"""
+            SHOW TRIGGERS;
+        """ % locals()
+        rows = readquery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.transientsDbConn,
+        )
+
+        # DON'T ADD TRIGGERS IF THEY ALREADY EXIST
+        for r in rows:
+            if r["Trigger"] in ("sherlock_classifications_BEFORE_INSERT", "sherlock_classifications_AFTER_INSERT"):
+                return None
+
         triggers.append("""CREATE TRIGGER `sherlock_classifications_BEFORE_INSERT` BEFORE INSERT ON `sherlock_classifications` FOR EACH ROW
 BEGIN
     IF new.classification = "ORPHAN" THEN
