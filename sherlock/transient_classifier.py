@@ -783,18 +783,50 @@ class transient_classifier():
         crossmatches = crossmatchArray
 
         for xm in crossmatches:
-            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN") and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None):
+            try:
+                print xm["photoZ"]
+            except:
+                print "null"
+
+            # SPEC-Z GALAXIES
+            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN" and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1 + xm["physical_separation_kpc"] / 10
+                print "-1"
+            # PHOTO-Z GALAXIES
+            elif (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
+                rankScore = xm["classificationReliability"] * 1000 + 2.2 - \
+                    colMaps[xm["catalogue_view_name"]][
+                        "object_type_accuracy"] * 0.1 + xm["physical_separation_kpc"] / 10
+                print "-1.5"
+            # NOT SPEC-Z, NON PHOTO-Z GALAXIES
+            elif (xm["association_type"] == "SN"):
+                rankScore = xm["classificationReliability"] * 1000 + 5. - \
+                    colMaps[xm["catalogue_view_name"]][
+                        "object_type_accuracy"] * 0.1
+                print "-1.5"
+            # VS
+            elif (xm["association_type"] == "VS"):
+                if xm["classificationReliability"] == 1:
+                    cr = 2.1
+                else:
+                    cr = xm["classificationReliability"] + 0.1
+                rankScore = cr * 1000 + xm["separationArcsec"] + 2. - \
+                    colMaps[xm["catalogue_view_name"]][
+                        "object_type_accuracy"] * 0.1
+            # BS
             elif (xm["association_type"] == "BS"):
                 rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1
+                print "-2"
             else:
-                rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] + 1. - \
+                rankScore = xm["classificationReliability"] * 1000 + xm["separationArcsec"] + 10. - \
                     colMaps[xm["catalogue_view_name"]][
                         "object_type_accuracy"] * 0.1
+                print "-3"
+            print rankScore
             xm["rankScore"] = rankScore
 
         crossmatches = sorted(
