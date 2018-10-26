@@ -361,34 +361,39 @@ class transient_classifier():
             print "FINISH CROSSMATCH/START RANKING: %d" % (time.time() - start_time2,)
             start_time2 = time.time()
 
+            classifications = {}
+            crossmatches = []
+
             for sublist in crossmatchArray:
                 sublist = sorted(
                     sublist, key=itemgetter('transient_object_id'))
 
                 # REORGANISE INTO INDIVIDUAL TRANSIENTS FOR RANKING AND
                 # TOP-LEVEL CLASSIFICATION EXTRACTION
-                classifications = {}
-                crossmatches = []
-                batch = []
-                transientId = sublist[0]['transient_object_id']
-                for s in sublist:
-                    if s['transient_object_id'] != transientId:
-                        # RANK TRANSIENT CROSSMATCH BATCH
-                        cl, cr = self._rank_classifications(
-                            batch, colMaps)
-                        crossmatches.extend(cr)
-                        classifications = dict(
-                            classifications.items() + cl.items())
-                        transientId = s['transient_object_id']
-                        batch = [s]
-                    else:
-                        batch.append(s)
 
-                # RANK FINAL BATCH
-                cl, cr = self._rank_classifications(
-                    batch, colMaps)
-                classifications = dict(classifications.items() + cl.items())
-                crossmatches.extend(cr)
+                batch = []
+                if len(sublist) != 0:
+                    transientId = sublist[0]['transient_object_id']
+                    for s in sublist:
+                        if s['transient_object_id'] != transientId:
+                            # RANK TRANSIENT CROSSMATCH BATCH
+                            cl, cr = self._rank_classifications(
+                                batch, colMaps)
+                            crossmatches.extend(cr)
+                            classifications = dict(
+                                classifications.items() + cl.items())
+
+                            transientId = s['transient_object_id']
+                            batch = [s]
+                        else:
+                            batch.append(s)
+
+                    # RANK FINAL BATCH
+                    cl, cr = self._rank_classifications(
+                        batch, colMaps)
+                    classifications = dict(
+                        classifications.items() + cl.items())
+                    crossmatches.extend(cr)
 
             for t in transientsMetadataList:
                 if t["id"] not in classifications:
