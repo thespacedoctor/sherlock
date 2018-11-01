@@ -960,8 +960,8 @@ class transient_classifier():
                     if k != "qual":
                         mergedMatch[k] = v
 
-            mergedMatch["catalogue_object_id"] = mergedMatch[
-                "catalogue_object_id"].replace(" ", "")
+            mergedMatch["catalogue_object_id"] = str(mergedMatch[
+                "catalogue_object_id"]).replace(" ", "")
 
             # RECALULATE PHYSICAL DISTANCE SEPARATION
             if mergedMatch["direct_distance_scale"]:
@@ -1366,10 +1366,12 @@ class transient_classifier():
             catalogueString = catalogue
             if "catalogue" not in catalogueString.lower():
                 catalogueString = catalogue + " catalogue"
+            if "/" in catalogueString:
+                catalogueString += "s"
 
-            if "ned" in catalogue.lower():
+            if "ned" in catalogue.lower() and "/" not in catalogue:
                 objectId = '''<a href="https://ned.ipac.caltech.edu/cgi-bin/objsearch?objname=%(objectId)s&extend=no&hconst=73&omegam=0.27&omegav=0.73&corr_z=1&out_csys=Equatorial&out_equinox=J2000.0&obj_sort=RA+or+Longitude&of=pre_text&zv_breaker=30000.0&list_limit=5&img_stamp=YES">%(objectId)s</a>''' % locals()
-            elif "sdss" in catalogue.lower():
+            elif "sdss" in catalogue.lower() and "/" not in catalogue:
                 objectId = "http://skyserver.sdss.org/dr12/en/tools/explore/Summary.aspx?id=%(objectId)s" % locals(
                 )
 
@@ -1383,7 +1385,7 @@ class transient_classifier():
                 )
                 betterName = "SDSS J" + ra[0:9] + dec[0:9]
                 objectId = '''<a href="%(objectId)s">%(betterName)s</a>''' % locals()
-            elif "milliquas" in catalogue.lower():
+            elif "milliquas" in catalogue.lower() and "/" not in catalogue:
                 thisName = objectId
                 objectId = objectId.replace(" ", "+")
                 objectId = '''<a href="https://heasarc.gsfc.nasa.gov/db-perl/W3Browse/w3table.pl?popupFrom=Query+Results&tablehead=name%%3Dheasarc_milliquas%%26description%%3DMillion+Quasars+Catalog+%%28MILLIQUAS%%29%%2C+Version+4.8+%%2822+June+2016%%29%%26url%%3Dhttp%%3A%%2F%%2Fheasarc.gsfc.nasa.gov%%2FW3Browse%%2Fgalaxy-catalog%%2Fmilliquas.html%%26archive%%3DN%%26radius%%3D1%%26mission%%3DGALAXY+CATALOG%%26priority%%3D5%%26tabletype%%3DObject&dummy=Examples+of+query+constraints%%3A&varon=name&bparam_name=%%3D%%22%(objectId)s%%22&bparam_name%%3A%%3Aunit=+&bparam_name%%3A%%3Aformat=char25&varon=ra&bparam_ra=&bparam_ra%%3A%%3Aunit=degree&bparam_ra%%3A%%3Aformat=float8%%3A.5f&varon=dec&bparam_dec=&bparam_dec%%3A%%3Aunit=degree&bparam_dec%%3A%%3Aformat=float8%%3A.5f&varon=bmag&bparam_bmag=&bparam_bmag%%3A%%3Aunit=mag&bparam_bmag%%3A%%3Aformat=float8%%3A4.1f&varon=rmag&bparam_rmag=&bparam_rmag%%3A%%3Aunit=mag&bparam_rmag%%3A%%3Aformat=float8%%3A4.1f&varon=redshift&bparam_redshift=&bparam_redshift%%3A%%3Aunit=+&bparam_redshift%%3A%%3Aformat=float8%%3A6.3f&varon=radio_name&bparam_radio_name=&bparam_radio_name%%3A%%3Aunit=+&bparam_radio_name%%3A%%3Aformat=char22&varon=xray_name&bparam_xray_name=&bparam_xray_name%%3A%%3Aunit=+&bparam_xray_name%%3A%%3Aformat=char22&bparam_lii=&bparam_lii%%3A%%3Aunit=degree&bparam_lii%%3A%%3Aformat=float8%%3A.5f&bparam_bii=&bparam_bii%%3A%%3Aunit=degree&bparam_bii%%3A%%3Aformat=float8%%3A.5f&bparam_broad_type=&bparam_broad_type%%3A%%3Aunit=+&bparam_broad_type%%3A%%3Aformat=char4&bparam_optical_flag=&bparam_optical_flag%%3A%%3Aunit=+&bparam_optical_flag%%3A%%3Aformat=char3&bparam_red_psf_flag=&bparam_red_psf_flag%%3A%%3Aunit=+&bparam_red_psf_flag%%3A%%3Aformat=char1&bparam_blue_psf_flag=&bparam_blue_psf_flag%%3A%%3Aunit=+&bparam_blue_psf_flag%%3A%%3Aformat=char1&bparam_ref_name=&bparam_ref_name%%3A%%3Aunit=+&bparam_ref_name%%3A%%3Aformat=char6&bparam_ref_redshift=&bparam_ref_redshift%%3A%%3Aunit=+&bparam_ref_redshift%%3A%%3Aformat=char6&bparam_qso_prob=&bparam_qso_prob%%3A%%3Aunit=percent&bparam_qso_prob%%3A%%3Aformat=int2%%3A3d&bparam_alt_name_1=&bparam_alt_name_1%%3A%%3Aunit=+&bparam_alt_name_1%%3A%%3Aformat=char22&bparam_alt_name_2=&bparam_alt_name_2%%3A%%3Aunit=+&bparam_alt_name_2%%3A%%3Aformat=char22&Entry=&Coordinates=J2000&Radius=Default&Radius_unit=arcsec&NR=CheckCaches%%2FGRB%%2FSIMBAD%%2BSesame%%2FNED&Time=&ResultMax=1000&displaymode=Display&Action=Start+Search&table=heasarc_milliquas">%(thisName)s</a>''' % locals()
