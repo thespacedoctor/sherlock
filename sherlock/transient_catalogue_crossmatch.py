@@ -34,11 +34,11 @@ class transient_catalogue_crossmatch():
 
     **Usage:**
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_).
 
         To initiate a transient_catalogue_crossmatch object, use the following:
 
-        .. code-block:: python 
+        .. code-block:: python
 
             from sherlock import transient_catalogue_crossmatch
             xmatcher = transient_catalogue_crossmatch(
@@ -51,7 +51,7 @@ class transient_catalogue_crossmatch():
 
         Then to run the transient through the search algorithm found in the settings file, use the ``match`` method:
 
-        .. code-block:: python 
+        .. code-block:: python
 
             classifications = xmatcher.match()
 
@@ -160,51 +160,55 @@ class transient_catalogue_crossmatch():
                     allCatalogueMatches = allCatalogueMatches + catalogueMatches
 
         synonymIDs = []
-        synonymIDs[:] = [xm["transient_object_id"] for xm in catalogueMatches]
+        synonymIDs[:] = [xm["transient_object_id"]
+                         for xm in allCatalogueMatches]
+
         nonSynonymTransients = []
         nonSynonymTransients[:] = [
             t for t in self.transients if t["id"] not in synonymIDs]
+        nonSynonymTransients[:] = self.transients
 
         # ASSOCIATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
-        for search_name, searchPara in sa.iteritems():
-            self.log.debug("""  searching: %(search_name)s""" % locals())
-            for bf in brightnessFilters:
-                if bf not in searchPara:
-                    continue
-                if "association" not in searchPara[bf] or searchPara[bf]["association"] == False:
-                    continue
-                if "physical radius kpc" in searchPara[bf]:
+        if len(nonSynonymTransients) > 0:
+            for search_name, searchPara in sa.iteritems():
+                self.log.debug("""  searching: %(search_name)s""" % locals())
+                for bf in brightnessFilters:
+                    if bf not in searchPara:
+                        continue
+                    if "association" not in searchPara[bf] or searchPara[bf]["association"] == False:
+                        continue
+                    if "physical radius kpc" in searchPara[bf]:
 
-                    # THE PHYSICAL SEPARATION SEARCHES
-                    self.log.debug(
-                        'checking physical distance crossmatches in %(search_name)s' % locals())
-                    catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
-                        objectList=nonSynonymTransients,
-                        searchPara=searchPara,
-                        search_name=search_name + " physical",
-                        brightnessFilter=bf,
-                        classificationType="association"
-                    )
-                else:
-                    # THE ANGULAR SEPARATION SEARCHES
-                    self.log.debug(
-                        'Crossmatching against %(search_name)s' % locals())
+                        # THE PHYSICAL SEPARATION SEARCHES
+                        self.log.debug(
+                            'checking physical distance crossmatches in %(search_name)s' % locals())
+                        catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
+                            objectList=nonSynonymTransients,
+                            searchPara=searchPara,
+                            search_name=search_name + " physical",
+                            brightnessFilter=bf,
+                            classificationType="association"
+                        )
+                    else:
+                        # THE ANGULAR SEPARATION SEARCHES
+                        self.log.debug(
+                            'Crossmatching against %(search_name)s' % locals())
 
-                    # RENAMED from searchCatalogue
-                    catalogueMatches = self.angular_crossmatch_against_catalogue(
-                        objectList=nonSynonymTransients,
-                        searchPara=searchPara,
-                        search_name=search_name + " angular",
-                        brightnessFilter=bf,
-                        classificationType="association"
-                    )
+                        # RENAMED from searchCatalogue
+                        catalogueMatches = self.angular_crossmatch_against_catalogue(
+                            objectList=nonSynonymTransients,
+                            searchPara=searchPara,
+                            search_name=search_name + " angular",
+                            brightnessFilter=bf,
+                            classificationType="association"
+                        )
 
-                # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
-                if catalogueMatches:
-                    allCatalogueMatches = allCatalogueMatches + catalogueMatches
-                    catalogueMatches = []
+                    # ADD CLASSIFICATION AND CROSSMATCHES IF FOUND
+                    if catalogueMatches:
+                        allCatalogueMatches = allCatalogueMatches + catalogueMatches
+                        catalogueMatches = []
 
         # ANNOTATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER

@@ -870,7 +870,7 @@ class transient_classifier():
 
             for i, m in enumerate(x):
                 m["merged_rank"] = int(dupKey)
-                if i > 1:
+                if i > 0:
                     # MERGE ALL BEST MAGNITUDE MEASUREMENTS
                     for f in self.filterPreference:
                         if f in m and m[f] and (f not in mergedMatch or (f + "Err" in mergedMatch and (f + "Err" not in m or (mergedMatch[f + "Err"] > m[f + "Err"])))):
@@ -884,16 +884,17 @@ class transient_classifier():
                     mergedMatch["catalogue_view_name"] = "multiple"
 
                     # MERGE SEARCH NAMES
-                    snippet = m["search_name"].split(" ")[0]
-                    if "/" not in mergedMatch["search_name"] and snippet not in mergedMatch["search_name"]:
+                    snippet = m["search_name"].split(" ")[0].upper()
+
+                    if "/" not in mergedMatch["search_name"] and snippet not in mergedMatch["search_name"].upper():
                         mergedMatch["search_name"] = mergedMatch["search_name"].split(
-                            " ")[0] + "/" + m["search_name"].split(" ")[0]
-                    elif snippet not in mergedMatch["search_name"]:
+                            " ")[0].upper() + "/" + m["search_name"].split(" ")[0].upper()
+                    elif snippet not in mergedMatch["search_name"].upper():
                         mergedMatch[
-                            "search_name"] += "/" + m["search_name"].split(" ")[0]
+                            "search_name"] += "/" + m["search_name"].split(" ")[0].upper()
                     elif "/" not in mergedMatch["search_name"]:
                         mergedMatch["search_name"] = mergedMatch["search_name"].split(
-                            " ")[0]
+                            " ")[0].upper()
 
                     mergedMatch["catalogue_table_name"] = mergedMatch[
                         "search_name"]
@@ -907,7 +908,12 @@ class transient_classifier():
                             m["catalogue_object_id"]
 
                     # DETERMINE BEST CLASSIFICATION
-                    if m["association_type"] in associatationTypeOrder and (mergedMatch["association_type"] not in associatationTypeOrder or associatationTypeOrder.index(m["association_type"]) < associatationTypeOrder.index(mergedMatch["association_type"])):
+                    if mergedMatch["classificationReliability"] == 3 and m["classificationReliability"] < 3:
+                        mergedMatch["association_type"] = m["association_type"]
+                        mergedMatch["classificationReliability"] = m[
+                            "classificationReliability"]
+
+                    if m["classificationReliability"] != 3 and m["association_type"] in associatationTypeOrder and (mergedMatch["association_type"] not in associatationTypeOrder or associatationTypeOrder.index(m["association_type"]) < associatationTypeOrder.index(mergedMatch["association_type"])):
                         mergedMatch["association_type"] = m["association_type"]
                         mergedMatch["classificationReliability"] = m[
                             "classificationReliability"]
@@ -954,6 +960,9 @@ class transient_classifier():
                     if k != "qual":
                         mergedMatch[k] = v
 
+            mergedMatch["catalogue_object_id"] = mergedMatch[
+                "catalogue_object_id"].replace(" ", "")
+
             # RECALULATE PHYSICAL DISTANCE SEPARATION
             if mergedMatch["direct_distance_scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
@@ -983,11 +992,8 @@ class transient_classifier():
                 rankScore = xm["classificationReliability"] * 1000 + 5.
             # VS
             elif (xm["association_type"] == "VS"):
-                if xm["classificationReliability"] == 1:
-                    cr = 2.1
-                else:
-                    cr = xm["classificationReliability"] + 0.1
-                rankScore = cr * 1000 + xm["separationArcsec"] + 2.
+                rankScore = xm["classificationReliability"] * \
+                    1000 + xm["separationArcsec"] + 2.
             # BS
             elif (xm["association_type"] == "BS"):
                 rankScore = xm["classificationReliability"] * \
