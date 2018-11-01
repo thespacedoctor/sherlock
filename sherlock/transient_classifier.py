@@ -960,8 +960,8 @@ class transient_classifier():
                     if k != "qual":
                         mergedMatch[k] = v
 
-            mergedMatch["catalogue_object_id"] = mergedMatch[
-                "catalogue_object_id"].replace(" ", "")
+            mergedMatch["catalogue_object_id"] = str(mergedMatch[
+                "catalogue_object_id"]).replace(" ", "")
 
             # RECALULATE PHYSICAL DISTANCE SEPARATION
             if mergedMatch["direct_distance_scale"]:
