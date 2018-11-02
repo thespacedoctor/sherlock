@@ -166,7 +166,6 @@ class transient_catalogue_crossmatch():
         nonSynonymTransients = []
         nonSynonymTransients[:] = [
             t for t in self.transients if t["id"] not in synonymIDs]
-        nonSynonymTransients[:] = self.transients
 
         # ASSOCIATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
@@ -210,6 +209,14 @@ class transient_catalogue_crossmatch():
                         allCatalogueMatches = allCatalogueMatches + catalogueMatches
                         catalogueMatches = []
 
+        associationIDs = []
+        associationIDs[:] = [xm["transient_object_id"]
+                             for xm in allCatalogueMatches]
+
+        nonAssociationTransients = []
+        nonAssociationTransients[:] = [
+            t for t in self.transients if t["id"] not in associationIDs]
+
         # ANNOTATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
@@ -227,7 +234,7 @@ class transient_catalogue_crossmatch():
                         'checking physical distance crossmatches in %(search_name)s' % locals())
                     if bf in searchPara:
                         catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
-                            objectList=self.transients,
+                            objectList=nonAssociationTransients,
                             searchPara=searchPara,
                             search_name=search_name + " physical",
                             brightnessFilter=bf,
@@ -240,7 +247,7 @@ class transient_catalogue_crossmatch():
                     # RENAMED from searchCatalogue
                     if bf in searchPara:
                         catalogueMatches = self.angular_crossmatch_against_catalogue(
-                            objectList=self.transients,
+                            objectList=nonAssociationTransients,
                             searchPara=searchPara,
                             search_name=search_name + " angular",
                             brightnessFilter=bf,
