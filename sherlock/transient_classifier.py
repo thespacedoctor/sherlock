@@ -223,7 +223,6 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
-        # 2018-02-05 KWS commented out again!! It doesn't work MySQL 5.5.
         self._create_tables_if_not_exist()
 
         import time
@@ -242,7 +241,7 @@ class transient_classifier():
         if searchCount > cpuCount:
             searchCount = cpuCount
 
-        largeBatchSize = 50000
+        largeBatchSize = 5000
         miniBatchSize = 100
         self.largeBatchSize = largeBatchSize
 
