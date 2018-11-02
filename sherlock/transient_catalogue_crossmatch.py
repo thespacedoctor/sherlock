@@ -166,7 +166,6 @@ class transient_catalogue_crossmatch():
         nonSynonymTransients = []
         nonSynonymTransients[:] = [
             t for t in self.transients if t["id"] not in synonymIDs]
-        nonSynonymTransients[:] = self.transients
 
         # ASSOCIATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
