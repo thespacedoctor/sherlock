@@ -1331,7 +1331,7 @@ class transient_classifier():
 
         if updatePeakMagnitudes:
             sqlQuery = u"""
-                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and (cl.annotation is null orcl.dateLastModified is null or cl.dateLastModified > DATE_SUB(NOW(), INTERVAL 30 DAY)) order by  cl.dateLastModified asc limit 100000
             """ % locals()
         else:
             sqlQuery = u"""
