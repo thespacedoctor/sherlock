@@ -1331,7 +1331,7 @@ class transient_classifier():
 
         if updatePeakMagnitudes:
             sqlQuery = u"""
-                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and (cl.annotation is null orcl.dateLastModified is null or cl.dateLastModified > DATE_SUB(NOW(), INTERVAL 30 DAY)) order by  cl.dateLastModified asc limit 100000
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and (cl.annotation is null or cl.dateLastModified is null or cl.dateLastModified > DATE_SUB(NOW(), INTERVAL 30 DAY)) order by  cl.dateLastModified asc limit 100000
             """ % locals()
         else:
             sqlQuery = u"""
@@ -1656,7 +1656,7 @@ class transient_classifier():
         createStatement = """
 CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `transient_object_id` bigint(20) unsigned DEFAULT NULL,
-  `catalogue_object_id` varchar(30) DEFAULT NULL,
+  `catalogue_object_id` varchar(200) DEFAULT NULL,
   `catalogue_table_id` smallint(5) unsigned DEFAULT NULL,
   `separationArcsec` double DEFAULT NULL,
   `northSeparationArcsec` DOUBLE DEFAULT NULL,
