@@ -232,7 +232,7 @@ class transient_classifier():
         sa = self.settings["search algorithm"]
         searchCount = 0
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in sa.iteritems():
+        for search_name, searchPara in sa.items():
             for bf in brightnessFilters:
                 if bf in searchPara:
                     searchCount += 1
@@ -760,7 +760,7 @@ class transient_classifier():
 
         sqlQuery = ""
         inserts = []
-        for k, v in classifications.iteritems():
+        for k, v in classifications.items():
             thisInsert = {
                 "transient_object_id": k,
                 "classification": v[0]
@@ -848,7 +848,7 @@ class transient_classifier():
             bestDirectDistance = {
                 "direct_distance": mergedMatch["direct_distance"],
                 "direct_distance_modulus": mergedMatch["direct_distance_modulus"],
-                "direct_distance_scale": mergedMatch["direct_distance"],
+                "direct_distance_scale": mergedMatch["direct_distance_scale"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
             bestSpecz = {
@@ -955,7 +955,7 @@ class transient_classifier():
 
             # MERGE THE BEST RESULTS
             for l in [bestPhotoz, bestSpecz, bestDirectDistance]:
-                for k, v in l.iteritems():
+                for k, v in l.items():
                     if k != "qual":
                         mergedMatch[k] = v
 
@@ -1108,7 +1108,7 @@ class transient_classifier():
 
         allKeys = []
         for c in crossmatches:
-            for k, v in c.iteritems():
+            for k, v in c.items():
                 if k not in allKeys:
                     allKeys.append(k)
 
@@ -1331,7 +1331,7 @@ class transient_classifier():
 
         if updatePeakMagnitudes:
             sqlQuery = u"""
-                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and (cl.annotation is null or cl.dateLastModified is null or cl.dateLastModified > DATE_SUB(NOW(), INTERVAL 30 DAY)) order by  cl.dateLastModified asc limit 100000
+                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id= cm.transient_object_id and (cl.annotation is null or cl.dateLastModified is null or cl.dateLastModified > DATE_SUB(NOW(), INTERVAL 30 DAY)) order by  cl.dateLastModified asc limit 100000
             """ % locals()
         else:
             sqlQuery = u"""
