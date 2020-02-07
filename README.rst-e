@@ -36,7 +36,7 @@ Command-Line Usage
         sherlock init
         sherlock info [-s <pathToSettingsFile>]
         sherlock [-NA] dbmatch [--update] [-s <pathToSettingsFile>]
-        sherlock [-vN] match -- <ra> <dec> [<pathToSettingsFile>] 
+        sherlock [-bN] match -- <ra> <dec> [<pathToSettingsFile>] 
         sherlock clean [-s <pathToSettingsFile>]
         sherlock wiki [-s <pathToSettingsFile>]
         sherlock import ned <ra> <dec> <radiusArcsec> [-s <pathToSettingsFile>]
@@ -62,12 +62,13 @@ Command-Line Usage
         stream_name             name of the stream to import into the sherlock-catalogues database (ifs)
     
         -N, --skipNedUpdate     do not update the NED database before classification
-        -A, --skipAnnotation    do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
+        -A, --skipMagUpdate     do not update the peak magnitudes and human readable text annotations of objects (can eat up some time)
         -h, --help              show this help message
         -s, --settings          the settings file
-        -v, --verbose           print more details to stdout
+        -b, --verbose           print more details to stdout
         -l, --transientlistId   the id of the transient list to classify
         -u, --update            update the transient database with new classifications and crossmatches
+        -v, --version           print the version of sherlock
     
 
 Documentation
@@ -84,7 +85,7 @@ Once you have Anaconda installed, go ahead and create a new Conda environment to
 
 .. code:: bash
 
-    conda create -n sherlock python=2.7 pip
+    conda create -n sherlock python=2.7 pip numpy
 
 Now activate the environment and install sherlock:
 

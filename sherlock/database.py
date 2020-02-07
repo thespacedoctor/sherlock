@@ -151,7 +151,7 @@ class database():
         }
 
         dbVersions = {}
-        for k, v in dbConns.iteritems():
+        for k, v in dbConns.items():
             if v:
                 sqlQuery = u"""
                     SELECT VERSION() as v;

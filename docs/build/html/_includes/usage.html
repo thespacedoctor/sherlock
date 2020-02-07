@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Command-Line Usage &mdash; sherlock v1.4.4 documentation</title>
+  <title>Command-Line Usage &mdash; sherlock v1.6.5 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="sherlock v1.4.4 documentation" href="../index.html"/> 
+    <link rel="top" title="sherlock v1.6.5 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -75,7 +75,7 @@
             
             
               <div class="version">
-                v1.4.4
+                v1.6.5
               </div>
             
           
@@ -191,7 +191,7 @@ Usage:
     sherlock init
     sherlock info <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
     sherlock <span class="o">[</span>-NA<span class="o">]</span> dbmatch <span class="o">[</span>--update<span class="o">]</span> <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
-    sherlock <span class="o">[</span>-vN<span class="o">]</span> match -- &lt;ra&gt; &lt;dec&gt; <span class="o">[</span>&lt;pathToSettingsFile&gt;<span class="o">]</span>
+    sherlock <span class="o">[</span>-bN<span class="o">]</span> match -- &lt;ra&gt; &lt;dec&gt; <span class="o">[</span>&lt;pathToSettingsFile&gt;<span class="o">]</span>
     sherlock clean <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
     sherlock wiki <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
     sherlock import ned &lt;ra&gt; &lt;dec&gt; &lt;radiusArcsec&gt; <span class="o">[</span>-s &lt;pathToSettingsFile&gt;<span class="o">]</span>
@@ -217,12 +217,13 @@ Options:
     stream_name             name of the stream to import into the sherlock-catalogues database <span class="o">(</span>ifs<span class="o">)</span>
 
     -N, --skipNedUpdate     <span class="k">do</span> not update the NED database before classification
-    -A, --skipAnnotation    <span class="k">do</span> not update the peak magnitudes and human readable text annotations of objects <span class="o">(</span>can eat up some <span class="nb">time</span><span class="o">)</span>
+    -A, --skipMagUpdate     <span class="k">do</span> not update the peak magnitudes and human readable text annotations of objects <span class="o">(</span>can eat up some <span class="nb">time</span><span class="o">)</span>
     -h, --help              show this <span class="nb">help</span> message
     -s, --settings          the settings file
-    -v, --verbose           print more details to stdout
+    -b, --verbose           print more details to stdout
     -l, --transientlistId   the id of the transient list to classify
     -u, --update            update the transient database with new classifications and crossmatches
+    -v, --version           print the version of sherlock
 </pre></div>
 </div>
 </div>
@@ -240,7 +241,7 @@ Options:
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Dave Young.
+        &copy; Copyright 2020, Dave Young.
 
     </p>
   </div>
@@ -262,7 +263,7 @@ Options:
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'v1.4.4',
+            VERSION:'v1.6.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

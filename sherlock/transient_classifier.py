@@ -1745,7 +1745,8 @@ CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
   PRIMARY KEY (`transient_object_id`),
   KEY `key_transient_object_id` (`transient_object_id`),
   KEY `idx_summary` (`summary`),
-  KEY `idx_classification` (`classification`)
+  KEY `idx_classification` (`classification`),
+  KEY `idx_dateLastModified` (`dateLastModified`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 """ % locals()
