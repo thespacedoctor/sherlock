@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # sherlock documentation build configuration file, created by
-# sphinx-quickstart on Wed Sep 26 07:50:29 2018.
+# sphinx-quickstart on Thu Jan 16 11:25:57 2020.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -18,7 +18,7 @@
 #
 # import os
 # import sys
-# sys.path.insert(0, u'/Users/Dave/git_repos/sherlock')
+# sys.path.insert(0, u'/Users/Dave/git_repos/_packages_/python/sherlock')
 
 
 # -- General configuration ------------------------------------------------
@@ -50,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'sherlock'
-copyright = u'2018, Author'
+copyright = u'2020, Author'
 author = u'Author'
 
 # The version info for the project you're documenting, acts as replacement for
