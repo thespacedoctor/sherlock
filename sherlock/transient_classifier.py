@@ -223,7 +223,8 @@ class transient_classifier():
             dbConn=self.cataloguesDbConn
         )
 
-        self._create_tables_if_not_exist()
+        if self.transientsDbConn:
+            self._create_tables_if_not_exist()
 
         import time
         start_time = time.time()
@@ -292,18 +293,28 @@ class transient_classifier():
                 # 'ra': '08:57:57.19'}
             # TRANSIENT PASSED VIA COMMAND-LINE
             else:
-                if not self.name:
-                    name = "transient"
-                else:
-                    name = self.name
-                transient = {
-                    'name': name,
-                    'object_classification': None,
-                    'dec': self.dec,
-                    'id': name,
-                    'ra': self.ra
-                }
-                transientsMetadataList = [transient]
+                # CONVERT SINGLE TRANSIENTS TO LIST
+                if not isinstance(self.ra, list):
+                    self.ra = [self.ra]
+                    self.dec = [self.dec]
+                    self.name = [self.name]
+
+                # GIVEN TRANSIENTS UNIQUE NAMES IF NOT PROVIDED
+                if not self.name[0]:
+                    self.name = []
+                    for i, v in enumerate(self.ra):
+                        self.name.append("transient_%(i)05d" % locals())
+
+                transientsMetadataList = []
+                for r, d, n in zip(self.ra, self.dec, self.name):
+                    transient = {
+                        'name': n,
+                        'object_classification': None,
+                        'dec': d,
+                        'id': n,
+                        'ra': r
+                    }
+                    transientsMetadataList.append(transient)
                 remaining = 0
 
             if self.oneRun:
@@ -342,8 +353,9 @@ class transient_classifier():
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
 
-            print "BATCH SIZE = %(total)s" % locals()
-            print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
+            if self.verbose:
+                print "BATCH SIZE = %(total)s" % locals()
+                print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
 
             # DEFINE AN INPUT ARRAY
             # cores = psutil.cpu_count()
@@ -352,12 +364,14 @@ class transient_classifier():
 
             start_time2 = time.time()
 
-            print "START CROSSMATCH"
+            if self.verbose:
+                print "START CROSSMATCH"
 
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
                                             inputArray=range(len(theseBatches)), poolSize=None, colMaps=colMaps)
 
-            print "FINISH CROSSMATCH/START RANKING: %d" % (time.time() - start_time2,)
+            if self.verbose:
+                print "FINISH CROSSMATCH/START RANKING: %d" % (time.time() - start_time2,)
             start_time2 = time.time()
 
             classifications = {}
@@ -407,7 +421,8 @@ class transient_classifier():
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
-            print "FINISH RANKING/START UPDATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            if self.verbose:
+                print "FINISH RANKING/START UPDATING TRANSIENT DB: %d" % (time.time() - start_time2,)
             start_time2 = time.time()
             if self.update and not self.ra:
                 self._update_transient_database(
@@ -417,7 +432,8 @@ class transient_classifier():
                     colMaps=colMaps
                 )
 
-            print "FINISH UPDATING TRANSIENT DB/START ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            if self.verbose:
+                print "FINISH UPDATING TRANSIENT DB/START ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
             start_time2 = time.time()
 
             if self.ra:
@@ -1075,15 +1091,6 @@ class transient_classifier():
         if self.verbose == 0:
             return
 
-        if self.name in classifications:
-            headline = self.name + "'s Predicted Classification: " + \
-                classifications[self.name][0]
-        else:
-            headline = self.name + "'s Predicted Classification: ORPHAN"
-        print headline
-        print
-        print "Suggested Associations:"
-
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
                  "raDeg", "decDeg", "separationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
@@ -1091,73 +1098,88 @@ class transient_classifier():
                    "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
                       "catalogue_object_id", "catalogue_object_subtype", "merged_rank"]
-
         if self.verbose == 2:
             basic = basic + verbose
 
-        for c in crossmatches:
-            for f in self.filterPreference:
-                if f in c and c[f]:
-                    c["Mag"] = c[f]
-                    c["MagFilter"] = f.replace("_", "").replace("Mag", "")
-                    if f + "Err" in c:
-                        c["MagErr"] = c[f + "Err"]
-                    else:
-                        c["MagErr"] = None
-                    break
+        for n in self.name:
 
-        allKeys = []
-        for c in crossmatches:
-            for k, v in c.items():
-                if k not in allKeys:
-                    allKeys.append(k)
+            if n in classifications:
+                headline = "\n" + n + "'s Predicted Classification: " + \
+                    classifications[n][0]
+            else:
+                headline = n + "'s Predicted Classification: ORPHAN"
+            print headline
+            print "Suggested Associations:"
 
-        for c in crossmatches:
-            for k in allKeys:
-                if k not in c:
-                    c[k] = None
+            myCrossmatches = []
+            myCrossmatches[:] = [c for c in crossmatches if c[
+                "transient_object_id"] == n]
 
-        printCrossmatches = []
-        for c in crossmatches:
-            ordDict = collections.OrderedDict(sorted({}.items()))
-            for k in basic:
-                if k in c:
-                    if k == "catalogue_table_name":
-                        c[k] = c[k].replace("tcs_cat_", "").replace("_", " ")
-                    if k == "classificationReliability":
-                        if c[k] == 1:
-                            c["classification reliability"] = "synonym"
-                        elif c[k] == 2:
-                            c["classification reliability"] = "association"
-                        elif c[k] == 3:
-                            c["classification reliability"] = "annotation"
-                        k = "classification reliability"
-                    if k == "catalogue_object_subtype" and "sdss" in c["catalogue_table_name"]:
-                        if c[k] == 6:
-                            c[k] = "galaxy"
-                        elif c[k] == 3:
-                            c[k] = "star"
-                    columnName = k.replace("tcs_cat_", "").replace("_", " ")
-                    value = c[k]
-                    if k not in dontFormat:
+            for c in myCrossmatches:
+                for f in self.filterPreference:
+                    if f in c and c[f]:
+                        c["Mag"] = c[f]
+                        c["MagFilter"] = f.replace("_", "").replace("Mag", "")
+                        if f + "Err" in c:
+                            c["MagErr"] = c[f + "Err"]
+                        else:
+                            c["MagErr"] = None
+                        break
 
-                        try:
-                            ordDict[columnName] = "%(value)0.2f" % locals()
-                        except:
+            allKeys = []
+            for c in myCrossmatches:
+                for k, v in c.items():
+                    if k not in allKeys:
+                        allKeys.append(k)
+
+            for c in myCrossmatches:
+                for k in allKeys:
+                    if k not in c:
+                        c[k] = None
+
+            printCrossmatches = []
+            for c in myCrossmatches:
+                ordDict = collections.OrderedDict(sorted({}.items()))
+                for k in basic:
+                    if k in c:
+                        if k == "catalogue_table_name":
+                            c[k] = c[k].replace(
+                                "tcs_cat_", "").replace("_", " ")
+                        if k == "classificationReliability":
+                            if c[k] == 1:
+                                c["classification reliability"] = "synonym"
+                            elif c[k] == 2:
+                                c["classification reliability"] = "association"
+                            elif c[k] == 3:
+                                c["classification reliability"] = "annotation"
+                            k = "classification reliability"
+                        if k == "catalogue_object_subtype" and "sdss" in c["catalogue_table_name"]:
+                            if c[k] == 6:
+                                c[k] = "galaxy"
+                            elif c[k] == 3:
+                                c[k] = "star"
+                        columnName = k.replace(
+                            "tcs_cat_", "").replace("_", " ")
+                        value = c[k]
+                        if k not in dontFormat:
+
+                            try:
+                                ordDict[columnName] = "%(value)0.2f" % locals()
+                            except:
+                                ordDict[columnName] = value
+                        else:
                             ordDict[columnName] = value
-                    else:
-                        ordDict[columnName] = value
 
-            printCrossmatches.append(ordDict)
+                printCrossmatches.append(ordDict)
 
-        from fundamentals.renderer import list_of_dictionaries
-        dataSet = list_of_dictionaries(
-            log=self.log,
-            listOfDictionaries=printCrossmatches
-        )
-        tableData = dataSet.table(filepath=None)
+            from fundamentals.renderer import list_of_dictionaries
+            dataSet = list_of_dictionaries(
+                log=self.log,
+                listOfDictionaries=printCrossmatches
+            )
+            tableData = dataSet.table(filepath=None)
 
-        print tableData
+            print tableData
 
         self.log.debug('completed the ``_print_results_to_stdout`` method')
         return None

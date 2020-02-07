@@ -102,10 +102,19 @@ class database():
         """
         self.log.debug('starting the ``get`` method')
 
-        transientSettings = self.settings[
-            "database settings"]["transients"]
+        # CATALOGUE DATABASE ALWAYS NEEDED
         catalogueSettings = self.settings[
             "database settings"]["static catalogues"]
+
+        # TRANSIENT DATABASE OPTIONAL
+        if "transients" in self.settings[
+                "database settings"]:
+            transientSettings = self.settings[
+                "database settings"]["transients"]
+        else:
+            transientSettings = False
+
+        # MARSHALL DATABASE OPTIONAL
         if "pessto marshall" in self.settings[
                 "database settings"]:
             marshallSettings = self.settings[
