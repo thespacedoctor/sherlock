@@ -1864,7 +1864,10 @@ END""" % locals())
         for f in filters:
             if f in match and match[f] and not best_mag:
                 best_mag = match[f]
-                best_mag_error = match[f + "Err"]
+                try:
+                    best_mag_error = match[f + "Err"]
+                except:
+                    pass
                 subfilter = f.replace(
                     "_", "").replace("Mag", "")
                 best_mag_filter = f.replace(
