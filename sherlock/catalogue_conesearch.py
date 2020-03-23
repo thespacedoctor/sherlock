@@ -250,7 +250,7 @@ class catalogue_conesearch():
         if self.lowerMagnitudeLimit != False and self.lowerMagnitudeLimit and self.upperMagnitudeLimit != False and self.upperMagnitudeLimit:
             upperMagnitudeLimit = self.upperMagnitudeLimit
             lowerMagnitudeLimit = self.lowerMagnitudeLimit
-            sqlWhere += " and ((`%(magnitudeLimitFilter)s` > %(upperMagnitudeLimit)s and `%(magnitudeLimitFilter)s` < %(lowerMagnitudeLimit)s) or `%(magnitudeLimitFilter)s` is null)" % locals()
+            sqlWhere += " and ((`%(magnitudeLimitFilter)s` > %(upperMagnitudeLimit)s and `%(magnitudeLimitFilter)s` < %(lowerMagnitudeLimit)s))" % locals()
 
         if sqlWhere and " and" == sqlWhere[0:4]:
             sqlWhere = sqlWhere[5:]
