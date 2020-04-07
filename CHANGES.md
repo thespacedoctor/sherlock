@@ -1,3 +1,7 @@
+# v2.0.1
+
+* fixed: AGN with secure distance info now given higher weight in rank algotithm
+
 # v2.0.0
 
 * enhancement: annotations provided for transient webpages are now more readable readable and the user is given a link to an external resource where possible. e.g.
