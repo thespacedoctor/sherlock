@@ -1036,7 +1036,7 @@ class transient_classifier():
         for xm, gm in zip(distinctMatches, groupedMatches):
 
             # SPEC-Z GALAXIES
-            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN" and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
+            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
                     (50 - xm["physical_separation_kpc"] / 20)
             # PHOTO-Z GALAXIES
