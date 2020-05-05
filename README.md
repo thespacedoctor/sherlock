@@ -3,7 +3,7 @@ sherlock
 
 [![Documentation Status](https://readthedocs.org/projects/qub-sherlock/badge/)](http://qub-sherlock.readthedocs.io/en/latest/?badge)
 
-[![Coverage Status](https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg)](https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html)
+[![Coverage Status](https://cdn.jsdelivr.net/gh/thespacedoctor/sherlock@master/coverage.svg)](https://cdn.jsdelivr.net/gh/thespacedoctor/sherlock@master/htmlcov/index.html)
 
 *A python package with command-line tools for contextually classifying
 variable/transient astronomical sources. Sherlock mines a library of
