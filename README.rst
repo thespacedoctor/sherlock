@@ -5,8 +5,8 @@ sherlock
     :target: http://qub-sherlock.readthedocs.io/en/latest/?badge
     :alt: Documentation Status
 
-.. image:: https://cdn.rawgit.com/thespacedoctor/sherlock/master/coverage.svg
-    :target: https://cdn.rawgit.com/thespacedoctor/sherlock/master/htmlcov/index.html
+.. image:: https://cdn.jsdelivr.net/gh/thespacedoctor/sherlock@master/coverage.svg
+    :target: https://cdn.jsdelivr.net/gh/thespacedoctor/sherlock@master/htmlcov/index.html
     :alt: Coverage Status
 
 *A python package with command-line tools for contextually classifying variable/transient astronomical sources. Sherlock mines a library of historical and on-going astronomical survey data in an attempt to identify sources transient/variable events, and predict their classifications based on the associated crossmatched data*.

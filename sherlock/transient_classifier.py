@@ -1395,23 +1395,25 @@ class transient_classifier():
         # start_time = time.time()
         # print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
 
-        if updatePeakMagnitudes:
-            sqlQuery = u"""
-                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id= cm.transient_object_id and (cl.annotation is null or cl.dateLastModified is null or cl.dateLastModified > DATE_SUB(NOW(), INTERVAL 30 DAY)) order by  cl.dateLastModified asc limit 100000
-            """ % locals()
+        if not crossmatches:
+            if updatePeakMagnitudes:
+                sqlQuery = u"""
+                    SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id= cm.transient_object_id and ((cl.classification not in ("AGN","CV","BS","VS") AND cm.dateLastModified > DATE_SUB(NOW(), INTERVAL 1 Day))  or cl.annotation is null)
+                    -- SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id= cm.transient_object_id and (cl.annotation is null or cl.dateLastModified is null or cl.dateLastModified > DATE_SUB(NOW(), INTERVAL 30 DAY)) order by  cl.dateLastModified asc limit 100000
+                """ % locals()
+            else:
+                sqlQuery = u"""
+                    SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and cl.summary is null
+                """ % locals()
+
+            rows = readquery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.transientsDbConn,
+                quiet=False
+            )
+
         else:
-            sqlQuery = u"""
-                SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id=cm.transient_object_id and cl.summary is null
-            """ % locals()
-
-        rows = readquery(
-            log=self.log,
-            sqlQuery=sqlQuery,
-            dbConn=self.transientsDbConn,
-            quiet=False
-        )
-
-        if crossmatches:
             rows = crossmatches
 
         # print "FINISHED COLLECTING TRANSIENTS WITH NO ANNOTATIONS/GENERATING ANNOTATIONS: %d" % (time.time() - start_time,)
@@ -1424,12 +1426,15 @@ class transient_classifier():
             log=self.log
         )
 
+        if self.verbose == 0 and cl:
+            return
+
         for row in rows:
 
             annotation, summary, sep = self.generate_match_annotation(
                 match=row, updatePeakMagnitudes=updatePeakMagnitudes)
 
-            if cl and row["rank"] == 1:
+            if cl and self.verbose and row["rank"] == 1:
                 print annotation
 
             update = {
@@ -1523,7 +1528,9 @@ class transient_classifier():
         WHERE
             IFNULL(direct_distance_modulus,
                     distance_modulus) IS NOT NULL
-                AND t.id = s.transient_object_id;""" % locals()
+            AND (s.association_type not in ("AGN","CV","BS","VS") or s.transientAbsMag is null)
+                AND t.id = s.transient_object_id
+                AND (s.dateLastModified!=s.dateCreated and s.dateLastModified > DATE_SUB(NOW(), INTERVAL 1 DAY));""" % locals()
 
         writequery(
             log=self.log,
@@ -1780,6 +1787,8 @@ END""" % locals())
         """
         self.log.debug('starting the ``generate_match_annotation`` method')
 
+        if "catalogue_object_subtype" not in match:
+            match["catalogue_object_subtype"] = None
         catalogue = match["catalogue_table_name"]
         objectId = match["catalogue_object_id"]
         objectType = match["catalogue_object_type"]
