@@ -1530,7 +1530,7 @@ class transient_classifier():
                     distance_modulus) IS NOT NULL
             AND (s.association_type not in ("AGN","CV","BS","VS") or s.transientAbsMag is null)
                 AND t.id = s.transient_object_id
-                AND (s.dateLastModified!=s.dateCreated and s.dateLastModified > DATE_SUB(NOW(), INTERVAL 1 DAY));""" % locals()
+                AND (s.dateLastModified > DATE_SUB(NOW(), INTERVAL 1 DAY));""" % locals()
 
         writequery(
             log=self.log,
@@ -1929,7 +1929,7 @@ END""" % locals())
         if updatePeakMagnitudes:
             if distance:
                 absMag = match["transientAbsMag"]
-                absMag = """ A host %(distance)s implies a transient <em>M =</em> %(absMag)s.""" % locals(
+                absMag = """ A host %(distance)s implies a transient <em>M =</em> %(absMag)s mag.""" % locals(
                 )
             else:
                 absMag = ""
