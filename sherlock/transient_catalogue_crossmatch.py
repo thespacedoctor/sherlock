@@ -820,10 +820,9 @@ class transient_catalogue_crossmatch():
                                 self.settings["galaxy radius stetch factor"],)
                         newAngularSep = row[
                             "major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]
-                    else:
-                        continue
+
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
-                elif row["direct_distance_scale"] and physical_separation_kpc < physicalRadius:
+                if row["direct_distance_scale"] and physical_separation_kpc < physicalRadius and thisMatch == False:
                     if row["separationArcsec"] > 300.:
                         continue
                     thisMatch = True
