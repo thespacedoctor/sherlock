@@ -51,7 +51,7 @@ cataloguesDbConn = dbConns["catalogues"]
 
 try:
     from fundamentals.mysql import writequery
-    sqlQuery = """drop table IF EXISTS tcs_cat_ned_d_v1_0;""" % locals()
+    sqlQuery = """drop table IF EXISTS tcs_cat_ned_stream;""" % locals()
     writequery(
         log=log,
         sqlQuery=sqlQuery,
@@ -61,31 +61,30 @@ except:
     pass
 
 
-class test_ned_d(unittest.TestCase):
+class test_ned(unittest.TestCase):
 
-    def test_ned_d_function(self):
-
-        from sherlock.imports import ned_d
-        catalogue = ned_d(
+    def test_ned_function(self):
+        coordinateList = ["23.2323 -43.23434"]
+        from sherlock.imports import ned
+        catalogue = ned(
             log=log,
             settings=settings,
-            pathToDataFile=pathToInputDir + "/ned_d_test.csv",
-            version="1.0",
-            catalogueName="ned_d"
+            coordinateList=coordinateList,
+            radiusArcsec=300
         )
         catalogue.ingest()
 
-    def test_ned_d_function_exception(self):
+    def test_ned_function_exception(self):
 
-        from sherlock.imports import ned_d
+        from sherlock.imports import ned
         try:
-            this = ned_d(
+            this = ned(
                 log=log,
                 settings=settings,
                 fakeKey="break the code"
             )
             this.get()
             assert False
-        except Exception as e:
+        except Exception, e:
             assert True
             print(str(e))

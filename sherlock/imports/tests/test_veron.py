@@ -86,7 +86,7 @@ class test_veron(unittest.TestCase):
             )
             this.get()
             assert False
-        except Exception, e:
+        except Exception as e:
             assert True
             print(str(e))
 

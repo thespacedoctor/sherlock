@@ -132,7 +132,7 @@ class transient_catalogue_crossmatch():
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in sa.iteritems():
+        for search_name, searchPara in sa.items():
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -179,7 +179,7 @@ class transient_catalogue_crossmatch():
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         if len(nonSynonymTransients) > 0:
-            for search_name, searchPara in sa.iteritems():
+            for search_name, searchPara in sa.items():
                 self.log.debug("""  searching: %(search_name)s""" % locals())
                 for bf in brightnessFilters:
                     if bf not in searchPara:
@@ -229,7 +229,7 @@ class transient_catalogue_crossmatch():
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in sa.iteritems():
+        for search_name, searchPara in sa.items():
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue

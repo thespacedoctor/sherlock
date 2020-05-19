@@ -73,7 +73,7 @@ class test_update_wiki_pages(unittest.TestCase):
             )
             this.update()
             assert False
-        except Exception, e:
+        except Exception as e:
             assert True
             print(str(e))
 

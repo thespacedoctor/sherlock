@@ -86,6 +86,6 @@ class test_ned_d(unittest.TestCase):
             )
             this.get()
             assert False
-        except Exception as e:
+        except Exception, e:
             assert True
             print(str(e))

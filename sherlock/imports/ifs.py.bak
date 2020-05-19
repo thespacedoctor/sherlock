@@ -9,7 +9,6 @@
 :Date Created:
     December 12, 2016
 """
-from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -135,7 +134,7 @@ class ifs(_base_importer):
             thisData = thisData.split("\n")
             status_code = response.status_code
         except requests.exceptions.RequestException:
-            print('HTTP Request failed')
+            print 'HTTP Request failed'
             sys.exit(0)
 
         dictList = []

@@ -46,8 +46,6 @@ Options:
     -u, --update            update the transient database with new classifications and crossmatches
     -v, --version           print the version of sherlock
 """
-from __future__ import print_function
-from __future__ import absolute_import
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -58,8 +56,8 @@ from docopt import docopt
 from fundamentals import tools, times
 from subprocess import Popen, PIPE, STDOUT
 from fundamentals.renderer import list_of_dictionaries
-from .database_cleaner import database_cleaner
-from .commonutils import update_wiki_pages
+from database_cleaner import database_cleaner
+from commonutils import update_wiki_pages
 from sherlock.imports import veron as veronImporter
 from sherlock.imports import ifs as ifsImporter
 from sherlock.imports import ned_d as nedImporter
@@ -270,7 +268,7 @@ def main(arguments=None):
         classifier.classify()
 
     if info:
-        print("sherlock-catalogues")
+        print "sherlock-catalogues"
         wiki = update_wiki_pages(
             log=log,
             settings=settings
@@ -282,20 +280,20 @@ def main(arguments=None):
             listOfDictionaries=table
         )
         tableData = dataSet.reST(filepath=None)
-        print(tableData)
-        print()
+        print tableData
+        print
 
-        print("Crossmatch Streams")
+        print "Crossmatch Streams"
         table = list(wiki._get_stream_view_infos(trimmed=True))
         dataSet = list_of_dictionaries(
             log=log,
             listOfDictionaries=table
         )
         tableData = dataSet.reST(filepath=None)
-        print(tableData)
-        print()
+        print tableData
+        print
 
-        print("Views on Catalogues and Streams")
+        print "Views on Catalogues and Streams"
 
         table = list(wiki._get_view_infos(trimmed=True))
         dataSet = list_of_dictionaries(
@@ -303,7 +301,7 @@ def main(arguments=None):
             listOfDictionaries=table
         )
         tableData = dataSet.reST(filepath=None)
-        print(tableData)
+        print tableData
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()

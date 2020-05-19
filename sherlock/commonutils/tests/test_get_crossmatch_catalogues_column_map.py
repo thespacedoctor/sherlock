@@ -70,7 +70,7 @@ class test_get_crossmatch_catalogues_column_map(unittest.TestCase):
             )
             this.get()
             assert False
-        except Exception, e:
+        except Exception as e:
             assert True
             print(str(e))
 

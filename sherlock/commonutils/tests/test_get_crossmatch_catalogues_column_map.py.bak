@@ -49,43 +49,29 @@ transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
 
-try:
-    from fundamentals.mysql import writequery
-    sqlQuery = """drop table IF EXISTS tcs_cat_ned_d_v1_0;""" % locals()
-    writequery(
-        log=log,
-        sqlQuery=sqlQuery,
-        dbConn=cataloguesDbConn
-    )
-except:
-    pass
+class test_get_crossmatch_catalogues_column_map(unittest.TestCase):
 
+    def test_get_crossmatch_catalogues_column_map_function(self):
 
-class test_ned_d(unittest.TestCase):
-
-    def test_ned_d_function(self):
-
-        from sherlock.imports import ned_d
-        catalogue = ned_d(
+        from sherlock.commonutils import get_crossmatch_catalogues_column_map
+        colMaps = get_crossmatch_catalogues_column_map(
             log=log,
-            settings=settings,
-            pathToDataFile=pathToInputDir + "/ned_d_test.csv",
-            version="1.0",
-            catalogueName="ned_d"
+            dbConn=cataloguesDbConn
         )
-        catalogue.ingest()
 
-    def test_ned_d_function_exception(self):
+    def test_get_crossmatch_catalogues_column_map_function_exception(self):
 
-        from sherlock.imports import ned_d
+        from sherlock.commonutils import get_crossmatch_catalogues_column_map
         try:
-            this = ned_d(
+            this = get_crossmatch_catalogues_column_map(
                 log=log,
                 settings=settings,
                 fakeKey="break the code"
             )
             this.get()
             assert False
-        except Exception as e:
+        except Exception, e:
             assert True
             print(str(e))
+
+    # x-class-to-test-named-worker-function

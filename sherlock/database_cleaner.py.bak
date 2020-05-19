@@ -9,7 +9,6 @@
 :Date Created:
     November 18, 2016
 """
-from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -106,7 +105,7 @@ class database_cleaner():
         self._clean_up_columns()
         self._updated_row_counts_in_tcs_helper_catalogue_tables_info()
 
-        print("`tcs_helper_catalogue_tables_info` & `tcs_helper_catalogue_views_info` database tables updated")
+        print "`tcs_helper_catalogue_tables_info` & `tcs_helper_catalogue_views_info` database tables updated"
 
         self.log.debug('completed the ``get`` method')
         return None
@@ -162,7 +161,7 @@ class database_cleaner():
 
         for row in rows:
             tbName = row["view_name"]
-            print(tbName)
+            print tbName
 
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set number_of_rows = (select count(*) as count from %(tbName)s) where view_name = "%(tbName)s"
@@ -241,7 +240,7 @@ class database_cleaner():
         for tb in tablesInDatabase:
             if tb["TABLE_NAME"] not in tbList:
                 thisTableName = tb["TABLE_NAME"]
-                print("`%(thisTableName)s` added to `tcs_helper_catalogue_tables_info` database table" % locals())
+                print "`%(thisTableName)s` added to `tcs_helper_catalogue_tables_info` database table" % locals()
                 sqlQuery = u"""
                     INSERT INTO tcs_helper_catalogue_tables_info (
                             id,
@@ -403,7 +402,7 @@ class database_cleaner():
         for tb in tablesInDatabase:
             if tb["TABLE_NAME"] not in tbList:
                 thisViewName = tb["TABLE_NAME"]
-                print("`%(thisViewName)s` added to `tcs_helper_catalogue_views_info` database table" % locals())
+                print "`%(thisViewName)s` added to `tcs_helper_catalogue_views_info` database table" % locals()
                 sqlQuery = u"""
                     INSERT INTO tcs_helper_catalogue_views_info (
                             id,

@@ -64,10 +64,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 0.02548233704918263,
-     'followup_id': 2065412,
+     'followup_id': 2065412L,
      'dec': -4.284933417540423,
      'id': 1,
-     'object_classification': 0
+     'object_classification': 0L
      },
 
     {'ps1_designation': u'PS1-13dcr',
@@ -75,10 +75,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 4.754236999477372,
-     'followup_id': 1140386,
+     'followup_id': 1140386L,
      'dec': 28.276703631398625,
      'id': 2,
-     'object_classification': 0
+     'object_classification': 0L
      },
 
     {'ps1_designation': u'PS1-13dhc',
@@ -86,10 +86,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 1.3324973428505413,
-     'followup_id': 1202386,
+     'followup_id': 1202386L,
      'dec': 32.98869220595689,
      'id': 3,
-     'object_classification': 0
+     'object_classification': 0L
      },
 
     {'ps1_designation': u'faint-sdss-star',
@@ -97,10 +97,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 134.74209,
-     'followup_id': 1202386,
+     'followup_id': 1202386L,
      'dec': 59.18086,
      'id': 4,
-     'object_classification': 0
+     'object_classification': 0L
      },
 
     {'ps1_designation': u'faint-sdss-galaxy',
@@ -108,10 +108,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 134.77235,
-     'followup_id': 1202386,
+     'followup_id': 1202386L,
      'dec': 59.20961,
      'id': 5,
-     'object_classification': 0
+     'object_classification': 0L
      },
 
     {'ps1_designation': u'faint-sdss-medium-galaxy',
@@ -119,10 +119,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 134.76298,
-     'followup_id': 1202386,
+     'followup_id': 1202386L,
      'dec': 59.18248,
      'id': 6,
-     'object_classification': 0
+     'object_classification': 0L
      },
 
     {'ps1_designation': u'faint-sdss-bright-star',
@@ -130,10 +130,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 134.81694,
-     'followup_id': 1202386,
+     'followup_id': 1202386L,
      'dec': 59.19204,
      'id': 7,
-     'object_classification': 0
+     'object_classification': 0L
      },
 
     {'ps1_designation': u'faint-sdss-medium-star',
@@ -141,10 +141,10 @@ transients = [
      'detection_list_id': 2,
      'local_comments': u'',
      'ra': 134.84064,
-     'followup_id': 1202386,
+     'followup_id': 1202386L,
      'dec': 59.21254,
      'id': 8,
-     'object_classification': 0
+     'object_classification': 0L
      }
 ]
 
@@ -296,7 +296,7 @@ class test_transient_catalogue_crossmatch(unittest.TestCase):
             classificationType="annotation"
         )
         print(matchedObjects)
-        print()
+        print
 
         search_name = "2mass star"
         searchPara = sa[search_name]
@@ -308,7 +308,7 @@ class test_transient_catalogue_crossmatch(unittest.TestCase):
             classificationType="annotation"
         )
         print(matchedObjects)
-        print()
+        print
 
         search_name = "GSC star 1"
         searchPara = sa[search_name]
@@ -320,7 +320,7 @@ class test_transient_catalogue_crossmatch(unittest.TestCase):
             classificationType="annotation"
         )
         print(matchedObjects)
-        print()
+        print
 
     def test_transient_catalogue_bright_mag_search_catalogue_function(self):
 
@@ -343,7 +343,7 @@ class test_transient_catalogue_crossmatch(unittest.TestCase):
             classificationType="association"
         )
         print(matchedObjects)
-        print()
+        print
 
         search_name = "2mass star"
         searchPara = sa[search_name]
@@ -355,7 +355,7 @@ class test_transient_catalogue_crossmatch(unittest.TestCase):
             classificationType="association"
         )
         print(matchedObjects)
-        print()
+        print
 
         search_name = "GSC star 1"
         searchPara = sa[search_name]
@@ -367,7 +367,7 @@ class test_transient_catalogue_crossmatch(unittest.TestCase):
             classificationType="association"
         )
         print(matchedObjects)
-        print()
+        print
 
     def test_transient_catalogue_crossmatch_function_exception(self):
 
@@ -380,7 +380,7 @@ class test_transient_catalogue_crossmatch(unittest.TestCase):
             )
             this.match()
             assert False
-        except Exception as e:
+        except Exception, e:
             assert True
             print(str(e))
 

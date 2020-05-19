@@ -50,6 +50,8 @@ Options:
     -u, --update            update the transient database with new classifications and crossmatches
     -v, --version           print the version of sherlock
 """
+from __future__ import print_function
+from __future__ import absolute_import
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -60,8 +62,8 @@ import pickle
 from docopt import docopt
 from fundamentals import tools, times
 from fundamentals.renderer import list_of_dictionaries
-from database_cleaner import database_cleaner
-from commonutils import update_wiki_pages
+from .database_cleaner import database_cleaner
+from .commonutils import update_wiki_pages
 from subprocess import Popen, PIPE, STDOUT
 from sherlock.imports import veron as veronImporter
 from sherlock.imports import ifs as ifsImporter
@@ -100,14 +102,14 @@ def main(arguments=None):
 
     # unpack remaining cl arguments using `exec` to setup the variable names
     # automatically
-    for arg, val in arguments.iteritems():
+    for arg, val in arguments.items():
         if arg[0] == "-":
             varname = arg.replace("-", "") + "Flag"
         else:
             varname = arg.replace("<", "").replace(">", "")
             if varname == "import":
                 varname = "iimport"
-        if isinstance(val, str) or isinstance(val, unicode):
+        if isinstance(val, ("".__class__, u"".__class__)) :
             exec(varname + " = '%s'" % (val,))
         else:
             exec(varname + " = %s" % (val,))
@@ -231,7 +233,7 @@ def main(arguments=None):
         classifier.classify()
 
     if info:
-        print "sherlock-catalogues"
+        print("sherlock-catalogues")
         wiki = update_wiki_pages(
             log=log,
             settings=settings
@@ -243,20 +245,20 @@ def main(arguments=None):
             listOfDictionaries=table
         )
         tableData = dataSet.reST(filepath=None)
-        print tableData
-        print
+        print(tableData)
+        print()
 
-        print "Crossmatch Streams"
+        print("Crossmatch Streams")
         table = list(wiki._get_stream_view_infos(trimmed=True))
         dataSet = list_of_dictionaries(
             log=log,
             listOfDictionaries=table
         )
         tableData = dataSet.reST(filepath=None)
-        print tableData
-        print
+        print(tableData)
+        print()
 
-        print "Views on Catalogues and Streams"
+        print("Views on Catalogues and Streams")
 
         table = list(wiki._get_view_infos(trimmed=True))
         dataSet = list_of_dictionaries(
@@ -264,7 +266,7 @@ def main(arguments=None):
             listOfDictionaries=table
         )
         tableData = dataSet.reST(filepath=None)
-        print tableData
+        print(tableData)
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()

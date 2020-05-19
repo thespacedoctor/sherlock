@@ -80,7 +80,7 @@ class test_database_cleaner(unittest.TestCase):
             )
             this.get()
             assert False
-        except Exception, e:
+        except Exception as e:
             assert True
             print(str(e))
 

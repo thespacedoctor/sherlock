@@ -51,7 +51,7 @@ cataloguesDbConn = dbConns["catalogues"]
 
 try:
     from fundamentals.mysql import writequery
-    sqlQuery = """drop table IF EXISTS tcs_cat_ned_d_v1_0;""" % locals()
+    sqlQuery = """drop table IF EXISTS tcs_cat_veron_v1_0;""" % locals()
     writequery(
         log=log,
         sqlQuery=sqlQuery,
@@ -61,31 +61,33 @@ except:
     pass
 
 
-class test_ned_d(unittest.TestCase):
+class test_veron(unittest.TestCase):
 
-    def test_ned_d_function(self):
+    def test_veron_function(self):
 
-        from sherlock.imports import ned_d
-        catalogue = ned_d(
+        from sherlock.imports import veron
+        catalogue = veron(
             log=log,
             settings=settings,
-            pathToDataFile=pathToInputDir + "/ned_d_test.csv",
+            pathToDataFile=pathToInputDir + "/veron-test-data.txt",
             version="1.0",
-            catalogueName="ned_d"
+            catalogueName="veron"
         )
         catalogue.ingest()
 
-    def test_ned_d_function_exception(self):
+    def test_veron_function_exception(self):
 
-        from sherlock.imports import ned_d
+        from sherlock.imports import veron
         try:
-            this = ned_d(
+            this = veron(
                 log=log,
                 settings=settings,
                 fakeKey="break the code"
             )
             this.get()
             assert False
-        except Exception as e:
+        except Exception, e:
             assert True
             print(str(e))
+
+    # x-class-to-test-named-worker-function

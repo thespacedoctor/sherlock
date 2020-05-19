@@ -87,7 +87,7 @@ class catalogue_conesearch():
             # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
             indices, catalogueMatches = cs.search()
 
-            print catalogueMatches
+            print(catalogueMatches)
 
         The output of this search is:
 
@@ -118,7 +118,7 @@ class catalogue_conesearch():
 
             indices, catalogueMatches = cs.search()
             for i, c in zip(indices, catalogueMatches):
-                print i, c
+                print(i, c)
 
         The output of this search is:
 
@@ -257,7 +257,7 @@ class catalogue_conesearch():
         # THE COLUMN MAP LIFTED FROM ``tcs_helper_catalogue_tables_info` TABLE
         # IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')
         columns = {}
-        for k, v in self.colMaps[self.tableName].iteritems():
+        for k, v in self.colMaps[self.tableName].items():
             name = k.replace("ColName", "")
             if "colname" in k.lower() and v:
                 columns[k] = "`%(v)s` as `%(name)s`" % locals()
