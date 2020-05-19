@@ -35,14 +35,14 @@ class update_wiki_pages():
 
         To trigger an update of sherlock's wiki pages to give an overview of the crossmatch table database tables run the following:
 
-        .. code-block:: python 
+        .. code-block:: python
 
             from sherlock.commonutils import update_wiki_pages
             wiki = update_wiki_pages(
                 log=log,
                 settings=settings
             )
-            wiki.update() 
+            wiki.update()
 
     .. todo ::
 
@@ -71,7 +71,6 @@ class update_wiki_pages():
         dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
-        self.pmDbConn = dbConns["marshall"]
 
         self.basicColumns = [
             "view_name",
@@ -99,6 +98,11 @@ class update_wiki_pages():
         if "sherlock wiki root" not in self.settings:
             print "Sherlock wiki settings not found in settings file"
             return
+        else:
+            from os.path import expanduser
+            home = expanduser("~")
+            self.settings["sherlock wiki root"] = self.settings[
+                "sherlock wiki root"].replace("~", home)
 
         staticTableInfo = self._get_table_infos()
         viewInfo = self._get_view_infos()
@@ -122,7 +126,7 @@ class update_wiki_pages():
         self.log.debug('starting the ``_get_table_infos`` method')
 
         sqlQuery = u"""
-            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" and table_name not like "%%stream"  order by number_of_rows desc;
+            SELECT * FROM tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" and table_name not like "%%stream"  order by number_of_rows desc;
         """ % locals()
         tableInfo = readquery(
             log=self.log,
@@ -152,7 +156,7 @@ class update_wiki_pages():
         self.log.debug('starting the ``_get_view_infos`` method')
 
         sqlQuery = u"""
-            SELECT v.*, t.description as "master table" FROM crossmatch_catalogues.tcs_helper_catalogue_views_info as v,  crossmatch_catalogues.tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like "legacy%%" and t.id=v.table_id order by number_of_rows desc
+            SELECT v.*, t.description as "master table" FROM tcs_helper_catalogue_views_info as v,  tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like "legacy%%" and t.id=v.table_id order by number_of_rows desc
         """ % locals()
         viewInfo = readquery(
             log=self.log,
@@ -182,7 +186,7 @@ class update_wiki_pages():
         self.log.debug('starting the ``_get_stream_view_infos`` method')
 
         sqlQuery = u"""
-            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%"  and table_name like "%%stream" order by number_of_rows desc;
+            SELECT * FROM tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%"  and table_name like "%%stream" order by number_of_rows desc;
         """ % locals()
         streamInfo = readquery(
             log=self.log,
@@ -299,7 +303,7 @@ class update_wiki_pages():
         self.mdViews = header + rows
 
         header = u"""
-| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |  
+| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |
 | :--- | :--- | :--- | :--- | :--- |  """
 
         rows = u""

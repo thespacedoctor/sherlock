@@ -176,13 +176,30 @@ class transient_classifier():
         self.dbVersions = dbVersions
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
-        self.pmDbConn = dbConns["marshall"]
+
+        # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
+        self.largeBatchSize = 5000
+        self.miniBatchSize = 100
 
         # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
         if self.ra and self.dec:
             self.cl = True
             if not self.name:
                 self.name = "Transient"
+
+        # ASTROCALC UNIT CONVERTER OBJECT
+        self.converter = unit_conversion(
+            log=self.log
+        )
+
+        if self.ra and not isinstance(self.ra, float) and ":" in self.ra:
+            # ASTROCALC UNIT CONVERTER OBJECT
+            self.ra = self.converter.ra_sexegesimal_to_decimal(
+                ra=self.ra
+            )
+            self.dec = self.converter.dec_sexegesimal_to_decimal(
+                dec=self.dec
+            )
 
         # DATETIME REGEX - EXPENSIVE OPERATION, LET"S JUST DO IT ONCE
         self.reDatetime = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}T')
@@ -243,9 +260,7 @@ class transient_classifier():
         if searchCount > cpuCount:
             searchCount = cpuCount
 
-        largeBatchSize = 5000
-        miniBatchSize = 100
-        self.largeBatchSize = largeBatchSize
+        miniBatchSize = self.miniBatchSize
 
         # print "mini batch size ", str(miniBatchSize)
 
@@ -264,7 +279,7 @@ class transient_classifier():
                     sqlQuery = sqlQuery.replace(
                         "where", "where %(thisInt)s=%(thisInt)s and " % locals())
 
-                if remaining == 1 or remaining < largeBatchSize:
+                if remaining == 1 or remaining < self.largeBatchSize:
                     rows = readquery(
                         log=self.log,
                         sqlQuery=sqlQuery,
@@ -272,7 +287,7 @@ class transient_classifier():
                     )
                     remaining = rows[0]["count(*)"]
                 else:
-                    remaining = remaining - largeBatchSize
+                    remaining = remaining - self.largeBatchSize
 
                 print "%(remaining)s transient sources requiring a classification remain" % locals()
 
@@ -677,8 +692,6 @@ class transient_classifier():
             log=self.log,
             dbSettings=self.settings["database settings"]["static catalogues"]
         ).connect()
-
-        self.allClassifications = []
 
         cm = transient_catalogue_crossmatch(
             log=self.log,
@@ -1421,11 +1434,6 @@ class transient_classifier():
 
         updates = []
 
-        # ASTROCALC UNIT CONVERTER OBJECT
-        self.converter = unit_conversion(
-            log=self.log
-        )
-
         if self.verbose == 0 and cl:
             return
 
@@ -1842,7 +1850,8 @@ END""" % locals())
             else:
                 location = '%(sep)0.1f" from the %(objectType)s core' % locals(
                 )
-        elif match["classificationReliability"] in (2, 3):
+        else:
+            # elif match["classificationReliability"] in (2, 3):
             classificationReliability = "possibly associated"
             n = match["northSeparationArcsec"]
             if n > 0:

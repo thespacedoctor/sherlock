@@ -19,6 +19,7 @@ from sherlock.catalogue_conesearch import catalogue_conesearch
 from astrocalc.distances import converter
 from astrocalc.coords import separations
 import time
+from fundamentals.mysql import database
 
 
 class transient_catalogue_crossmatch():
@@ -44,9 +45,9 @@ class transient_catalogue_crossmatch():
             xmatcher = transient_catalogue_crossmatch(
                 log=log,
                 settings=settings,
-                dbConn=dbConn,
                 colMaps=colMaps,
-                transients=transients
+                transients=transients,
+                dbSettings=settings["database settings"]["static catalogues"]
             )
 
         Then to run the transient through the search algorithm found in the settings file, use the ``match`` method:
@@ -70,10 +71,11 @@ class transient_catalogue_crossmatch():
     def __init__(
             self,
             log,
-            dbConn=False,
             settings=False,
             colMaps=False,
-            transients=[]
+            transients=[],
+            dbSettings=False,
+            dbConn=False
     ):
         self.log = log
         log.debug("instansiating a new 'transient_catalogue_crossmatch' object")
@@ -81,6 +83,12 @@ class transient_catalogue_crossmatch():
         self.settings = settings
         self.transients = transients
         self.colMaps = colMaps
+
+        if dbSettings:
+            self.dbConn = database(
+                log=self.log,
+                dbSettings=dbSettings
+            ).connect()
 
         # xt-self-arg-tmpx
         return None

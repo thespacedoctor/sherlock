@@ -88,7 +88,6 @@ class _base_importer():
         dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
-        self.pmDbConn = dbConns["marshall"]
 
         # OPEN THE FILE TO IMPORT THE DATA FROM
         if pathToDataFile:
@@ -232,7 +231,8 @@ class _base_importer():
             tableName=self.dbTableName,
             dbConn=self.cataloguesDbConn,
             log=self.log,
-            primaryIdColumnName=self.primaryIdColumnName
+            primaryIdColumnName=self.primaryIdColumnName,
+            dbSettings=self.settings["database settings"]["static catalogues"]
         )
 
         self.log.debug('completed the ``add_htmids_to_database_table`` method')

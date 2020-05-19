@@ -1,5 +1,5 @@
-sherlock.commonutils (*subpackage*)
-===================================
+commonutils
+====================================================
 
 .. automodule:: sherlock.commonutils
     :members:
@@ -21,25 +21,9 @@ sherlock.commonutils (*subpackage*)
         
         
         
-            
-                ~get_crossmatch_catalogues_column_map
-           
         
-        
-            
-                ~getpackagepath
-           
-        
-        
-            
-        
-        
-            
-                ~update_wiki_pages
-           
         
     
-        
         
         
         

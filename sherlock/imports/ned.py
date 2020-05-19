@@ -289,7 +289,8 @@ class ned(_base_importer):
             tableName="tcs_helper_ned_query_history",
             dbConn=self.cataloguesDbConn,
             log=self.log,
-            primaryIdColumnName="primaryId"
+            primaryIdColumnName="primaryId",
+            dbSettings=self.settings["database settings"]["static catalogues"]
         )
 
         self.log.debug('completed the ``_update_ned_query_history`` method')

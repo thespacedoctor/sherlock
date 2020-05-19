@@ -60,7 +60,6 @@ class catalogue_conesearch():
             dbConns, dbVersions = db.connect()
             transientsDbConn = dbConns["transients"]
             cataloguesDbConn = dbConns["catalogues"]
-            pmDbConn = dbConns["marshall"]
 
             # GET THE COLUMN MAPS FROM THE CATALOGUE DATABASE
             from sherlock.commonutils import get_crossmatch_catalogues_column_map

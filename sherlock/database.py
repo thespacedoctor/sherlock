@@ -31,7 +31,6 @@ class database():
     The returned dictionary of database connections contain the following databases:
         - ``transients`` -- the database hosting the transient source data
         - ``catalogues`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
-        - ``marshall`` -- connection to the PESSTO Marshall database
 
     **Key Arguments:**
         - ``log`` -- logger
@@ -55,7 +54,6 @@ class database():
             dbConns, dbVersions = db.connect()
             transientsDbConn = dbConns["transients"]
             cataloguesDbConn = dbConns["catalogues"]
-            pmDbConn = dbConns["marshall"]
 
     .. todo ::
 
@@ -86,7 +84,6 @@ class database():
         **Return:**
             - ``transientsDbConn`` -- the database hosting the transient source data
             - ``cataloguesDbConn`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
-            - ``pmDbConn`` -- connection to the PESSTO Marshall database
 
         See the class docstring for usage
 
@@ -114,16 +111,8 @@ class database():
         else:
             transientSettings = False
 
-        # MARSHALL DATABASE OPTIONAL
-        if "pessto marshall" in self.settings[
-                "database settings"]:
-            marshallSettings = self.settings[
-                "database settings"]["pessto marshall"]
-        else:
-            marshallSettings = False
-
         dbConns = []
-        for dbSettings in [transientSettings, catalogueSettings, marshallSettings]:
+        for dbSettings in [transientSettings, catalogueSettings]:
             port = False
             if dbSettings and dbSettings["tunnel"]:
                 port = self._setup_tunnel(
@@ -155,8 +144,7 @@ class database():
         # CREATE A DICTIONARY OF DATABASES
         dbConns = {
             "transients": dbConns[0],
-            "catalogues": dbConns[1],
-            "marshall": dbConns[2]
+            "catalogues": dbConns[1]
         }
 
         dbVersions = {}

@@ -1,40 +1,32 @@
+from __future__ import print_function
+from builtins import str
 import os
-import nose
+import unittest
 import shutil
 import yaml
-from sherlock import catalogue_conesearch, cl_utils
 from sherlock.utKit import utKit
-
 from fundamentals import tools
+from os.path import expanduser
+home = expanduser("~")
+
+packageDirectory = utKit("").get_project_root()
+settingsFile = packageDirectory + "/test_settings.yaml"
 
 su = tools(
-    arguments={"settingsFile": None},
+    arguments={"settingsFile": settingsFile},
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,
-    projectName="sherlock"
+    projectName=None,
+    defaultSettingsFile=False
 )
 arguments, settings, log, dbConn = su.setup()
 
-# # load settings
-# stream = file(
-#     "/Users/Dave/.config/sherlock/sherlock.yaml", 'r')
-# settings = yaml.load(stream)
-# stream.close()
-
-# SETUP AND TEARDOWN FIXTURE FUNCTIONS FOR THE ENTIRE MODULE
+# SETUP PATHS TO COMMON DIRECTORIES FOR TEST DATA
 moduleDirectory = os.path.dirname(__file__)
-utKit = utKit(moduleDirectory)
-log, dbConn, pathToInputDir, pathToOutputDir = utKit.setupModule()
-utKit.tearDownModule()
+pathToInputDir = moduleDirectory + "/input/"
+pathToOutputDir = moduleDirectory + "/output/"
 
-# load settings
-stream = file(
-    pathToInputDir + "/example_settings2.yaml", 'r')
-settings = yaml.load(stream)
-stream.close()
-
-import shutil
 try:
     shutil.rmtree(pathToOutputDir)
 except:
@@ -46,7 +38,8 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-# xt-setup-unit-testing-files-and-folders
+settings["database settings"]["static catalogues"] = settings[
+    "database settings"]["static catalogues2"]
 
 # SETUP ALL DATABASE CONNECTIONS
 from sherlock import database
@@ -57,7 +50,6 @@ db = database(
 dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
-pmDbConn = dbConns["marshall"]
 
 # GET THE COLUMN MAPS FROM THE CATALOGUE DATABASE
 from sherlock.commonutils import get_crossmatch_catalogues_column_map
@@ -78,7 +70,7 @@ class test_catalogue_conesearch(unittest.TestCase):
             dec="-01:58:04.5",
             radiusArcsec=60.,
             colMaps=colMaps,
-            tableName="tcs_view_agn_milliquas_v4_5",
+            tableName="tcs_view_agn_milliquas_v5_2",
             dbConn=cataloguesDbConn,
             nearestOnly=False,
             physicalSearch=False
@@ -86,7 +78,7 @@ class test_catalogue_conesearch(unittest.TestCase):
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
         indices, catalogueMatches = cs.search()
 
-        print catalogueMatches
+        print(catalogueMatches)
 
     def test_catalogue_conesearch_function2(self):
 
@@ -97,7 +89,7 @@ class test_catalogue_conesearch(unittest.TestCase):
             dec=["-01:58:04.5", 30.45671, -25.26721],
             radiusArcsec=60.,
             colMaps=colMaps,
-            tableName="tcs_view_agn_milliquas_v4_5",
+            tableName="tcs_view_agn_milliquas_v5_2",
             dbConn=cataloguesDbConn,
             nearestOnly=False,
             physicalSearch=False
@@ -106,7 +98,7 @@ class test_catalogue_conesearch(unittest.TestCase):
         indices, catalogueMatches = cs.search()
 
         for i, c in zip(indices, catalogueMatches):
-            print i, c
+            print(i, c)
 
     def test_catalogue_conesearch_function_exception(self):
 
@@ -121,8 +113,6 @@ class test_catalogue_conesearch(unittest.TestCase):
             assert False
         except Exception, e:
             assert True
-            print str(e)
-
-        # x-print-testpage-for-pessto-marshall-web-object
+            print(str(e))
 
     # x-class-to-test-named-worker-function

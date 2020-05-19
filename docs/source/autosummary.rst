@@ -1,14 +1,14 @@
 
-Subpackages
------------
+Modules
+-------
 
 .. autosummary::
    :toctree: _autosummary
    :nosignatures:
-   :template: autosummary/subpackage.rst
 
-   sherlock.commonutils
-   sherlock.imports 
+   sherlock.commonutils 
+   sherlock.docstring_test
+   sherlock.utKit 
 
 
 Classes
@@ -18,18 +18,7 @@ Classes
    :toctree: _autosummary
    :nosignatures:
 
-   sherlock.catalogue_conesearch
-   sherlock.commonutils.update_wiki_pages
-   sherlock.database
-   sherlock.database_cleaner
-   sherlock.imports._base_importer
-   sherlock.imports.ifs
-   sherlock.imports.marshall
-   sherlock.imports.ned
-   sherlock.imports.ned_d
-   sherlock.imports.veron
-   sherlock.transient_catalogue_crossmatch
-   sherlock.transient_classifier 
+   sherlock.utKit.utKit 
 
 
 Functions
@@ -39,5 +28,4 @@ Functions
    :toctree: _autosummary
    :nosignatures:
 
-   sherlock.commonutils.get_crossmatch_catalogues_column_map 
-
+   sherlock.docstring_test.docsting_test 
