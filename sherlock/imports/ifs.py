@@ -132,7 +132,7 @@ class ifs(_base_importer):
                 url=self.settings["ifs galaxies url"],
             )
             thisData = response.content
-            thisData = thisData.split("\n")
+            thisData = str(thisData).split("\n")
             status_code = response.status_code
         except requests.exceptions.RequestException:
             print('HTTP Request failed')

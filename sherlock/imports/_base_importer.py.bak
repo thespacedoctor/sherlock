@@ -13,6 +13,7 @@
 
     - document this module
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -98,7 +99,7 @@ class _base_importer():
                 readFile = codecs.open(pathToReadFile, mode='r')
                 self.catData = readFile.read()
                 readFile.close()
-            except IOError, e:
+            except IOError as e:
                 message = 'could not open the file %s' % (pathToReadFile,)
                 self.log.critical(message)
                 raise IOError(message)
@@ -195,7 +196,7 @@ class _base_importer():
 
         self._update_database_helper_table()
 
-        print """Now:
+        print("""Now:
 
 - [ ] edit the `%(dbTableName)s` row in the sherlock catalogues database adding relevant column mappings, catalogue version number etc
 - [ ] retire any previous version of this catlogue in the database. Renaming the catalogue-table by appending `legacy_` and also change the name in the `tcs_helper_catalogue_tables_info` table
@@ -204,7 +205,7 @@ class _base_importer():
 - [ ] switch out the old catalogue table/views in your sherlock search algorithms in the yaml settings files
 - [ ] run a test batch of transients to make sure catalogue is installed as expected
 
-""" % locals()
+""" % locals())
 
         self.log.debug('completed the ``add_data_to_database_table`` method')
         return None

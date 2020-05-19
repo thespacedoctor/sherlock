@@ -10,6 +10,8 @@
     November 18, 2016
 """
 from __future__ import print_function
+from builtins import str
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -23,7 +25,7 @@ from docopt import docopt
 from fundamentals.mysql import readquery
 
 
-class update_wiki_pages():
+class update_wiki_pages(object):
 
     """
     *Update sherlock's github wiki pages with some useful info regarding the crossmatch database catalogue tables*

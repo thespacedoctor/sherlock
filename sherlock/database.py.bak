@@ -247,7 +247,7 @@ class database():
             self.log.debug(
                 """Connected to `%(address)s` on port `%(port)s`""" % locals())
             return True
-        except socket.error, e:
+        except socket.error as e:
             self.log.warning(
                 """Connection to `%(address)s` on port `%(port)s` failed - try again: %(e)s""" % locals())
             return False

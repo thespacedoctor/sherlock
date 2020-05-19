@@ -9,6 +9,7 @@
 :Date Created:
     December 12, 2016
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -155,7 +156,7 @@ class veron(_base_importer):
             if count > 1:
                 # Cursor up one line and clear line
                 sys.stdout.write("\x1b[1A\x1b[2K")
-            print "%(count)s / %(totalCount)s veron data added to memory" % locals()
+            print("%(count)s / %(totalCount)s veron data added to memory" % locals())
 
             if count == 1:
                 theseKeys = []

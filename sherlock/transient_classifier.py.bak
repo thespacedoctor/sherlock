@@ -9,6 +9,7 @@
 :Date Created:
     January  5, 2017
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -289,7 +290,7 @@ class transient_classifier():
                 else:
                     remaining = remaining - self.largeBatchSize
 
-                print "%(remaining)s transient sources requiring a classification remain" % locals()
+                print("%(remaining)s transient sources requiring a classification remain" % locals())
 
                 # START THE TIME TO TRACK CLASSIFICATION SPPED
                 start_time = time.time()
@@ -298,7 +299,7 @@ class transient_classifier():
                 transientsMetadataList = self._get_transient_metadata_from_database_list()
 
                 count = len(transientsMetadataList)
-                print "  now classifying the next %(count)s transient sources" % locals()
+                print("  now classifying the next %(count)s transient sources" % locals())
 
                 # EXAMPLE OF TRANSIENT METADATA
                 # { 'name': 'PS17gx',
@@ -339,10 +340,10 @@ class transient_classifier():
             if len(transientsMetadataList) == 0:
                 if self.daemonMode == False:
                     remaining = 0
-                    print "No transients need classified"
+                    print("No transients need classified")
                     return None, None
                 else:
-                    print "No remaining transients need classified, will try again in 5 mins"
+                    print("No remaining transients need classified, will try again in 5 mins")
                     time.sleep("10")
 
             # FROM THE LOCATIONS OF THE TRANSIENTS, CHECK IF OUR LOCAL NED DATABASE
@@ -370,8 +371,8 @@ class transient_classifier():
                 theseBatches.append(thisBatch)
 
             if self.verbose:
-                print "BATCH SIZE = %(total)s" % locals()
-                print "MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals()
+                print("BATCH SIZE = %(total)s" % locals())
+                print("MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals())
 
             # DEFINE AN INPUT ARRAY
             # cores = psutil.cpu_count()
@@ -381,13 +382,13 @@ class transient_classifier():
             start_time2 = time.time()
 
             if self.verbose:
-                print "START CROSSMATCH"
+                print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=self._crossmatch_transients_against_catalogues,
                                             inputArray=range(len(theseBatches)), poolSize=None, colMaps=colMaps)
 
             if self.verbose:
-                print "FINISH CROSSMATCH/START RANKING: %d" % (time.time() - start_time2,)
+                print("FINISH CROSSMATCH/START RANKING: %d" % (time.time() - start_time2,))
             start_time2 = time.time()
 
             classifications = {}
@@ -438,7 +439,7 @@ class transient_classifier():
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
             if self.verbose:
-                print "FINISH RANKING/START UPDATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+                print("FINISH RANKING/START UPDATING TRANSIENT DB: %d" % (time.time() - start_time2,))
             start_time2 = time.time()
             if self.update and not self.ra:
                 self._update_transient_database(
@@ -449,7 +450,7 @@ class transient_classifier():
                 )
 
             if self.verbose:
-                print "FINISH UPDATING TRANSIENT DB/START ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+                print("FINISH UPDATING TRANSIENT DB/START ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,))
             start_time2 = time.time()
 
             if self.ra:
@@ -463,11 +464,11 @@ class transient_classifier():
             self.update_classification_annotations_and_summaries(
                 self.updatePeakMags)
 
-            print "FINISH ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,)
+            print("FINISH ANNOTATING TRANSIENT DB: %d" % (time.time() - start_time2,))
             start_time2 = time.time()
 
             classificationRate = count / (time.time() - start_time)
-            print "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals()
+            print("Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals())
 
         self.log.debug('completed the ``classify`` method')
         return None, None
@@ -736,8 +737,8 @@ class transient_classifier():
 
         import time
         start_time = time.time()
-        print "UPDATING TRANSIENTS DATABASE WITH RESULTS"
-        print "DELETING OLD RESULTS"
+        print("UPDATING TRANSIENTS DATABASE WITH RESULTS")
+        print("DELETING OLD RESULTS")
 
         now = datetime.now()
         now = now.strftime("%Y-%m-%d_%H-%M-%S-%f")
@@ -752,7 +753,7 @@ class transient_classifier():
         # COMBINE ALL CROSSMATCHES INTO A LIST OF DICTIONARIES TO DUMP INTO
         # DATABASE TABLE
         transientIDs = [str(c)
-                        for c in classifications.keys()]
+                        for c in list(classifications.keys())]
         transientIDs = ",".join(transientIDs)
 
         # REMOVE PREVIOUS MATCHES
@@ -771,7 +772,7 @@ class transient_classifier():
             dbConn=self.transientsDbConn,
         )
 
-        print "FINISHED DELETING OLD RESULTS/ADDING TO CROSSMATCHES: %d" % (time.time() - start_time,)
+        print("FINISHED DELETING OLD RESULTS/ADDING TO CROSSMATCHES: %d" % (time.time() - start_time,))
         start_time = time.time()
 
         if len(crossmatches):
@@ -787,7 +788,7 @@ class transient_classifier():
                     "transients"]
             )
 
-        print "FINISHED ADDING TO CROSSMATCHES/UPDATING CLASSIFICATIONS IN TRANSIENT TABLE: %d" % (time.time() - start_time,)
+        print("FINISHED ADDING TO CROSSMATCHES/UPDATING CLASSIFICATIONS IN TRANSIENT TABLE: %d" % (time.time() - start_time,))
         start_time = time.time()
 
         sqlQuery = ""
@@ -799,7 +800,7 @@ class transient_classifier():
             }
             inserts.append(thisInsert)
 
-        print "FINISHED UPDATING CLASSIFICATIONS IN TRANSIENT TABLE/UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,)
+        print("FINISHED UPDATING CLASSIFICATIONS IN TRANSIENT TABLE/UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,))
         start_time = time.time()
 
         insert_list_of_dictionaries_into_database_tables(
@@ -814,7 +815,7 @@ class transient_classifier():
                 "transients"]
         )
 
-        print "FINISHED UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,)
+        print("FINISHED UPDATING sherlock_classifications TABLE: %d" % (time.time() - start_time,))
         start_time = time.time()
 
         self.log.debug('completed the ``_update_transient_database`` method')
@@ -1162,8 +1163,8 @@ class transient_classifier():
                     classifications[n][0]
             else:
                 headline = n + "'s Predicted Classification: ORPHAN"
-            print headline
-            print "Suggested Associations:"
+            print(headline)
+            print("Suggested Associations:")
 
             myCrossmatches = []
             myCrossmatches[:] = [c for c in crossmatches if c[
@@ -1233,7 +1234,7 @@ class transient_classifier():
             )
             tableData = dataSet.table(filepath=None)
 
-            print tableData
+            print(tableData)
 
         self.log.debug('completed the ``_print_results_to_stdout`` method')
         return None
@@ -1357,7 +1358,7 @@ class transient_classifier():
             elif classType in [2, 3]:
                 annotation.append("is possibly associated with")
 
-            print xm["catalogue_object_id"]
+            print(xm["catalogue_object_id"])
 
         self.log.debug('completed the ``classification_annotations`` method')
         return None
@@ -1443,7 +1444,7 @@ class transient_classifier():
                 match=row, updatePeakMagnitudes=updatePeakMagnitudes)
 
             if cl and self.verbose and row["rank"] == 1:
-                print annotation
+                print(annotation)
 
             update = {
                 "transient_object_id": row["transient_object_id"],

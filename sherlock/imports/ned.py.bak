@@ -9,6 +9,7 @@
 :Date Created:
     December 13, 2016
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -225,7 +226,7 @@ class ned(_base_importer):
         # SEARCHES PERFORMED
         dataList = []
         for i, coord in enumerate(self.coordinateList):
-            if isinstance(coord, str):
+            if isinstance(coord, ("".__class__, u"".__class__)):
                 ra = coord.split(" ")[0]
                 dec = coord.split(" ")[1]
             elif isinstance(coord, tuple) or isinstance(coord, list):
@@ -394,7 +395,7 @@ class ned(_base_importer):
 
         # QUERY NED WITH BATCH
         totalCount = len(self.theseIds)
-        print "requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals()
+        print("requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals())
         # QUERY THE ONLINE NED DATABASE USING NEDDY'S NAMESEARCH METHOD
         search = namesearch(
             log=self.log,
@@ -402,7 +403,7 @@ class ned(_base_importer):
             quiet=True
         )
         results = search.get()
-        print "results returned from ned -- starting to add to database" % locals()
+        print("results returned from ned -- starting to add to database" % locals())
 
         # CLEAN THE RETURNED DATA AND UPDATE DATABASE
         totalCount = len(results)
@@ -412,13 +413,13 @@ class ned(_base_importer):
         for thisDict in results:
             thisDict["tableName"] = tableName
             count += 1
-            for k, v in thisDict.iteritems():
+            for k, v in thisDict.items():
                 if not v or len(v) == 0:
                     thisDict[k] = "null"
                 if k in ["major_diameter_arcmin", "minor_diameter_arcmin"] and (":" in v or "?" in v or "<" in v):
                     thisDict[k] = v.replace(":", "").replace(
                         "?", "").replace("<", "")
-                if isinstance(v, str) and '"' in v:
+                if isinstance(v, ("".__class__, u"".__class__)) and '"' in v:
                     thisDict[k] = v.replace('"', '\\"')
             if "Input name not" not in thisDict["input_note"] and "Same object as" not in thisDict["input_note"]:
                 try:
@@ -460,7 +461,7 @@ class ned(_base_importer):
             dbConn=self.cataloguesDbConn,
         )
 
-        print "%(count)s/%(totalCount)s galaxy metadata batch entries added to database" % locals()
+        print("%(count)s/%(totalCount)s galaxy metadata batch entries added to database" % locals())
         if count < totalCount:
             # Cursor up one line and clear line
             sys.stdout.write("\x1b[1A\x1b[2K")

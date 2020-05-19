@@ -11,6 +11,7 @@
 """
 from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
+from builtins import zip
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -142,7 +143,10 @@ class veron(_base_importer):
             'starting the ``_create_dictionary_of_veron`` method')
 
         dictList = []
-        lines = string.split(self.catData, '\n')
+        try:
+            lines = str.split(self.catData, '\n')
+        except:
+            lines = string.split(self.catData, '\n')
 
         totalCount = len(lines)
         count = 0
@@ -160,7 +164,11 @@ class veron(_base_importer):
 
             if count == 1:
                 theseKeys = []
-                someKeys = string.split(line, '|')
+                try:
+                    someKeys = str.split(line, '|')
+                except:
+                    someKeys = string.split(line, '|')
+
                 for key in someKeys:
                     if key == "_RAJ2000":
                         key = "raDeg"
@@ -195,7 +203,10 @@ class veron(_base_importer):
                 continue
 
             thisDict = {}
-            theseValues = string.split(line, '|')
+            try:
+                theseValues = str.split(line, '|')
+            except:
+                theseValues = string.split(line, '|')
 
             for k, v in zip(theseKeys, theseValues):
                 v = v.strip()

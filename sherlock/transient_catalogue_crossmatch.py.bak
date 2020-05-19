@@ -9,11 +9,7 @@
 :Date Created:
     December 19, 2016
 """
-from __future__ import division
 ################# GLOBAL IMPORTS ####################
-from builtins import zip
-from builtins import object
-from past.utils import old_div
 import sys
 import os
 import math
@@ -26,7 +22,7 @@ import time
 from fundamentals.mysql import database
 
 
-class transient_catalogue_crossmatch(object):
+class transient_catalogue_crossmatch():
     """
     *crossmatch a list of transients against a suite of catalogues according to given search algorithm*
 
@@ -136,7 +132,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
+        for search_name, searchPara in sa.items():
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -183,7 +179,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         if len(nonSynonymTransients) > 0:
-            for search_name, searchPara in list(sa.items()):
+            for search_name, searchPara in sa.items():
                 self.log.debug("""  searching: %(search_name)s""" % locals())
                 for bf in brightnessFilters:
                     if bf not in searchPara:
@@ -233,7 +229,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
+        for search_name, searchPara in sa.items():
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -594,7 +590,7 @@ class transient_catalogue_crossmatch(object):
         # ADD DISTANCE VALUES
         if "distance" in crossmatchDict and crossmatchDict["distance"]:
             direct_distance = crossmatchDict["distance"]
-            direct_distance_scale = old_div(direct_distance, 206.264806)
+            direct_distance_scale = direct_distance / 206.264806
             direct_distance_modulus = 5 * \
                 math.log10(direct_distance * 1e6) - 5
         # crossmatchDict['z'] = z
@@ -719,7 +715,7 @@ class transient_catalogue_crossmatch(object):
                 mag = decimal.Decimal(row[magnitudeLimitFilter])
                 if mag and mag < lowerMagnitudeLimit and mag > upperMagnitudeLimit:
                     sep = decimal.Decimal(row["separationArcsec"])
-                    if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal(old_div((decimal.Decimal(25.) - mag), decimal.Decimal(6.))))):
+                    if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal((decimal.Decimal(25.) - mag) / decimal.Decimal(6.)))):
                         galaxyMatches.append(row)
 
         self.log.debug('completed the ``_galaxy_association_cuts`` method')
@@ -839,13 +835,13 @@ class transient_catalogue_crossmatch(object):
                         continue
                     thisMatch = True
                     newsearch_name = newsearch_name + " (direct distance)"
-                    newAngularSep = old_div(physicalRadius, \
-                        row["direct_distance_scale"])
+                    newAngularSep = physicalRadius / \
+                        row["direct_distance_scale"]
                 # NEW CHECK FOR A REDSHIFT DISTANCE
                 elif row["scale"] and physical_separation_kpc < physicalRadius:
                     thisMatch = True
                     newsearch_name = newsearch_name + " (redshift distance)"
-                    newAngularSep = old_div(physicalRadius, row["scale"])
+                    newAngularSep = physicalRadius / row["scale"]
 
                 if thisMatch == True:
                     row["physical_separation_kpc"] = physical_separation_kpc

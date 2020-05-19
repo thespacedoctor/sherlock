@@ -11,6 +11,7 @@
 """
 from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -22,7 +23,7 @@ from docopt import docopt
 from fundamentals.mysql import readquery, writequery
 
 
-class database_cleaner():
+class database_cleaner(object):
     """*Clean and maintain the database helper tables used by sherlock*
 
     The helper tables list row counts for tables and views and provide the column maps that help sherlock know which catalogue columns relate to which parameters (e.g. RA, DEC etc)

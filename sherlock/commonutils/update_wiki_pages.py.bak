@@ -9,6 +9,7 @@
 :Date Created:
     November 18, 2016
 """
+from __future__ import print_function
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -96,7 +97,7 @@ class update_wiki_pages():
         self.log.debug('starting the ``update`` method')
 
         if "sherlock wiki root" not in self.settings:
-            print "Sherlock wiki settings not found in settings file"
+            print("Sherlock wiki settings not found in settings file")
             return
         else:
             from os.path import expanduser
@@ -406,7 +407,7 @@ class update_wiki_pages():
         cmd = """cd %(gdir)s && git add --all && git commit -m "x" && git pull origin master && git push origin master""" % locals()
         p = Popen(cmd, stdout=PIPE, stdin=PIPE, shell=True)
         output = p.communicate()[0]
-        print output
+        print(output)
         self.log.debug('output: %(output)s' % locals())
 
         self.log.debug('completed the ``_update_github`` method')

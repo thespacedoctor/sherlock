@@ -10,7 +10,9 @@
     December 13, 2016
 """
 from __future__ import print_function
+from __future__ import division
 ################# GLOBAL IMPORTS ####################
+from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -413,7 +415,7 @@ class ned(_base_importer):
         for thisDict in results:
             thisDict["tableName"] = tableName
             count += 1
-            for k, v in thisDict.items():
+            for k, v in list(thisDict.items()):
                 if not v or len(v) == 0:
                     thisDict[k] = "null"
                 if k in ["major_diameter_arcmin", "minor_diameter_arcmin"] and (":" in v or "?" in v or "<" in v):
@@ -507,7 +509,7 @@ class ned(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(self.total / 50000.) + 1
+        self.batches = int(old_div(self.total, 50000.)) + 1
 
         if self.total == 0:
             self.batches = 0

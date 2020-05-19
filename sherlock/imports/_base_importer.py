@@ -15,6 +15,8 @@
 """
 from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
+from builtins import str
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -32,7 +34,7 @@ from fundamentals.renderer import list_of_dictionaries
 from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 
 
-class _base_importer():
+class _base_importer(object):
 
     """
     *The base importer object used to import new catalgues into sherlock-catalogues database*

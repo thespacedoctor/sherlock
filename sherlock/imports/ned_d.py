@@ -10,7 +10,10 @@
     December 15, 2016
 """
 from __future__ import print_function
+from __future__ import division
 ################# GLOBAL IMPORTS ####################
+from builtins import zip
+from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -196,14 +199,14 @@ class ned_d(_base_importer):
             'starting the ``_create_dictionary_of_ned_d`` method')
 
         count = 0
-        with open(self.pathToDataFile, 'rb') as csvFile:
+        with open(self.pathToDataFile, 'r') as csvFile:
             csvReader = csv.reader(
                 csvFile, dialect='excel', delimiter=',', quotechar='"')
             totalRows = sum(1 for row in csvReader)
         csvFile.close()
         totalCount = totalRows
 
-        with open(self.pathToDataFile, 'rb') as csvFile:
+        with open(self.pathToDataFile, 'r') as csvFile:
             csvReader = csv.reader(
                 csvFile, dialect='excel', delimiter=',', quotechar='"')
             theseKeys = []
@@ -254,8 +257,9 @@ class ned_d(_base_importer):
                         sys.stdout.write("\x1b[1A\x1b[2K")
                     if count > totalCount:
                         count = totalCount
-                    percent = (float(count) / float(totalCount)) * 100.
-                    print("%(count)s / %(totalCount)s (%(percent)1.1f%%) rows added to memory" % locals())
+                    percent = (old_div(float(count), float(totalCount))) * 100.
+                    print(
+                        "%(count)s / %(totalCount)s (%(percent)1.1f%%) rows added to memory" % locals())
                     rowDict = {}
                     for t, r in zip(theseKeys, row):
                         rowDict[t] = r
@@ -393,7 +397,7 @@ class ned_d(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(self.total / 3000.) + 1
+        self.batches = int(old_div(self.total, 3000.)) + 1
 
         if self.total == 0:
             self.batches = 0
@@ -475,7 +479,7 @@ class ned_d(_base_importer):
         print("requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals())
         search = namesearch(
             log=self.log,
-            names=self.theseIds.keys(),
+            names=list(self.theseIds.keys()),
             quiet=True
         )
         results = search.get()
@@ -491,7 +495,7 @@ class ned_d(_base_importer):
                    "ned_notes", "eb_v", "raDeg", "radio_morphology", "activity_type", "minor_diameter_arcmin", "decDeg", "redshift_err", "in_ned"]
 
         if not len(results):
-            for k, v in self.theseIds.items():
+            for k, v in list(self.theseIds.items()):
                 dictList.append({
                     "in_ned": 0,
                     "primaryID": v
@@ -500,7 +504,7 @@ class ned_d(_base_importer):
 
             thisDict["tableName"] = tableName
             count += 1
-            for k, v in thisDict.items():
+            for k, v in list(thisDict.items()):
                 if not v or len(v) == 0:
                     thisDict[k] = "null"
                 if k in ["major_diameter_arcmin", "minor_diameter_arcmin"] and (":" in v or "?" in v or "<" in v):
@@ -594,7 +598,7 @@ class ned_d(_base_importer):
 
             if count > totalCount:
                 count = totalCount
-            percent = (float(count) / float(totalCount)) * 100.
+            percent = (old_div(float(count), float(totalCount))) * 100.
 
             primaryID = row["primaryID"]
             raDeg = float(row["raDeg"])

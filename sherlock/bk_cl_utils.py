@@ -102,7 +102,7 @@ def main(arguments=None):
 
     # unpack remaining cl arguments using `exec` to setup the variable names
     # automatically
-    for arg, val in arguments.items():
+    for arg, val in list(arguments.items()):
         if arg[0] == "-":
             varname = arg.replace("-", "") + "Flag"
         else:

@@ -12,8 +12,6 @@
 :noindex:
 """
 ################# GLOBAL IMPORTS ####################
-from builtins import zip
-from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -23,7 +21,7 @@ from HMpTy.mysql import conesearch as hmptyConesearch
 import copy
 
 
-class catalogue_conesearch(object):
+class catalogue_conesearch():
     """
     *The worker class for the conesearch module*
 
@@ -259,11 +257,11 @@ class catalogue_conesearch(object):
         # THE COLUMN MAP LIFTED FROM ``tcs_helper_catalogue_tables_info` TABLE
         # IN CATALOGUE DATABASE (COLUMN NAMES ENDDING WITH 'ColName')
         columns = {}
-        for k, v in list(self.colMaps[self.tableName].items()):
+        for k, v in self.colMaps[self.tableName].items():
             name = k.replace("ColName", "")
             if "colname" in k.lower() and v:
                 columns[k] = "`%(v)s` as `%(name)s`" % locals()
-        columns = ", ".join(list(columns.values()))
+        columns = ", ".join(columns.values())
 
         cs = hmptyConesearch(
             log=self.log,
