@@ -14,13 +14,14 @@ import codecs
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.todo',
               'sphinx.ext.mathjax', 'sphinx.ext.autosummary', 'sphinx.ext.coverage', 'sphinx.ext.linkcode', 'sphinxcontrib.mermaid', 'sphinx_search.extension']
 
+
 class Mock(MagicMock):
     """AVOID INSTALLING THESE C-DEPENDENT PACKAGES"""
     @classmethod
     def __getattr__(cls, name):
         return Mock()
 MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.colors',
-                'matplotlib.pyplot', 'matplotlib.cm', 'matplotlib.path', 'matplotlib.patches', 'matplotlib.projections', 'matplotlib.projections.geo', 'healpy', 'astropy', 'astropy.io', 'pylibmc', 'HMpTy', 'HMpTy.mysql', 'ligo', 'ligo.gracedb', 'ligo.gracedb.rest', 'pandas']
+                'matplotlib.pyplot', 'matplotlib.cm', 'matplotlib.path', 'matplotlib.patches', 'matplotlib.projections', 'matplotlib.projections.geo', 'healpy', 'astropy', 'astropy.io', 'pylibmc', 'ligo', 'ligo.gracedb', 'ligo.gracedb.rest', 'pandas']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # WHERE DOES THIS conf.py FILE LIVE?
@@ -135,6 +136,7 @@ markdown_parser_config = {
     },
 }
 
+
 def updateUsageMd():
     """
     *Grab the usage from cl_utils.py to display in README.md*
@@ -162,6 +164,7 @@ def updateUsageMd():
     writeFile.close()
 
     return None
+
 
 def generateAutosummaryIndex():
 
@@ -320,6 +323,7 @@ Functions
 
     return thisText
 
+
 def findAllSubpackges(
     pathToPackage
 ):
@@ -335,6 +339,7 @@ def findAllSubpackges(
 
     return subPackages
 
+
 def linkcode_resolve(domain, info):
     if domain != 'py':
         return None
@@ -344,6 +349,7 @@ def linkcode_resolve(domain, info):
     if info['fullname']:
         filename += "/" + info['fullname'] + ".py"
     return link_resolver_url + "/" + filename
+
 
 def docstring(app, what, name, obj, options, lines):
 
@@ -398,6 +404,7 @@ def docstring(app, what, name, obj, options, lines):
     lines.clear()
     for line in rst.split("\n"):
         lines.append(line)
+
 
 def setup(app):
     app.connect('autodoc-process-docstring', docstring)

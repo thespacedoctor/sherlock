@@ -1,9 +1,9 @@
-utKit *(class)*
-==============================
+database *(class)*
+===========================
 
-.. currentmodule:: sherlock.utKit
+.. currentmodule:: sherlock
 
-.. autoclass:: utKit
+.. autoclass:: database
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,7 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
-       
-   
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~database.connect
        
    
    .. 
@@ -88,10 +76,12 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~database._checkServer
+   ..      
    .. 
    ..     
-   .. 
-   ..     
+   ..          ~database._setup_tunnel
+   ..      
    .. 
    ..     
    .. 

@@ -1,9 +1,9 @@
-utKit *(module)*
-=========================
+imports *(module)*
+===========================
 
 
 
-.. automodule:: sherlock.utKit
+.. automodule:: sherlock.imports
     :members:
     :undoc-members:
     :show-inheritance:
@@ -11,12 +11,6 @@ utKit *(module)*
     :member-order: groupwise
     
     
-    
-    .. rubric:: Classes
-
-    .. autosummary::
-    
-      ~utKit
     
     
 
@@ -43,8 +37,29 @@ utKit *(module)*
     
     
     
+    
+    
+    
         
-            ~utKit (nice)
+            ~ifs (nice)
+       
+    
+    
+        
+            ~ned (nice)
+       
+    
+    
+        
+            ~ned_d (nice)
+       
+    
+    
+        
+    
+    
+        
+            ~veron (nice)
        
     
     

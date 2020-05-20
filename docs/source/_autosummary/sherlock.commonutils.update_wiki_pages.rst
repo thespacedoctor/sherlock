@@ -1,9 +1,9 @@
-utKit *(class)*
-==============================
+update_wiki_pages *(class)*
+================================================
 
-.. currentmodule:: sherlock.utKit
+.. currentmodule:: sherlock.commonutils
 
-.. autoclass:: utKit
+.. autoclass:: update_wiki_pages
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,7 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
-       
-   
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~update_wiki_pages.update
        
    
    .. 
@@ -88,10 +76,28 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~update_wiki_pages._create_md_tables
+   ..      
    .. 
    ..     
+   ..          ~update_wiki_pages._get_stream_view_infos
+   ..      
    .. 
    ..     
+   ..          ~update_wiki_pages._get_table_infos
+   ..      
+   .. 
+   ..     
+   ..          ~update_wiki_pages._get_view_infos
+   ..      
+   .. 
+   ..     
+   ..          ~update_wiki_pages._update_github
+   ..      
+   .. 
+   ..     
+   ..          ~update_wiki_pages._write_wiki_pages
+   ..      
    .. 
    ..     
    .. 

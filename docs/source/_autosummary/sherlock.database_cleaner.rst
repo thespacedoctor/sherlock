@@ -1,9 +1,9 @@
-utKit *(class)*
-==============================
+database_cleaner *(class)*
+===================================
 
-.. currentmodule:: sherlock.utKit
+.. currentmodule:: sherlock
 
-.. autoclass:: utKit
+.. autoclass:: database_cleaner
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,7 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
-       
-   
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~database_cleaner.clean
        
    
    .. 
@@ -88,10 +76,24 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~database_cleaner._clean_up_columns
+   ..      
    .. 
    ..     
+   ..          ~database_cleaner._create_tcs_help_tables
+   ..      
    .. 
    ..     
+   ..          ~database_cleaner._update_tcs_helper_catalogue_tables_info_with_new_tables
+   ..      
+   .. 
+   ..     
+   ..          ~database_cleaner._update_tcs_helper_catalogue_views_info_with_new_views
+   ..      
+   .. 
+   ..     
+   ..          ~database_cleaner._updated_row_counts_in_tcs_helper_catalogue_tables_info
+   ..      
    .. 
    ..     
    .. 

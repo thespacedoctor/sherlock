@@ -1,9 +1,9 @@
-utKit *(class)*
+ifs *(class)*
 ==============================
 
-.. currentmodule:: sherlock.utKit
+.. currentmodule:: sherlock.imports
 
-.. autoclass:: utKit
+.. autoclass:: ifs
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,11 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
+            ~ifs.add_data_to_database_table
        
    
         
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~ifs.ingest
        
    
    .. 
@@ -88,8 +80,16 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~ifs._add_htmids_to_database_table
+   ..      
    .. 
    ..     
+   ..          ~ifs._create_dictionary_of_IFS
+   ..      
+   .. 
+   ..     
+   ..          ~ifs._update_database_helper_table
+   ..      
    .. 
    ..     
    .. 

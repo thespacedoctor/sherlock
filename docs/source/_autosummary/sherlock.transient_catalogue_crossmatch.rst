@@ -1,9 +1,9 @@
-utKit *(class)*
-==============================
+transient_catalogue_crossmatch *(class)*
+=================================================
 
-.. currentmodule:: sherlock.utKit
+.. currentmodule:: sherlock
 
-.. autoclass:: utKit
+.. autoclass:: transient_catalogue_crossmatch
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,15 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
+            ~transient_catalogue_crossmatch.angular_crossmatch_against_catalogue
        
    
         
-            ~utKit.refresh_database
+            ~transient_catalogue_crossmatch.match
        
    
         
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~transient_catalogue_crossmatch.physical_separation_crossmatch_against_catalogue
        
    
    .. 
@@ -88,6 +84,16 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~transient_catalogue_crossmatch._annotate_crossmatch_with_value_added_parameters
+   ..      
+   .. 
+   ..     
+   ..          ~transient_catalogue_crossmatch._bright_star_match
+   ..      
+   .. 
+   ..     
+   ..          ~transient_catalogue_crossmatch._galaxy_association_cuts
+   ..      
    .. 
    ..     
    .. 

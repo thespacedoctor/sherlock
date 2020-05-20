@@ -1,37 +1,56 @@
-commonutils
-====================================================
+commonutils *(module)*
+===============================
+
+
 
 .. automodule:: sherlock.commonutils
     :members:
-    :private-members:
+    :undoc-members:
     :show-inheritance:
     :inherited-members:
-    :member-order: bysource
+    :member-order: groupwise
+    
+    
+    
+    
 
     
     
-    .. rubric:: Subpackage Members
+    
+
+    
+    
+    
+
+    
+    
+    .. rubric:: Sub-modules
 
     .. autosummary::
     
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
         
+            ~get_crossmatch_catalogues_column_map (nice)
+       
+    
+    
         
+    
+    
         
-        
-        
-        
-        
-        
-        
+            ~update_wiki_pages (nice)
+       
+    
+    
     
     

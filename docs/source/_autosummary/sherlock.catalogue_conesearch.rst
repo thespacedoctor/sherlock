@@ -1,9 +1,9 @@
-utKit *(class)*
-==============================
+catalogue_conesearch *(class)*
+=======================================
 
-.. currentmodule:: sherlock.utKit
+.. currentmodule:: sherlock
 
-.. autoclass:: utKit
+.. autoclass:: catalogue_conesearch
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,27 +19,9 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
+            ~catalogue_conesearch.search
        
    
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
-       
-   
-   .. 
-   ..     
-   .. 
-   ..     
-   .. 
-   ..     
    .. 
    ..     
    .. 

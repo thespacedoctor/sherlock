@@ -1,9 +1,9 @@
-utKit *(class)*
-==============================
+veron *(class)*
+================================
 
-.. currentmodule:: sherlock.utKit
+.. currentmodule:: sherlock.imports
 
-.. autoclass:: utKit
+.. autoclass:: veron
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,11 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
+            ~veron.add_data_to_database_table
        
    
         
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~veron.ingest
        
    
    .. 
@@ -88,8 +80,16 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~veron._add_htmids_to_database_table
+   ..      
    .. 
    ..     
+   ..          ~veron._create_dictionary_of_veron
+   ..      
+   .. 
+   ..     
+   ..          ~veron._update_database_helper_table
+   ..      
    .. 
    ..     
    .. 
