@@ -1601,13 +1601,13 @@ class transient_classifier(object):
 
         crossmatchTable = "sherlock_crossmatches"
         createStatement = """
-CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
+CREATE TABLE IF NOT EXISTS `sherlock_crossmatches` (
   `transient_object_id` bigint(20) unsigned DEFAULT NULL,
-  `catalogue_object_id` varchar(200) DEFAULT NULL,
+  `catalogue_object_id` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `catalogue_table_id` smallint(5) unsigned DEFAULT NULL,
   `separationArcsec` double DEFAULT NULL,
-  `northSeparationArcsec` DOUBLE DEFAULT NULL,
-  `eastSeparationArcsec` DOUBLE DEFAULT NULL,
+  `northSeparationArcsec` double DEFAULT NULL,
+  `eastSeparationArcsec` double DEFAULT NULL,
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `z` double DEFAULT NULL,
   `scale` double DEFAULT NULL,
@@ -1615,17 +1615,17 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `distance_modulus` double DEFAULT NULL,
   `photoZ` double DEFAULT NULL,
   `photoZErr` double DEFAULT NULL,
-  `association_type` varchar(45) DEFAULT NULL,
-  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `association_type` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dateCreated` datetime DEFAULT NULL,
   `physical_separation_kpc` double DEFAULT NULL,
-  `catalogue_object_type` varchar(45) DEFAULT NULL,
-  `catalogue_object_subtype` varchar(45) DEFAULT NULL,
+  `catalogue_object_type` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `catalogue_object_subtype` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `association_rank` int(11) DEFAULT NULL,
-  `catalogue_table_name` varchar(100) DEFAULT NULL,
-  `catalogue_view_name` varchar(100) DEFAULT NULL,
+  `catalogue_table_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `catalogue_view_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rank` int(11) DEFAULT NULL,
   `rankScore` double DEFAULT NULL,
-  `search_name` varchar(100) DEFAULT NULL,
+  `search_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `major_axis_arcsec` double DEFAULT NULL,
   `direct_distance` double DEFAULT NULL,
   `direct_distance_scale` double DEFAULT NULL,
@@ -1666,16 +1666,17 @@ CREATE TABLE IF NOT EXISTS `%(crossmatchTable)s` (
   `GErr` double DEFAULT NULL,
   `unkMag` double DEFAULT NULL,
   `unkMagErr` double DEFAULT NULL,
-  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated` TINYINT NULL DEFAULT 0,
-  `classificationReliability` TINYINT NULL DEFAULT NULL,
-  `transientAbsMag` DOUBLE NULL DEFAULT NULL,
+  `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated` tinyint(4) DEFAULT '0',
+  `classificationReliability` tinyint(4) DEFAULT NULL,
+  `transientAbsMag` double DEFAULT NULL,
+  `merged_rank` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `key_transient_object_id` (`transient_object_id`),
   KEY `key_catalogue_object_id` (`catalogue_object_id`),
   KEY `idx_separationArcsec` (`separationArcsec`),
   KEY `idx_rank` (`rank`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `sherlock_classifications` (
   `transient_object_id` bigint(20) NOT NULL,
