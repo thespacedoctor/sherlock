@@ -67,8 +67,10 @@ from sherlock.imports import ned as nedStreamImporter
 from sherlock.commonutils import update_wiki_pages
 from sherlock import transient_classifier
 
+
 def tab_complete(text, state):
     return (glob.glob(text + '*') + [None])[state]
+
 
 def main(arguments=None):
     """

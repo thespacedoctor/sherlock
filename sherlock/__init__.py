@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from . import cl_utils
 from . import utKit
-from . import cl_utils
 from .database import database
 from .database_cleaner import database_cleaner
 from .catalogue_conesearch import catalogue_conesearch
