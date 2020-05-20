@@ -6,12 +6,8 @@
 :Author:
     David Young
 
-:Date Created:
-    December 16, 2016
-
 :noindex:
 """
-################# GLOBAL IMPORTS ####################
 from builtins import zip
 from builtins import object
 import sys
@@ -22,112 +18,116 @@ from astrocalc.coords import unit_conversion
 from HMpTy.mysql import conesearch as hmptyConesearch
 import copy
 
-
 class catalogue_conesearch(object):
     """
     *The worker class for the conesearch module*
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection to the catalogues database
-        - ``log`` -- logger
-        - ``ra`` -- ra of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
-        - ``dec`` -- dec of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
-        - ``tableName`` -- the name of the database table to perform the conesearch on
-        - ``radius`` -- radius of the conesearch to perform (arcsec)
-        - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
-        - ``nearestOnly`` -- return only the nearest object. Default *False*
-        - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
-        - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
+    **Key Arguments**
+
+    - ``dbConn`` -- mysql database connection to the catalogues database
+    - ``log`` -- logger
+    - ``ra`` -- ra of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
+    - ``dec`` -- dec of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
+    - ``tableName`` -- the name of the database table to perform the conesearch on
+    - ``radius`` -- radius of the conesearch to perform (arcsec)
+    - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
+    - ``nearestOnly`` -- return only the nearest object. Default *False*
+    - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
+    - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
+    
+
         - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
         - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
 
-    **Usage:**
+    **Usage**
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. todo::
+    .. todo::
 
-            - update the package tutorial if needed
+        - update the package tutorial if needed
 
-        The following examples assume you've connected to the various databases and generated the catalogue column maps in the following menner:
+    The following examples assume you've connected to the various databases and generated the catalogue column maps in the following menner:
 
-        .. code-block:: python 
+    ```python
+    # SETUP ALL DATABASE CONNECTIONS
+    from sherlock import database
+    db = database(
+        log=log,
+        settings=settings
+    )
+    dbConns, dbVersions = db.connect()
+    transientsDbConn = dbConns["transients"]
+    cataloguesDbConn = dbConns["catalogues"]
 
-            # SETUP ALL DATABASE CONNECTIONS
-            from sherlock import database
-            db = database(
-                log=log,
-                settings=settings
-            )
-            dbConns, dbVersions = db.connect()
-            transientsDbConn = dbConns["transients"]
-            cataloguesDbConn = dbConns["catalogues"]
+    # GET THE COLUMN MAPS FROM THE CATALOGUE DATABASE
+    from sherlock.commonutils import get_crossmatch_catalogues_column_map
+    colMaps = get_crossmatch_catalogues_column_map(
+        log=log,
+        dbConn=cataloguesDbConn
+    )
+    ```
 
-            # GET THE COLUMN MAPS FROM THE CATALOGUE DATABASE
-            from sherlock.commonutils import get_crossmatch_catalogues_column_map
-            colMaps = get_crossmatch_catalogues_column_map(
-                log=log,
-                dbConn=cataloguesDbConn
-            )
+    To perform a single location conesearch on a catalogue in the database, for example the milliquas AGN catalogue:
 
-        To perform a single location conesearch on a catalogue in the database, for example the milliquas AGN catalogue:
+    ```python
+    from sherlock import catalogue_conesearch
+    cs = catalogue_conesearch(
+        log=log,
+        ra="23:01:07.99",
+        dec="-01:58:04.5",
+        radiusArcsec=60.,
+        colMaps=colMaps,
+        tableName="tcs_view_agn_milliquas_v4_5",
+        dbConn=cataloguesDbConn,
+        nearestOnly=False,
+        physicalSearch=False
+    )
+    # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
+    indices, catalogueMatches = cs.search()
 
-        .. code-block:: python 
+    print(catalogueMatches)
+    ```
 
-            from sherlock import catalogue_conesearch
-            cs = catalogue_conesearch(
-                log=log,
-                ra="23:01:07.99",
-                dec="-01:58:04.5",
-                radiusArcsec=60.,
-                colMaps=colMaps,
-                tableName="tcs_view_agn_milliquas_v4_5",
-                dbConn=cataloguesDbConn,
-                nearestOnly=False,
-                physicalSearch=False
-            )
-            # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
-            indices, catalogueMatches = cs.search()
+    The output of this search is:
 
-            print(catalogueMatches)
+    ```text
+    [{'R': 20.1, 'cmSepArcsec': 0.28015184686564643, 'ra': 345.2832267, 'catalogue_object_subtype': u'QR', 'z': 0.777, 'dec': -1.9679629, 'catalogue_object_id': u'PKS 2258-022'}]        
+    ```
 
-        The output of this search is:
+    Note ``catalogue_conesearch`` can accept coordinates in sexegesimal or decimal degrees (J200). It can also accept lists of corrdinates:
 
-        .. code-block:: text 
+    ```python
+    from sherlock import catalogue_conesearch
+    cs = catalogue_conesearch(
+        log=log,
+        ra=["23:01:07.99", 45.36722, 13.875250],
+        dec=["-01:58:04.5", 30.45671, -25.26721],
+        radiusArcsec=60.,
+    
 
-            [{'R': 20.1, 'cmSepArcsec': 0.28015184686564643, 'ra': 345.2832267, 'catalogue_object_subtype': u'QR', 'z': 0.777, 'dec': -1.9679629, 'catalogue_object_id': u'PKS 2258-022'}]        
-
-        Note ``catalogue_conesearch`` can accept coordinates in sexegesimal or decimal degrees (J200). It can also accept lists of corrdinates:
-
-        .. code-block:: python 
-
-            from sherlock import catalogue_conesearch
-            cs = catalogue_conesearch(
-                log=log,
-                ra=["23:01:07.99", 45.36722, 13.875250],
-                dec=["-01:58:04.5", 30.45671, -25.26721],
-                radiusArcsec=60.,
-                colMaps=colMaps,
-                tableName="tcs_view_agn_milliquas_v4_5",
-                dbConn=cataloguesDbConn,
-                nearestOnly=False,
-                physicalSearch=False
-            )
+            colMaps=colMaps,
+            tableName="tcs_view_agn_milliquas_v4_5",
+            dbConn=cataloguesDbConn,
+            nearestOnly=False,
+            physicalSearch=False
+        )
+        ```
 
         When passing a list of transient coordinates the returned ``indices`` value becomes important as this list identifies which transient is matched with which crossmatch results (and possibly multiple crossmatch results)
 
-        .. code-block:: python
-
-            indices, catalogueMatches = cs.search()
-            for i, c in zip(indices, catalogueMatches):
-                print(i, c)
+        ```python
+        indices, catalogueMatches = cs.search()
+        for i, c in zip(indices, catalogueMatches):
+            print(i, c)
+        ```
 
         The output of this search is:
 
-        .. code-block:: text
-
-            0 {'R': 20.1, 'cmSepArcsec': 0.28015184686564643, 'ra': 345.2832267, 'catalogue_object_subtype': u'QR', 'z': 0.777, 'dec': -1.9679629, 'catalogue_object_id': u'PKS 2258-022'}
-            2 {'R': 19.2, 'cmSepArcsec': 0.81509715903447644, 'ra': 13.875, 'catalogue_object_subtype': u'Q', 'z': 2.7, 'dec': -25.2672223, 'catalogue_object_id': u'Q 0053-2532'}
+        ```text
+        0 {'R': 20.1, 'cmSepArcsec': 0.28015184686564643, 'ra': 345.2832267, 'catalogue_object_subtype': u'QR', 'z': 0.777, 'dec': -1.9679629, 'catalogue_object_id': u'PKS 2258-022'}
+        2 {'R': 19.2, 'cmSepArcsec': 0.81509715903447644, 'ra': 13.875, 'catalogue_object_subtype': u'Q', 'z': 2.7, 'dec': -25.2672223, 'catalogue_object_id': u'Q 0053-2532'}
+        ```
 
     .. todo ::
 
@@ -206,13 +206,16 @@ class catalogue_conesearch(object):
         """
         *trigger the conesearch*
 
-        **Return:**
-            - ``matchIndies`` -- the indicies of the input transient sources (syncs with ``uniqueMatchDicts``)
-            - ``uniqueMatchDicts`` -- the crossmatch results
+        **Return**
 
-        **Usage:**
+        - ``matchIndies`` -- the indicies of the input transient sources (syncs with ``uniqueMatchDicts``)
+        - ``uniqueMatchDicts`` -- the crossmatch results
+        
 
-            See class docstring for usage examples
+        **Usage**
+
+        See class docstring for usage examples
+        
 
         .. todo ::
 

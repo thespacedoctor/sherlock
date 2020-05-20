@@ -48,7 +48,6 @@ dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
-
 # from fundamentals.mysql import writequery
 # sqlQuery = """drop table if exists `tcs_helper_catalogue_tables_info`, `tcs_helper_catalogue_views_info`"""
 # writequery(
@@ -56,7 +55,6 @@ cataloguesDbConn = dbConns["catalogues"]
 #     sqlQuery=sqlQuery,
 #     dbConn=cataloguesDbConn
 # )
-
 
 class test_database_cleaner(unittest.TestCase):
 

@@ -5,12 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 19, 2016
 """
 from __future__ import division
-################# GLOBAL IMPORTS ####################
 from builtins import zip
 from builtins import object
 from past.utils import old_div
@@ -25,40 +21,42 @@ from astrocalc.coords import separations
 import time
 from fundamentals.mysql import database
 
-
 class transient_catalogue_crossmatch(object):
     """
     *crossmatch a list of transients against a suite of catalogues according to given search algorithm*
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection for the catalogues
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
-        - ``transients`` -- the list of transients
+    **Key Arguments**
 
-    **Usage:**
+    - ``dbConn`` -- mysql database connection for the catalogues
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
+    - ``transients`` -- the list of transients
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_).
+    **Usage**
 
-        To initiate a transient_catalogue_crossmatch object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_).
 
-        .. code-block:: python
+    To initiate a transient_catalogue_crossmatch object, use the following:
 
-            from sherlock import transient_catalogue_crossmatch
-            xmatcher = transient_catalogue_crossmatch(
-                log=log,
-                settings=settings,
-                colMaps=colMaps,
-                transients=transients,
-                dbSettings=settings["database settings"]["static catalogues"]
-            )
+    ```python
+    from sherlock import transient_catalogue_crossmatch
+    xmatcher = transient_catalogue_crossmatch(
+        log=log,
+        settings=settings,
+        colMaps=colMaps,
+        transients=transients,
+        dbSettings=settings["database settings"]["static catalogues"]
+    )
+    ```
 
-        Then to run the transient through the search algorithm found in the settings file, use the ``match`` method:
+    Then to run the transient through the search algorithm found in the settings file, use the ``match`` method:
 
-        .. code-block:: python
-
-            classifications = xmatcher.match()
+    ```python
+    classifications = xmatcher.match()
+    ```
+    
 
     .. todo ::
 
@@ -101,8 +99,10 @@ class transient_catalogue_crossmatch(object):
         """
         *match the transients against the sherlock-catalogues according to the search algorithm and return matches alongside the predicted classification(s)*
 
-        **Return:**
-            - ``classification`` -- the crossmatch results and classifications assigned to the transients
+        **Return**
+
+        - ``classification`` -- the crossmatch results and classifications assigned to the transients
+        
 
         See the class docstring for usage.
 
@@ -284,71 +284,75 @@ class transient_catalogue_crossmatch(object):
     ):
         """*perform an angular separation crossmatch against a given catalogue in the database and annotate the crossmatch with some value added parameters (distances, physical separations, sub-type of transient etc)*
 
-        **Key Arguments:**
-            - ``objectList`` -- the list of transient locations to match against the crossmatch catalogue
-            - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
-            - ``search_name`` -- the name of the search as given in the sherlock settings file
-            - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
-            - ``physicalSearch`` -- is this angular search a sub-part of a physical separation search
-            - ``classificationType`` -- synonym, association or annotation. Default *False*
+        **Key Arguments**
 
-         **Return:**
+        - ``objectList`` -- the list of transient locations to match against the crossmatch catalogue
+        - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
+        - ``search_name`` -- the name of the search as given in the sherlock settings file
+        - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
+        - ``physicalSearch`` -- is this angular search a sub-part of a physical separation search
+        - ``classificationType`` -- synonym, association or annotation. Default *False*
+        
+
+         **Return**
+
+         
             - matchedObjects -- any sources matched against the object
 
-        **Usage:**
+        **Usage**
 
-            Take a list of transients from somewhere
+        Take a list of transients from somewhere
 
-            .. code-block:: python 
+        ```python
+        transients = [
+            {'ps1_designation': u'PS1-14aef',
+             'name': u'4L3Piiq',
+             'detection_list_id': 2,
+             'local_comments': u'',
+             'ra': 0.02548233704918263,
+             'followup_id': 2065412L,
+             'dec': -4.284933417540423,
+             'id': 1000006110041705700L,
+             'object_classification': 0L
+             },
 
+            {'ps1_designation': u'PS1-13dcr',
+             'name': u'3I3Phzx',
+             'detection_list_id': 2,
+             'local_comments': u'',
+             'ra': 4.754236999477372,
+             'followup_id': 1140386L,
+             'dec': 28.276703631398625,
+             'id': 1001901011281636100L,
+             'object_classification': 0L
+             },
 
-                transients = [
-                    {'ps1_designation': u'PS1-14aef',
-                     'name': u'4L3Piiq',
-                     'detection_list_id': 2,
-                     'local_comments': u'',
-                     'ra': 0.02548233704918263,
-                     'followup_id': 2065412L,
-                     'dec': -4.284933417540423,
-                     'id': 1000006110041705700L,
-                     'object_classification': 0L
-                     },
+            {'ps1_designation': u'PS1-13dhc',
+             'name': u'3I3Pixd',
+             'detection_list_id': 2,
+             'local_comments': u'',
+             'ra': 1.3324973428505413,
+             'followup_id': 1202386L,
+             'dec': 32.98869220595689,
+             'id': 1000519791325919200L,
+             'object_classification': 0L
+             }
+        ]
+        ```
 
-                    {'ps1_designation': u'PS1-13dcr',
-                     'name': u'3I3Phzx',
-                     'detection_list_id': 2,
-                     'local_comments': u'',
-                     'ra': 4.754236999477372,
-                     'followup_id': 1140386L,
-                     'dec': 28.276703631398625,
-                     'id': 1001901011281636100L,
-                     'object_classification': 0L
-                     },
+        Then run the ``angular_crossmatch_against_catalogue`` method to crossmatch against the catalogues and return results:
 
-                    {'ps1_designation': u'PS1-13dhc',
-                     'name': u'3I3Pixd',
-                     'detection_list_id': 2,
-                     'local_comments': u'',
-                     'ra': 1.3324973428505413,
-                     'followup_id': 1202386L,
-                     'dec': 32.98869220595689,
-                     'id': 1000519791325919200L,
-                     'object_classification': 0L
-                     }
-                ]
-
-            Then run the ``angular_crossmatch_against_catalogue`` method to crossmatch against the catalogues and return results:
-
-            .. code-block:: python 
-
-                # ANGULAR CONESEARCH ON CATALOGUE
-                search_name = "ned_d spec sn"
-                searchPara = self.settings["search algorithm"][search_name]
-                matchedObjects = xmatcher.angular_crossmatch_against_catalogue(
-                    objectList=transients,
-                    searchPara=searchPara,
-                    search_name=search_name
-                )
+        ```python
+        # ANGULAR CONESEARCH ON CATALOGUE
+        search_name = "ned_d spec sn"
+        searchPara = self.settings["search algorithm"][search_name]
+        matchedObjects = xmatcher.angular_crossmatch_against_catalogue(
+            objectList=transients,
+            searchPara=searchPara,
+            search_name=search_name
+        )
+        ```
+        
 
         .. todo ::
 
@@ -531,14 +535,18 @@ class transient_catalogue_crossmatch(object):
             search_name):
         """*annotate each crossmatch with physical parameters such are distances etc*
 
-        **Key Arguments:**
-            - ``crossmatchDict`` -- the crossmatch dictionary
-            - ``catalogueName`` -- the name of the catalogue the crossmatch results from
-            - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
-            - ``search_name`` -- the name of the search as given in the sherlock settings file
+        **Key Arguments**
 
-        **Return:**
-            - ``crossmatchDict`` -- the annotated crossmatch dictionary
+        - ``crossmatchDict`` -- the crossmatch dictionary
+        - ``catalogueName`` -- the name of the catalogue the crossmatch results from
+        - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
+        - ``search_name`` -- the name of the search as given in the sherlock settings file
+        
+
+        **Return**
+
+        - ``crossmatchDict`` -- the annotated crossmatch dictionary
+        
 
         .. todo ::
 
@@ -640,14 +648,18 @@ class transient_catalogue_crossmatch(object):
             lowerMagnitudeLimit):
         """*perform a bright star match on the crossmatch results if required by the catalogue search*
 
-        **Key Arguments:**
-            - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
-            - ``catalogueName`` -- the name of the catalogue the crossmatch results from
-            - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
-            - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match bright stars against
+        **Key Arguments**
 
-        **Return:**
-            - ``brightStarMatches`` -- the trimmed matched sources (bright stars associations only)
+        - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
+        - ``catalogueName`` -- the name of the catalogue the crossmatch results from
+        - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
+        - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match bright stars against
+        
+
+        **Return**
+
+        - ``brightStarMatches`` -- the trimmed matched sources (bright stars associations only)
+        
 
         .. todo ::
 
@@ -685,15 +697,19 @@ class transient_catalogue_crossmatch(object):
             lowerMagnitudeLimit):
         """*perform a bright star match on the crossmatch results if required by the catalogue search*
 
-        **Key Arguments:**
-            - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
-            - ``catalogueName`` -- the name of the catalogue the crossmatch results from
-            - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
-            - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match general galaxies against
-            - ``upperMagnitudeLimit`` -- the upper magnitude limit to match general galaxies against
+        **Key Arguments**
 
-        **Return:**
-            - ``galaxyMatches`` -- the trimmed matched sources (associated galaxies only)
+        - ``matchedObjects`` -- the list of matched sources from the catalogue crossmatch
+        - ``catalogueName`` -- the name of the catalogue the crossmatch results from
+        - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
+        - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match general galaxies against
+        - ``upperMagnitudeLimit`` -- the upper magnitude limit to match general galaxies against
+        
+
+        **Return**
+
+        - ``galaxyMatches`` -- the trimmed matched sources (associated galaxies only)
+        
 
         .. todo ::
 
@@ -737,29 +753,34 @@ class transient_catalogue_crossmatch(object):
 
         This search is basically the same as the angular separation search except extra filtering is done to exclude sources outside the physical search radius (matched sources require distance info to calulate physical separations)
 
-        **Key Arguments:**
-            - ``objectList`` -- transients to be crossmatched
-            - ``searchPara`` -- parameters of the search (from settings file)
-            - ``search_name`` -- the name of the search
-            - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
-            - ``classificationType`` -- synonym, association or annotation. Default *False*
+        **Key Arguments**
 
-        **Return:**
-            - matchedObjects -- any sources matched against the object
+        - ``objectList`` -- transients to be crossmatched
+        - ``searchPara`` -- parameters of the search (from settings file)
+        - ``search_name`` -- the name of the search
+        - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
+        - ``classificationType`` -- synonym, association or annotation. Default *False*
+        
+
+        **Return**
+
+        - matchedObjects -- any sources matched against the object
+        
 
         To run a physical separation crossmatch, run in a similar way to the angular separation crossmatch:
 
-        **Usage:**
+        **Usage**
 
-            .. code-block:: python 
-
-                search_name = "ned spec sn"
-                searchPara = self.settings["search algorithm"][search_name]
-                matchedObjects = xmatcher.physical_separation_crossmatch_against_catalogue(
-                    objectList=transients,
-                    searchPara=searchPara,
-                    search_name=search_name
-                )
+        ```python
+        search_name = "ned spec sn"
+        searchPara = self.settings["search algorithm"][search_name]
+        matchedObjects = xmatcher.physical_separation_crossmatch_against_catalogue(
+            objectList=transients,
+            searchPara=searchPara,
+            search_name=search_name
+        )
+        ```
+        
 
         .. todo ::
 

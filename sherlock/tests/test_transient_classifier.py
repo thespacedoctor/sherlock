@@ -59,7 +59,6 @@ directory_script_runner(
     dbConn=transientsDbConn
 )
 
-
 class test_transient_classifier(unittest.TestCase):
 
     def test_transient_update_classified_annotations_function(self):

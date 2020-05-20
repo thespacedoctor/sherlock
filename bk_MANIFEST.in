@@ -1,9 +1,0 @@
-include README.md
-include README.rst
-include *.yaml
-include *.txt
-include *.md
-include *.rst
-recursive-include sherlock *
-global-exclude *.pyo
-global-exclude *.pyc

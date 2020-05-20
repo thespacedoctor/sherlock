@@ -5,13 +5,9 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 15, 2016
 """
 from __future__ import print_function
 from __future__ import division
-################# GLOBAL IMPORTS ####################
 from builtins import zip
 from past.utils import old_div
 import sys
@@ -32,34 +28,35 @@ from neddy import namesearch
 from docopt import docopt
 from ._base_importer import _base_importer
 
-
 class ned_d(_base_importer):
-
     """
     *Import the * `NED-D <https://ned.ipac.caltech.edu/Library/Distances/>`_ *galaxy catalogue in to the sherlock-catalogues database*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``pathToDataFile`` -- path to the ned_d data file
-        - ``version`` -- version of the ned_d catalogue
-        - ``catalogueName`` -- the name of the catalogue
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``pathToDataFile`` -- path to the ned_d data file
+    - ``version`` -- version of the ned_d catalogue
+    - ``catalogueName`` -- the name of the catalogue
+    
 
-        To import the ned_d catalogue catalogue, run the following:
+    **Usage**
 
-        .. code-block:: python 
+    To import the ned_d catalogue catalogue, run the following:
 
-            from sherlock.imports import ned_d
-            catalogue = ned_d(
-                log=log,
-                settings=settings,
-                pathToDataFile="/path/to/ned_d.txt",
-                version="1.0",
-                catalogueName="ned_d"
-            )
-            catalogue.ingest()
+    ```python
+    from sherlock.imports import ned_d
+    catalogue = ned_d(
+        log=log,
+        settings=settings,
+        pathToDataFile="/path/to/ned_d.txt",
+        version="1.0",
+        catalogueName="ned_d"
+    )
+    catalogue.ingest()
+    ```
+    
 
     .. todo ::
 
@@ -72,12 +69,12 @@ class ned_d(_base_importer):
 
         The method first generates a list of python dictionaries from the ned_d datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
-        **Usage:**
+        **Usage**
 
-            See class docstring for usage
+        See class docstring for usage
+        
 
         .. todo ::
-
 
             - update docstring text
             - check sublime snippet exists
@@ -182,8 +179,10 @@ class ned_d(_base_importer):
             self):
         """create a list of dictionaries containing all the rows in the ned_d catalogue
 
-        **Return:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the ned_d catalogue
+        **Return**
+
+        - ``dictList`` - a list of dictionaries containing all the rows in the ned_d catalogue
+        
 
         .. todo ::
 
@@ -369,8 +368,10 @@ class ned_d(_base_importer):
             self):
         """ count galaxies requiring metadata
 
-        **Return:**
-            - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+        **Return**
+
+        - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+        
 
         .. todo ::
 
@@ -410,8 +411,10 @@ class ned_d(_base_importer):
             self):
         """ get 3000 galaxies needing metadata
 
-        **Return:**
-            - ``len(self.theseIds)`` -- the number of NED IDs returned
+        **Return**
+
+        - ``len(self.theseIds)`` -- the number of NED IDs returned
+        
 
         .. todo ::
 
@@ -452,8 +455,10 @@ class ned_d(_base_importer):
             batchCount):
         """ query ned and add results to database
 
-        **Key Arguments:**
-            - ``batchCount`` - the index number of the batch sent to NED
+        **Key Arguments**
+
+        - ``batchCount`` - the index number of the batch sent to NED
+        
 
         .. todo ::
 

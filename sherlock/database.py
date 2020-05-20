@@ -5,11 +5,7 @@
 
 :Author:
     David Young
-
-:Date Created:
-    November 18, 2016
 """
-################# GLOBAL IMPORTS ####################
 from builtins import object
 import sys
 import os
@@ -24,7 +20,6 @@ import pymysql as ms
 from docopt import docopt
 from fundamentals.mysql import readquery
 
-
 class database(object):
     """
     *the database object for sherlock, setting up ssh tunnels and various database connections*
@@ -33,28 +28,33 @@ class database(object):
         - ``transients`` -- the database hosting the transient source data
         - ``catalogues`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Return:**
-        - ``dbConns`` -- a dictionary of the database connections required by sherlock
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    
 
-    **Usage:**
+    **Return**
 
-        To setup the sherlock database connections, run the following:
+    - ``dbConns`` -- a dictionary of the database connections required by sherlock
+    
 
-        .. code-block:: python 
+    **Usage**
 
-            # SETUP ALL DATABASE CONNECTIONS
-            from sherlock import database
-            db = database(
-                log=log,
-                settings=settings
-            )
-            dbConns, dbVersions = db.connect()
-            transientsDbConn = dbConns["transients"]
-            cataloguesDbConn = dbConns["catalogues"]
+    To setup the sherlock database connections, run the following:
+
+    ```python
+    # SETUP ALL DATABASE CONNECTIONS
+    from sherlock import database
+    db = database(
+        log=log,
+        settings=settings
+    )
+    dbConns, dbVersions = db.connect()
+    transientsDbConn = dbConns["transients"]
+    cataloguesDbConn = dbConns["catalogues"]
+    ```
+    
 
     .. todo ::
 
@@ -82,9 +82,11 @@ class database(object):
     def connect(self):
         """connect to the various databases, the credientals and settings of which are found in the sherlock settings file
 
-        **Return:**
-            - ``transientsDbConn`` -- the database hosting the transient source data
-            - ``cataloguesDbConn`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
+        **Return**
+
+        - ``transientsDbConn`` -- the database hosting the transient source data
+        - ``cataloguesDbConn`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
+        
 
         See the class docstring for usage
 
@@ -174,11 +176,15 @@ class database(object):
         """
         *setup a ssh tunnel for a database connection to port through*
 
-        **Key Arguments:**
-            - ``tunnelParameters`` -- the tunnel parameters found associated with the database settings
+        **Key Arguments**
 
-        **Return:**
-            - ``sshPort`` -- the port the ssh tunnel is connected via
+        - ``tunnelParameters`` -- the tunnel parameters found associated with the database settings
+        
+
+        **Return**
+
+        - ``sshPort`` -- the port the ssh tunnel is connected via
+        
 
         .. todo ::
 

@@ -5,12 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    November 18, 2016
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
 from builtins import object
 import sys
 import os
@@ -22,31 +18,33 @@ from fundamentals import tools, times
 from docopt import docopt
 from fundamentals.mysql import readquery, writequery
 
-
 class database_cleaner(object):
     """*Clean and maintain the database helper tables used by sherlock*
 
     The helper tables list row counts for tables and views and provide the column maps that help sherlock know which catalogue columns relate to which parameters (e.g. RA, DEC etc)
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-     **Usage:**
+    - ``dbConn`` -- mysql database connection
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    
 
-        .. todo::
+     **Usage**
 
-            - add an entry in the tutorial to clean database tables
+     .. todo::
 
-        .. code-block:: python 
+        - add an entry in the tutorial to clean database tables
+     
 
-            from sherlock.database_cleaner import database_cleaner
-            db = database_cleaner(
-                log=log,
-                settings=settings
-            )
-            db.clean()
+        ```python
+        from sherlock.database_cleaner import database_cleaner
+        db = database_cleaner(
+            log=log,
+            settings=settings
+        )
+        db.clean()
+        ```
 
     .. todo ::
 
@@ -429,13 +427,19 @@ class database_cleaner(object):
             self):
         """* create tcs help tables*
 
-        **Key Arguments:**
-            # -
+        **Key Arguments**
 
-        **Return:**
-            - None
+        # -
+        
 
-        **Usage:**
+        **Return**
+
+        - None
+        
+
+        **Usage**
+
+        
 
         ```python
         usage code 

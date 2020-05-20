@@ -23,6 +23,3 @@ Documentation for sherlock is hosted by [Read the Docs](https://sherlock.readthe
 ## Features
 
 * 
-
-
-

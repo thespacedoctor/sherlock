@@ -6,15 +6,11 @@
 :Author:
     David Young
 
-:Date Created:
-    November 18, 2016
-
 .. todo ::
 
     - document this module
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
 from builtins import str
 from builtins import object
 import sys
@@ -33,29 +29,30 @@ from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables,
 from fundamentals.renderer import list_of_dictionaries
 from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 
-
 class _base_importer(object):
-
     """
     *The base importer object used to import new catalgues into sherlock-catalogues database*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``pathToDataFIle`` -- path to the file containing the data to import
-        - ``version`` -- version number of the catalogue to be imported (e.g. DR12)
-        - ``catalogueName`` -- name of the catalogue to be imported
-        - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
-        - ``radiusArcsec`` -- the radius in arcsec with which to perform the initial NED conesearch. Default *False*
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``pathToDataFIle`` -- path to the file containing the data to import
+    - ``version`` -- version number of the catalogue to be imported (e.g. DR12)
+    - ``catalogueName`` -- name of the catalogue to be imported
+    - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
+    - ``radiusArcsec`` -- the radius in arcsec with which to perform the initial NED conesearch. Default *False*
+    
 
-        To use this base class to write a new importer, create your class like so:
+    **Usage**
 
-            .. code-block:: python 
+    To use this base class to write a new importer, create your class like so:
 
-                class newImporter(_base_importer):
-                    ...
+        ```python
+        class newImporter(_base_importer):
+            ...
+        ```
+    
     """
     # INITIALISATION
 
@@ -142,18 +139,21 @@ class _base_importer(object):
 
         Also adds HTMIDs and updates the sherlock-catalogue database helper table with the time-stamp of when the imported catlogue was last updated
 
-        **Key Arguments:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the catalogue to be imported
-            - ``createStatement`` - the table's mysql create statement (used to generate table if it does not yet exist in database). Default *False*
+        **Key Arguments**
 
-        **Usage:**
+        - ``dictList`` - a list of dictionaries containing all the rows in the catalogue to be imported
+        - ``createStatement`` - the table's mysql create statement (used to generate table if it does not yet exist in database). Default *False*
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                self.add_data_to_database_table(
-                    dictList=dictList,
-                    createStatement=createStatement
-                )
+        ```python
+        self.add_data_to_database_table(
+            dictList=dictList,
+            createStatement=createStatement
+        )
+        ```
+        
 
         .. todo ::
 
@@ -216,11 +216,12 @@ class _base_importer(object):
             self):
         """*Add HTMIDs to database table once all the data has been imported (HTM Levels 10,13,16)*
 
-        **Usage:**
+        **Usage**
 
-            .. code-block:: python 
-
-                self._add_htmids_to_database_table()
+        ```python
+        self._add_htmids_to_database_table()
+        ```
+        
         """
         self.log.debug('starting the ``add_htmids_to_database_table`` method')
 
@@ -245,11 +246,12 @@ class _base_importer(object):
             self):
         """*Update the sherlock catalogues database helper table with the time-stamp of when this catlogue was last updated*
 
-        **Usage:**
+        **Usage**
 
-            .. code-block:: python 
-
-                self._update_database_helper_table()
+        ```python
+        self._update_database_helper_table()
+        ```
+        
         """
         self.log.debug('starting the ``_update_database_helper_table`` method')
 

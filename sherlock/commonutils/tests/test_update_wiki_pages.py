@@ -50,7 +50,6 @@ dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
-
 class test_update_wiki_pages(unittest.TestCase):
 
     def test_update_wiki_pages_function(self):

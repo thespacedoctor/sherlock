@@ -48,7 +48,6 @@ dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
-
 class test_ifs(unittest.TestCase):
 
     def test_ifs_function(self):

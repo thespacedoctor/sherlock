@@ -5,9 +5,6 @@
 
 :Author:
     David Young
-
-:Date Created:
-    November 18, 2016
 """
 from __future__ import print_function
 from builtins import str
@@ -24,28 +21,29 @@ import pickle
 from docopt import docopt
 from fundamentals.mysql import readquery
 
-
 class update_wiki_pages(object):
-
     """
     *Update sherlock's github wiki pages with some useful info regarding the crossmatch database catalogue tables*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    
 
-        To trigger an update of sherlock's wiki pages to give an overview of the crossmatch table database tables run the following:
+    **Usage**
 
-        .. code-block:: python
+    To trigger an update of sherlock's wiki pages to give an overview of the crossmatch table database tables run the following:
 
-            from sherlock.commonutils import update_wiki_pages
-            wiki = update_wiki_pages(
-                log=log,
-                settings=settings
-            )
-            wiki.update()
+    ```python
+    from sherlock.commonutils import update_wiki_pages
+    wiki = update_wiki_pages(
+        log=log,
+        settings=settings
+    )
+    wiki.update()
+    ```
+    
 
     .. todo ::
 
@@ -219,13 +217,17 @@ class update_wiki_pages(object):
     ):
         """generate markdown format tables from the database query results
 
-        **Key Arguments:**
-            - ``tableData`` -- the sherlock-catalogues database table metadata.
-            - ``viewData`` -- the sherlock-catalogues database view metadata.
-            - ``streamData`` -- the sherlock-catalogues database streamed data tables' metadata.
+        **Key Arguments**
 
-        **Return:**
-            - None
+        - ``tableData`` -- the sherlock-catalogues database table metadata.
+        - ``viewData`` -- the sherlock-catalogues database view metadata.
+        - ``streamData`` -- the sherlock-catalogues database streamed data tables' metadata.
+        
+
+        **Return**
+
+        - None
+        
         """
         self.log.debug('starting the ``_create_md_tables`` method')
 

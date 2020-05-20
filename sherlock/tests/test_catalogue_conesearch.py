@@ -59,7 +59,6 @@ colMaps = get_crossmatch_catalogues_column_map(
     dbConn=cataloguesDbConn
 )
 
-
 class test_catalogue_conesearch(unittest.TestCase):
 
     def test_catalogue_conesearch_function(self):

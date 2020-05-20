@@ -48,7 +48,6 @@ dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
-
 class test_get_crossmatch_catalogues_column_map(unittest.TestCase):
 
     def test_get_crossmatch_catalogues_column_map_function(self):

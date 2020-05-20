@@ -5,12 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 12, 2016
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
 from builtins import zip
 import sys
 import os
@@ -24,26 +20,28 @@ import re
 from docopt import docopt
 from ._base_importer import _base_importer
 
-
 class veron(_base_importer):
-
     """
     *importer object for the* `VERON AGN catalogue <http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258>`_
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``pathToDataFIle`` -- path to the veron data file
-        - ``version`` -- version of the veron catalogue
+    **Key Arguments**
 
-    **Usage:**
+    - ``dbConn`` -- mysql database connection
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``pathToDataFIle`` -- path to the veron data file
+    - ``version`` -- version of the veron catalogue
+    
 
-      To import the veron catalogue catalogue, run the following:
+    **Usage**
 
-      .. code-block:: python 
+    To import the veron catalogue catalogue, run the following:
+    
 
-        from sherlock.imports import veron
+      ```python
+      from sherlock.imports import veron
+      ```
+
         catalogue = veron(
             log=log,
             settings=settings,
@@ -70,7 +68,6 @@ class veron(_base_importer):
         - check sublime snippet exists
         - clip any useful text to docs mindmap
         - regenerate the docs and check redendering of this docstring
-
     """
     # INITIALISATION
 
@@ -126,8 +123,10 @@ class veron(_base_importer):
             self):
         """create a list of dictionaries containing all the rows in the veron catalogue
 
-        **Return:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue
+        **Return**
+
+        - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue
+        
 
         .. todo ::
 

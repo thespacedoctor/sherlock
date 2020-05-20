@@ -5,12 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 12, 2016
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -26,23 +22,25 @@ from astrocalc.coords import unit_conversion
 from fundamentals.download import multiobject_download
 from ._base_importer import _base_importer
 
-
 class ifs(_base_importer):
-
     """
     *Importer for the Multi Unit Spectroscopic Explorer (MUSE) IFS galaxy catalogue stream*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    
 
-      To import the IFS catalogue stream into the sherlock-catalogues database, run the following:
+    **Usage**
 
-      .. code-block:: python 
+    To import the IFS catalogue stream into the sherlock-catalogues database, run the following:
+    
 
-        from sherlock.imports import IFS
+      ```python
+      from sherlock.imports import IFS
+      ```
+
         stream = IFS(
             log=log,
             settings=settings
@@ -61,9 +59,10 @@ class ifs(_base_importer):
 
         The method first generates a list of python dictionaries from the IFS datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
-        **Usage:**
+        **Usage**
 
-            See class docstring for usage
+        See class docstring for usage
+        
         """
         self.log.debug('starting the ``get`` method')
 
@@ -109,19 +108,22 @@ class ifs(_base_importer):
             self):
         """*Generate the list of dictionaries containing all the rows in the IFS stream*
 
-        **Return:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the IFS stream
+        **Return**
 
-        **Usage:**
+        - ``dictList`` - a list of dictionaries containing all the rows in the IFS stream
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                from sherlock.imports import IFS
-                stream = IFS(
-                    log=log,
-                    settings=settings
-                )
-                dictList = stream._create_dictionary_of_IFS()
+        ```python
+        from sherlock.imports import IFS
+        stream = IFS(
+            log=log,
+            settings=settings
+        )
+        dictList = stream._create_dictionary_of_IFS()
+        ```
+        
         """
         self.log.debug(
             'starting the ``_create_dictionary_of_IFS`` method')

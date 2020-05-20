@@ -48,7 +48,6 @@ dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
-
 try:
     from fundamentals.mysql import writequery
     sqlQuery = """drop table IF EXISTS tcs_cat_ned_d_v1_0;""" % locals()
@@ -59,7 +58,6 @@ try:
     )
 except:
     pass
-
 
 class test_ned_d(unittest.TestCase):
 

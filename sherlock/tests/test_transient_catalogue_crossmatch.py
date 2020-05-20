@@ -51,7 +51,6 @@ dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
-
 from sherlock.commonutils import get_crossmatch_catalogues_column_map
 colMaps = get_crossmatch_catalogues_column_map(
     log=log,
@@ -161,9 +160,7 @@ transients = [
 #      }
 # ]
 
-
 sa = settings["search algorithm"]
-
 
 class test_transient_catalogue_crossmatch(unittest.TestCase):
 
