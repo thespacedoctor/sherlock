@@ -1,0 +1,472 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sherlock.imports.ned module &mdash; sherlock v2.0.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/whistles-theme/Contents/Resources/core.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/whistles-theme/Contents/Resources/style.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/whistles-theme/Contents/Resources/dryx.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/rtd_sphinx_search.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/whistles-theme/Contents/Resources/main.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          messageStyle: "none",
+          tex2jax: {preview: "none"}
+        });
+    </script>
+  
+  <!-- REMOTE SCRIPTS AND STYLES -->
+
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot-number.min.css">
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/monokai-sublime.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.4/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.11.3/flowchart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot.min.js"></script>
+
+  
+
+
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+          
+
+
+          
+              
+          
+
+
+<!--           
+            <a href="../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../_static/thespacedoctor_icon_white_circle.png" class="logo" alt="Logo"/>
+          
+          </a> -->
+
+
+
+          
+            <a href="../index.html" class="icon icon-home"> sherlock</a> <p>mine a library of historical and on-going astronomical survey data in an attempt to identify the sources of transient/variable events, and predict their classifications based on crossmatched data</p> <a href="../index.html"><img src="../_static/thespacedoctor_icon_white_circle.png" class="logo" alt="Logo"/> </a>
+          
+
+
+          
+          
+            
+            
+              <div class="version">
+                v2.0.3
+              </div>
+            
+          
+
+          
+              <a class="github-button" href="https://github.com/thespacedoctor/sherlock" data-size="large" data-show-count="true" aria-label="Star thespacedoctor/sherlock on GitHub">Star</a>
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../initialisation.html">Initialisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../todolist.html">Todo List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes_link.html">Release Notes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">A-Z Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>sherlock.imports.ned module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_api/sherlock.imports.ned.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-sherlock.imports.ned">
+<span id="sherlock-imports-ned-module"></span><h1>sherlock.imports.ned module<a class="headerlink" href="#module-sherlock.imports.ned" title="Permalink to this headline">  ∞</a></h1>
+<p><em>Import ned stream into sherlock-catalogues database</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>David Young</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt id="sherlock.imports.ned.ned">
+<em class="property">class </em><code class="sig-name descname">ned</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log</span></em>, <em class="sig-param"><span class="n">settings</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">pathToDataFile</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">catalogueName</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">coordinateList</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">radiusArcsec</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sherlock.imports._base_importer.html#sherlock.imports._base_importer._base_importer" title="sherlock.imports._base_importer._base_importer"><code class="xref py py-class docutils literal notranslate"><span class="pre">sherlock.imports._base_importer._base_importer</span></code></a></p>
+<p><em>Using a list of coordinates, query the online</em> <a class="reference external" href="https://ned.ipac.caltech.edu/">NED</a> <em>database and import sources found within a given search radius of each of the loctions into the sherlock-catalogues database</em></p>
+<p>The code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. Uses the list of transient coordinates and queries NED (conesearch) for the results within the given search radius
+2. Creates the `tcs_cat_ned_stream` table if it doesn&#39;t exist
+3. Adds the resulting matched NED IDs/Names to the `tcs_cat_ned_stream` table
+4. Updates the NED query history table
+5. Queris NED via NED IDs (object search) for the remaining source metadata to be added to the `tcs_cat_ned_stream` table
+</pre></div>
+</div>
+<p>Note it’s up to the user to filter the input coordinate list by checking whether or not the same area of the sky has been imported into the <code class="docutils literal notranslate"><span class="pre">tcs_cat_ned_stream</span></code> table recently (by checking the <code class="docutils literal notranslate"><span class="pre">tcs_helper_ned_query_history</span></code> table)</p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dbConn</span></code> – mysql database connection</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">log</span></code> – logger</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">settings</span></code> – the settings dictionary</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coordinateList</span></code> – list of coordinates (a list of strings with RA and DEC space separated)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">radiusArcsec</span></code> - - the radius in arcsec with which to perform the initial NED conesearch. Default * False*</p></li>
+</ul>
+<p><strong>Usage</strong></p>
+<p>To import the ned catalogue stream, run the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sherlock.imports</span> <span class="kn">import</span> <span class="n">ned</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stream</span> <span class="o">=</span> <span class="n">ned</span><span class="p">(</span>
+    <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+    <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+    <span class="n">coordinateList</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;23.12323 -12.34343&quot;</span><span class="p">,</span><span class="s2">&quot;345.43234 45.26789&quot;</span><span class="p">],</span>
+    <span class="n">radiusArcsec</span><span class="o">=</span><span class="mi">180</span>
+<span class="p">)</span>
+<span class="n">stream</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- test this code is still working after changes
+- add option to filter coordinate list via the `tcs_helper_ned_query_history` table
+- check sublime snippet exists
+- clip any useful text to docs mindmap
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned.ingest">
+<code class="sig-name descname">ingest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned.ingest.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned.ingest" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Perform conesearches of the online NED database and import the results into a the sherlock-database</em></p>
+<p>The code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. uses the list of transient coordinates and queries NED for the results within the given search radius
+2. Creates the `tcs_cat_ned_stream` table if it doesn&#39;t exist
+3. Adds the resulting NED IDs/Names to the `tcs_cat_ned_stream` table
+4. Updates the NED query history table
+5. Queris NED via NED IDs for the remaining source metadata to be added to the `tcs_cat_ned_stream` table
+</pre></div>
+</div>
+<p><strong>Usage</strong></p>
+<p>Having setup the NED object with a coordinate list and cone-search radius, run the <code class="docutils literal notranslate"><span class="pre">ingest()</span></code> method</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stream</span><span class="o">.</span><span class="n">ingest</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">check</span> <span class="n">sublime</span> <span class="n">snippet</span> <span class="n">exists</span>
+<span class="o">-</span> <span class="n">clip</span> <span class="nb">any</span> <span class="n">useful</span> <span class="n">text</span> <span class="n">to</span> <span class="n">docs</span> <span class="n">mindmap</span>
+<span class="o">-</span> <span class="n">regenerate</span> <span class="n">the</span> <span class="n">docs</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">redendering</span> <span class="n">of</span> <span class="n">this</span> <span class="n">docstring</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._create_dictionary_of_ned">
+<code class="sig-name descname">_create_dictionary_of_ned</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._create_dictionary_of_ned.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._create_dictionary_of_ned" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Create a list of dictionaries containing all the object ids (NED names) in the ned stream</em></p>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dictList</span></code> - a list of dictionaries containing all the object ids (NED names) in the ned stream</p></li>
+</ul>
+<p><strong>Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dictList</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">_create_dictionary_of_ned</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._update_ned_query_history">
+<code class="sig-name descname">_update_ned_query_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._update_ned_query_history.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._update_ned_query_history" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Update the database helper table to give details of the ned cone searches performed</em></p>
+<p><em>Usage:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```python
+stream._update_ned_query_history()
+```
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._download_ned_source_metadata">
+<code class="sig-name descname">_download_ned_source_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._download_ned_source_metadata.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._download_ned_source_metadata" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Query NED using the names of the NED sources in our local database to retrieve extra metadata</em></p>
+<p><em>Usage:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```python
+stream._download_ned_source_metadata()
+```
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._get_ned_sources_needing_metadata">
+<code class="sig-name descname">_get_ned_sources_needing_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._get_ned_sources_needing_metadata.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._get_ned_sources_needing_metadata" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Get the names of 50000 or less NED sources that still require metabase in the database</em></p>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">len(self.theseIds)</span></code> – the number of NED IDs returned</p></li>
+</ul>
+<p><em>Usage:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```python
+numberSources = stream._get_ned_sources_needing_metadata()
+```
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._do_ned_namesearch_queries_and_add_resulting_metadata_to_database">
+<code class="sig-name descname">_do_ned_namesearch_queries_and_add_resulting_metadata_to_database</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">batchCount</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._do_ned_namesearch_queries_and_add_resulting_metadata_to_database.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._do_ned_namesearch_queries_and_add_resulting_metadata_to_database" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Query NED via name searcha and add result metadata to database</em></p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">batchCount</span></code> - the index number of the batch sent to NED (only needed for printing to STDOUT to give user idea of progress)</p></li>
+</ul>
+<p><em>Usage:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```python
+numberSources = stream._do_ned_namesearch_queries_and_add_resulting_metadata_to_database(batchCount=10)
+```
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._count_ned_sources_in_database_requiring_metadata">
+<code class="sig-name descname">_count_ned_sources_in_database_requiring_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._count_ned_sources_in_database_requiring_metadata.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._count_ned_sources_in_database_requiring_metadata" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Count the sources in the NED table requiring metadata</em></p>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">self.total</span></code>, <code class="docutils literal notranslate"><span class="pre">self.batches</span></code> – total number of galaxies needing metadata &amp; the number of batches required to be sent to NED</p></li>
+</ul>
+<p><em>Usage:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```python
+totalRemaining, numberOfBatches = stream._count_ned_sources_in_database_requiring_metadata()
+```
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._add_htmids_to_database_table">
+<code class="sig-name descname">_add_htmids_to_database_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._add_htmids_to_database_table.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._add_htmids_to_database_table" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Add HTMIDs to database table once all the data has been imported (HTM Levels 10,13,16)</em></p>
+<p><strong>Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">_add_htmids_to_database_table</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned._update_database_helper_table">
+<code class="sig-name descname">_update_database_helper_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned._update_database_helper_table.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned._update_database_helper_table" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Update the sherlock catalogues database helper table with the time-stamp of when this catlogue was last updated</em></p>
+<p><strong>Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">_update_database_helper_table</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.imports.ned.ned.add_data_to_database_table">
+<code class="sig-name descname">add_data_to_database_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dictList</span></em>, <em class="sig-param"><span class="n">createStatement</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/imports/ned/ned.add_data_to_database_table.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.imports.ned.ned.add_data_to_database_table" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>Import data in the list of dictionaries in the requested database table</em></p>
+<p>Also adds HTMIDs and updates the sherlock-catalogue database helper table with the time-stamp of when the imported catlogue was last updated</p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dictList</span></code> - a list of dictionaries containing all the rows in the catalogue to be imported</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">createStatement</span></code> - the table’s mysql create statement (used to generate table if it does not yet exist in database). Default <em>False</em></p></li>
+</ul>
+<p><strong>Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">add_data_to_database_table</span><span class="p">(</span>
+    <span class="n">dictList</span><span class="o">=</span><span class="n">dictList</span><span class="p">,</span>
+    <span class="n">createStatement</span><span class="o">=</span><span class="n">createStatement</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Write</span> <span class="n">a</span> <span class="n">checklist</span> <span class="k">for</span> <span class="n">creating</span> <span class="n">a</span> <span class="n">new</span> <span class="n">sherlock</span> <span class="n">database</span> <span class="n">importer</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Dave Young
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -5,11 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    November 18, 2016
 """
-################# GLOBAL IMPORTS ####################
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -23,39 +20,41 @@ import pymysql as ms
 from docopt import docopt
 from fundamentals.mysql import readquery
 
-
-class database():
+class database(object):
     """
     *the database object for sherlock, setting up ssh tunnels and various database connections*
 
     The returned dictionary of database connections contain the following databases:
         - ``transients`` -- the database hosting the transient source data
         - ``catalogues`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
-        - ``marshall`` -- connection to the PESSTO Marshall database
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Return:**
-        - ``dbConns`` -- a dictionary of the database connections required by sherlock
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    
 
-    **Usage:**
+    **Return**
 
-        To setup the sherlock database connections, run the following:
+    - ``dbConns`` -- a dictionary of the database connections required by sherlock
+    
 
-        .. code-block:: python 
+    **Usage**
 
-            # SETUP ALL DATABASE CONNECTIONS
-            from sherlock import database
-            db = database(
-                log=log,
-                settings=settings
-            )
-            dbConns, dbVersions = db.connect()
-            transientsDbConn = dbConns["transients"]
-            cataloguesDbConn = dbConns["catalogues"]
-            pmDbConn = dbConns["marshall"]
+    To setup the sherlock database connections, run the following:
+
+    ```python
+    # SETUP ALL DATABASE CONNECTIONS
+    from sherlock import database
+    db = database(
+        log=log,
+        settings=settings
+    )
+    dbConns, dbVersions = db.connect()
+    transientsDbConn = dbConns["transients"]
+    cataloguesDbConn = dbConns["catalogues"]
+    ```
+    
 
     .. todo ::
 
@@ -83,10 +82,11 @@ class database():
     def connect(self):
         """connect to the various databases, the credientals and settings of which are found in the sherlock settings file
 
-        **Return:**
-            - ``transientsDbConn`` -- the database hosting the transient source data
-            - ``cataloguesDbConn`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
-            - ``pmDbConn`` -- connection to the PESSTO Marshall database
+        **Return**
+
+        - ``transientsDbConn`` -- the database hosting the transient source data
+        - ``cataloguesDbConn`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
+        
 
         See the class docstring for usage
 
@@ -114,16 +114,8 @@ class database():
         else:
             transientSettings = False
 
-        # MARSHALL DATABASE OPTIONAL
-        if "pessto marshall" in self.settings[
-                "database settings"]:
-            marshallSettings = self.settings[
-                "database settings"]["pessto marshall"]
-        else:
-            marshallSettings = False
-
         dbConns = []
-        for dbSettings in [transientSettings, catalogueSettings, marshallSettings]:
+        for dbSettings in [transientSettings, catalogueSettings]:
             port = False
             if dbSettings and dbSettings["tunnel"]:
                 port = self._setup_tunnel(
@@ -155,12 +147,11 @@ class database():
         # CREATE A DICTIONARY OF DATABASES
         dbConns = {
             "transients": dbConns[0],
-            "catalogues": dbConns[1],
-            "marshall": dbConns[2]
+            "catalogues": dbConns[1]
         }
 
         dbVersions = {}
-        for k, v in dbConns.items():
+        for k, v in list(dbConns.items()):
             if v:
                 sqlQuery = u"""
                     SELECT VERSION() as v;
@@ -185,11 +176,15 @@ class database():
         """
         *setup a ssh tunnel for a database connection to port through*
 
-        **Key Arguments:**
-            - ``tunnelParameters`` -- the tunnel parameters found associated with the database settings
+        **Key Arguments**
 
-        **Return:**
-            - ``sshPort`` -- the port the ssh tunnel is connected via
+        - ``tunnelParameters`` -- the tunnel parameters found associated with the database settings
+        
+
+        **Return**
+
+        - ``sshPort`` -- the port the ssh tunnel is connected via
+        
 
         .. todo ::
 
@@ -259,7 +254,7 @@ class database():
             self.log.debug(
                 """Connected to `%(address)s` on port `%(port)s`""" % locals())
             return True
-        except socket.error, e:
+        except socket.error as e:
             self.log.warning(
                 """Connection to `%(address)s` on port `%(port)s` failed - try again: %(e)s""" % locals())
             return False

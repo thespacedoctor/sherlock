@@ -1,44 +1,32 @@
+from __future__ import print_function
+from builtins import str
 import os
 import unittest
 import shutil
 import yaml
-from sherlock import transient_classifier, cl_utils
 from sherlock.utKit import utKit
-
 from fundamentals import tools
+from os.path import expanduser
+home = expanduser("~")
+
+packageDirectory = utKit("").get_project_root()
+settingsFile = packageDirectory + "/test_settings.yaml"
 
 su = tools(
-    arguments={"settingsFile": None},
+    arguments={"settingsFile": settingsFile},
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,
-    projectName="sherlock"
+    projectName=None,
+    defaultSettingsFile=False
 )
 arguments, settings, log, dbConn = su.setup()
 
-# # load settings
-# stream = file(
-#     "/Users/Dave/.config/sherlock/sherlock.yaml", 'r')
-# settings = yaml.load(stream)
-# stream.close()
-
-# SETUP AND TEARDOWN FIXTURE FUNCTIONS FOR THE ENTIRE MODULE
+# SETUP PATHS TO COMMON DIRECTORIES FOR TEST DATA
 moduleDirectory = os.path.dirname(__file__)
-utKit = utKit(moduleDirectory)
-log, dbConn, pathToInputDir, pathToOutputDir = utKit.setupModule()
-utKit.tearDownModule()
+pathToInputDir = moduleDirectory + "/input/"
+pathToOutputDir = moduleDirectory + "/output/"
 
-# load settings
-stream = file(
-    pathToInputDir + "/example_settings2.yaml", 'r')
-stream = file(
-    "/Users/Dave/Dropbox/config/dave-macbook/sherlock/sherlock_mac_marshall.yaml")
-stream = file(
-    "/Users/Dave/Desktop/sherlock_ps1_mops.yaml")
-settings = yaml.load(stream)
-stream.close()
-
-import shutil
 try:
     shutil.rmtree(pathToOutputDir)
 except:
@@ -50,19 +38,26 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-# from fundamentals.mysql import directory_script_runner
-# directory_script_runner(
-#     log=log,
-#     pathToScriptDirectory=pathToInputDir.replace(
-#         "/input", "/resources") + "/transient_database",
-#     databaseName=settings["database settings"]["db"],
-#     loginPath=settings["database settings"]["loginPath"],
-#     successRule="delete",
-#     failureRule="failed"
-# )
+settings["database settings"]["static catalogues"] = settings[
+    "database settings"]["static catalogues2"]
 
-# xt-setup-unit-testing-files-and-folders
+# SETUP ALL DATABASE CONNECTIONS
+from sherlock import database
+db = database(
+    log=log,
+    settings=settings
+)
+dbConns, dbVersions = db.connect()
+transientsDbConn = dbConns["transients"]
+cataloguesDbConn = dbConns["catalogues"]
 
+from fundamentals.mysql import directory_script_runner
+directory_script_runner(
+    log=log,
+    pathToScriptDirectory=pathToInputDir.replace(
+        "/input", "/resources") + "/transient_database",
+    dbConn=transientsDbConn
+)
 
 class test_transient_classifier(unittest.TestCase):
 
@@ -72,8 +67,7 @@ class test_transient_classifier(unittest.TestCase):
         this = transient_classifier(
             log=log,
             settings=settings,
-            update=True,
-            fast=True
+            update=True
         )
         # this.update_peak_magnitudes()
         this.update_classification_annotations_and_summaries()
@@ -99,6 +93,7 @@ class test_transient_classifier(unittest.TestCase):
             ra="08:57:57.19",
             dec="+43:25:44.1",
             name="PS17gx",
+            updateNed=False,
             verbose=0
         )
         classifications, crossmatches = this.classify()
@@ -108,53 +103,26 @@ class test_transient_classifier(unittest.TestCase):
         from sherlock import transient_classifier
         classifier = transient_classifier(
             log=log,
-            settings=settings
+            settings=settings,
+            updateNed=False
         )
         transientsMetadataList = classifier._get_transient_metadata_from_database_list()
-        classifier._update_ned_stream(
-            transientsMetadataList=transientsMetadataList
-        )
+        # classifier._update_ned_stream(
+        #     transientsMetadataList=transientsMetadataList
+        # )
 
-    def test_crossmatching(self):
-
-        # SETUP ALL DATABASE CONNECTIONS
-        from sherlock import database
-        db = database(
-            log=log,
-            settings=settings
-        )
-        dbConns, dbVersions = db.connect()
-        transientsDbConn = dbConns["transients"]
-        cataloguesDbConn = dbConns["catalogues"]
-        pmDbConn = dbConns["marshall"]
-
-        from sherlock.commonutils import get_crossmatch_catalogues_column_map
-        colMaps = get_crossmatch_catalogues_column_map(
-            log=log,
-            dbConn=cataloguesDbConn
-        )
+    def test_full_classifier(self):
 
         from sherlock import transient_classifier
         classifier = transient_classifier(
             log=log,
-            settings=settings
+            settings=settings,
+            verbose=2,
+            update=True,
+            updateNed=False,
+            updatePeakMags=True
         )
-        transientsMetadataList = classifier._get_transient_metadata_from_database_list()
-        crossmatches = classifier._crossmatch_transients_against_catalogues(
-            colMaps=colMaps,
-            transientsMetadataList=transientsMetadataList
-        )
-
-        classifications, crossmatches = classifier._rank_classifications(
-            colMaps=colMaps,
-            crossmatches=crossmatches
-        )
-
-        classifier._update_transient_database(
-            classifications=classifications,
-            transientsMetadataList=transientsMetadataList,
-            colMaps=colMaps,
-            crossmatches=crossmatches)
+        classifier.classify()
 
     def test_classification_annotations(self):
 
@@ -166,7 +134,6 @@ class test_transient_classifier(unittest.TestCase):
         dbConns, dbVersions = db.connect()
         transientsDbConn = dbConns["transients"]
         cataloguesDbConn = dbConns["catalogues"]
-        pmDbConn = dbConns["marshall"]
 
         from sherlock.commonutils import get_crossmatch_catalogues_column_map
         colMaps = get_crossmatch_catalogues_column_map(
@@ -192,10 +159,8 @@ class test_transient_classifier(unittest.TestCase):
             )
             this.get()
             assert False
-        except Exception, e:
+        except Exception as e:
             assert True
-            print str(e)
-
-        # x-print-testpage-for-pessto-marshall-web-object
+            print(str(e))
 
     # x-class-to-test-named-worker-function

@@ -5,11 +5,9 @@
 
 :Author:
     David Young
-
-:Date Created:
-    November 18, 2016
 """
-################# GLOBAL IMPORTS ####################
+from __future__ import print_function
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -20,31 +18,33 @@ from fundamentals import tools, times
 from docopt import docopt
 from fundamentals.mysql import readquery, writequery
 
-
-class database_cleaner():
+class database_cleaner(object):
     """*Clean and maintain the database helper tables used by sherlock*
 
     The helper tables list row counts for tables and views and provide the column maps that help sherlock know which catalogue columns relate to which parameters (e.g. RA, DEC etc)
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-     **Usage:**
+    - ``dbConn`` -- mysql database connection
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    
 
-        .. todo::
+     **Usage**
 
-            - add an entry in the tutorial to clean database tables
+     .. todo::
 
-        .. code-block:: python 
+        - add an entry in the tutorial to clean database tables
+     
 
-            from sherlock.database_cleaner import database_cleaner
-            db = database_cleaner(
-                log=log,
-                settings=settings
-            )
-            db.clean()
+        ```python
+        from sherlock.database_cleaner import database_cleaner
+        db = database_cleaner(
+            log=log,
+            settings=settings
+        )
+        db.clean()
+        ```
 
     .. todo ::
 
@@ -79,7 +79,6 @@ class database_cleaner():
         dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
-        self.pmDbConn = dbConns["marshall"]
 
         return None
 
@@ -98,6 +97,7 @@ class database_cleaner():
         """
         self.log.debug('starting the ``get`` method')
 
+        self._create_tcs_help_tables()
         self._update_tcs_helper_catalogue_tables_info_with_new_tables()
         self._updated_row_counts_in_tcs_helper_catalogue_tables_info()
         self._clean_up_columns()
@@ -105,7 +105,7 @@ class database_cleaner():
         self._clean_up_columns()
         self._updated_row_counts_in_tcs_helper_catalogue_tables_info()
 
-        print "`tcs_helper_catalogue_tables_info` & `tcs_helper_catalogue_views_info` database tables updated"
+        print("`tcs_helper_catalogue_tables_info` & `tcs_helper_catalogue_views_info` database tables updated")
 
         self.log.debug('completed the ``get`` method')
         return None
@@ -161,7 +161,7 @@ class database_cleaner():
 
         for row in rows:
             tbName = row["view_name"]
-            print tbName
+            print(tbName)
 
             sqlQuery = u"""
                 update tcs_helper_catalogue_views_info set number_of_rows = (select count(*) as count from %(tbName)s) where view_name = "%(tbName)s"
@@ -240,7 +240,7 @@ class database_cleaner():
         for tb in tablesInDatabase:
             if tb["TABLE_NAME"] not in tbList:
                 thisTableName = tb["TABLE_NAME"]
-                print "`%(thisTableName)s` added to `tcs_helper_catalogue_tables_info` database table" % locals()
+                print("`%(thisTableName)s` added to `tcs_helper_catalogue_tables_info` database table" % locals())
                 sqlQuery = u"""
                     INSERT INTO tcs_helper_catalogue_tables_info (
                             id,
@@ -402,7 +402,7 @@ class database_cleaner():
         for tb in tablesInDatabase:
             if tb["TABLE_NAME"] not in tbList:
                 thisViewName = tb["TABLE_NAME"]
-                print "`%(thisViewName)s` added to `tcs_helper_catalogue_views_info` database table" % locals()
+                print("`%(thisViewName)s` added to `tcs_helper_catalogue_views_info` database table" % locals())
                 sqlQuery = u"""
                     INSERT INTO tcs_helper_catalogue_views_info (
                             id,
@@ -421,6 +421,134 @@ class database_cleaner():
 
         self.log.debug(
             'completed the ``_update_tcs_helper_catalogue_views_info_with_new_views`` method')
+        return None
+
+    def _create_tcs_help_tables(
+            self):
+        """* create tcs help tables*
+
+        **Key Arguments**
+
+        # -
+        
+
+        **Return**
+
+        - None
+        
+
+        **Usage**
+
+        
+
+        ```python
+        usage code 
+        ```
+
+        ---
+
+        ```eval_rst
+        .. todo::
+
+            - add usage info
+            - create a sublime snippet for usage
+            - write a command-line tool for this method
+            - update package tutorial with command-line tool info if needed
+        ```
+        """
+        self.log.debug('starting the ``_create_tcs_help_tables`` method')
+
+        sqlQuery = """
+        CREATE TABLE IF NOT EXISTS `tcs_helper_catalogue_tables_info` (
+          `id` smallint(5) unsigned NOT NULL,
+          `table_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `description` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `number_of_rows` bigint(20) DEFAULT NULL,
+          `reference_url` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `reference_text` varchar(70) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `notes` text COLLATE utf8_unicode_ci,
+          `vizier_link` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `in_ned` tinyint(4) DEFAULT NULL,
+          `object_types` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `version_number` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `last_updated` datetime DEFAULT NULL,
+          `legacy_table` tinyint(4) DEFAULT '0',
+          `old_table_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `raColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `decColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `catalogue_object_subtypeColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `catalogue_object_idColName` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `zColName` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `distanceColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `object_type_accuracy` tinyint(2) DEFAULT NULL,
+          `semiMajorColName` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `semiMajorToArcsec` float DEFAULT NULL,
+          `transientStream` tinyint(4) DEFAULT '0',
+          `photoZColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `photoZErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `UColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `UErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `BColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `BErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `VColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `VErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `RColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `RErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `IColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `IErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `JColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `JErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `HColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `HErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `KColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `KErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_uColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_uErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_gColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_gErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_rColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_rErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_iColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_iErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_zColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_zErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_yColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `_yErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `unkMagColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `unkMagErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `GColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          `GErrColName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;       
+        """
+
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn
+        )
+
+        sqlQuery = """
+        CREATE TABLE IF NOT EXISTS `tcs_helper_catalogue_views_info` (
+              `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+              `view_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `number_of_rows` bigint(20) DEFAULT NULL,
+              `object_type` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `legacy_view` tinyint(4) DEFAULT '0',
+              `old_view_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `table_id` int(11) DEFAULT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        """
+
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.cataloguesDbConn
+        )
+
+        self.log.debug('completed the ``_create_tcs_help_tables`` method')
         return None
 
     # use the tab-trigger below for new method

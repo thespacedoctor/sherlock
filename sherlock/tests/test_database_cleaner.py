@@ -1,38 +1,32 @@
+from __future__ import print_function
+from builtins import str
 import os
-import nose
+import unittest
 import shutil
 import yaml
 from sherlock.utKit import utKit
 from fundamentals import tools
+from os.path import expanduser
+home = expanduser("~")
+
+packageDirectory = utKit("").get_project_root()
+settingsFile = packageDirectory + "/test_settings.yaml"
 
 su = tools(
-    arguments={"settingsFile": None},
+    arguments={"settingsFile": settingsFile},
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,
-    projectName="sherlock"
+    projectName=None,
+    defaultSettingsFile=False
 )
 arguments, settings, log, dbConn = su.setup()
 
-# # load settings
-# stream = file(
-#     "/Users/Dave/.config/sherlock/sherlock.yaml", 'r')
-# settings = yaml.load(stream)
-# stream.close()
-
-# SETUP AND TEARDOWN FIXTURE FUNCTIONS FOR THE ENTIRE MODULE
+# SETUP PATHS TO COMMON DIRECTORIES FOR TEST DATA
 moduleDirectory = os.path.dirname(__file__)
-utKit = utKit(moduleDirectory)
-log, dbConn, pathToInputDir, pathToOutputDir = utKit.setupModule()
-utKit.tearDownModule()
+pathToInputDir = moduleDirectory + "/input/"
+pathToOutputDir = moduleDirectory + "/output/"
 
-# load settings
-stream = file(
-    pathToInputDir + "/example_settings.yaml", 'r')
-settings = yaml.load(stream)
-stream.close()
-
-import shutil
 try:
     shutil.rmtree(pathToOutputDir)
 except:
@@ -44,8 +38,23 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-# xt-setup-unit-testing-files-and-folders
+# SETUP ALL DATABASE CONNECTIONS
+from sherlock import database
+db = database(
+    log=log,
+    settings=settings
+)
+dbConns, dbVersions = db.connect()
+transientsDbConn = dbConns["transients"]
+cataloguesDbConn = dbConns["catalogues"]
 
+# from fundamentals.mysql import writequery
+# sqlQuery = """drop table if exists `tcs_helper_catalogue_tables_info`, `tcs_helper_catalogue_views_info`"""
+# writequery(
+#     log=log,
+#     sqlQuery=sqlQuery,
+#     dbConn=cataloguesDbConn
+# )
 
 class test_database_cleaner(unittest.TestCase):
 
@@ -69,10 +78,8 @@ class test_database_cleaner(unittest.TestCase):
             )
             this.get()
             assert False
-        except Exception, e:
+        except Exception as e:
             assert True
-            print str(e)
-
-        # x-print-testpage-for-pessto-marshall-web-object
+            print(str(e))
 
     # x-class-to-test-named-worker-function

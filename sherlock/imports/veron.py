@@ -5,11 +5,9 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 12, 2016
 """
-################# GLOBAL IMPORTS ####################
+from __future__ import print_function
+from builtins import zip
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -22,26 +20,28 @@ import re
 from docopt import docopt
 from ._base_importer import _base_importer
 
-
 class veron(_base_importer):
-
     """
     *importer object for the* `VERON AGN catalogue <http://cdsarc.u-strasbg.fr/viz-bin/Cat?VII/258>`_
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``pathToDataFIle`` -- path to the veron data file
-        - ``version`` -- version of the veron catalogue
+    **Key Arguments**
 
-    **Usage:**
+    - ``dbConn`` -- mysql database connection
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``pathToDataFIle`` -- path to the veron data file
+    - ``version`` -- version of the veron catalogue
+    
 
-      To import the veron catalogue catalogue, run the following:
+    **Usage**
 
-      .. code-block:: python 
+    To import the veron catalogue catalogue, run the following:
+    
 
-        from sherlock.imports import veron
+      ```python
+      from sherlock.imports import veron
+      ```
+
         catalogue = veron(
             log=log,
             settings=settings,
@@ -68,7 +68,6 @@ class veron(_base_importer):
         - check sublime snippet exists
         - clip any useful text to docs mindmap
         - regenerate the docs and check redendering of this docstring
-
     """
     # INITIALISATION
 
@@ -124,8 +123,10 @@ class veron(_base_importer):
             self):
         """create a list of dictionaries containing all the rows in the veron catalogue
 
-        **Return:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue
+        **Return**
+
+        - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue
+        
 
         .. todo ::
 
@@ -141,7 +142,10 @@ class veron(_base_importer):
             'starting the ``_create_dictionary_of_veron`` method')
 
         dictList = []
-        lines = string.split(self.catData, '\n')
+        try:
+            lines = str.split(self.catData, '\n')
+        except:
+            lines = string.split(self.catData, '\n')
 
         totalCount = len(lines)
         count = 0
@@ -155,11 +159,15 @@ class veron(_base_importer):
             if count > 1:
                 # Cursor up one line and clear line
                 sys.stdout.write("\x1b[1A\x1b[2K")
-            print "%(count)s / %(totalCount)s veron data added to memory" % locals()
+            print("%(count)s / %(totalCount)s veron data added to memory" % locals())
 
             if count == 1:
                 theseKeys = []
-                someKeys = string.split(line, '|')
+                try:
+                    someKeys = str.split(line, '|')
+                except:
+                    someKeys = string.split(line, '|')
+
                 for key in someKeys:
                     if key == "_RAJ2000":
                         key = "raDeg"
@@ -194,7 +202,10 @@ class veron(_base_importer):
                 continue
 
             thisDict = {}
-            theseValues = string.split(line, '|')
+            try:
+                theseValues = str.split(line, '|')
+            except:
+                theseValues = string.split(line, '|')
 
             for k, v in zip(theseKeys, theseValues):
                 v = v.strip()

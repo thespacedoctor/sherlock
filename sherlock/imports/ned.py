@@ -5,11 +5,10 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 13, 2016
 """
-################# GLOBAL IMPORTS ####################
+from __future__ import print_function
+from __future__ import division
+from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -29,9 +28,7 @@ from fundamentals.renderer import list_of_dictionaries
 from fundamentals.mysql import directory_script_runner, readquery, writequery
 from ._base_importer import _base_importer
 
-
 class ned(_base_importer):
-
     """
     *Using a list of coordinates, query the online* `NED <https://ned.ipac.caltech.edu/>`_ *database and import sources found within a given search radius of each of the loctions into the sherlock-catalogues database*
 
@@ -45,20 +42,24 @@ class ned(_base_importer):
 
     Note it's up to the user to filter the input coordinate list by checking whether or not the same area of the sky has been imported into the `tcs_cat_ned_stream` table recently (by checking the `tcs_helper_ned_query_history` table)
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``coordinateList`` -- list of coordinates (a list of strings with RA and DEC space separated)
-        - ``radiusArcsec`` - - the radius in arcsec with which to perform the initial NED conesearch. Default * False*
+    **Key Arguments**
 
-    **Usage:**
+    - ``dbConn`` -- mysql database connection
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``coordinateList`` -- list of coordinates (a list of strings with RA and DEC space separated)
+    - ``radiusArcsec`` - - the radius in arcsec with which to perform the initial NED conesearch. Default * False*
+    
 
-      To import the ned catalogue stream, run the following:
+    **Usage**
 
-      .. code-block:: python 
+    To import the ned catalogue stream, run the following:
+    
 
-        from sherlock.imports import ned
+      ```python
+      from sherlock.imports import ned
+      ```
+
         stream = ned(
             log=log,
             settings=settings,
@@ -87,13 +88,14 @@ class ned(_base_importer):
             4. Updates the NED query history table
             5. Queris NED via NED IDs for the remaining source metadata to be added to the `tcs_cat_ned_stream` table
 
-        **Usage:**
+        **Usage**
 
-            Having setup the NED object with a coordinate list and cone-search radius, run the `ingest()` method
+        Having setup the NED object with a coordinate list and cone-search radius, run the `ingest()` method
 
-            .. code-block:: python
-
-                stream.ingest()
+        ```python
+        stream.ingest()
+        ```
+        
 
         .. todo ::
 
@@ -170,14 +172,17 @@ class ned(_base_importer):
             self):
         """*Create a list of dictionaries containing all the object ids (NED names) in the ned stream*
 
-        **Return:**
-            - ``dictList`` - a list of dictionaries containing all the object ids (NED names) in the ned stream
+        **Return**
 
-        **Usage:**
+        - ``dictList`` - a list of dictionaries containing all the object ids (NED names) in the ned stream
+        
 
-            .. code-block:: python
+        **Usage**
 
-                dictList = stream._create_dictionary_of_ned()
+        ```python
+        dictList = stream._create_dictionary_of_ned()
+        ```
+        
         """
         self.log.debug(
             'starting the ``_create_dictionary_of_ned`` method')
@@ -208,9 +213,9 @@ class ned(_base_importer):
 
         *Usage:*
 
-            .. code-block:: python
-
-                stream._update_ned_query_history()
+            ```python
+            stream._update_ned_query_history()
+            ```
         """
         self.log.debug('starting the ``_update_ned_query_history`` method')
 
@@ -225,7 +230,7 @@ class ned(_base_importer):
         # SEARCHES PERFORMED
         dataList = []
         for i, coord in enumerate(self.coordinateList):
-            if isinstance(coord, str):
+            if isinstance(coord, ("".__class__, u"".__class__)):
                 ra = coord.split(" ")[0]
                 dec = coord.split(" ")[1]
             elif isinstance(coord, tuple) or isinstance(coord, list):
@@ -289,7 +294,8 @@ class ned(_base_importer):
             tableName="tcs_helper_ned_query_history",
             dbConn=self.cataloguesDbConn,
             log=self.log,
-            primaryIdColumnName="primaryId"
+            primaryIdColumnName="primaryId",
+            dbSettings=self.settings["database settings"]["static catalogues"]
         )
 
         self.log.debug('completed the ``_update_ned_query_history`` method')
@@ -301,9 +307,9 @@ class ned(_base_importer):
 
         *Usage:*
 
-            .. code-block:: python
-
-                stream._download_ned_source_metadata()
+            ```python
+            stream._download_ned_source_metadata()
+            ```
         """
         self.log.debug('starting the ``_download_ned_source_metadata`` method')
 
@@ -335,14 +341,16 @@ class ned(_base_importer):
             self):
         """*Get the names of 50000 or less NED sources that still require metabase in the database*
 
-        **Return:**
-            - ``len(self.theseIds)`` -- the number of NED IDs returned
+        **Return**
+
+        - ``len(self.theseIds)`` -- the number of NED IDs returned
+        
 
         *Usage:*
 
-            .. code-block:: python
-
-                numberSources = stream._get_ned_sources_needing_metadata()
+            ```python
+            numberSources = stream._get_ned_sources_needing_metadata()
+            ```
         """
         self.log.debug(
             'starting the ``_get_ned_sources_needing_metadata`` method')
@@ -373,14 +381,16 @@ class ned(_base_importer):
             batchCount):
         """*Query NED via name searcha and add result metadata to database*
 
-        **Key Arguments:**
-            - ``batchCount`` - the index number of the batch sent to NED (only needed for printing to STDOUT to give user idea of progress)
+        **Key Arguments**
+
+        - ``batchCount`` - the index number of the batch sent to NED (only needed for printing to STDOUT to give user idea of progress)
+        
 
         *Usage:*
 
-            .. code-block:: python
-
-                numberSources = stream._do_ned_namesearch_queries_and_add_resulting_metadata_to_database(batchCount=10)
+            ```python
+            numberSources = stream._do_ned_namesearch_queries_and_add_resulting_metadata_to_database(batchCount=10)
+            ```
         """
         self.log.debug(
             'starting the ``_do_ned_namesearch_queries_and_add_resulting_metadata_to_database`` method')
@@ -393,7 +403,7 @@ class ned(_base_importer):
 
         # QUERY NED WITH BATCH
         totalCount = len(self.theseIds)
-        print "requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals()
+        print("requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals())
         # QUERY THE ONLINE NED DATABASE USING NEDDY'S NAMESEARCH METHOD
         search = namesearch(
             log=self.log,
@@ -401,7 +411,7 @@ class ned(_base_importer):
             quiet=True
         )
         results = search.get()
-        print "results returned from ned -- starting to add to database" % locals()
+        print("results returned from ned -- starting to add to database" % locals())
 
         # CLEAN THE RETURNED DATA AND UPDATE DATABASE
         totalCount = len(results)
@@ -411,13 +421,13 @@ class ned(_base_importer):
         for thisDict in results:
             thisDict["tableName"] = tableName
             count += 1
-            for k, v in thisDict.iteritems():
+            for k, v in list(thisDict.items()):
                 if not v or len(v) == 0:
                     thisDict[k] = "null"
                 if k in ["major_diameter_arcmin", "minor_diameter_arcmin"] and (":" in v or "?" in v or "<" in v):
                     thisDict[k] = v.replace(":", "").replace(
                         "?", "").replace("<", "")
-                if isinstance(v, str) and '"' in v:
+                if isinstance(v, ("".__class__, u"".__class__)) and '"' in v:
                     thisDict[k] = v.replace('"', '\\"')
             if "Input name not" not in thisDict["input_note"] and "Same object as" not in thisDict["input_note"]:
                 try:
@@ -459,7 +469,7 @@ class ned(_base_importer):
             dbConn=self.cataloguesDbConn,
         )
 
-        print "%(count)s/%(totalCount)s galaxy metadata batch entries added to database" % locals()
+        print("%(count)s/%(totalCount)s galaxy metadata batch entries added to database" % locals())
         if count < totalCount:
             # Cursor up one line and clear line
             sys.stdout.write("\x1b[1A\x1b[2K")
@@ -481,14 +491,16 @@ class ned(_base_importer):
             self):
         """*Count the sources in the NED table requiring metadata*
 
-        **Return:**
-            - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+        **Return**
+
+        - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+        
 
         *Usage:*
 
-            .. code-block:: python
-
-                totalRemaining, numberOfBatches = stream._count_ned_sources_in_database_requiring_metadata()
+            ```python
+            totalRemaining, numberOfBatches = stream._count_ned_sources_in_database_requiring_metadata()
+            ```
         """
         self.log.debug(
             'starting the ``_count_ned_sources_in_database_requiring_metadata`` method')
@@ -505,7 +517,7 @@ class ned(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(self.total / 50000.) + 1
+        self.batches = int(old_div(self.total, 50000.)) + 1
 
         if self.total == 0:
             self.batches = 0

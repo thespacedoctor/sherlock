@@ -5,11 +5,11 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 15, 2016
 """
-################# GLOBAL IMPORTS ####################
+from __future__ import print_function
+from __future__ import division
+from builtins import zip
+from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -28,34 +28,35 @@ from neddy import namesearch
 from docopt import docopt
 from ._base_importer import _base_importer
 
-
 class ned_d(_base_importer):
-
     """
     *Import the * `NED-D <https://ned.ipac.caltech.edu/Library/Distances/>`_ *galaxy catalogue in to the sherlock-catalogues database*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``pathToDataFile`` -- path to the ned_d data file
-        - ``version`` -- version of the ned_d catalogue
-        - ``catalogueName`` -- the name of the catalogue
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``pathToDataFile`` -- path to the ned_d data file
+    - ``version`` -- version of the ned_d catalogue
+    - ``catalogueName`` -- the name of the catalogue
+    
 
-        To import the ned_d catalogue catalogue, run the following:
+    **Usage**
 
-        .. code-block:: python 
+    To import the ned_d catalogue catalogue, run the following:
 
-            from sherlock.imports import ned_d
-            catalogue = ned_d(
-                log=log,
-                settings=settings,
-                pathToDataFile="/path/to/ned_d.txt",
-                version="1.0",
-                catalogueName="ned_d"
-            )
-            catalogue.ingest()
+    ```python
+    from sherlock.imports import ned_d
+    catalogue = ned_d(
+        log=log,
+        settings=settings,
+        pathToDataFile="/path/to/ned_d.txt",
+        version="1.0",
+        catalogueName="ned_d"
+    )
+    catalogue.ingest()
+    ```
+    
 
     .. todo ::
 
@@ -68,12 +69,12 @@ class ned_d(_base_importer):
 
         The method first generates a list of python dictionaries from the ned_d datafile, imports this list of dictionaries into a database table and then generates the HTMIDs for that table. 
 
-        **Usage:**
+        **Usage**
 
-            See class docstring for usage
+        See class docstring for usage
+        
 
         .. todo ::
-
 
             - update docstring text
             - check sublime snippet exists
@@ -178,8 +179,10 @@ class ned_d(_base_importer):
             self):
         """create a list of dictionaries containing all the rows in the ned_d catalogue
 
-        **Return:**
-            - ``dictList`` - a list of dictionaries containing all the rows in the ned_d catalogue
+        **Return**
+
+        - ``dictList`` - a list of dictionaries containing all the rows in the ned_d catalogue
+        
 
         .. todo ::
 
@@ -195,14 +198,14 @@ class ned_d(_base_importer):
             'starting the ``_create_dictionary_of_ned_d`` method')
 
         count = 0
-        with open(self.pathToDataFile, 'rb') as csvFile:
+        with open(self.pathToDataFile, 'r') as csvFile:
             csvReader = csv.reader(
                 csvFile, dialect='excel', delimiter=',', quotechar='"')
             totalRows = sum(1 for row in csvReader)
         csvFile.close()
         totalCount = totalRows
 
-        with open(self.pathToDataFile, 'rb') as csvFile:
+        with open(self.pathToDataFile, 'r') as csvFile:
             csvReader = csv.reader(
                 csvFile, dialect='excel', delimiter=',', quotechar='"')
             theseKeys = []
@@ -253,8 +256,9 @@ class ned_d(_base_importer):
                         sys.stdout.write("\x1b[1A\x1b[2K")
                     if count > totalCount:
                         count = totalCount
-                    percent = (float(count) / float(totalCount)) * 100.
-                    print "%(count)s / %(totalCount)s (%(percent)1.1f%%) rows added to memory" % locals()
+                    percent = (old_div(float(count), float(totalCount))) * 100.
+                    print(
+                        "%(count)s / %(totalCount)s (%(percent)1.1f%%) rows added to memory" % locals())
                     rowDict = {}
                     for t, r in zip(theseKeys, row):
                         rowDict[t] = r
@@ -291,7 +295,7 @@ class ned_d(_base_importer):
 
         tableName = self.dbTableName
 
-        print "cleaning up %(tableName)s columns" % locals()
+        print("cleaning up %(tableName)s columns" % locals())
 
         sqlQuery = u"""
                 set sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION";
@@ -339,7 +343,7 @@ class ned_d(_base_importer):
         self.log.debug('starting the ``_get_metadata_for_galaxies`` method')
 
         total, batches = self._count_galaxies_requiring_metadata()
-        print "%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals()
+        print("%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals())
 
         totalBatches = self.batches
         thisCount = 0
@@ -364,8 +368,10 @@ class ned_d(_base_importer):
             self):
         """ count galaxies requiring metadata
 
-        **Return:**
-            - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+        **Return**
+
+        - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
+        
 
         .. todo ::
 
@@ -392,7 +398,7 @@ class ned_d(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(self.total / 3000.) + 1
+        self.batches = int(old_div(self.total, 3000.)) + 1
 
         if self.total == 0:
             self.batches = 0
@@ -405,8 +411,10 @@ class ned_d(_base_importer):
             self):
         """ get 3000 galaxies needing metadata
 
-        **Return:**
-            - ``len(self.theseIds)`` -- the number of NED IDs returned
+        **Return**
+
+        - ``len(self.theseIds)`` -- the number of NED IDs returned
+        
 
         .. todo ::
 
@@ -447,8 +455,10 @@ class ned_d(_base_importer):
             batchCount):
         """ query ned and add results to database
 
-        **Key Arguments:**
-            - ``batchCount`` - the index number of the batch sent to NED
+        **Key Arguments**
+
+        - ``batchCount`` - the index number of the batch sent to NED
+        
 
         .. todo ::
 
@@ -471,14 +481,14 @@ class ned_d(_base_importer):
 
         # QUERY NED WITH BATCH
         totalCount = len(self.theseIds)
-        print "requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals()
+        print("requesting metadata from NED for %(totalCount)s galaxies (batch %(batchCount)s)" % locals())
         search = namesearch(
             log=self.log,
-            names=self.theseIds.keys(),
+            names=list(self.theseIds.keys()),
             quiet=True
         )
         results = search.get()
-        print "results returned from ned -- starting to add to database" % locals()
+        print("results returned from ned -- starting to add to database" % locals())
 
         # CLEAN THE RETURNED DATA AND UPDATE DATABASE
         totalCount = len(results)
@@ -490,7 +500,7 @@ class ned_d(_base_importer):
                    "ned_notes", "eb_v", "raDeg", "radio_morphology", "activity_type", "minor_diameter_arcmin", "decDeg", "redshift_err", "in_ned"]
 
         if not len(results):
-            for k, v in self.theseIds.iteritems():
+            for k, v in list(self.theseIds.items()):
                 dictList.append({
                     "in_ned": 0,
                     "primaryID": v
@@ -499,13 +509,13 @@ class ned_d(_base_importer):
 
             thisDict["tableName"] = tableName
             count += 1
-            for k, v in thisDict.iteritems():
+            for k, v in list(thisDict.items()):
                 if not v or len(v) == 0:
                     thisDict[k] = "null"
                 if k in ["major_diameter_arcmin", "minor_diameter_arcmin"] and (":" in v or "?" in v or "<" in v):
                     thisDict[k] = v.replace(":", "").replace(
                         "?", "").replace("<", "")
-                if isinstance(v, str) and '"' in v:
+                if isinstance(v, ("".__class__, u"".__class__)) and '"' in v:
                     thisDict[k] = v.replace('"', '\\"')
             if "Input name not" not in thisDict["input_note"] and "Same object as" not in thisDict["input_note"]:
                 if thisDict["ra"] != "null" and thisDict["dec"] != "null":
@@ -593,7 +603,7 @@ class ned_d(_base_importer):
 
             if count > totalCount:
                 count = totalCount
-            percent = (float(count) / float(totalCount)) * 100.
+            percent = (old_div(float(count), float(totalCount))) * 100.
 
             primaryID = row["primaryID"]
             raDeg = float(row["raDeg"])
@@ -602,8 +612,8 @@ class ned_d(_base_importer):
 
             # SDSS CAN ONLY ACCEPT 60 QUERIES/MIN
             time.sleep(1.1)
-            print "%(count)s / %(totalCount)s (%(percent)1.1f%%) NED galaxies checked for SDSS coverage" % locals()
-            print "NED NAME: ", primary_ned_id
+            print("%(count)s / %(totalCount)s (%(percent)1.1f%%) NED galaxies checked for SDSS coverage" % locals())
+            print("NED NAME: ", primary_ned_id)
 
             # covered = True | False | 999 (i.e. not sure)
             sdss_coverage = check_coverage(

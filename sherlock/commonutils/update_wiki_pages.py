@@ -5,10 +5,10 @@
 
 :Author:
     David Young
-
-:Date Created:
-    November 18, 2016
 """
+from __future__ import print_function
+from builtins import str
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -21,28 +21,29 @@ import pickle
 from docopt import docopt
 from fundamentals.mysql import readquery
 
-
-class update_wiki_pages():
-
+class update_wiki_pages(object):
     """
     *Update sherlock's github wiki pages with some useful info regarding the crossmatch database catalogue tables*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    
 
-        To trigger an update of sherlock's wiki pages to give an overview of the crossmatch table database tables run the following:
+    **Usage**
 
-        .. code-block:: python 
+    To trigger an update of sherlock's wiki pages to give an overview of the crossmatch table database tables run the following:
 
-            from sherlock.commonutils import update_wiki_pages
-            wiki = update_wiki_pages(
-                log=log,
-                settings=settings
-            )
-            wiki.update() 
+    ```python
+    from sherlock.commonutils import update_wiki_pages
+    wiki = update_wiki_pages(
+        log=log,
+        settings=settings
+    )
+    wiki.update()
+    ```
+    
 
     .. todo ::
 
@@ -71,7 +72,6 @@ class update_wiki_pages():
         dbConns, dbVersions = db.connect()
         self.transientsDbConn = dbConns["transients"]
         self.cataloguesDbConn = dbConns["catalogues"]
-        self.pmDbConn = dbConns["marshall"]
 
         self.basicColumns = [
             "view_name",
@@ -97,8 +97,13 @@ class update_wiki_pages():
         self.log.debug('starting the ``update`` method')
 
         if "sherlock wiki root" not in self.settings:
-            print "Sherlock wiki settings not found in settings file"
+            print("Sherlock wiki settings not found in settings file")
             return
+        else:
+            from os.path import expanduser
+            home = expanduser("~")
+            self.settings["sherlock wiki root"] = self.settings[
+                "sherlock wiki root"].replace("~", home)
 
         staticTableInfo = self._get_table_infos()
         viewInfo = self._get_view_infos()
@@ -122,7 +127,7 @@ class update_wiki_pages():
         self.log.debug('starting the ``_get_table_infos`` method')
 
         sqlQuery = u"""
-            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" and table_name not like "%%stream"  order by number_of_rows desc;
+            SELECT * FROM tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" and table_name not like "%%stream"  order by number_of_rows desc;
         """ % locals()
         tableInfo = readquery(
             log=self.log,
@@ -152,7 +157,7 @@ class update_wiki_pages():
         self.log.debug('starting the ``_get_view_infos`` method')
 
         sqlQuery = u"""
-            SELECT v.*, t.description as "master table" FROM crossmatch_catalogues.tcs_helper_catalogue_views_info as v,  crossmatch_catalogues.tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like "legacy%%" and t.id=v.table_id order by number_of_rows desc
+            SELECT v.*, t.description as "master table" FROM tcs_helper_catalogue_views_info as v,  tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like "legacy%%" and t.id=v.table_id order by number_of_rows desc
         """ % locals()
         viewInfo = readquery(
             log=self.log,
@@ -182,7 +187,7 @@ class update_wiki_pages():
         self.log.debug('starting the ``_get_stream_view_infos`` method')
 
         sqlQuery = u"""
-            SELECT * FROM crossmatch_catalogues.tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%"  and table_name like "%%stream" order by number_of_rows desc;
+            SELECT * FROM tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%"  and table_name like "%%stream" order by number_of_rows desc;
         """ % locals()
         streamInfo = readquery(
             log=self.log,
@@ -212,13 +217,17 @@ class update_wiki_pages():
     ):
         """generate markdown format tables from the database query results
 
-        **Key Arguments:**
-            - ``tableData`` -- the sherlock-catalogues database table metadata.
-            - ``viewData`` -- the sherlock-catalogues database view metadata.
-            - ``streamData`` -- the sherlock-catalogues database streamed data tables' metadata.
+        **Key Arguments**
 
-        **Return:**
-            - None
+        - ``tableData`` -- the sherlock-catalogues database table metadata.
+        - ``viewData`` -- the sherlock-catalogues database view metadata.
+        - ``streamData`` -- the sherlock-catalogues database streamed data tables' metadata.
+        
+
+        **Return**
+
+        - None
+        
         """
         self.log.debug('starting the ``_create_md_tables`` method')
 
@@ -299,7 +308,7 @@ class update_wiki_pages():
         self.mdViews = header + rows
 
         header = u"""
-| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |  
+| <sub>Table Name</sub> | <sub>Description</sub> | <sub>Reference</sub> | <sub>Number Rows</sub> | <sub>Objects</sub> |
 | :--- | :--- | :--- | :--- | :--- |  """
 
         rows = u""
@@ -402,7 +411,7 @@ class update_wiki_pages():
         cmd = """cd %(gdir)s && git add --all && git commit -m "x" && git pull origin master && git push origin master""" % locals()
         p = Popen(cmd, stdout=PIPE, stdin=PIPE, shell=True)
         output = p.communicate()[0]
-        print output
+        print(output)
         self.log.debug('output: %(output)s' % locals())
 
         self.log.debug('completed the ``_update_github`` method')

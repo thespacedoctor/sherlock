@@ -5,17 +5,12 @@
 
 :Author:
     David Young
-
-:Date Created:
-    December 16, 2016
 """
-################# GLOBAL IMPORTS ####################
 import sys
 import os
 os.environ['TERM'] = 'vt100'
 from fundamentals import tools
 from fundamentals.mysql import readquery
-
 
 def get_crossmatch_catalogues_column_map(
         dbConn,
@@ -32,24 +27,29 @@ def get_crossmatch_catalogues_column_map(
     .. image:: https://farm5.staticflickr.com/4604/38429536400_eafa991580_o.png
         :width: 200 px
 
-    **Key Arguments:**
-        - ``dbConn`` -- the sherlock-catalogues database connection
-        - ``log`` -- logger
+    **Key Arguments**
 
-    **Return:**
-        - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
+    - ``dbConn`` -- the sherlock-catalogues database connection
+    - ``log`` -- logger
+    
 
-    **Usage:**
+    **Return**
 
-        To collect the column map dictionary of dictionaries from the catalogues database, use the ``get_crossmatch_catalogues_column_map`` function:
+    - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
+    
 
-        .. code-block:: python 
+    **Usage**
 
-            from sherlock.commonutils import get_crossmatch_catalogues_column_map
-            colMaps = get_crossmatch_catalogues_column_map(
-                log=log,
-                dbConn=cataloguesDbConn
-            )
+    To collect the column map dictionary of dictionaries from the catalogues database, use the ``get_crossmatch_catalogues_column_map`` function:
+
+    ```python
+    from sherlock.commonutils import get_crossmatch_catalogues_column_map
+    colMaps = get_crossmatch_catalogues_column_map(
+        log=log,
+        dbConn=cataloguesDbConn
+    )
+    ```
+    
     """
     log.debug('starting the ``get_crossmatch_catalogues_column_map`` function')
 
