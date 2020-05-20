@@ -38,4 +38,5 @@ Functions
    :toctree: _autosummary
    :nosignatures:
 
-   sherlock.commonutils.get_crossmatch_catalogues_column_map 
+   sherlock.commonutils.get_crossmatch_catalogues_column_map
+   sherlock.commonutils.getpackagepath 
