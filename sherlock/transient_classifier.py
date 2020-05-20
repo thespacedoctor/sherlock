@@ -1428,7 +1428,7 @@ class transient_classifier(object):
         else:
             rows = crossmatches
 
-        print "FINISHED COLLECTING TRANSIENTS WITH NO ANNOTATIONS/GENERATING ANNOTATIONS: %d" % (time.time() - start_time,)
+        # print "FINISHED COLLECTING TRANSIENTS WITH NO ANNOTATIONS/GENERATING ANNOTATIONS: %d" % (time.time() - start_time,)
         # start_time = time.time()
 
         updates = []
