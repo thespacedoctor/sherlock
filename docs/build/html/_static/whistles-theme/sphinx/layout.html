@@ -1,0 +1,32 @@
+{# layout.html #}
+{# Import the theme's layout. #}
+{% extends "!layout.html" %}
+
+ {% set css_files = css_files + ['_static/whistles-theme/Contents/Resources/core.css'] %}
+ {% set css_files = css_files + ['_static/whistles-theme/Contents/Resources/style.css'] %}
+ {% set css_files = css_files + ['_static/whistles-theme/Contents/Resources/dryx.css'] %}
+
+{% block extrahead %}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          messageStyle: "none",
+          tex2jax: {preview: "none"}
+        });
+    </script>
+  
+  <!-- REMOTE SCRIPTS AND STYLES -->
+
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot-number.min.css">
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/monokai-sublime.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.4/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.11.3/flowchart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot.min.js"></script>
+
+  
+{% endblock %}
+
+{% set script_files = script_files + ["_static/whistles-theme/Contents/Resources/main.js"] %}

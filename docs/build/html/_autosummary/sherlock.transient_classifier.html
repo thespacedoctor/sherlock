@@ -1,0 +1,565 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>transient_classifier (class) &mdash; sherlock v2.0.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/whistles-theme/Contents/Resources/core.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/whistles-theme/Contents/Resources/style.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/whistles-theme/Contents/Resources/dryx.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/rtd_sphinx_search.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/whistles-theme/Contents/Resources/main.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="utKit (class)" href="sherlock.utKit.utKit.html" />
+    <link rel="prev" title="transient_catalogue_crossmatch (class)" href="sherlock.transient_catalogue_crossmatch.html" />
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          messageStyle: "none",
+          tex2jax: {preview: "none"}
+        });
+    </script>
+  
+  <!-- REMOTE SCRIPTS AND STYLES -->
+
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot-number.min.css">
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/monokai-sublime.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.4/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.11.3/flowchart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot.min.js"></script>
+
+  
+
+
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+          
+
+
+          
+              
+          
+
+
+<!--           
+            <a href="../index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="../_static/thespacedoctor_icon_white_circle.png" class="logo" alt="Logo"/>
+          
+          </a> -->
+
+
+
+          
+            <a href="../index.html" class="icon icon-home"> sherlock</a> <p>mine a library of historical and on-going astronomical survey data in an attempt to identify the sources of transient/variable events, and predict their classifications based on crossmatched data</p> <a href="../index.html"><img src="../_static/thespacedoctor_icon_white_circle.png" class="logo" alt="Logo"/> </a>
+          
+
+
+          
+          
+            
+            
+              <div class="version">
+                v2.0.3
+              </div>
+            
+          
+
+          
+              <a class="github-button" href="https://github.com/thespacedoctor/sherlock" data-size="large" data-show-count="true" aria-label="Star thespacedoctor/sherlock on GitHub">Star</a>
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../initialisation.html">Initialisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../todolist.html">Todo List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes_link.html">Release Notes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../autosummary.html#classes">Classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sherlock.catalogue_conesearch.html">catalogue_conesearch <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.commonutils.update_wiki_pages.html">update_wiki_pages <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.database.html">database <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.database_cleaner.html">database_cleaner <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ifs.html">ifs <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned.html">ned <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.ned_d.html">ned_d <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.imports.veron.html">veron <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.transient_catalogue_crossmatch.html">transient_catalogue_crossmatch <em>(class)</em></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">transient_classifier <em>(class)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sherlock.utKit.utKit.html">utKit <em>(class)</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary.html#functions">Functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">A-Z Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sherlock</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../autosummary.html">Modules</a> &raquo;</li>
+        
+      <li>transient_classifier <em>(class)</em></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/sherlock.transient_classifier.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="transient-classifier-class">
+<h1>transient_classifier <em>(class)</em><a class="headerlink" href="#transient-classifier-class" title="Permalink to this headline">  ∞</a></h1>
+<dl class="py class">
+<dt id="sherlock.transient_classifier">
+<em class="property">class </em><code class="sig-name descname">transient_classifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log</span></em>, <em class="sig-param"><span class="n">settings</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">update</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ra</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dec</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">updateNed</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">daemonMode</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">updatePeakMags</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">oneRun</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/transient_classifier.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.transient_classifier" title="Permalink to this definition">  ∞</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><em>The Sherlock Transient Classifier</em></p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">log</span></code> – logger</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">settings</span></code> – the settings dictionary</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code> – update the transient database with crossmatch results (boolean)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ra</span></code> – right ascension of a single transient source. Default <em>False</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dec</span></code> – declination of a single transient source. Default <em>False</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> – the ID of a single transient source. Default <em>False</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose</span></code> – amount of details to print about crossmatches to stdout. 0|1|2 Default <em>0</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">updateNed</span></code> – update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default <em>True</em>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">daemonMode</span></code> – run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default <em>True</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">updatePeakMags</span></code> – update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">oneRun</span></code> – only process one batch of transients, usful for unit testing. Default <em>False</em></p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Usage</strong></p>
+<p>To setup your logger, settings and database connections, please use the <code class="docutils literal notranslate"><span class="pre">fundamentals</span></code> package (<a class="reference external" href="http://fundamentals.readthedocs.io/en/latest/#tutorial">see tutorial here</a>).</p>
+<p>To initiate a transient_classifier object, use the following:</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>update the package tutorial if needed</p></li>
+</ul>
+</div>
+<p>The sherlock classifier can be run in one of two ways. The first is to pass into the coordinates of an object you wish to classify:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sherlock</span> <span class="kn">import</span> <span class="n">transient_classifier</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">transient_classifier</span><span class="p">(</span>
+    <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+    <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+    <span class="n">ra</span><span class="o">=</span><span class="s2">&quot;08:57:57.19&quot;</span><span class="p">,</span>
+    <span class="n">dec</span><span class="o">=</span><span class="s2">&quot;+43:25:44.1&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;PS17gx&quot;</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+<span class="n">classifications</span><span class="p">,</span> <span class="n">crossmatches</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The crossmatches returned are a list of dictionaries giving details of the crossmatched sources. The classifications returned are a list of classifications resulting from these crossmatches. The lists are ordered from most to least likely classification and the indicies for the crossmatch and the classification lists are synced.</p>
+<p>The second way to run the classifier is to not pass in a coordinate set and therefore cause sherlock to run the classifier on the transient database referenced in the sherlock settings file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sherlock</span> <span class="kn">import</span> <span class="n">transient_classifier</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">transient_classifier</span><span class="p">(</span>
+    <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span>
+    <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+    <span class="n">update</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here the transient list is selected out of the database using the <code class="docutils literal notranslate"><span class="pre">transient</span> <span class="pre">query</span></code> value in the settings file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">database settings</span><span class="p">:</span>
+    <span class="nt">transients</span><span class="p">:</span>
+        <span class="nt">user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myusername</span>
+        <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypassword</span>
+        <span class="nt">db</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nice_transients</span>
+        <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+        <span class="nt">transient table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">transientBucket</span>
+        <span class="nt">transient query</span><span class="p">:</span> <span class="s">&quot;select</span><span class="nv"> </span><span class="s">primaryKeyId</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">&#39;id&#39;,</span><span class="nv"> </span><span class="s">transientBucketId</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">&#39;alt_id&#39;,</span><span class="nv"> </span><span class="s">raDeg</span><span class="nv"> </span><span class="s">&#39;ra&#39;,</span><span class="nv"> </span><span class="s">decDeg</span><span class="nv"> </span><span class="s">&#39;dec&#39;,</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">&#39;name&#39;,</span><span class="nv"> </span><span class="s">sherlockClassification</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">&#39;object_classification&#39;</span>
+            <span class="s">from</span><span class="nv"> </span><span class="s">transientBucket</span><span class="nv"> </span><span class="s">where</span><span class="nv"> </span><span class="s">object_classification</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">null</span>
+        <span class="s">transient</span><span class="nv"> </span><span class="s">primary</span><span class="nv"> </span><span class="s">id</span><span class="nv"> </span><span class="s">column:</span><span class="nv"> </span><span class="s">primaryKeyId</span>
+        <span class="s">transient</span><span class="nv"> </span><span class="s">classification</span><span class="nv"> </span><span class="s">column:</span><span class="nv"> </span><span class="s">sherlockClassification</span>
+        <span class="s">tunnel:</span><span class="nv"> </span><span class="s">False</span>
+</pre></div>
+</div>
+<p>By setting <code class="docutils literal notranslate"><span class="pre">update=True</span></code> the classifier will update the <code class="docutils literal notranslate"><span class="pre">sherlockClassification</span></code> column of the <code class="docutils literal notranslate"><span class="pre">transient</span> <span class="pre">table</span></code> with new classification and populate the <code class="docutils literal notranslate"><span class="pre">sherlock_crossmatches</span></code> table with key details of the crossmatched sources from the catalogues database. By setting <code class="docutils literal notranslate"><span class="pre">update=False</span></code> results are printed to stdout but the database is not updated (useful for dry runs and testing new algorithms),</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">update</span> <span class="n">key</span> <span class="n">arguments</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span> <span class="k">with</span> <span class="n">defaults</span>
+<span class="o">-</span> <span class="n">update</span> <span class="k">return</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">usage</span> <span class="n">examples</span> <span class="ow">and</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">docstring</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">check</span> <span class="n">sublime</span> <span class="n">snippet</span> <span class="n">exists</span>
+<span class="o">-</span> <span class="n">clip</span> <span class="nb">any</span> <span class="n">useful</span> <span class="n">text</span> <span class="n">to</span> <span class="n">docs</span> <span class="n">mindmap</span>
+<span class="o">-</span> <span class="n">regenerate</span> <span class="n">the</span> <span class="n">docs</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">redendering</span> <span class="n">of</span> <span class="n">this</span> <span class="n">docstring</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_api/sherlock.transient_classifier.html#sherlock.transient_classifier.transient_classifier.classification_annotations" title="sherlock.transient_classifier.transient_classifier.classification_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classification_annotations</span></code></a>()</p></td>
+<td><p><em>add a detialed classification annotation to each classification in the sherlock_classifications table</em></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../_api/sherlock.transient_classifier.html#sherlock.transient_classifier.transient_classifier.classify" title="sherlock.transient_classifier.transient_classifier.classify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classify</span></code></a>()</p></td>
+<td><p><em>classify the transients selected from the transient selection query in the settings file or passed in via the CL or other code</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_api/sherlock.transient_classifier.html#sherlock.transient_classifier.transient_classifier.generate_match_annotation" title="sherlock.transient_classifier.transient_classifier.generate_match_annotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_match_annotation</span></code></a>(match[, …])</p></td>
+<td><p><em>generate a human readale annotation for the transient-catalogue source match</em></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../_api/sherlock.transient_classifier.html#sherlock.transient_classifier.transient_classifier.update_classification_annotations_and_summaries" title="sherlock.transient_classifier.transient_classifier.update_classification_annotations_and_summaries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_classification_annotations_and_summaries</span></code></a>([…])</p></td>
+<td><p><em>update classification annotations and summaries</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_api/sherlock.transient_classifier.html#sherlock.transient_classifier.transient_classifier.update_peak_magnitudes" title="sherlock.transient_classifier.transient_classifier.update_peak_magnitudes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_peak_magnitudes</span></code></a>()</p></td>
+<td><p><em>update peak magnitudes</em></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="sherlock.transient_classifier.classification_annotations">
+<code class="sig-name descname">classification_annotations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/transient_classifier.classification_annotations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.transient_classifier.classification_annotations" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>add a detialed classification annotation to each classification in the sherlock_classifications table</em></p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li></li>
+</ul>
+<p>=</p>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p><strong>Usage</strong></p>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span> <span class="n">code</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">update</span> <span class="n">key</span> <span class="n">arguments</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span> <span class="k">with</span> <span class="n">defaults</span>
+<span class="o">-</span> <span class="n">update</span> <span class="k">return</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">usage</span> <span class="n">examples</span> <span class="ow">and</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">docstring</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">check</span> <span class="n">sublime</span> <span class="n">snippet</span> <span class="n">exists</span>
+<span class="o">-</span> <span class="n">clip</span> <span class="nb">any</span> <span class="n">useful</span> <span class="n">text</span> <span class="n">to</span> <span class="n">docs</span> <span class="n">mindmap</span>
+<span class="o">-</span> <span class="n">regenerate</span> <span class="n">the</span> <span class="n">docs</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">redendering</span> <span class="n">of</span> <span class="n">this</span> <span class="n">docstring</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.transient_classifier.classify">
+<code class="sig-name descname">classify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/transient_classifier.classify.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.transient_classifier.classify" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>classify the transients selected from the transient selection query in the settings file or passed in via the CL or other code</em></p>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">crossmatches</span></code> – list of dictionaries of crossmatched associated sources</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">classifications</span></code> – the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)</p></li>
+</ul>
+<p>See class docstring for usage.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">update</span> <span class="n">key</span> <span class="n">arguments</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span> <span class="k">with</span> <span class="n">defaults</span>
+<span class="o">-</span> <span class="n">update</span> <span class="k">return</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">usage</span> <span class="n">examples</span> <span class="ow">and</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">docstring</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">check</span> <span class="n">sublime</span> <span class="n">snippet</span> <span class="n">exists</span>
+<span class="o">-</span> <span class="n">clip</span> <span class="nb">any</span> <span class="n">useful</span> <span class="n">text</span> <span class="n">to</span> <span class="n">docs</span> <span class="n">mindmap</span>
+<span class="o">-</span> <span class="n">regenerate</span> <span class="n">the</span> <span class="n">docs</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">redendering</span> <span class="n">of</span> <span class="n">this</span> <span class="n">docstring</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.transient_classifier.generate_match_annotation">
+<code class="sig-name descname">generate_match_annotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">match</span></em>, <em class="sig-param"><span class="n">updatePeakMagnitudes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/transient_classifier.generate_match_annotation.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.transient_classifier.generate_match_annotation" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>generate a human readale annotation for the transient-catalogue source match</em></p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">match</span></code> – the source crossmatched against the transient</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">updatePeakMagnitudes</span></code> – update the peak magnitudes in the annotations to give absolute magnitudes. Default <em>False</em></p></li>
+</ul>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p><strong>Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span> <span class="n">code</span>
+</pre></div>
+</div>
+<blockquote>
+<div><div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.transient_classifier.update_classification_annotations_and_summaries">
+<code class="sig-name descname">update_classification_annotations_and_summaries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">updatePeakMagnitudes</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">cl</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">crossmatches</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/transient_classifier.update_classification_annotations_and_summaries.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.transient_classifier.update_classification_annotations_and_summaries" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>update classification annotations and summaries</em></p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">updatePeakMagnitudes</span></code> – update the peak magnitudes in the annotations to give absolute magnitudes. Default <em>True</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cl</span></code> – reporting only to the command-line, do not update database. Default <em>False</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crossmatches</span></code> – crossmatches will be passed for the single classifications to report annotations from command-line</p></li>
+</ul>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p><strong>Usage</strong></p>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span> <span class="n">code</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">update</span> <span class="n">key</span> <span class="n">arguments</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span> <span class="k">with</span> <span class="n">defaults</span>
+<span class="o">-</span> <span class="n">update</span> <span class="k">return</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">usage</span> <span class="n">examples</span> <span class="ow">and</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">docstring</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">check</span> <span class="n">sublime</span> <span class="n">snippet</span> <span class="n">exists</span>
+<span class="o">-</span> <span class="n">clip</span> <span class="nb">any</span> <span class="n">useful</span> <span class="n">text</span> <span class="n">to</span> <span class="n">docs</span> <span class="n">mindmap</span>
+<span class="o">-</span> <span class="n">regenerate</span> <span class="n">the</span> <span class="n">docs</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">redendering</span> <span class="n">of</span> <span class="n">this</span> <span class="n">docstring</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sherlock.transient_classifier.update_peak_magnitudes">
+<code class="sig-name descname">update_peak_magnitudes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/thespacedoctor/sherlock/tree/master/sherlock/transient_classifier.update_peak_magnitudes.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sherlock.transient_classifier.update_peak_magnitudes" title="Permalink to this definition">  ∞</a></dt>
+<dd><p><em>update peak magnitudes</em></p>
+<p><strong>Key Arguments</strong></p>
+<ul class="simple">
+<li></li>
+</ul>
+<p>=</p>
+<p><strong>Return</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p><strong>Usage</strong></p>
+<div class="admonition-todo admonition" id="id5">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span> <span class="n">code</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">update</span> <span class="n">key</span> <span class="n">arguments</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span> <span class="k">with</span> <span class="n">defaults</span>
+<span class="o">-</span> <span class="n">update</span> <span class="k">return</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">definitions</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">usage</span> <span class="n">examples</span> <span class="ow">and</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">update</span> <span class="n">docstring</span> <span class="n">text</span>
+<span class="o">-</span> <span class="n">check</span> <span class="n">sublime</span> <span class="n">snippet</span> <span class="n">exists</span>
+<span class="o">-</span> <span class="n">clip</span> <span class="nb">any</span> <span class="n">useful</span> <span class="n">text</span> <span class="n">to</span> <span class="n">docs</span> <span class="n">mindmap</span>
+<span class="o">-</span> <span class="n">regenerate</span> <span class="n">the</span> <span class="n">docs</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">redendering</span> <span class="n">of</span> <span class="n">this</span> <span class="n">docstring</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sherlock.utKit.utKit.html" class="btn btn-neutral float-right" title="utKit (class)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sherlock.transient_catalogue_crossmatch.html" class="btn btn-neutral float-left" title="transient_catalogue_crossmatch (class)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Dave Young
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

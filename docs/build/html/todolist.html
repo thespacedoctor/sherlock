@@ -1,0 +1,481 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Todo List &mdash; sherlock v2.0.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/whistles-theme/Contents/Resources/core.css" type="text/css" />
+  <link rel="stylesheet" href="_static/whistles-theme/Contents/Resources/style.css" type="text/css" />
+  <link rel="stylesheet" href="_static/whistles-theme/Contents/Resources/dryx.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/js/rtd_sphinx_search.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="_static/whistles-theme/Contents/Resources/main.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Release Notes" href="changes_link.html" />
+    <link rel="prev" title="Initialisation" href="initialisation.html" />
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          messageStyle: "none",
+          tex2jax: {preview: "none"}
+        });
+    </script>
+  
+  <!-- REMOTE SCRIPTS AND STYLES -->
+
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot-number.min.css">
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/monokai-sublime.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.4/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.11.3/flowchart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bigfoot/2.1.4/bigfoot.min.js"></script>
+
+  
+
+
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+          
+
+
+          
+              
+          
+
+
+<!--           
+            <a href="index.html" class="icon icon-home"> sherlock
+          
+
+          
+            
+            <img src="_static/thespacedoctor_icon_white_circle.png" class="logo" alt="Logo"/>
+          
+          </a> -->
+
+
+
+          
+            <a href="index.html" class="icon icon-home"> sherlock</a> <p>mine a library of historical and on-going astronomical survey data in an attempt to identify the sources of transient/variable events, and predict their classifications based on crossmatched data</p> <a href="index.html"><img src="_static/thespacedoctor_icon_white_circle.png" class="logo" alt="Logo"/> </a>
+          
+
+
+          
+          
+            
+            
+              <div class="version">
+                v2.0.3
+              </div>
+            
+          
+
+          
+              <a class="github-button" href="https://github.com/thespacedoctor/sherlock" data-size="large" data-show-count="true" aria-label="Star thespacedoctor/sherlock on GitHub">Star</a>
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initialisation.html">Initialisation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Todo List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes_link.html">Release Notes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autosummary.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary.html#classes">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary.html#functions">Functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">A-Z Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sherlock</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Todo List</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/todolist.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="todo-list">
+<h1>Todo List<a class="headerlink" href="#todo-list" title="Permalink to this headline">  ∞</a></h1>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>update the package tutorial if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.catalogue_conesearch.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/catalogue_conesearch.py:docstring of sherlock.catalogue_conesearch.catalogue_conesearch, line 25.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>docuument cl_utils module</p></li>
+<li><p>tidy usage text</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.cl_utils.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/cl_utils.py:docstring of sherlock.cl_utils, line 7.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>write a checklist for adding a new catalogue to the sherlock database and reference it from here (use the image below of the tcs_helper_catalogue_views_info table)</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.commonutils.get_crossmatch_catalogues_column_map.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/commonutils/get_crossmatch_catalogues_column_map.py:docstring of sherlock.commonutils.get_crossmatch_catalogues_column_map.get_crossmatch_catalogues_column_map, line 7.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add an entry in the tutorial to clean database tables</p></li>
+</ul>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from sherlock.database_cleaner import database_cleaner
+db = database_cleaner(</p>
+<blockquote>
+<div><p>log=log,
+settings=settings</p>
+</div></blockquote>
+<p>)
+db.clean()
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.database_cleaner.html#id9"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/database_cleaner.py:docstring of sherlock.database_cleaner.database_cleaner, line 15.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.database_cleaner.html#id10"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/database_cleaner.py:docstring of sherlock.database_cleaner.database_cleaner._create_tcs_help_tables, line 25.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>update the package tutorial if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.transient_classifier.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.transient_classifier, line 26.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>update package tutorial if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.transient_classifier.html#id2"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.transient_classifier._consolidate_coordinateList, line 16.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.transient_classifier.html#id3"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.transient_classifier.classification_annotations, line 16.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.transient_classifier.html#id4"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.transient_classifier.update_classification_annotations_and_summaries, line 18.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.transient_classifier.html#id5"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.transient_classifier.update_peak_magnitudes, line 16.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.transient_classifier.html#id6"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.transient_classifier._create_tables_if_not_exist, line 16.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_api/sherlock.transient_classifier.html#id7"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.transient_classifier.generate_match_annotation, line 25.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>update the package tutorial if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.catalogue_conesearch.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/catalogue_conesearch.py:docstring of sherlock.catalogue_conesearch, line 25.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>write a checklist for adding a new catalogue to the sherlock database and reference it from here (use the image below of the tcs_helper_catalogue_views_info table)</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.commonutils.get_crossmatch_catalogues_column_map.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/commonutils/get_crossmatch_catalogues_column_map.py:docstring of sherlock.commonutils.get_crossmatch_catalogues_column_map, line 7.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add an entry in the tutorial to clean database tables</p></li>
+</ul>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from sherlock.database_cleaner import database_cleaner
+db = database_cleaner(</p>
+<blockquote>
+<div><p>log=log,
+settings=settings</p>
+</div></blockquote>
+<p>)
+db.clean()
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.database_cleaner.html#id9"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/database_cleaner.py:docstring of sherlock.database_cleaner, line 15.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>update the package tutorial if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.transient_classifier.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier, line 26.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.transient_classifier.html#id2"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.classification_annotations, line 16.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.transient_classifier.html#id3"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.generate_match_annotation, line 25.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.transient_classifier.html#id4"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.update_classification_annotations_and_summaries, line 18.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>add usage info</p></li>
+<li><p>create a sublime snippet for usage</p></li>
+<li><p>write a command-line tool for this method</p></li>
+<li><p>update package tutorial with command-line tool info if needed</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_autosummary/sherlock.transient_classifier.html#id5"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/sherlock/transient_classifier.py:docstring of sherlock.transient_classifier.update_peak_magnitudes, line 16.)</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>nice!</p></li>
+</ul>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="_template_.html#id1"><em>original entry</em></a> is located in /var/lib/jenkins/workspace/sherlock_feature_update/docs/source/_template_.md, line 1.)</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="changes_link.html" class="btn btn-neutral float-right" title="Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="initialisation.html" class="btn btn-neutral float-left" title="Initialisation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Dave Young
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

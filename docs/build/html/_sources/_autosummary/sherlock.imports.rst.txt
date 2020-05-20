@@ -1,9 +1,9 @@
-commonutils *(module)*
-===============================
+imports *(module)*
+===========================
 
 
 
-.. automodule:: sherlock.commonutils
+.. automodule:: sherlock.imports
     :members:
     :undoc-members:
     :show-inheritance:
@@ -39,13 +39,19 @@ commonutils *(module)*
     
     
     
+    
         
-            ~get_crossmatch_catalogues_column_map (nice)
+            ~ifs (nice)
        
     
     
         
-            ~getpackagepath (nice)
+            ~ned (nice)
+       
+    
+    
+        
+            ~ned_d (nice)
        
     
     
@@ -53,7 +59,7 @@ commonutils *(module)*
     
     
         
-            ~update_wiki_pages (nice)
+            ~veron (nice)
        
     
     

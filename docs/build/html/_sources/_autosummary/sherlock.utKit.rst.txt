@@ -1,9 +1,9 @@
-commonutils *(module)*
-===============================
+utKit *(module)*
+=========================
 
 
 
-.. automodule:: sherlock.commonutils
+.. automodule:: sherlock.utKit
     :members:
     :undoc-members:
     :show-inheritance:
@@ -11,6 +11,12 @@ commonutils *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~utKit
     
     
 
@@ -37,23 +43,8 @@ commonutils *(module)*
     
     
     
-    
-    
         
-            ~get_crossmatch_catalogues_column_map (nice)
-       
-    
-    
-        
-            ~getpackagepath (nice)
-       
-    
-    
-        
-    
-    
-        
-            ~update_wiki_pages (nice)
+            ~utKit (nice)
        
     
     
