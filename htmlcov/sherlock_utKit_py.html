@@ -58,70 +58,70 @@
     <p id="t5" class="pln"><span class="n"><a href="#t5">5</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t6" class="pln"><span class="n"><a href="#t6">6</a></span><span class="t"><span class="com"># OVERRIDES</span>&nbsp;</span><span class="r"></span></p>
     <p id="t7" class="pln"><span class="n"><a href="#t7">7</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t8" class="pln"><span class="n"><a href="#t8">8</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t9" class="run"><span class="n"><a href="#t9">9</a></span><span class="t"><span class="key">class</span> <span class="nam">utKit</span><span class="op">(</span><span class="nam">utKit</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t10" class="pln"><span class="n"><a href="#t10">10</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t11" class="pln"><span class="n"><a href="#t11">11</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t12" class="pln"><span class="n"><a href="#t12">12</a></span><span class="t"><span class="str">    *Override dryx utKit*</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t13" class="pln"><span class="n"><a href="#t13">13</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t14" class="pln"><span class="n"><a href="#t14">14</a></span><span class="t">    <span class="com"># Variable Data Atrributes</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t15" class="pln"><span class="n"><a href="#t15">15</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t16" class="pln"><span class="n"><a href="#t16">16</a></span><span class="t">    <span class="com"># Override Variable Data Atrributes</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t17" class="pln"><span class="n"><a href="#t17">17</a></span><span class="t">    <span class="com"># Initialisation</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t18" class="run"><span class="n"><a href="#t18">18</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t19" class="pln"><span class="n"><a href="#t19">19</a></span><span class="t">            <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t20" class="pln"><span class="n"><a href="#t20">20</a></span><span class="t">            <span class="nam">moduleDirectory</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t21" class="pln"><span class="n"><a href="#t21">21</a></span><span class="t">            <span class="nam">dbConn</span><span class="op">=</span><span class="nam">False</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t22" class="pln"><span class="n"><a href="#t22">22</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t23" class="run"><span class="n"><a href="#t23">23</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">moduleDirectory</span> <span class="op">=</span> <span class="nam">moduleDirectory</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t24" class="pln"><span class="n"><a href="#t24">24</a></span><span class="t">        <span class="com"># x-self-arg-tmpx</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t25" class="pln"><span class="n"><a href="#t25">25</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t26" class="pln"><span class="n"><a href="#t26">26</a></span><span class="t">        <span class="com"># SETUP PATHS TO COMMON DIRECTORIES FOR TEST DATA</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t27" class="run"><span class="n"><a href="#t27">27</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">pathToInputDir</span> <span class="op">=</span> <span class="nam">moduleDirectory</span> <span class="op">+</span> <span class="str">"/input/"</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t28" class="run"><span class="n"><a href="#t28">28</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">pathToOutputDir</span> <span class="op">=</span> <span class="nam">moduleDirectory</span> <span class="op">+</span> <span class="str">"/output/"</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t29" class="pln"><span class="n"><a href="#t29">29</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t30" class="pln"><span class="n"><a href="#t30">30</a></span><span class="t">        <span class="com"># SETUP LOGGING</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t31" class="run"><span class="n"><a href="#t31">31</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">loggerConfig</span> <span class="op">=</span> <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t32" class="pln"><span class="n"><a href="#t32">32</a></span><span class="t"><span class="str">        version: 1</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t33" class="pln"><span class="n"><a href="#t33">33</a></span><span class="t"><span class="str">        formatters:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t34" class="pln"><span class="n"><a href="#t34">34</a></span><span class="t"><span class="str">            file_style:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t35" class="pln"><span class="n"><a href="#t35">35</a></span><span class="t"><span class="str">                format: '* %(asctime)s - %(name)s - %(levelname)s (%(filename)s > %(funcName)s > %(lineno)d) - %(message)s  '</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t36" class="pln"><span class="n"><a href="#t36">36</a></span><span class="t"><span class="str">                datefmt: '%Y/%m/%d %H:%M:%S'</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t37" class="pln"><span class="n"><a href="#t37">37</a></span><span class="t"><span class="str">            console_style:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t38" class="pln"><span class="n"><a href="#t38">38</a></span><span class="t"><span class="str">                format: '* %(asctime)s - %(levelname)s: %(filename)s:%(funcName)s:%(lineno)d > %(message)s'</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t39" class="pln"><span class="n"><a href="#t39">39</a></span><span class="t"><span class="str">                datefmt: '%H:%M:%S'</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t40" class="pln"><span class="n"><a href="#t40">40</a></span><span class="t"><span class="str">            html_style:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t41" class="pln"><span class="n"><a href="#t41">41</a></span><span class="t"><span class="str">                format: '&lt;div id="row" class="%(levelname)s">&lt;span class="date">%(asctime)s&lt;/span>   &lt;span class="label">file:&lt;/span>&lt;span class="filename">%(filename)s&lt;/span>   &lt;span class="label">method:&lt;/span>&lt;span class="funcName">%(funcName)s&lt;/span>   &lt;span class="label">line#:&lt;/span>&lt;span class="lineno">%(lineno)d&lt;/span> &lt;span class="pathname">%(pathname)s&lt;/span>  &lt;div class="right">&lt;span class="message">%(message)s&lt;/span>&lt;span class="levelname">%(levelname)s&lt;/span>&lt;/div>&lt;/div>'</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t42" class="pln"><span class="n"><a href="#t42">42</a></span><span class="t"><span class="str">                datefmt: '%Y-%m-%d &lt;span class= "time">%H:%M &lt;span class= "seconds">%Ss&lt;/span>&lt;/span>'</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t43" class="pln"><span class="n"><a href="#t43">43</a></span><span class="t"><span class="str">        handlers:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t44" class="pln"><span class="n"><a href="#t44">44</a></span><span class="t"><span class="str">            console:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t45" class="pln"><span class="n"><a href="#t45">45</a></span><span class="t"><span class="str">                class: logging.StreamHandler</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t46" class="pln"><span class="n"><a href="#t46">46</a></span><span class="t"><span class="str">                level: DEBUG</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t47" class="pln"><span class="n"><a href="#t47">47</a></span><span class="t"><span class="str">                formatter: console_style</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t48" class="pln"><span class="n"><a href="#t48">48</a></span><span class="t"><span class="str">                stream: ext://sys.stdout</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t49" class="pln"><span class="n"><a href="#t49">49</a></span><span class="t"><span class="str">        root:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t50" class="pln"><span class="n"><a href="#t50">50</a></span><span class="t"><span class="str">            level: DEBUG</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t51" class="pln"><span class="n"><a href="#t51">51</a></span><span class="t"><span class="str">            handlers: [console]"""</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t52" class="pln"><span class="n"><a href="#t52">52</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t53" class="pln"><span class="n"><a href="#t53">53</a></span><span class="t">        <span class="com"># Override Variable Data Atrributes</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t54" class="run"><span class="n"><a href="#t54">54</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">dbConfig</span> <span class="op">=</span> <span class="nam">False</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t55" class="run"><span class="n"><a href="#t55">55</a></span><span class="t">        <span class="key">if</span> <span class="nam">dbConn</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t56" class="mis show_mis"><span class="n"><a href="#t56">56</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">dbConfig</span> <span class="op">=</span> <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t57" class="pln"><span class="n"><a href="#t57">57</a></span><span class="t"><span class="str">             version: 1</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t58" class="pln"><span class="n"><a href="#t58">58</a></span><span class="t"><span class="str">             db: dryx_unit_testing</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t59" class="pln"><span class="n"><a href="#t59">59</a></span><span class="t"><span class="str">             host: localhost</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t60" class="pln"><span class="n"><a href="#t60">60</a></span><span class="t"><span class="str">             user: unittesting</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t61" class="pln"><span class="n"><a href="#t61">61</a></span><span class="t"><span class="str">             password: utpass</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t62" class="pln"><span class="n"><a href="#t62">62</a></span><span class="t"><span class="str">             """</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t8" class="run"><span class="n"><a href="#t8">8</a></span><span class="t"><span class="key">class</span> <span class="nam">utKit</span><span class="op">(</span><span class="nam">utKit</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t9" class="pln"><span class="n"><a href="#t9">9</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t10" class="pln"><span class="n"><a href="#t10">10</a></span><span class="t"><span class="str">    *Override dryx utKit*</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t11" class="pln"><span class="n"><a href="#t11">11</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t12" class="pln"><span class="n"><a href="#t12">12</a></span><span class="t">    <span class="com"># Variable Data Atrributes</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t13" class="pln"><span class="n"><a href="#t13">13</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t14" class="pln"><span class="n"><a href="#t14">14</a></span><span class="t">    <span class="com"># Override Variable Data Atrributes</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t15" class="pln"><span class="n"><a href="#t15">15</a></span><span class="t">    <span class="com"># Initialisation</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t16" class="run"><span class="n"><a href="#t16">16</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t17" class="pln"><span class="n"><a href="#t17">17</a></span><span class="t">            <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t18" class="pln"><span class="n"><a href="#t18">18</a></span><span class="t">            <span class="nam">moduleDirectory</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t19" class="pln"><span class="n"><a href="#t19">19</a></span><span class="t">            <span class="nam">dbConn</span><span class="op">=</span><span class="nam">False</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t20" class="pln"><span class="n"><a href="#t20">20</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t21" class="run"><span class="n"><a href="#t21">21</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">moduleDirectory</span> <span class="op">=</span> <span class="nam">moduleDirectory</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t22" class="pln"><span class="n"><a href="#t22">22</a></span><span class="t">        <span class="com"># x-self-arg-tmpx</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t23" class="pln"><span class="n"><a href="#t23">23</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t24" class="pln"><span class="n"><a href="#t24">24</a></span><span class="t">        <span class="com"># SETUP PATHS TO COMMON DIRECTORIES FOR TEST DATA</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t25" class="run"><span class="n"><a href="#t25">25</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">pathToInputDir</span> <span class="op">=</span> <span class="nam">moduleDirectory</span> <span class="op">+</span> <span class="str">"/input/"</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t26" class="run"><span class="n"><a href="#t26">26</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">pathToOutputDir</span> <span class="op">=</span> <span class="nam">moduleDirectory</span> <span class="op">+</span> <span class="str">"/output/"</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t27" class="pln"><span class="n"><a href="#t27">27</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t28" class="pln"><span class="n"><a href="#t28">28</a></span><span class="t">        <span class="com"># SETUP LOGGING</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t29" class="run"><span class="n"><a href="#t29">29</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">loggerConfig</span> <span class="op">=</span> <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t30" class="pln"><span class="n"><a href="#t30">30</a></span><span class="t"><span class="str">        version: 1</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t31" class="pln"><span class="n"><a href="#t31">31</a></span><span class="t"><span class="str">        formatters:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t32" class="pln"><span class="n"><a href="#t32">32</a></span><span class="t"><span class="str">            file_style:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t33" class="pln"><span class="n"><a href="#t33">33</a></span><span class="t"><span class="str">                format: '* %(asctime)s - %(name)s - %(levelname)s (%(filename)s > %(funcName)s > %(lineno)d) - %(message)s  '</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t34" class="pln"><span class="n"><a href="#t34">34</a></span><span class="t"><span class="str">                datefmt: '%Y/%m/%d %H:%M:%S'</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t35" class="pln"><span class="n"><a href="#t35">35</a></span><span class="t"><span class="str">            console_style:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t36" class="pln"><span class="n"><a href="#t36">36</a></span><span class="t"><span class="str">                format: '* %(asctime)s - %(levelname)s: %(filename)s:%(funcName)s:%(lineno)d > %(message)s'</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t37" class="pln"><span class="n"><a href="#t37">37</a></span><span class="t"><span class="str">                datefmt: '%H:%M:%S'</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t38" class="pln"><span class="n"><a href="#t38">38</a></span><span class="t"><span class="str">            html_style:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t39" class="pln"><span class="n"><a href="#t39">39</a></span><span class="t"><span class="str">                format: '&lt;div id="row" class="%(levelname)s">&lt;span class="date">%(asctime)s&lt;/span>   &lt;span class="label">file:&lt;/span>&lt;span class="filename">%(filename)s&lt;/span>   &lt;span class="label">method:&lt;/span>&lt;span class="funcName">%(funcName)s&lt;/span>   &lt;span class="label">line#:&lt;/span>&lt;span class="lineno">%(lineno)d&lt;/span> &lt;span class="pathname">%(pathname)s&lt;/span>  &lt;div class="right">&lt;span class="message">%(message)s&lt;/span>&lt;span class="levelname">%(levelname)s&lt;/span>&lt;/div>&lt;/div>'</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t40" class="pln"><span class="n"><a href="#t40">40</a></span><span class="t"><span class="str">                datefmt: '%Y-%m-%d &lt;span class= "time">%H:%M &lt;span class= "seconds">%Ss&lt;/span>&lt;/span>'</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t41" class="pln"><span class="n"><a href="#t41">41</a></span><span class="t"><span class="str">        handlers:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t42" class="pln"><span class="n"><a href="#t42">42</a></span><span class="t"><span class="str">            console:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t43" class="pln"><span class="n"><a href="#t43">43</a></span><span class="t"><span class="str">                class: logging.StreamHandler</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t44" class="pln"><span class="n"><a href="#t44">44</a></span><span class="t"><span class="str">                level: DEBUG</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t45" class="pln"><span class="n"><a href="#t45">45</a></span><span class="t"><span class="str">                formatter: console_style</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t46" class="pln"><span class="n"><a href="#t46">46</a></span><span class="t"><span class="str">                stream: ext://sys.stdout</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t47" class="pln"><span class="n"><a href="#t47">47</a></span><span class="t"><span class="str">        root:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t48" class="pln"><span class="n"><a href="#t48">48</a></span><span class="t"><span class="str">            level: DEBUG</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t49" class="pln"><span class="n"><a href="#t49">49</a></span><span class="t"><span class="str">            handlers: [console]"""</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t50" class="pln"><span class="n"><a href="#t50">50</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t51" class="pln"><span class="n"><a href="#t51">51</a></span><span class="t">        <span class="com"># Override Variable Data Atrributes</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t52" class="run"><span class="n"><a href="#t52">52</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">dbConfig</span> <span class="op">=</span> <span class="nam">False</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t53" class="run"><span class="n"><a href="#t53">53</a></span><span class="t">        <span class="key">if</span> <span class="nam">dbConn</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t54" class="mis show_mis"><span class="n"><a href="#t54">54</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">dbConfig</span> <span class="op">=</span> <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t55" class="pln"><span class="n"><a href="#t55">55</a></span><span class="t"><span class="str">             version: 1</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t56" class="pln"><span class="n"><a href="#t56">56</a></span><span class="t"><span class="str">             db: dryx_unit_testing</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t57" class="pln"><span class="n"><a href="#t57">57</a></span><span class="t"><span class="str">             host: localhost</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t58" class="pln"><span class="n"><a href="#t58">58</a></span><span class="t"><span class="str">             user: unittesting</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t59" class="pln"><span class="n"><a href="#t59">59</a></span><span class="t"><span class="str">             password: utpass</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t60" class="pln"><span class="n"><a href="#t60">60</a></span><span class="t"><span class="str">             """</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t61" class="pln"><span class="n"><a href="#t61">61</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t62" class="run"><span class="n"><a href="#t62">62</a></span><span class="t">        <span class="key">return</span>&nbsp;</span><span class="r"></span></p>
     <p id="t63" class="pln"><span class="n"><a href="#t63">63</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t64" class="run"><span class="n"><a href="#t64">64</a></span><span class="t">        <span class="key">return</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t65" class="pln"><span class="n"><a href="#t65">65</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t66" class="run"><span class="n"><a href="#t66">66</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_project_root</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t67" class="pln"><span class="n"><a href="#t67">67</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t68" class="pln"><span class="n"><a href="#t68">68</a></span><span class="t"><span class="str">        *Get the root of the `python` package - useful for getting files in the root directory of a project*</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t64" class="run"><span class="n"><a href="#t64">64</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_project_root</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t65" class="pln"><span class="n"><a href="#t65">65</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t66" class="pln"><span class="n"><a href="#t66">66</a></span><span class="t"><span class="str">        *Get the root of the `python` package - useful for getting files in the root directory of a project*</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t67" class="pln"><span class="n"><a href="#t67">67</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t68" class="pln"><span class="n"><a href="#t68">68</a></span><span class="t"><span class="str">        **Return**</span>&nbsp;</span><span class="r"></span></p>
     <p id="t69" class="pln"><span class="n"><a href="#t69">69</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t70" class="pln"><span class="n"><a href="#t70">70</a></span><span class="t"><span class="str">        **Return:**</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t71" class="pln"><span class="n"><a href="#t71">71</a></span><span class="t"><span class="str">            - ``rootPath`` -- the root path of a project</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t70" class="pln"><span class="n"><a href="#t70">70</a></span><span class="t"><span class="str">        - ``rootPath`` -- the root path of a project</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t71" class="pln"><span class="n"><a href="#t71">71</a></span><span class="t"><span class="str">        </span>&nbsp;</span><span class="r"></span></p>
     <p id="t72" class="pln"><span class="n"><a href="#t72">72</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p id="t73" class="run"><span class="n"><a href="#t73">73</a></span><span class="t">        <span class="key">import</span> <span class="nam">os</span>&nbsp;</span><span class="r"></span></p>
     <p id="t74" class="run"><span class="n"><a href="#t74">74</a></span><span class="t">        <span class="nam">rootPath</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span><span class="op">.</span><span class="nam">dirname</span><span class="op">(</span><span class="nam">__file__</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -157,7 +157,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.0.4</a>,
-            created at 2020-05-19 10:12
+            created at 2020-05-20 19:10
         </p>
     </div>
 </div>
