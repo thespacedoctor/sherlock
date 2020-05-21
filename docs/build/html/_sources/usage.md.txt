@@ -43,7 +43,6 @@
         -h, --help              show this help message
         -s, --settings          the settings file
         -b, --verbose           print more details to stdout
-        -l, --transientlistId   the id of the transient list to classify
         -u, --update            update the transient database with new classifications and crossmatches
         -v, --version           print the version of sherlock
     
