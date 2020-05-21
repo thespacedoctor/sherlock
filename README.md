@@ -2,10 +2,10 @@
 
 <!-- INFO BADGES -->  
 
-[![](https://img.shields.io/pypi/pyversions/sherlock)](https://pypi.org/project/sherlock/)  
-[![](https://img.shields.io/pypi/v/sherlock)](https://pypi.org/project/sherlock/)  
+[![](https://img.shields.io/pypi/pyversions/qub-sherlock)](https://pypi.org/project/qub-sherlock/)  
+[![](https://img.shields.io/pypi/v/qub-sherlock)](https://pypi.org/project/qub-sherlock/)  
 [![](https://img.shields.io/github/license/thespacedoctor/sherlock)](https://github.com/thespacedoctor/sherlock)  
-[![](https://img.shields.io/pypi/dm/sherlock)](https://pypi.org/project/sherlock/)  
+[![](https://img.shields.io/pypi/dm/qub-sherlock)](https://pypi.org/project/qub-sherlock/)  
 
 <!-- STATUS BADGES -->  
 
