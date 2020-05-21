@@ -42,7 +42,6 @@ Options:
     -h, --help              show this help message
     -s, --settings          the settings file
     -b, --verbose           print more details to stdout
-    -l, --transientlistId   the id of the transient list to classify
     -u, --update            update the transient database with new classifications and crossmatches
     -v, --version           print the version of sherlock
 """
@@ -82,6 +81,7 @@ def main(arguments=None):
         docString=__doc__,
         logLevel="WARNING",
         options_first=False,
+        distributionName="qub-sherlock",
         projectName="sherlock",
         defaultSettingsFile=True
     )
@@ -161,7 +161,7 @@ def main(arguments=None):
     dbmatch = a["dbmatch"]
     clean = a["clean"]
     wiki = a["wiki"]
-    iimport = a["iimport"]
+    iimport = a["import"]
     ned = a["ned"]
     cat = a["cat"]
     stream = a["stream"]
@@ -175,7 +175,6 @@ def main(arguments=None):
     skipMagUpdateFlag = a["skipMagUpdateFlag"]
     settingsFlag = a["settingsFlag"]
     verboseFlag = a["verboseFlag"]
-    transientlistIdFlag = a["transientlistIdFlag"]
     updateFlag = a["updateFlag"]
 
     # CALL FUNCTIONS/OBJECTS
