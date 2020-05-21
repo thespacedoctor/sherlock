@@ -26,7 +26,7 @@ install_requires = [
 exists = os.path.exists("/home/docs/")
 if exists:
     c_exclude_list = ['healpy', 'astropy',
-                      'numpy', 'wcsaxes', 'ligo-gracedb']
+                      'numpy', 'sherlock', 'wcsaxes', 'HMpTy', 'ligo-gracedb']
     for e in c_exclude_list:
         try:
             install_requires.remove(e)
