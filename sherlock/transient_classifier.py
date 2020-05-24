@@ -866,6 +866,9 @@ class transient_classifier(object):
                 "direct_distance_scale": mergedMatch["direct_distance_scale"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
+            if not mergedMatch["direct_distance"]:
+                bestDirectDistance["qual"] = 0
+
             bestSpecz = {
                 "z": mergedMatch["z"],
                 "distance": mergedMatch["distance"],
@@ -873,14 +876,16 @@ class transient_classifier(object):
                 "scale": mergedMatch["scale"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
+            if not mergedMatch["distance"]:
+                bestSpecz["qual"] = 0
+
             bestPhotoz = {
                 "photoZ": mergedMatch["photoZ"],
                 "photoZErr": mergedMatch["photoZErr"],
-                "distance": mergedMatch["distance"],
-                "distance_modulus": mergedMatch["distance_modulus"],
-                "scale": mergedMatch["scale"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
+            if not mergedMatch["photoZ"]:
+                bestPhotoz["qual"] = 0
 
             # ORDER THESE FIRST IN NAME LISTING
             mergedMatch["search_name"] = None
@@ -1010,7 +1015,7 @@ class transient_classifier(object):
             # MERGE THE BEST RESULTS
             for l in [bestPhotoz, bestSpecz, bestDirectDistance]:
                 for k, v in list(l.items()):
-                    if k != "qual":
+                    if k != "qual" and v:
                         mergedMatch[k] = v
 
             mergedMatch["catalogue_object_id"] = str(mergedMatch[
@@ -1020,6 +1025,7 @@ class transient_classifier(object):
             if mergedMatch["direct_distance_scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
                     "direct_distance_scale"] * mergedMatch["separationArcsec"]
+                print(mergedMatch["physical_separation_kpc"])
             elif mergedMatch["scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
                     "scale"] * mergedMatch["separationArcsec"]
@@ -1219,7 +1225,7 @@ class transient_classifier(object):
             )
             tableData = dataSet.table(filepath=None)
 
-            print(tableData)
+            print(tableData.decode("UTF-8"))
 
         self.log.debug('completed the ``_print_results_to_stdout`` method')
         return None
@@ -1867,12 +1873,12 @@ END""" % locals())
         else:
             # elif match["classificationReliability"] in (2, 3):
             classificationReliability = "possibly associated"
-            n = match["northSeparationArcsec"]
+            n = float(match["northSeparationArcsec"])
             if n > 0:
                 nd = "S"
             else:
                 nd = "N"
-            e = match["eastSeparationArcsec"]
+            e = float(match["eastSeparationArcsec"])
             if e > 0:
                 ed = "W"
             else:

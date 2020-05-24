@@ -21,6 +21,7 @@ from astrocalc.coords import separations
 import time
 from fundamentals.mysql import database
 
+
 class transient_catalogue_crossmatch(object):
     """
     *crossmatch a list of transients against a suite of catalogues according to given search algorithm*
@@ -32,7 +33,7 @@ class transient_catalogue_crossmatch(object):
     - ``settings`` -- the settings dictionary
     - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
     - ``transients`` -- the list of transients
-    
+
 
     **Usage**
 
@@ -56,7 +57,7 @@ class transient_catalogue_crossmatch(object):
     ```python
     classifications = xmatcher.match()
     ```
-    
+
 
     .. todo ::
 
@@ -102,7 +103,7 @@ class transient_catalogue_crossmatch(object):
         **Return**
 
         - ``classification`` -- the crossmatch results and classifications assigned to the transients
-        
+
 
         See the class docstring for usage.
 
@@ -292,11 +293,11 @@ class transient_catalogue_crossmatch(object):
         - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
         - ``physicalSearch`` -- is this angular search a sub-part of a physical separation search
         - ``classificationType`` -- synonym, association or annotation. Default *False*
-        
+
 
          **Return**
 
-         
+
             - matchedObjects -- any sources matched against the object
 
         **Usage**
@@ -352,7 +353,7 @@ class transient_catalogue_crossmatch(object):
             search_name=search_name
         )
         ```
-        
+
 
         .. todo ::
 
@@ -541,12 +542,12 @@ class transient_catalogue_crossmatch(object):
         - ``catalogueName`` -- the name of the catalogue the crossmatch results from
         - ``searchPara`` -- the search parameters for this individual search as lifted from the search algorithm in the sherlock settings file
         - ``search_name`` -- the name of the search as given in the sherlock settings file
-        
+
 
         **Return**
 
         - ``crossmatchDict`` -- the annotated crossmatch dictionary
-        
+
 
         .. todo ::
 
@@ -654,12 +655,12 @@ class transient_catalogue_crossmatch(object):
         - ``catalogueName`` -- the name of the catalogue the crossmatch results from
         - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
         - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match bright stars against
-        
+
 
         **Return**
 
         - ``brightStarMatches`` -- the trimmed matched sources (bright stars associations only)
-        
+
 
         .. todo ::
 
@@ -704,12 +705,12 @@ class transient_catalogue_crossmatch(object):
         - ``magnitudeLimitFilter`` -- the name of the column containing the magnitude to filter on
         - ``lowerMagnitudeLimit`` -- the lower magnitude limit to match general galaxies against
         - ``upperMagnitudeLimit`` -- the upper magnitude limit to match general galaxies against
-        
+
 
         **Return**
 
         - ``galaxyMatches`` -- the trimmed matched sources (associated galaxies only)
-        
+
 
         .. todo ::
 
@@ -760,12 +761,12 @@ class transient_catalogue_crossmatch(object):
         - ``search_name`` -- the name of the search
         - ``brightnessFilter`` -- is this search to be constrained by magnitude of the catalogue sources? Default *False*. [bright|faint|general]
         - ``classificationType`` -- synonym, association or annotation. Default *False*
-        
+
 
         **Return**
 
         - matchedObjects -- any sources matched against the object
-        
+
 
         To run a physical separation crossmatch, run in a similar way to the angular separation crossmatch:
 
@@ -780,7 +781,7 @@ class transient_catalogue_crossmatch(object):
             search_name=search_name
         )
         ```
-        
+
 
         .. todo ::
 
@@ -860,8 +861,8 @@ class transient_catalogue_crossmatch(object):
                         continue
                     thisMatch = True
                     newsearch_name = newsearch_name + " (direct distance)"
-                    newAngularSep = old_div(physicalRadius, \
-                        row["direct_distance_scale"])
+                    newAngularSep = old_div(physicalRadius,
+                                            row["direct_distance_scale"])
                 # NEW CHECK FOR A REDSHIFT DISTANCE
                 elif row["scale"] and physical_separation_kpc < physicalRadius:
                     thisMatch = True
