@@ -249,7 +249,7 @@ class transient_classifier(object):
             dbConn=self.cataloguesDbConn
         )
 
-        if self.transientsDbConn:
+        if self.transientsDbConn and self.update:
             self._create_tables_if_not_exist()
 
         import time
@@ -1225,7 +1225,7 @@ class transient_classifier(object):
             )
             tableData = dataSet.table(filepath=None)
 
-            print(tableData.decode("UTF-8"))
+            print(tableData)
 
         self.log.debug('completed the ``_print_results_to_stdout`` method')
         return None
@@ -1799,7 +1799,7 @@ END""" % locals())
 
 
         ```python
-        usage code 
+        usage code
         ```
 
         ---
