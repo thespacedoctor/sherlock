@@ -576,8 +576,6 @@ class transient_catalogue_crossmatch(object):
         if 'z' in crossmatchDict:
             # THE CATALOGUE HAS A REDSHIFT COLUMN
             redshift = crossmatchDict['z']
-        elif 'photoZ' in crossmatchDict:
-            redshift = crossmatchDict['photoZ']
         if redshift and redshift > 0.0:
             # CALCULATE DISTANCE MODULUS, ETC
             c = converter(log=self.log)
