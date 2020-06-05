@@ -3,8 +3,8 @@
 
 **v2.1.3 - June 5, 2020**
 
-**refactor**: stop sherlock checking for transient database triggers if running in non-update mode
-**fixed**: another sdss photoz issue where photoz ranking about specz
+* **refactor**: stop sherlock checking for transient database triggers if running in non-update mode
+* **fixed**: another sdss photoz issue where photoz ranking about specz
 
 **v2.1.2 - May 24, 2020**
 
