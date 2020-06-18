@@ -1414,7 +1414,7 @@ class transient_classifier(object):
         # print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
 
         # BULK RUN
-        if not crossmatches:
+        if crossmatches == False:
             if updatePeakMagnitudes:
                 sqlQuery = u"""
                     SELECT * from sherlock_crossmatches cm, sherlock_classifications cl where rank =1 and cl.transient_object_id= cm.transient_object_id and ((cl.classification not in ("AGN","CV","BS","VS") AND cm.dateLastModified > DATE_SUB(NOW(), INTERVAL 1 Day))  or cl.annotation is null)
