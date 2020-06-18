@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v2.1.4 - June 18, 2020**
+
+* **fixed**: an empty crossmatch set could cause a transient database update when not required
+
 **v2.1.3 - June 5, 2020**
 
 * **refactor**: stop sherlock checking for transient database triggers if running in non-update mode
