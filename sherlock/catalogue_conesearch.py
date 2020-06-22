@@ -18,6 +18,7 @@ from astrocalc.coords import unit_conversion
 from HMpTy.mysql import conesearch as hmptyConesearch
 import copy
 
+
 class catalogue_conesearch(object):
     """
     *The worker class for the conesearch module*
@@ -34,7 +35,7 @@ class catalogue_conesearch(object):
     - ``nearestOnly`` -- return only the nearest object. Default *False*
     - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
     - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
-    
+
 
         - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
         - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
@@ -104,7 +105,7 @@ class catalogue_conesearch(object):
         ra=["23:01:07.99", 45.36722, 13.875250],
         dec=["-01:58:04.5", 30.45671, -25.26721],
         radiusArcsec=60.,
-    
+
 
             colMaps=colMaps,
             tableName="tcs_view_agn_milliquas_v4_5",
@@ -210,12 +211,12 @@ class catalogue_conesearch(object):
 
         - ``matchIndies`` -- the indicies of the input transient sources (syncs with ``uniqueMatchDicts``)
         - ``uniqueMatchDicts`` -- the crossmatch results
-        
+
 
         **Usage**
 
         See class docstring for usage examples
-        
+
 
         .. todo ::
 

@@ -20,6 +20,7 @@ import pymysql as ms
 from docopt import docopt
 from fundamentals.mysql import readquery
 
+
 class database(object):
     """
     *the database object for sherlock, setting up ssh tunnels and various database connections*
@@ -32,12 +33,12 @@ class database(object):
 
     - ``log`` -- logger
     - ``settings`` -- the settings dictionary
-    
+
 
     **Return**
 
     - ``dbConns`` -- a dictionary of the database connections required by sherlock
-    
+
 
     **Usage**
 
@@ -54,7 +55,7 @@ class database(object):
     transientsDbConn = dbConns["transients"]
     cataloguesDbConn = dbConns["catalogues"]
     ```
-    
+
 
     .. todo ::
 
@@ -86,7 +87,7 @@ class database(object):
 
         - ``transientsDbConn`` -- the database hosting the transient source data
         - ``cataloguesDbConn`` -- connection to the database hosting the contextual catalogues the transients are to be crossmatched against
-        
+
 
         See the class docstring for usage
 
@@ -117,10 +118,12 @@ class database(object):
         dbConns = []
         for dbSettings in [transientSettings, catalogueSettings]:
             port = False
-            if dbSettings and dbSettings["tunnel"]:
+            if dbSettings and "tunnel" in dbSettings and dbSettings["tunnel"]:
                 port = self._setup_tunnel(
                     tunnelParameters=dbSettings["tunnel"]
                 )
+            elif dbSettings and "port" in dbSettings and dbSettings["port"]:
+                port = int(dbSettings["port"])
 
             if dbSettings:
                 # SETUP A DATABASE CONNECTION FOR THE STATIC CATALOGUES
@@ -179,12 +182,12 @@ class database(object):
         **Key Arguments**
 
         - ``tunnelParameters`` -- the tunnel parameters found associated with the database settings
-        
+
 
         **Return**
 
         - ``sshPort`` -- the port the ssh tunnel is connected via
-        
+
 
         .. todo ::
 
