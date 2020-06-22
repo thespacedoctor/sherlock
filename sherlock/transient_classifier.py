@@ -1025,7 +1025,7 @@ class transient_classifier(object):
             if mergedMatch["direct_distance_scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
                     "direct_distance_scale"] * mergedMatch["separationArcsec"]
-                print(mergedMatch["physical_separation_kpc"])
+
             elif mergedMatch["scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
                     "scale"] * mergedMatch["separationArcsec"]
@@ -1358,8 +1358,6 @@ class transient_classifier(object):
                 annotation.append("is synonymous with")
             elif classType in [2, 3]:
                 annotation.append("is possibly associated with")
-
-            print(xm["catalogue_object_id"])
 
         self.log.debug('completed the ``classification_annotations`` method')
         return None
