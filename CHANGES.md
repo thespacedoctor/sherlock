@@ -1,6 +1,11 @@
 
 ## Release Notes
 
+**v2.1.5 - June 22, 2020**
+
+* **refactor**: tunnel changes due to new jump box installation at QUB
+* **fixed:** some NED galaxies not reported if redshift does not exist but a semi-major axis is given
+
 **v2.1.4 - June 18, 2020**
 
 * **fixed**: an empty crossmatch set could cause a transient database update when not required

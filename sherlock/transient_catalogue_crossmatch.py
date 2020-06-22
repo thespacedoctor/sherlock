@@ -840,11 +840,12 @@ class transient_catalogue_crossmatch(object):
                 thisMatch = False
                 physical_separation_kpc = row["physical_separation_kpc"]
                 newsearch_name = search_name
-
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
                 # BYPASS NED FAULTY AXES MEASUREMENTS:
                 # https://gist.github.com/search?utf8=%E2%9C%93&q=user%3Athespacedoctor+ned
+
                 if row["major_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)):
+
                     if row["separationArcsec"] < row["major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]:
                         thisMatch = True
                         newsearch_name = newsearch_name + \
@@ -879,8 +880,18 @@ class transient_catalogue_crossmatch(object):
         if matchSubset:
 
             from operator import itemgetter
-            matchSubset = sorted(matchSubset, key=itemgetter(
-                'physical_separation_kpc'), reverse=False)
+
+            physicalDicts = []
+            physicalDicts[:] = [m for m in matchSubset if m[
+                'physical_separation_kpc']]
+
+            semiMajor = []
+            semiMajor[:] = [m for m in matchSubset if not m[
+                'physical_separation_kpc']]
+
+            matchSubset = sorted(physicalDicts, key=itemgetter(
+                'physical_separation_kpc'), reverse=False) + sorted(semiMajor, key=itemgetter(
+                    'separationArcsec'), reverse=False)
 
             if nearestOnly == True:
                 theseMatches = matchSubset[0]
