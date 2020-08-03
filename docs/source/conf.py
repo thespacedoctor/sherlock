@@ -395,6 +395,10 @@ def docstring(app, what, name, obj, options, lines):
     regex = re.compile(r'\n---')
     md = regex.sub(r"\n\n----------\n\n", md)
 
+    # FIX LINKS
+    regex = re.compile(r'\[(.*?)\]\(\/?(\_autosummary\/)?(\S*?)(\.html)?\)')
+    md = regex.sub(r'[\1](\3.html)', md)
+
     rst = md
     rst = m2r.convert(md)
     rst = rst.replace("6473829123", "  ")
