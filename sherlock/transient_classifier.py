@@ -584,7 +584,7 @@ class transient_classifier(object):
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn
         )
-        sqlQuery = """update tcs_cat_ned_stream set magnitude = CAST(`magnitude_filter` AS DECIMAL(5,2)) where magnitude is null;""" % locals(
+        sqlQuery = """update tcs_cat_ned_stream set magnitude = CAST(`magnitude_filter` AS DECIMAL(5,2)) where magnitude is null and magnitude_filter is not null;""" % locals(
         )
         writequery(
             log=self.log,
