@@ -1942,7 +1942,10 @@ END""" % locals())
         elif match["photoZ"]:
             z = match["photoZ"]
             zErr = match["photoZErr"]
-            distance = "photoZ=%(z)0.3f (&plusmn%(zErr)0.3f)" % locals()
+            if not zErr:
+                distance = "photoZ=%(z)0.3f" % locals()
+            else:
+                distance = "photoZ=%(z)0.3f (&plusmn%(zErr)0.3f)" % locals()
 
         if distance:
             distance = "%(distance)s" % locals()
