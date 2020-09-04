@@ -469,7 +469,12 @@ class transient_classifier(object):
             # COMMAND-LINE SINGLE CLASSIFICATION
             if self.ra:
                 self.update_classification_annotations_and_summaries(
-                    False, True, crossmatches)
+                    False, True, crossmatches, classifications)
+                for k, v in classifications.items():
+                    if len(v) == 1 and v[0] == "ORPHAN":
+                        v.append(
+                            "No contexual information is available for this transient")
+
                 return classifications, crossmatches
 
             if self.updatePeakMags and self.settings["database settings"]["transients"]["transient peak magnitude query"]:
@@ -1366,7 +1371,8 @@ class transient_classifier(object):
             self,
             updatePeakMagnitudes=True,
             cl=False,
-            crossmatches=False):
+            crossmatches=False,
+            classifications=False):
         """*update classification annotations and summaries*
 
         **Key Arguments**
@@ -1374,6 +1380,7 @@ class transient_classifier(object):
         - ``updatePeakMagnitudes`` -- update the peak magnitudes in the annotations to give absolute magnitudes. Default *True*
         - ``cl`` -- reporting only to the command-line, do not update database. Default *False*
         - ``crossmatches`` -- crossmatches will be passed for the single classifications to report annotations from command-line
+        - ``classifications`` -- classifications will be passed for the single classifications to have annotation appended to the dictionary for stand-alone non-database scripts
 
         **Return**
 
@@ -1446,6 +1453,9 @@ class transient_classifier(object):
                 match=row, updatePeakMagnitudes=updatePeakMagnitudes)
 
             if cl and self.verbose and row["rank"] == 1:
+                if classifications != False:
+                    classifications[
+                        row["transient_object_id"]].append(annotation)
                 print(annotation)
 
             update = {
