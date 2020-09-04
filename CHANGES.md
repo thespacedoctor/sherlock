@@ -1,6 +1,9 @@
 
 ## Release Notes
 
+* **refactor**: small change to query that writes NED source magnitudes that vastly improves speed
+* **fixed** small issue where a missing error in photoz was causing annotations to not complete
+
 **v2.1.5 - June 22, 2020**
 
 * **refactor**: tunnel changes due to new jump box installation at QUB

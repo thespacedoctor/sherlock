@@ -28,6 +28,7 @@ from fundamentals.renderer import list_of_dictionaries
 from fundamentals.mysql import directory_script_runner, readquery, writequery
 from ._base_importer import _base_importer
 
+
 class ned(_base_importer):
     """
     *Using a list of coordinates, query the online* `NED <https://ned.ipac.caltech.edu/>`_ *database and import sources found within a given search radius of each of the loctions into the sherlock-catalogues database*
@@ -49,12 +50,12 @@ class ned(_base_importer):
     - ``settings`` -- the settings dictionary
     - ``coordinateList`` -- list of coordinates (a list of strings with RA and DEC space separated)
     - ``radiusArcsec`` - - the radius in arcsec with which to perform the initial NED conesearch. Default * False*
-    
+
 
     **Usage**
 
     To import the ned catalogue stream, run the following:
-    
+
 
       ```python
       from sherlock.imports import ned
@@ -95,7 +96,7 @@ class ned(_base_importer):
         ```python
         stream.ingest()
         ```
-        
+
 
         .. todo ::
 
@@ -175,14 +176,14 @@ class ned(_base_importer):
         **Return**
 
         - ``dictList`` - a list of dictionaries containing all the object ids (NED names) in the ned stream
-        
+
 
         **Usage**
 
         ```python
         dictList = stream._create_dictionary_of_ned()
         ```
-        
+
         """
         self.log.debug(
             'starting the ``_create_dictionary_of_ned`` method')
@@ -344,7 +345,7 @@ class ned(_base_importer):
         **Return**
 
         - ``len(self.theseIds)`` -- the number of NED IDs returned
-        
+
 
         *Usage:*
 
@@ -384,7 +385,7 @@ class ned(_base_importer):
         **Key Arguments**
 
         - ``batchCount`` - the index number of the batch sent to NED (only needed for printing to STDOUT to give user idea of progress)
-        
+
 
         *Usage:*
 
@@ -494,7 +495,7 @@ class ned(_base_importer):
         **Return**
 
         - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
-        
+
 
         *Usage:*
 

@@ -584,7 +584,7 @@ class transient_classifier(object):
             sqlQuery=sqlQuery,
             dbConn=self.cataloguesDbConn
         )
-        sqlQuery = """update tcs_cat_ned_stream set magnitude = CAST(`magnitude_filter` AS DECIMAL(5,2)) where magnitude is null;""" % locals(
+        sqlQuery = """update tcs_cat_ned_stream set magnitude = CAST(`magnitude_filter` AS DECIMAL(5,2)) where magnitude is null and magnitude_filter is not null;""" % locals(
         )
         writequery(
             log=self.log,
@@ -1942,7 +1942,10 @@ END""" % locals())
         elif match["photoZ"]:
             z = match["photoZ"]
             zErr = match["photoZErr"]
-            distance = "photoZ=%(z)0.3f (&plusmn%(zErr)0.3f)" % locals()
+            if not zErr:
+                distance = "photoZ=%(z)0.3f" % locals()
+            else:
+                distance = "photoZ=%(z)0.3f (&plusmn%(zErr)0.3f)" % locals()
 
         if distance:
             distance = "%(distance)s" % locals()
