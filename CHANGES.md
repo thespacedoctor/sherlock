@@ -1,8 +1,11 @@
 
 ## Release Notes
 
-* **refactor**: small change to query that writes NED source magnitudes that vastly improves speed
-* **fixed** small issue where a missing error in photoz was causing annotations to not complete
+* **ENHANCEMENT**: transient human-readable annotations added to the `classifications` dictionary return of the `transient_classifier.classify()` method.
+* **ENHANCEMENT**: a `lite` parameter has been added to the Sherlock `transient_classifier` object. When set to `True` only top-ranked crossmatches are returned with a limited column set.
+* **ENHANCEMENT**: snapshot annotation is now added into the classification dictionary return. The classification dictionary is now `{'MyTransientId01': ['Type', 'Annotation'], 'MyTransientId02': ['Type', 'Annotation'],}`
+* **REFACTOR**: small change to query that writes NED source magnitudes that vastly improves speed
+* **FIXED**: small issue where a missing error in photoz was causing annotations to not complete
 
 **v2.1.5 - June 22, 2020**
 

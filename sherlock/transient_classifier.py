@@ -35,7 +35,7 @@ from sherlock.commonutils import get_crossmatch_catalogues_column_map
 import psutil
 from fundamentals import fmultiprocess
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
-
+import copy
 import psutil
 import copy
 from operator import itemgetter
@@ -61,9 +61,8 @@ class transient_classifier(object):
     - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
     - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
     - ``updatePeakMags`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
-
-
-        - ``oneRun`` -- only process one batch of transients, usful for unit testing. Default *False*
+    - ``lite`` -- return only a lite version of the results with the topped ranked matches only. Default *False*
+    - ``oneRun`` -- only process one batch of transients, usful for unit testing. Default *False*
 
     **Usage**
 
@@ -148,7 +147,8 @@ class transient_classifier(object):
             updateNed=True,
             daemonMode=False,
             updatePeakMags=True,
-            oneRun=False
+            oneRun=False,
+            lite=False
     ):
         self.log = log
         log.debug("instansiating a new 'classifier' object")
@@ -163,9 +163,10 @@ class transient_classifier(object):
         self.daemonMode = daemonMode
         self.updatePeakMags = updatePeakMags
         self.oneRun = oneRun
+        self.lite = lite
 
         self.filterPreference = [
-            "R", "_r", "G", "V", "_g", "B", "I", "_i", "_z", "J", "H", "K", "U", "_u", "_y", "unkMag"
+            "R", "_r", "G", "V", "_g", "B", "I", "_i", "_z", "J", "H", "K", "U", "_u", "_y", "W1", "unkMag"
         ]
 
         # xt-self-arg-tmpx
@@ -186,6 +187,10 @@ class transient_classifier(object):
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
         self.largeBatchSize = 5000
         self.miniBatchSize = 100
+
+        # LITE VERSION CANNOT BE RUN ON A DATABASE QUERY AS YET
+        if self.ra == False:
+            self.lite = False
 
         # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
         if self.ra and self.dec:
@@ -440,12 +445,6 @@ class transient_classifier(object):
                 if t["id"] not in classifications:
                     classifications[t["id"]] = ["ORPHAN"]
 
-            if self.cl:
-                self._print_results_to_stdout(
-                    classifications=classifications,
-                    crossmatches=crossmatches
-                )
-
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
@@ -468,12 +467,21 @@ class transient_classifier(object):
 
             # COMMAND-LINE SINGLE CLASSIFICATION
             if self.ra:
-                self.update_classification_annotations_and_summaries(
+                classifications = self.update_classification_annotations_and_summaries(
                     False, True, crossmatches, classifications)
                 for k, v in classifications.items():
                     if len(v) == 1 and v[0] == "ORPHAN":
                         v.append(
                             "No contexual information is available for this transient")
+
+                if self.lite != False:
+                    crossmatches = self._lighten_return(crossmatches)
+
+                if self.cl:
+                    self._print_results_to_stdout(
+                        classifications=classifications,
+                        crossmatches=crossmatches
+                    )
 
                 return classifications, crossmatches
 
@@ -1087,29 +1095,31 @@ class transient_classifier(object):
             if rank == 1:
                 transClass.append(xm["association_type"])
                 classifications[xm["transient_object_id"]] = transClass
-            xm["rank"] = rank
-            crossmatchesKeep.append(xm)
+            if rank == 1 or self.lite == False:
+                xm["rank"] = rank
+                crossmatchesKeep.append(xm)
         crossmatches = crossmatchesKeep
 
         crossmatchesKeep = []
-        for xm in crossmatches:
-            group = groupedMatches[xm["merged_rank"] - 1]
-            xm["merged_rank"] = None
-            crossmatchesKeep.append(xm)
+        if self.lite == False:
+            for xm in crossmatches:
+                group = groupedMatches[xm["merged_rank"] - 1]
+                xm["merged_rank"] = None
+                crossmatchesKeep.append(xm)
 
-            if len(group) > 1:
-                groupKeep = []
-                uniqueIndexCheck = []
-                for g in group:
-                    g["merged_rank"] = xm["rank"]
-                    g["rankScore"] = xm["rankScore"]
-                    index = "%(catalogue_table_name)s%(catalogue_object_id)s" % g
-                    # IF WE HAVE HIT A NEW SOURCE
-                    if index not in uniqueIndexCheck:
-                        uniqueIndexCheck.append(index)
-                        crossmatchesKeep.append(g)
+                if len(group) > 1:
+                    groupKeep = []
+                    uniqueIndexCheck = []
+                    for g in group:
+                        g["merged_rank"] = xm["rank"]
+                        g["rankScore"] = xm["rankScore"]
+                        index = "%(catalogue_table_name)s%(catalogue_object_id)s" % g
+                        # IF WE HAVE HIT A NEW SOURCE
+                        if index not in uniqueIndexCheck:
+                            uniqueIndexCheck.append(index)
+                            crossmatchesKeep.append(g)
 
-        crossmatches = crossmatchesKeep
+            crossmatches = crossmatchesKeep
 
         self.log.debug('completed the ``_rank_classifications`` method')
 
@@ -1142,6 +1152,8 @@ class transient_classifier(object):
         if self.verbose == 0:
             return
 
+        crossmatchesCopy = copy.deepcopy(crossmatches)
+
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
                  "raDeg", "decDeg", "separationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
@@ -1163,7 +1175,7 @@ class transient_classifier(object):
             print("Suggested Associations:")
 
             myCrossmatches = []
-            myCrossmatches[:] = [c for c in crossmatches if c[
+            myCrossmatches[:] = [c for c in crossmatchesCopy if c[
                 "transient_object_id"] == n]
 
             for c in myCrossmatches:
@@ -1213,7 +1225,6 @@ class transient_classifier(object):
                             "tcs_cat_", "").replace("_", " ")
                         value = c[k]
                         if k not in dontFormat:
-
                             try:
                                 ordDict[columnName] = "%(value)0.2f" % locals()
                             except:
@@ -1234,6 +1245,78 @@ class transient_classifier(object):
 
         self.log.debug('completed the ``_print_results_to_stdout`` method')
         return None
+
+    def _lighten_return(
+            self,
+            crossmatches):
+        """*lighten the classification and crossmatch results for smaller database footprint*
+
+        **Key Arguments**
+
+        - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
+        """
+        self.log.debug('starting the ``_lighten_return`` method')
+
+        # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
+        basic = ["transient_object_id", "association_type", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type",
+                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability"]
+        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "distance_modulus", "direct_distance_scale", "major_axis_arcsec", "scale", "U", "UErr",
+                   "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
+        dontFormat = ["decDeg", "raDeg", "rank",
+                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "classificationReliability"]
+        if self.verbose == 2:
+            basic = basic + verbose
+
+        for c in crossmatches:
+            for f in self.filterPreference:
+                if f in c and c[f]:
+                    c["Mag"] = c[f]
+                    c["MagFilter"] = f.replace("_", "").replace("Mag", "")
+                    if f + "Err" in c:
+                        c["MagErr"] = c[f + "Err"]
+                    else:
+                        c["MagErr"] = None
+                    break
+
+        allKeys = []
+        for c in crossmatches:
+            for k, v in list(c.items()):
+                if k not in allKeys:
+                    allKeys.append(k)
+
+        for c in crossmatches:
+            for k in allKeys:
+                if k not in c:
+                    c[k] = None
+
+        liteCrossmatches = []
+        for c in crossmatches:
+            ordDict = collections.OrderedDict(sorted({}.items()))
+            for k in basic:
+                if k in c:
+                    if k == "catalogue_table_name":
+                        c[k] = c[k].replace(
+                            "tcs_cat_", "").replace("_", " ")
+                    if k == "catalogue_object_subtype" and "sdss" in c["catalogue_table_name"]:
+                        if c[k] == 6:
+                            c[k] = "galaxy"
+                        elif c[k] == 3:
+                            c[k] = "star"
+                    columnName = k.replace(
+                        "tcs_cat_", "")
+                    value = c[k]
+                    if k not in dontFormat:
+                        try:
+                            ordDict[columnName] = float(f'{value:0.2f}')
+                        except:
+                            ordDict[columnName] = value
+                    else:
+                        ordDict[columnName] = value
+
+            liteCrossmatches.append(ordDict)
+
+        self.log.debug('completed the ``_lighten_return`` method')
+        return liteCrossmatches
 
     def _consolidate_coordinateList(
             self,
@@ -1444,19 +1527,16 @@ class transient_classifier(object):
 
         updates = []
 
-        if self.verbose == 0 and cl:
-            return
-
         for row in rows:
-
             annotation, summary, sep = self.generate_match_annotation(
                 match=row, updatePeakMagnitudes=updatePeakMagnitudes)
 
-            if cl and self.verbose and row["rank"] == 1:
+            if cl and row["rank"] == 1:
                 if classifications != False:
                     classifications[
                         row["transient_object_id"]].append(annotation)
-                print(annotation)
+                if self.verbose != 0:
+                    print(annotation)
 
             update = {
                 "transient_object_id": row["transient_object_id"],
@@ -1467,7 +1547,7 @@ class transient_classifier(object):
             updates.append(update)
 
         if cl:
-            return
+            return classifications
 
         # print "FINISHED GENERATING ANNOTATIONS/ADDING ANNOTATIONS TO TRANSIENT DATABASE: %d" % (time.time() - start_time,)
         # start_time = time.time()
@@ -1906,7 +1986,7 @@ END""" % locals())
         best_mag_error = None
         best_mag_filter = None
         filters = ["R", "V", "B", "I", "J", "G", "H", "K", "U",
-                   "_r", "_g", "_i", "_g", "_z", "_y", "_u", "unkMag"]
+                   "_r", "_g", "_i", "_g", "_z", "_y", "_u", "W1", "unkMag"]
         for f in filters:
             if f in match and match[f] and not best_mag:
                 best_mag = match[f]
