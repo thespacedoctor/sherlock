@@ -29,7 +29,12 @@ moduleDirectory = os.path.dirname(os.path.realpath(__file__))
 # GET PACKAGE __version__ INTO locals()
 exec(open(moduleDirectory + "/../../sherlock/__version__.py").read())
 
+
+sys.path.insert(0, os.path.abspath('../../sherlock/sherlock'))
+
+
 autosummary_generate = True
+autosummary_imported_members = True
 autodoc_member_order = 'bysource'
 add_module_names = False
 todo_include_todos = True

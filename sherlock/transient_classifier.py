@@ -1531,7 +1531,7 @@ class transient_classifier(object):
             annotation, summary, sep = self.generate_match_annotation(
                 match=row, updatePeakMagnitudes=updatePeakMagnitudes)
 
-            if cl and row["rank"] == 1:
+            if cl and "rank" in row and row["rank"] == 1:
                 if classifications != False:
                     classifications[
                         row["transient_object_id"]].append(annotation)
@@ -1633,7 +1633,8 @@ class transient_classifier(object):
         WHERE
             IFNULL(direct_distance_modulus,
                     distance_modulus) IS NOT NULL
-            AND (s.association_type not in ("AGN","CV","BS","VS") or s.transientAbsMag is null)
+            AND (s.association_type not in ("AGN","CV","BS","VS")
+                 or s.transientAbsMag is null)
                 AND t.id = s.transient_object_id
                 AND (s.dateLastModified > DATE_SUB(NOW(), INTERVAL 1 DAY));""" % locals()
 
@@ -2019,17 +2020,17 @@ END""" % locals())
             best_mag = "%(best_mag)0.2f " % locals()
 
         distance = None
-        if match["direct_distance"]:
+        if "direct_distance" in match and match["direct_distance"]:
             d = match["direct_distance"]
             distance = "distance of %(d)0.1f Mpc" % locals()
 
             if match["z"]:
                 z = match["z"]
                 distance += "(z=%(z)0.3f)" % locals()
-        elif match["z"]:
+        elif "z" in match and match["z"]:
             z = match["z"]
             distance = "z=%(z)0.3f" % locals()
-        elif match["photoZ"]:
+        elif "photoZ" in match and match["photoZ"]:
             z = match["photoZ"]
             zErr = match["photoZErr"]
             if not zErr:
