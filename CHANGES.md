@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v2.1.7 - September 29, 2020**
+
+* **FIXED**: lite version introduced a couple of small bugs. Fixed.
+
 **v2.1.6 - September 7, 2020**
 
 * **ENHANCEMENT**: transient human-readable annotations added to the `classifications` dictionary return of the `transient_classifier.classify()` method.
