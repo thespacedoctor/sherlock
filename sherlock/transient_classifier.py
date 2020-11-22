@@ -1759,6 +1759,8 @@ CREATE TABLE IF NOT EXISTS `sherlock_crossmatches` (
   `_yErr` double DEFAULT NULL,
   `G` double DEFAULT NULL,
   `GErr` double DEFAULT NULL,
+  `W1` double DEFAULT NULL,
+  `W1Err` double DEFAULT NULL,
   `unkMag` double DEFAULT NULL,
   `unkMagErr` double DEFAULT NULL,
   `dateLastModified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

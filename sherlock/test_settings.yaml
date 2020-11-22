@@ -22,7 +22,7 @@ database settings:
         password: sherlock_readonly_pass
         tunnel: 
             remote user: dry
-            remote ip: starbase2.mp.qub.ac.uk
+            remote ip: starbase
             remote datbase host: db4
             port: 9017
 

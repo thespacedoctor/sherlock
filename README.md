@@ -9,8 +9,8 @@
 
 <!-- STATUS BADGES -->  
 
-[![](http://167.99.90.204:8080/buildStatus/icon?job=sherlock%2Fmaster&subject=build%20master)](http://167.99.90.204:8080/blue/organizations/jenkins/sherlock/activity?branch=master)  
-[![](http://167.99.90.204:8080/buildStatus/icon?job=sherlock%2Fdevelop&subject=build%20dev)](http://167.99.90.204:8080/blue/organizations/jenkins/sherlock/activity?branch=develop)  
+[![](http://157.245.42.153:8080/buildStatus/icon?job=sherlock%2Fmaster&subject=build%20master)](http://157.245.42.153:8080/blue/organizations/jenkins/sherlock/activity?branch=master)  
+[![](http://157.245.42.153:8080/buildStatus/icon?job=sherlock%2Fdevelop&subject=build%20dev)](http://157.245.42.153:8080/blue/organizations/jenkins/sherlock/activity?branch=develop)  
 [![](https://cdn.jsdelivr.net/gh/thespacedoctor/sherlock@master/coverage.svg)](https://raw.githack.com/thespacedoctor/sherlock/master/htmlcov/index.html)  
 [![](https://readthedocs.org/projects/qub-sherlock/badge/?version=master)](https://qub-sherlock.readthedocs.io/en/master/)  
 [![](https://img.shields.io/github/issues/thespacedoctor/sherlock/type:%20bug?label=bug%20issues)](https://github.com/thespacedoctor/sherlock/issues?q=is%3Aissue+is%3Aopen+label%3A%22type%3A+bug%22+)  
