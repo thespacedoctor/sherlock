@@ -144,6 +144,18 @@ class database(object):
                 )
                 thisConn.autocommit(True)
                 dbConns.append(thisConn)
+
+                # from fundamentals.mysql import readquery
+                # sqlQuery = u"""
+                #     show databases;
+                # """ % locals()
+                # rows = readquery(
+                #     log=self.log,
+                #     sqlQuery=sqlQuery,
+                #     dbConn=thisConn,
+                #     quiet=False
+                # )
+                # print(rows)
             else:
                 dbConns.append(None)
 
