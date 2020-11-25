@@ -59,6 +59,7 @@ try:
 except:
     pass
 
+
 class test_ned(unittest.TestCase):
 
     def test_ned_function(self):
@@ -68,7 +69,7 @@ class test_ned(unittest.TestCase):
             log=log,
             settings=settings,
             coordinateList=coordinateList,
-            radiusArcsec=300
+            radiusArcsec=30
         )
         catalogue.ingest()
 

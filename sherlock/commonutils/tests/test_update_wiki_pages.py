@@ -50,30 +50,30 @@ dbConns, dbVersions = db.connect()
 transientsDbConn = dbConns["transients"]
 cataloguesDbConn = dbConns["catalogues"]
 
-class test_update_wiki_pages(unittest.TestCase):
+# class test_update_wiki_pages(unittest.TestCase):
 
-    def test_update_wiki_pages_function(self):
+#     def test_update_wiki_pages_function(self):
 
-        from sherlock.commonutils import update_wiki_pages
-        wiki = update_wiki_pages(
-            log=log,
-            settings=settings
-        )
-        wiki.update()
+#         from sherlock.commonutils import update_wiki_pages
+#         wiki = update_wiki_pages(
+#             log=log,
+#             settings=settings
+#         )
+#         wiki.update()
 
-    def test_update_wiki_pages_function_exception(self):
+#     def test_update_wiki_pages_function_exception(self):
 
-        from sherlock.commonutils import update_wiki_pages
-        try:
-            this = update_wiki_pages(
-                log=log,
-                settings=settings,
-                fakeKey="break the code"
-            )
-            this.update()
-            assert False
-        except Exception as e:
-            assert True
-            print(str(e))
+#         from sherlock.commonutils import update_wiki_pages
+#         try:
+#             this = update_wiki_pages(
+#                 log=log,
+#                 settings=settings,
+#                 fakeKey="break the code"
+#             )
+#             this.update()
+#             assert False
+#         except Exception as e:
+#             assert True
+#             print(str(e))
 
-    # x-class-to-test-named-worker-function
+# x-class-to-test-named-worker-function
