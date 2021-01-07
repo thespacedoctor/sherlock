@@ -26,7 +26,6 @@ database settings:
             remote datbase host: db4
             port: 9017
 
-
     transients:
         user: utuser
         password: utpass
