@@ -1,4 +1,4 @@
-database_cleaner *(class)*
+﻿database_cleaner *(class)*
 ===================================
 
 .. currentmodule:: sherlock

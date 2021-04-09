@@ -1,4 +1,4 @@
-catalogue_conesearch *(class)*
+﻿catalogue_conesearch *(class)*
 =======================================
 
 .. currentmodule:: sherlock

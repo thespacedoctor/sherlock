@@ -1,4 +1,4 @@
-ned *(class)*
+﻿ned *(class)*
 ==============================
 
 .. currentmodule:: sherlock.imports

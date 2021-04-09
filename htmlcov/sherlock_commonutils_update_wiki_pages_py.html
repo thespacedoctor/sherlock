@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
     <title>Coverage for sherlock/commonutils/update_wiki_pages.py: 11%</title>
+    <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.hotkeys.js"></script>
@@ -22,9 +23,9 @@
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
             220 statements &nbsp;
-            <span class="run shortkey_r button_toggle_run">24 run</span>
-            <span class="mis show_mis shortkey_m button_toggle_mis">196 missing</span>
-            <span class="exc show_exc shortkey_x button_toggle_exc">0 excluded</span>
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">24 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">196 missing</button>
+            <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
 </div>
@@ -108,7 +109,7 @@
     <p id="t55" class="run"><span class="n"><a href="#t55">55</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t56" class="pln"><span class="n"><a href="#t56">56</a></span><span class="t">            <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t57" class="pln"><span class="n"><a href="#t57">57</a></span><span class="t">            <span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t58" class="pln"><span class="n"><a href="#t58">58</a></span><span class="t">            <span class="nam">settings</span><span class="op">=</span><span class="nam">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t58" class="pln"><span class="n"><a href="#t58">58</a></span><span class="t">            <span class="nam">settings</span><span class="op">=</span><span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t59" class="pln"><span class="n"><a href="#t59">59</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t60" class="pln"><span class="n"><a href="#t60">60</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t61" class="mis show_mis"><span class="n"><a href="#t61">61</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span> <span class="op">=</span> <span class="nam">log</span>&nbsp;</span><span class="r"></span></p>
@@ -139,7 +140,7 @@
     <p id="t86" class="pln"><span class="n"><a href="#t86">86</a></span><span class="t">            <span class="str">"last_updated"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t87" class="pln"><span class="n"><a href="#t87">87</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p id="t88" class="pln"><span class="n"><a href="#t88">88</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t89" class="mis show_mis"><span class="n"><a href="#t89">89</a></span><span class="t">        <span class="key">return</span> <span class="nam">None</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t89" class="mis show_mis"><span class="n"><a href="#t89">89</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p id="t90" class="pln"><span class="n"><a href="#t90">90</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t91" class="run"><span class="n"><a href="#t91">91</a></span><span class="t">    <span class="key">def</span> <span class="nam">update</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t92" class="pln"><span class="n"><a href="#t92">92</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
@@ -150,7 +151,7 @@
     <p id="t97" class="mis show_mis"><span class="n"><a href="#t97">97</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'starting the ``update`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t98" class="pln"><span class="n"><a href="#t98">98</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t99" class="mis show_mis"><span class="n"><a href="#t99">99</a></span><span class="t">        <span class="key">if</span> <span class="str">"sherlock wiki root"</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">settings</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t100" class="mis show_mis"><span class="n"><a href="#t100">100</a></span><span class="t">            <span class="key">print</span><span class="op">(</span><span class="str">"Sherlock wiki settings not found in settings file"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t100" class="mis show_mis"><span class="n"><a href="#t100">100</a></span><span class="t">            <span class="nam">print</span><span class="op">(</span><span class="str">"Sherlock wiki settings not found in settings file"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t101" class="mis show_mis"><span class="n"><a href="#t101">101</a></span><span class="t">            <span class="key">return</span>&nbsp;</span><span class="r"></span></p>
     <p id="t102" class="pln"><span class="n"><a href="#t102">102</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t103" class="mis show_mis"><span class="n"><a href="#t103">103</a></span><span class="t">            <span class="key">from</span> <span class="nam">os</span><span class="op">.</span><span class="nam">path</span> <span class="key">import</span> <span class="nam">expanduser</span>&nbsp;</span><span class="r"></span></p>
@@ -174,7 +175,7 @@
     <p id="t121" class="pln"><span class="n"><a href="#t121">121</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t122" class="run"><span class="n"><a href="#t122">122</a></span><span class="t">    <span class="key">def</span> <span class="nam">_get_table_infos</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t123" class="pln"><span class="n"><a href="#t123">123</a></span><span class="t">            <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t124" class="pln"><span class="n"><a href="#t124">124</a></span><span class="t">            <span class="nam">trimmed</span><span class="op">=</span><span class="nam">False</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t124" class="pln"><span class="n"><a href="#t124">124</a></span><span class="t">            <span class="nam">trimmed</span><span class="op">=</span><span class="key">False</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t125" class="pln"><span class="n"><a href="#t125">125</a></span><span class="t">        <span class="str">"""query the sherlock-catalogues database table metadata</span>&nbsp;</span><span class="r"></span></p>
     <p id="t126" class="pln"><span class="n"><a href="#t126">126</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p id="t127" class="mis show_mis"><span class="n"><a href="#t127">127</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'starting the ``_get_table_infos`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -186,7 +187,7 @@
     <p id="t133" class="pln"><span class="n"><a href="#t133">133</a></span><span class="t">            <span class="nam">log</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t134" class="pln"><span class="n"><a href="#t134">134</a></span><span class="t">            <span class="nam">sqlQuery</span><span class="op">=</span><span class="nam">sqlQuery</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t135" class="pln"><span class="n"><a href="#t135">135</a></span><span class="t">            <span class="nam">dbConn</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">cataloguesDbConn</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t136" class="pln"><span class="n"><a href="#t136">136</a></span><span class="t">            <span class="nam">quiet</span><span class="op">=</span><span class="nam">False</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t136" class="pln"><span class="n"><a href="#t136">136</a></span><span class="t">            <span class="nam">quiet</span><span class="op">=</span><span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p id="t137" class="pln"><span class="n"><a href="#t137">137</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t138" class="pln"><span class="n"><a href="#t138">138</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t139" class="mis show_mis"><span class="n"><a href="#t139">139</a></span><span class="t">        <span class="key">if</span> <span class="nam">trimmed</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -204,7 +205,7 @@
     <p id="t151" class="pln"><span class="n"><a href="#t151">151</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t152" class="run"><span class="n"><a href="#t152">152</a></span><span class="t">    <span class="key">def</span> <span class="nam">_get_view_infos</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t153" class="pln"><span class="n"><a href="#t153">153</a></span><span class="t">            <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t154" class="pln"><span class="n"><a href="#t154">154</a></span><span class="t">            <span class="nam">trimmed</span><span class="op">=</span><span class="nam">False</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t154" class="pln"><span class="n"><a href="#t154">154</a></span><span class="t">            <span class="nam">trimmed</span><span class="op">=</span><span class="key">False</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t155" class="pln"><span class="n"><a href="#t155">155</a></span><span class="t">        <span class="str">"""query the sherlock-catalogues database view metadata</span>&nbsp;</span><span class="r"></span></p>
     <p id="t156" class="pln"><span class="n"><a href="#t156">156</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p id="t157" class="mis show_mis"><span class="n"><a href="#t157">157</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'starting the ``_get_view_infos`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -216,7 +217,7 @@
     <p id="t163" class="pln"><span class="n"><a href="#t163">163</a></span><span class="t">            <span class="nam">log</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t164" class="pln"><span class="n"><a href="#t164">164</a></span><span class="t">            <span class="nam">sqlQuery</span><span class="op">=</span><span class="nam">sqlQuery</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t165" class="pln"><span class="n"><a href="#t165">165</a></span><span class="t">            <span class="nam">dbConn</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">cataloguesDbConn</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t166" class="pln"><span class="n"><a href="#t166">166</a></span><span class="t">            <span class="nam">quiet</span><span class="op">=</span><span class="nam">False</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t166" class="pln"><span class="n"><a href="#t166">166</a></span><span class="t">            <span class="nam">quiet</span><span class="op">=</span><span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p id="t167" class="pln"><span class="n"><a href="#t167">167</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t168" class="pln"><span class="n"><a href="#t168">168</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t169" class="mis show_mis"><span class="n"><a href="#t169">169</a></span><span class="t">        <span class="key">if</span> <span class="nam">trimmed</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -234,7 +235,7 @@
     <p id="t181" class="pln"><span class="n"><a href="#t181">181</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t182" class="run"><span class="n"><a href="#t182">182</a></span><span class="t">    <span class="key">def</span> <span class="nam">_get_stream_view_infos</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t183" class="pln"><span class="n"><a href="#t183">183</a></span><span class="t">            <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t184" class="pln"><span class="n"><a href="#t184">184</a></span><span class="t">            <span class="nam">trimmed</span><span class="op">=</span><span class="nam">False</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t184" class="pln"><span class="n"><a href="#t184">184</a></span><span class="t">            <span class="nam">trimmed</span><span class="op">=</span><span class="key">False</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t185" class="pln"><span class="n"><a href="#t185">185</a></span><span class="t">        <span class="str">"""query the sherlock-catalogues database streamed data tables' metadata</span>&nbsp;</span><span class="r"></span></p>
     <p id="t186" class="pln"><span class="n"><a href="#t186">186</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p id="t187" class="mis show_mis"><span class="n"><a href="#t187">187</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'starting the ``_get_stream_view_infos`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -246,7 +247,7 @@
     <p id="t193" class="pln"><span class="n"><a href="#t193">193</a></span><span class="t">            <span class="nam">log</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t194" class="pln"><span class="n"><a href="#t194">194</a></span><span class="t">            <span class="nam">sqlQuery</span><span class="op">=</span><span class="nam">sqlQuery</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t195" class="pln"><span class="n"><a href="#t195">195</a></span><span class="t">            <span class="nam">dbConn</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">cataloguesDbConn</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t196" class="pln"><span class="n"><a href="#t196">196</a></span><span class="t">            <span class="nam">quiet</span><span class="op">=</span><span class="nam">False</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t196" class="pln"><span class="n"><a href="#t196">196</a></span><span class="t">            <span class="nam">quiet</span><span class="op">=</span><span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p id="t197" class="pln"><span class="n"><a href="#t197">197</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t198" class="pln"><span class="n"><a href="#t198">198</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t199" class="mis show_mis"><span class="n"><a href="#t199">199</a></span><span class="t">        <span class="key">if</span> <span class="nam">trimmed</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -451,7 +452,7 @@
     <p id="t398" class="mis show_mis"><span class="n"><a href="#t398">398</a></span><span class="t">        <span class="nam">writeFile</span><span class="op">.</span><span class="nam">close</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t399" class="pln"><span class="n"><a href="#t399">399</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t400" class="mis show_mis"><span class="n"><a href="#t400">400</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'completed the ``_write_wiki_pages`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t401" class="mis show_mis"><span class="n"><a href="#t401">401</a></span><span class="t">        <span class="key">return</span> <span class="nam">None</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t401" class="mis show_mis"><span class="n"><a href="#t401">401</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p id="t402" class="pln"><span class="n"><a href="#t402">402</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t403" class="run"><span class="n"><a href="#t403">403</a></span><span class="t">    <span class="key">def</span> <span class="nam">_update_github</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t404" class="pln"><span class="n"><a href="#t404">404</a></span><span class="t">            <span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -462,13 +463,13 @@
     <p id="t409" class="mis show_mis"><span class="n"><a href="#t409">409</a></span><span class="t">        <span class="key">from</span> <span class="nam">subprocess</span> <span class="key">import</span> <span class="nam">Popen</span><span class="op">,</span> <span class="nam">PIPE</span><span class="op">,</span> <span class="nam">STDOUT</span>&nbsp;</span><span class="r"></span></p>
     <p id="t410" class="mis show_mis"><span class="n"><a href="#t410">410</a></span><span class="t">        <span class="nam">gdir</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">settings</span><span class="op">[</span><span class="str">"sherlock wiki root"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p id="t411" class="mis show_mis"><span class="n"><a href="#t411">411</a></span><span class="t">        <span class="nam">cmd</span> <span class="op">=</span> <span class="str">"""cd %(gdir)s &amp;&amp; git add --all &amp;&amp; git commit -m "x" &amp;&amp; git pull origin master &amp;&amp; git push origin master"""</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t412" class="mis show_mis"><span class="n"><a href="#t412">412</a></span><span class="t">        <span class="nam">p</span> <span class="op">=</span> <span class="nam">Popen</span><span class="op">(</span><span class="nam">cmd</span><span class="op">,</span> <span class="nam">stdout</span><span class="op">=</span><span class="nam">PIPE</span><span class="op">,</span> <span class="nam">stdin</span><span class="op">=</span><span class="nam">PIPE</span><span class="op">,</span> <span class="nam">shell</span><span class="op">=</span><span class="nam">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t412" class="mis show_mis"><span class="n"><a href="#t412">412</a></span><span class="t">        <span class="nam">p</span> <span class="op">=</span> <span class="nam">Popen</span><span class="op">(</span><span class="nam">cmd</span><span class="op">,</span> <span class="nam">stdout</span><span class="op">=</span><span class="nam">PIPE</span><span class="op">,</span> <span class="nam">stdin</span><span class="op">=</span><span class="nam">PIPE</span><span class="op">,</span> <span class="nam">shell</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t413" class="mis show_mis"><span class="n"><a href="#t413">413</a></span><span class="t">        <span class="nam">output</span> <span class="op">=</span> <span class="nam">p</span><span class="op">.</span><span class="nam">communicate</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t414" class="mis show_mis"><span class="n"><a href="#t414">414</a></span><span class="t">        <span class="key">print</span><span class="op">(</span><span class="nam">output</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t414" class="mis show_mis"><span class="n"><a href="#t414">414</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="nam">output</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t415" class="mis show_mis"><span class="n"><a href="#t415">415</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'output: %(output)s'</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t416" class="pln"><span class="n"><a href="#t416">416</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t417" class="mis show_mis"><span class="n"><a href="#t417">417</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'completed the ``_update_github`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t418" class="mis show_mis"><span class="n"><a href="#t418">418</a></span><span class="t">        <span class="key">return</span> <span class="nam">None</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t418" class="mis show_mis"><span class="n"><a href="#t418">418</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p id="t419" class="pln"><span class="n"><a href="#t419">419</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t420" class="pln"><span class="n"><a href="#t420">420</a></span><span class="t">    <span class="com"># use the tab-trigger below for new method</span>&nbsp;</span><span class="r"></span></p>
     <p id="t421" class="pln"><span class="n"><a href="#t421">421</a></span><span class="t">    <span class="com"># xt-class-method</span>&nbsp;</span><span class="r"></span></p>
@@ -476,8 +477,8 @@
 <div id="footer">
     <div class="content">
         <p>
-            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.0.4</a>,
-            created at 2020-05-20 19:10
+            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
+            created at 2021-04-09 13:32 +0000
         </p>
     </div>
 </div>

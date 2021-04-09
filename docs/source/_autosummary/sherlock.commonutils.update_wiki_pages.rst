@@ -1,4 +1,4 @@
-update_wiki_pages *(class)*
+﻿update_wiki_pages *(class)*
 ================================================
 
 .. currentmodule:: sherlock.commonutils

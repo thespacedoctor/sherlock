@@ -1,4 +1,4 @@
-transient_classifier *(class)*
+﻿transient_classifier *(class)*
 =======================================
 
 .. currentmodule:: sherlock

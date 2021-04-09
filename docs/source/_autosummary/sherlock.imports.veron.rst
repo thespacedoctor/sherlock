@@ -1,4 +1,4 @@
-veron *(class)*
+﻿veron *(class)*
 ================================
 
 .. currentmodule:: sherlock.imports

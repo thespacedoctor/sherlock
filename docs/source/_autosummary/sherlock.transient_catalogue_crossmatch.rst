@@ -1,4 +1,4 @@
-transient_catalogue_crossmatch *(class)*
+﻿transient_catalogue_crossmatch *(class)*
 =================================================
 
 .. currentmodule:: sherlock

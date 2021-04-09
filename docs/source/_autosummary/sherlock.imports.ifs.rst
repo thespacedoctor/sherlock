@@ -1,4 +1,4 @@
-ifs *(class)*
+﻿ifs *(class)*
 ==============================
 
 .. currentmodule:: sherlock.imports
