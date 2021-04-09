@@ -22,8 +22,7 @@
    sherlock.imports.ned_d
    sherlock.imports.veron
    sherlock.transient_catalogue_crossmatch
-   sherlock.transient_classifier
- 
+   sherlock.transient_classifier 
 
 **Functions**
 

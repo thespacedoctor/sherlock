@@ -12,6 +12,15 @@ imports *(module)*
     
     
     
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~ifs
+      ~ned
+      ~ned_d
+      ~veron
+    
     
 
     

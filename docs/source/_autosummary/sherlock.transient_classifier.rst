@@ -104,6 +104,10 @@ transient_classifier *(class)*
    ..      
    .. 
    ..     
+   ..          ~transient_classifier._lighten_return
+   ..      
+   .. 
+   ..     
    ..          ~transient_classifier._print_results_to_stdout
    ..      
    .. 

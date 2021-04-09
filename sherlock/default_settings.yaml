@@ -3,16 +3,15 @@ version: 1
 database settings:
      
     static catalogues:
-        db: sherlock_catalogues_quickstart
+        db: crossmatch_catalogues
         host: 127.0.0.1
-        user: root
-        password: root
-        tunnel: False
-        # tunnel: 
-        #     remote user: username
-        #     remote ip: mymachine.uni.ac.uk
-        #     remote datbase host: myhost
-        #     port: 5002
+        user: sherlock_readonly_user
+        password: sherlock_readonly_pass
+        tunnel: 
+            remote user: dry
+            remote ip: starbase
+            remote datbase host: db4
+            port: 9017
 
     transients:
         db: transient_survey_quickstart

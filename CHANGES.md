@@ -1,6 +1,8 @@
 
 ## Release Notes
 
+* **REFACTOR**: updating db connection settings to use QUB jumpbox.
+
 **v2.1.7 - September 29, 2020**
 
 * **FIXED**: lite version introduced a couple of small bugs. Fixed.

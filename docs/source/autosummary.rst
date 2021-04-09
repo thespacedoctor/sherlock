@@ -27,8 +27,7 @@ Classes
    sherlock.imports.ned_d
    sherlock.imports.veron
    sherlock.transient_catalogue_crossmatch
-   sherlock.transient_classifier
-   sherlock.utKit.utKit 
+   sherlock.transient_classifier 
 
 
 Functions

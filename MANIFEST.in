@@ -7,3 +7,8 @@ include *.rst
 recursive-include sherlock *
 global-exclude *.pyo
 global-exclude *.pyc
+recursive-exclude tests *
+recursive-exclude */tests *
+recursive-exclude */*/tests *
+recursive-exclude */*/*/tests *
+recursive-exclude tests

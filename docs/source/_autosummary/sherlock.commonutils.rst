@@ -12,9 +12,22 @@ commonutils *(module)*
     
     
     
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~update_wiki_pages
+    
     
 
     
+    
+    .. rubric:: Functions
+
+    .. autosummary::
+    
+      ~get_crossmatch_catalogues_column_map
+      ~getpackagepath
     
     
 
