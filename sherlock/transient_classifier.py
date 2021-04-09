@@ -853,7 +853,7 @@ class transient_classifier(object):
             log=self.log,
             ra=ra,
             dec=dec,
-            radius=old_div(3, (60. * 60.)),  # in degrees
+            radius=1. / (60. * 60.),  # in degrees
             sourceList=crossmatches
         )
         groupedMatches = xmatcher.match
@@ -872,7 +872,8 @@ class transient_classifier(object):
             for e in ['z', 'photoZ', 'photoZErr']:
                 if e not in mergedMatch:
                     mergedMatch[e] = None
-
+            bestQualityCatalogue = colMaps[mergedMatch[
+                "catalogue_view_name"]]["object_type_accuracy"]
             bestDirectDistance = {
                 "direct_distance": mergedMatch["direct_distance"],
                 "direct_distance_modulus": mergedMatch["direct_distance_modulus"],
@@ -981,11 +982,24 @@ class transient_classifier(object):
                     # DETERMINE BEST CLASSIFICATION
                     if mergedMatch["classificationReliability"] == 3 and m["classificationReliability"] < 3:
                         mergedMatch["association_type"] = m["association_type"]
+                        mergedMatch["catalogue_object_type"] = m[
+                            "catalogue_object_type"]
                         mergedMatch["classificationReliability"] = m[
                             "classificationReliability"]
 
-                    if m["classificationReliability"] != 3 and m["association_type"] in associatationTypeOrder and (mergedMatch["association_type"] not in associatationTypeOrder or associatationTypeOrder.index(m["association_type"]) < associatationTypeOrder.index(mergedMatch["association_type"])):
+                    if m["classificationReliability"] != 3 and colMaps[m["catalogue_view_name"]]["object_type_accuracy"] > bestQualityCatalogue:
+                        bestQualityCatalogue = colMaps[
+                            m["catalogue_view_name"]]["object_type_accuracy"]
                         mergedMatch["association_type"] = m["association_type"]
+                        mergedMatch["catalogue_object_type"] = m[
+                            "catalogue_object_type"]
+                        mergedMatch["classificationReliability"] = m[
+                            "classificationReliability"]
+
+                    if m["classificationReliability"] != 3 and colMaps[m["catalogue_view_name"]]["object_type_accuracy"] == bestQualityCatalogue and m["association_type"] in associatationTypeOrder and (mergedMatch["association_type"] not in associatationTypeOrder or associatationTypeOrder.index(m["association_type"]) < associatationTypeOrder.index(mergedMatch["association_type"])):
+                        mergedMatch["association_type"] = m["association_type"]
+                        mergedMatch["catalogue_object_type"] = m[
+                            "catalogue_object_type"]
                         mergedMatch["classificationReliability"] = m[
                             "classificationReliability"]
 
@@ -1050,7 +1064,6 @@ class transient_classifier(object):
 
         crossmatches = []
         for xm, gm in zip(distinctMatches, groupedMatches):
-
             # SPEC-Z GALAXIES
             if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
