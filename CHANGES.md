@@ -2,6 +2,10 @@
 ## Release Notes
 
 * **REFACTOR**: updating db connection settings to use QUB jumpbox.
+* **REFACTOR/FIX** Reduced associated source merging radius from 3 arcsec to 1 arcsec (1/9th of the original matching area). This seems to correct many of the cases in which 2 or more distinct catalogued sources were getting merged into one association. This resulted in in-correct classification prediction and wrongly associated distances.
+* **REFACTOR**: catalogue quality weights now used *within* the merged source sets to sort the data
+* **FIXED**: annotation mismatches. If transient is classified as a SN then the underlying sources is identified as a galaxy in the annotation.
+
 
 **v2.1.7 - September 29, 2020**
 
