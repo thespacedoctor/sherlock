@@ -36,14 +36,6 @@ galaxy radius stetch factor: 1.2
 synonym radius arcsec: 1.5
 
 
-# IFS Galaxies
-ifs galaxies url: "https://raw.githubusercontent.com/lgalbany/lgalbany.github.io/master/GALBANY_PESSTO_ENV"
-ned stream search radius arcec: 900
-first pass ned search radius arcec: 240
-ned stream refresh rate in days: 90
-galaxy radius stetch factor: 1.2
-synonym radius arcsec: 1.5
-
 search algorithm:
     GSC star 1:
         database table: tcs_view_star_guide_star_catalogue_v2_3

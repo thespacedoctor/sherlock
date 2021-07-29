@@ -20,6 +20,8 @@ import codecs
 import re
 import math
 import time
+import inspect
+import yaml
 from random import randint
 os.environ['TERM'] = 'vt100'
 from datetime import datetime, date, time, timedelta
@@ -164,12 +166,31 @@ class transient_classifier(object):
         self.updatePeakMags = updatePeakMags
         self.oneRun = oneRun
         self.lite = lite
-
         self.filterPreference = [
             "R", "_r", "G", "V", "_g", "B", "I", "_i", "_z", "J", "H", "K", "U", "_u", "_y", "W1", "unkMag"
         ]
 
-        # xt-self-arg-tmpx
+        # COLLECT ADVANCED SETTINGS IF AVAILABLE
+        parentDirectory = os.path.dirname(__file__)
+        advs = parentDirectory + "/advanced_settings.yaml"
+        level = 0
+        exists = False
+        count = 1
+        while not exists and len(advs) and count < 10:
+            count += 1
+            level -= 1
+            exists = os.path.exists(advs)
+            if not exists:
+                advs = "/".join(parentDirectory.split("/")
+                                [:level]) + "/advanced_settings.yaml"
+                print(advs)
+        if not exists:
+            advs = {}
+        else:
+            with open(advs, 'r') as stream:
+                advs = yaml.load(stream)
+        # MERGE ADVANCED SETTINGS AND USER SETTINGS (USER SETTINGS OVERRIDE)
+        self.settings = {**advs, **self.settings}
 
         # INITIAL ACTIONS
         # SETUP DATABASE CONNECTIONS
@@ -185,8 +206,8 @@ class transient_classifier(object):
         self.cataloguesDbConn = dbConns["catalogues"]
 
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
-        self.largeBatchSize = 5000
-        self.miniBatchSize = 100
+        self.largeBatchSize = self.settings["database-batch-size"]
+        self.miniBatchSize = 1000
 
         # LITE VERSION CANNOT BE RUN ON A DATABASE QUERY AS YET
         if self.ra == False:
@@ -274,8 +295,6 @@ class transient_classifier(object):
             searchCount = cpuCount
 
         miniBatchSize = self.miniBatchSize
-
-        # print "mini batch size ", str(miniBatchSize)
 
         while remaining:
 
@@ -389,10 +408,11 @@ class transient_classifier(object):
                 print("BATCH SIZE = %(total)s" % locals())
                 print("MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals())
 
-            # DEFINE AN INPUT ARRAY
-            # cores = psutil.cpu_count()
-            # if cores > 8:
-            #     cores = 8
+            # poolSize = 100
+            # if batches < poolSize:
+            #     poolSize = batches
+
+            poolSize = 50
 
             start_time2 = time.time()
 
@@ -400,7 +420,7 @@ class transient_classifier(object):
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=None, settings=self.settings, colMaps=colMaps)
+                                            inputArray=list(range(len(theseBatches))), poolSize=False, settings=self.settings, colMaps=colMaps)
 
             if self.verbose:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
