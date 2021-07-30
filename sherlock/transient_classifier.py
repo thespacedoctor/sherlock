@@ -408,11 +408,9 @@ class transient_classifier(object):
                 print("BATCH SIZE = %(total)s" % locals())
                 print("MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals())
 
-            # poolSize = 100
-            # if batches < poolSize:
-            #     poolSize = batches
-
-            poolSize = 50
+            poolSize = self.settings["cpu-pool-size"]
+            if poolSize and batches < poolSize:
+                poolSize = batches
 
             start_time2 = time.time()
 
@@ -420,7 +418,7 @@ class transient_classifier(object):
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=False, settings=self.settings, colMaps=colMaps)
+                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps)
 
             if self.verbose:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
