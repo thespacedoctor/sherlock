@@ -1950,6 +1950,7 @@ END""" % locals())
             catalogueString += "s"
 
         if "ned" in catalogue.lower():
+            objectId = objectId.replace("+", "%2B")
             objectId = '''<a href="https://ned.ipac.caltech.edu/cgi-bin/objsearch?objname=%(objectId)s&extend=no&hconst=73&omegam=0.27&omegav=0.73&corr_z=1&out_csys=Equatorial&out_equinox=J2000.0&obj_sort=RA+or+Longitude&of=pre_text&zv_breaker=30000.0&list_limit=5&img_stamp=YES">%(objectId)s</a>''' % locals()
         elif "sdss" in catalogue.lower():
             objectId = "http://skyserver.sdss.org/dr12/en/tools/explore/Summary.aspx?id=%(objectId)s" % locals(
