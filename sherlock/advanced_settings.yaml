@@ -64,7 +64,6 @@ search algorithm:
             annotation: SN
         general:
             angular radius arcsec: 2.5
-            synonym: VS
             association: VS
     2mass galaxy:
         database table: tcs_view_galaxy_2mass_xsc_final
@@ -72,7 +71,6 @@ search algorithm:
         bright:
             mag limit: 16.
             angular radius arcsec: 35.
-            synonym: NT
             association: SN
         faint:
             mag limit: 20.5
@@ -80,7 +78,6 @@ search algorithm:
             association: SN
         general:
             angular radius arcsec: 35.
-            synonym: NT
             association: SN
     downes cv:
         database table: tcs_view_cv_downes_cataclysmic_variables_final
@@ -103,8 +100,7 @@ search algorithm:
             synonym: VS
             association: BS
         general:
-            angular radius arcsec: 5.0
-            synonym: VS
+            angular radius arcsec: 2.5
             association: VS
     gaia galaxy:
         database table: tcs_view_unclear_gaia_dr2
@@ -227,7 +223,6 @@ search algorithm:
         bright:
             mag limit: 16.
             angular radius arcsec: 35.
-            synonym: NT
             association: SN
         faint:
             mag limit: 20.
@@ -235,7 +230,6 @@ search algorithm:
             association: SN
         general:
             angular radius arcsec: 35.
-            synonym: NT
             association: SN
     ned phot galaxy-like:
         database table: tcs_view_galaxy_like_ned_stream
@@ -263,11 +257,11 @@ search algorithm:
             synonym: VS
             association: BS
         faint:
-            mag limit: 21.0
+            mag limit: 20.0
             angular radius arcsec: 3.0
             annotation: SN
         general:
-            angular radius arcsec: 2.5
+            angular radius arcsec: 2.0
             synonym: VS
             association: VS
     sdss phot galaxy:
@@ -285,7 +279,6 @@ search algorithm:
             association: SN
         general:
             angular radius arcsec: 35.
-            synonym: NT
             association: SN
     sdss spec sn:
         database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
@@ -300,8 +293,7 @@ search algorithm:
         general:
             physical radius kpc: 50.0
             angular radius arcsec: 60.0
-            synonym: UNCLEAR
-            association: UNCLEAR
+            annotation: UNCLEAR
     ned phot unknown:
         database table: tcs_view_other_ned_stream
         general:
@@ -313,48 +305,19 @@ search algorithm:
             angular radius arcsec: 2.5
             synonym: VS
             association: VS
-    glade agn:
-        database table: tcs_view_agn_glade_v2_3
-        general:
-            angular radius arcsec: 2.5
-            synonym: AGN
-            association: AGN
-    glade spec galaxy:
-        database table: tcs_view_galaxy_glade_v2_3
+    LASr galaxy:
+        database table: tcs_view_galaxy_lasr_v1
+        mag column: W1
         general:
             physical radius kpc: 50.0
-            angular radius arcsec: 60.
+            angular radius arcsec: 240.0
             synonym: NT
             association: SN
-    glade phot galaxy:
-        database table: tcs_view_galaxy_glade_v2_3
-        mag column: B
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 35.
-            synonym: NT
-            association: SN
-        faint:
-            mag limit: 20.
-            angular radius arcsec: 6.
-            association: SN
+    LASr agn:
+        database table: tcs_view_agn_lasr_v1
+        mag column: W1
         general:
-            angular radius arcsec: 35.
-            synonym: NT
-            association: SN
-    glade phot galaxy 2:
-        database table: tcs_view_galaxy_glade_v2_3
-        mag column: J
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 35.
-            synonym: NT
-            association: SN
-        faint:
-            mag limit: 20.
-            angular radius arcsec: 6.
-            association: SN
-        general:
-            angular radius arcsec: 35.
-            synonym: NT
+            physical radius kpc: 50.0
+            angular radius arcsec: 240.0
+            synonym: AGN
             association: SN
