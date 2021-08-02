@@ -1290,8 +1290,8 @@ class transient_classifier(object):
 
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["transient_object_id", "association_type", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type",
-                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability"]
-        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "distance_modulus", "direct_distance_scale", "major_axis_arcsec", "scale", "U", "UErr",
+                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "major_axis_arcsec"]
+        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "distance_modulus", "direct_distance_scale", "scale", "U", "UErr",
                    "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
                       "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "classificationReliability"]

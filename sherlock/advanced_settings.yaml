@@ -119,6 +119,7 @@ search algorithm:
             association: BS
         general:
             angular radius arcsec: 2.5
+            or within semi major axis: True
             synonym: VS
             association: VS
     ps1 star i:
@@ -131,6 +132,7 @@ search algorithm:
             association: BS
         general:
             angular radius arcsec: 2.5
+            or within semi major axis: True
             synonym: VS
             association: VS
     ps1 galaxy r:
@@ -144,9 +146,11 @@ search algorithm:
         faint:
             mag limit: 20.
             angular radius arcsec: 6.
+            or within semi major axis: True
             association: SN
         general:
             angular radius arcsec: 35.
+            or within semi major axis: True
             association: SN
     ps1 galaxy i:
         database table: tcs_view_galaxy_ps1_dr1
@@ -158,22 +162,26 @@ search algorithm:
             association: BS
         general:
             angular radius arcsec: 35.
+            or within semi major axis: True
             association: SN
         faint:
             mag limit: 20.
             angular radius arcsec: 6.
+            or within semi major axis: True
             association: SN
     ps1 faint sources r:
         database table: tcs_view_unclear_ps1_dr1
         mag column: _r
         general:
             angular radius arcsec: 1.0
+            or within semi major axis: True
             annotation: UNCLEAR
     ps1 faint sources i:
         database table: tcs_view_unclear_ps1_dr1
         mag column: _i
         general:
             angular radius arcsec: 1.0
+            or within semi major axis: True
             annotation: UNCLEAR
     kepler galaxy:
         database table: tcs_view_galaxy_kepler_k2
