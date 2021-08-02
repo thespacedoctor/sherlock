@@ -1,10 +1,13 @@
 
 ## Release Notes
 
-* Speed improvements (5-10 times processing speed increase)
-* Hidden `database-batch-size` and `cpu-pool-size` settings added - power users can access and change in settings files
-* Default search algorithm now version-controlled and ship alongside code. Users can override the default algorithm if they need to.
-* some URLs to NED objects, found in the human readable Sherlock annotations, that were not resolving now do. 
+**v2.2.0 - August 2, 2021** 
+
+*  **FEATURE**: Default search algorithm now version-controlled and ship alongside code. Users can override the default algorithm if they need to.
+* **FEATURE**: Hidden `database-batch-size` and `cpu-pool-size` settings added - power users can access and change in settings files.
+* **ENHANCEMENT**: Speed improvements (5-10 times processing speed increase).
+*  **REFACTOR/FIX**:  synonym match break now removed by default so a location now gets matched against all catalogues regardless of whether or not a synonym match is initially found (e.g. right on top of a catalogued star). Resolves edge cases where true SNe are mis-classified as VS as they are located just too close to a stellar source, or galaxy source mis-identified as stellar in one catalogue but correctly as galaxy in another.
+*  **FIX**: some URLs to NED objects, found in the human readable Sherlock annotations, that were not resolving now do. 
 
 **v2.1.8 - April 16, 2021** `#bugFixFriday`
 
