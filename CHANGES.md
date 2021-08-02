@@ -1,6 +1,11 @@
 
 ## Release Notes
 
+* Speed improvements (5-10 times processing speed increase)
+* Hidden `database-batch-size` and `cpu-pool-size` settings added - power users can access and change in settings files
+* Default search algorithm now version-controlled and ship alongside code. Users can override the default algorithm if they need to.
+* some URLs to NED objects, found in the human readable Sherlock annotations, that were not resolving now do. 
+
 **v2.1.8 - April 16, 2021** `#bugFixFriday`
 
 * **REFACTOR**: catalogue quality weights now used *within* the merged source sets to sort the data. This fixed *some* mis-matched annotation issues.

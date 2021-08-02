@@ -131,7 +131,6 @@ class transient_catalogue_crossmatch(object):
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         allCatalogueMatches = []
         catalogueMatches = []
-        nonSynonymTransients = self.transients[:]
 
         # SYNONYM SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
@@ -176,14 +175,17 @@ class transient_catalogue_crossmatch(object):
         synonymIDs[:] = [xm["transient_object_id"]
                          for xm in allCatalogueMatches]
 
-        nonSynonymTransients = []
-        nonSynonymTransients[:] = [
-            t for t in self.transients if t["id"] not in synonymIDs]
+        if self.settings["stop-search-on-synonym-match"]:
+            remainingTransientsToMatch = []
+            remainingTransientsToMatch[:] = [
+                t for t in self.transients if t["id"] not in synonymIDs]
+        else:
+            remainingTransientsToMatch = self.transients[:]
 
         # ASSOCIATION SEARCHES
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
-        if len(nonSynonymTransients) > 0:
+        if len(remainingTransientsToMatch) > 0:
             for search_name, searchPara in list(sa.items()):
                 self.log.debug("""  searching: %(search_name)s""" % locals())
                 for bf in brightnessFilters:
@@ -197,7 +199,7 @@ class transient_catalogue_crossmatch(object):
                         self.log.debug(
                             'checking physical distance crossmatches in %(search_name)s' % locals())
                         catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
-                            objectList=nonSynonymTransients,
+                            objectList=remainingTransientsToMatch,
                             searchPara=searchPara,
                             search_name=search_name + " physical",
                             brightnessFilter=bf,
@@ -210,7 +212,7 @@ class transient_catalogue_crossmatch(object):
 
                         # RENAMED from searchCatalogue
                         catalogueMatches = self.angular_crossmatch_against_catalogue(
-                            objectList=nonSynonymTransients,
+                            objectList=remainingTransientsToMatch,
                             searchPara=searchPara,
                             search_name=search_name + " angular",
                             brightnessFilter=bf,
