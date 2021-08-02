@@ -1,7 +1,323 @@
 version: 1
 
+# THESE ADVANCED SETTINGS ARE COLLECTED WHEN USING CL-TOOLS, 
+# BUT IF PACKAGE IS TO BE IMPORTED WITHIN OTHER CODE YOU NEED TO INCLUDE THIS PYTHON SNIPPET
+# WHERE NEEDED IN THIS PACKAGE
+# xt-collect-packages-advanced-settings
+
 # MAXIMUM NUMBER OF TRANSIENTS TO REQEUEST FROM DATABASE
 database-batch-size: 20000
+cpu-pool-size: False
 
 
-mytext: There was reading but at it pop down a White Rabbit actually took a large rabbit-hole under the bank and of getting up and burning with curiosity she was considering in her. So she had no pictures or conversation. Alice started to her feel very remarkable in time to see it had no pictures or twice she ought to take out of it occurred to see it all seemed quite natural but when the time it and then hurried on the way to do once or twice she thought Alice without pictures or conversation. So she ran close by her feel very sleepy and looked at the trouble of the daisies when suddenly a large rabbit-hole under the daisies when the hedge. There was considering in time it all seemed quite natural but when suddenly a rabbit with curiosity she thought it flashed across her feet for it pop down a White Rabbit say to get very much out of the way to itself Oh dear.
+## SEARCH ALGORITHM SETTINGS
+ned stream search radius arcec: 900
+first pass ned search radius arcec: 240
+ned stream refresh rate in days: 90
+galaxy radius stetch factor: 1.2
+synonym radius arcsec: 1.5
+
+search algorithm:
+    GSC star 1:
+        database table: tcs_view_star_guide_star_catalogue_v2_3
+        mag column: V
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        faint:
+            mag limit: 19.5
+            angular radius arcsec: 3.0
+            annotation: SN
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+    GSC star 2:
+        database table: tcs_view_star_guide_star_catalogue_v2_3
+        mag column: B
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        faint:
+            mag limit: 19.5
+            angular radius arcsec: 3.0
+            annotation: SN
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+    GSC unknown:
+        database table: tcs_view_unknown_guide_star_catalogue_v2_3
+        general:
+            angular radius arcsec: 2.0
+            annotation: UNCLEAR
+    2mass star:
+        database table: tcs_view_star_2mass_psc_final
+        mag column: J
+        faint:
+            mag limit: 19.5
+            angular radius arcsec: 3.0
+            annotation: SN
+        general:
+            angular radius arcsec: 2.5
+            association: VS
+    2mass galaxy:
+        database table: tcs_view_galaxy_2mass_xsc_final
+        mag column: J
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 35.
+            association: SN
+        faint:
+            mag limit: 20.5
+            angular radius arcsec: 6.
+            association: SN
+        general:
+            angular radius arcsec: 35.
+            association: SN
+    downes cv:
+        database table: tcs_view_cv_downes_cataclysmic_variables_final
+        general:
+            angular radius arcsec: 2.5
+            synonym: CV
+            association: CV
+    ritter binaries:
+        database table: tcs_view_cb_ritter_cataclysmic_binaries_v7_21
+        general:
+            angular radius arcsec: 2.5
+            synonym: CV
+            association: CV
+    gaia star:
+        database table: tcs_view_star_gaia_dr2
+        mag column: G
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        general:
+            angular radius arcsec: 2.5
+            association: VS
+    gaia galaxy:
+        database table: tcs_view_unclear_gaia_dr2
+        mag column: G
+        general:
+            angular radius arcsec: 3.0
+            synonym: UNCLEAR
+            association: SN
+    ps1 star r:
+        database table: tcs_view_star_ps1_dr1
+        mag column: _r
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+    ps1 star i:
+        database table: tcs_view_star_ps1_dr1
+        mag column: _i
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+    ps1 galaxy r:
+        database table: tcs_view_galaxy_ps1_dr1
+        mag column: _r
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        faint:
+            mag limit: 20.
+            angular radius arcsec: 6.
+            association: SN
+        general:
+            angular radius arcsec: 35.
+            association: SN
+    ps1 galaxy i:
+        database table: tcs_view_galaxy_ps1_dr1
+        mag column: _i
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        general:
+            angular radius arcsec: 35.
+            association: SN
+        faint:
+            mag limit: 20.
+            angular radius arcsec: 6.
+            association: SN
+    ps1 faint sources r:
+        database table: tcs_view_unclear_ps1_dr1
+        mag column: _r
+        general:
+            angular radius arcsec: 1.0
+            annotation: UNCLEAR
+    ps1 faint sources i:
+        database table: tcs_view_unclear_ps1_dr1
+        mag column: _i
+        general:
+            angular radius arcsec: 1.0
+            annotation: UNCLEAR
+    kepler galaxy:
+        database table: tcs_view_galaxy_kepler_k2
+        mag column: _r
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 35.
+            annotation: SN
+        faint:
+            mag limit: 20.5
+            angular radius arcsec: 6.
+            annotation: SN
+        general:
+            angular radius arcsec: 35.
+            annotation: SN
+    milliquas agn:
+        database table: tcs_view_agn_milliquas_v5_2
+        general:
+            angular radius arcsec: 3.0
+            synonym: AGN
+            association: AGN
+    veron agn:
+        database table: tcs_view_agn_veron_v13
+        general:
+            angular radius arcsec: 3.0
+            synonym: AGN
+            association: AGN
+    ned_d spec galaxy:
+        database table: tcs_view_galaxy_ned_d_v13_1_0
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 6000.0
+            or within semi major axis: True
+            synonym: NT
+            association: SN
+    ned spec galaxy:
+        database table: tcs_view_galaxy_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 240.0
+            or within semi major axis: True
+            synonym: NT
+            association: SN
+    ned phot galaxy:
+        database table: tcs_view_galaxy_ned_stream
+        mag column: unkMag
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 35.
+            association: SN
+        faint:
+            mag limit: 20.
+            angular radius arcsec: 6.
+            association: SN
+        general:
+            angular radius arcsec: 35.
+            association: SN
+    ned phot galaxy-like:
+        database table: tcs_view_galaxy_like_ned_stream
+        general:
+            angular radius arcsec: 10.
+            annotation: SN
+    sdss agn:
+        database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
+        general:
+            angular radius arcsec: 3.0
+            synonym: AGN
+            association: AGN
+    ned agn:
+        database table: tcs_view_agn_ned_stream
+        general:
+            angular radius arcsec: 3.0
+            synonym: AGN
+            association: AGN
+    sdss star:
+        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
+        mag column: _r
+        bright:
+            mag limit: 16.
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        faint:
+            mag limit: 20.0
+            angular radius arcsec: 3.0
+            annotation: SN
+        general:
+            angular radius arcsec: 2.0
+            synonym: VS
+            association: VS
+    sdss phot galaxy:
+        database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
+        mag column: _r
+        bright:
+            bright:
+            mag limit: 14.5
+            angular radius arcsec: 100.0
+            synonym: VS
+            association: BS
+        faint:
+            mag limit: 20.
+            angular radius arcsec: 6.
+            association: SN
+        general:
+            angular radius arcsec: 35.
+            association: SN
+    sdss spec sn:
+        database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 60.0
+            or within semi major axis: True
+            synonym: NT
+            association: SN
+    ned spec unknown:
+        database table: tcs_view_other_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 60.0
+            annotation: UNCLEAR
+    ned phot unknown:
+        database table: tcs_view_other_ned_stream
+        general:
+            angular radius arcsec: 20.
+            annotation: UNCLEAR
+    ned star:
+        database table: tcs_view_star_ned_stream
+        general:
+            angular radius arcsec: 2.5
+            synonym: VS
+            association: VS
+    LASr galaxy:
+        database table: tcs_view_galaxy_lasr_v1
+        mag column: W1
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 240.0
+            synonym: NT
+            association: SN
+    LASr agn:
+        database table: tcs_view_agn_lasr_v1
+        mag column: W1
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 240.0
+            synonym: AGN
+            association: SN
