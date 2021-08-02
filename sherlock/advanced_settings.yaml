@@ -9,6 +9,7 @@ version: 1
 database-batch-size: 20000
 cpu-pool-size: False
 
+stop-search-on-synonym-match: True
 
 ## SEARCH ALGORITHM SETTINGS
 ned stream search radius arcec: 900
