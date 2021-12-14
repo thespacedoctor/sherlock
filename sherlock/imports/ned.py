@@ -318,6 +318,9 @@ class ned(_base_importer):
 
         total, batches = self._count_ned_sources_in_database_requiring_metadata()
 
+        print(
+            "%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals())
+
         self.log.info(
             "%(total)s galaxies require metadata. Need to send %(batches)s batch requests to NED." % locals())
 
@@ -361,6 +364,9 @@ class ned(_base_importer):
         # SELECT THE DATA FROM NED TABLE
         sqlQuery = u"""
             select ned_name from %(tableName)s where raDeg is null and (download_error != 1 or download_error is null) limit 50000;
+        """ % locals()
+        sqlQuery = u"""
+            select ned_name from %(tableName)s where  (download_error != 1 or download_error is null) limit 50000;
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -452,6 +458,11 @@ class ned(_base_importer):
                     else:
                         row[k] = thisDict[k]
 
+                if '"' in thisDict["ned_name"]:
+                    print(thisDict)
+                    print(thisDict["ned_name"])
+                    sys.exit(0)
+
                 dictList.append(row)
 
         self.add_data_to_database_table(
@@ -508,8 +519,11 @@ class ned(_base_importer):
 
         tableName = self.dbTableName
 
+        # sqlQuery = u"""
+        #     select count(*) as count from %(tableName)s where raDeg is null and (download_error != 1 or download_error is null)
+        # """ % locals()
         sqlQuery = u"""
-            select count(*) as count from %(tableName)s where raDeg is null and (download_error != 1 or download_error is null)
+            select count(*) as count from %(tableName)s where (download_error != 1 or download_error is null)
         """ % locals()
         rows = readquery(
             log=self.log,

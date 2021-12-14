@@ -29,6 +29,7 @@ from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables,
 from fundamentals.renderer import list_of_dictionaries
 from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 
+
 class _base_importer(object):
     """
     *The base importer object used to import new catalgues into sherlock-catalogues database*
@@ -42,7 +43,7 @@ class _base_importer(object):
     - ``catalogueName`` -- name of the catalogue to be imported
     - ``coordinateList`` -- list of coordinates (needed for some streamed tables)
     - ``radiusArcsec`` -- the radius in arcsec with which to perform the initial NED conesearch. Default *False*
-    
+
 
     **Usage**
 
@@ -52,7 +53,7 @@ class _base_importer(object):
         class newImporter(_base_importer):
             ...
         ```
-    
+
     """
     # INITIALISATION
 
@@ -143,7 +144,7 @@ class _base_importer(object):
 
         - ``dictList`` - a list of dictionaries containing all the rows in the catalogue to be imported
         - ``createStatement`` - the table's mysql create statement (used to generate table if it does not yet exist in database). Default *False*
-        
+
 
         **Usage**
 
@@ -153,7 +154,7 @@ class _base_importer(object):
             createStatement=createStatement
         )
         ```
-        
+
 
         .. todo ::
 
@@ -198,16 +199,17 @@ class _base_importer(object):
 
         self._update_database_helper_table()
 
-        print("""Now:
+        if "ned_stream" not in dbTableName:
+            print("""Now:
 
-- [ ] edit the `%(dbTableName)s` row in the sherlock catalogues database adding relevant column mappings, catalogue version number etc
-- [ ] retire any previous version of this catlogue in the database. Renaming the catalogue-table by appending `legacy_` and also change the name in the `tcs_helper_catalogue_tables_info` table
-- [ ] dupliate views from the previous catalogue version to point towards the new version and then delete the old views
-- [ ] run the command `sherlock clean [-s <pathToSettingsFile>]` to clean up helper tables
-- [ ] switch out the old catalogue table/views in your sherlock search algorithms in the yaml settings files
-- [ ] run a test batch of transients to make sure catalogue is installed as expected
+    - [ ] edit the `%(dbTableName)s` row in the sherlock catalogues database adding relevant column mappings, catalogue version number etc
+    - [ ] retire any previous version of this catlogue in the database. Renaming the catalogue-table by appending `legacy_` and also change the name in the `tcs_helper_catalogue_tables_info` table
+    - [ ] dupliate views from the previous catalogue version to point towards the new version and then delete the old views
+    - [ ] run the command `sherlock clean [-s <pathToSettingsFile>]` to clean up helper tables
+    - [ ] switch out the old catalogue table/views in your sherlock search algorithms in the yaml settings files
+    - [ ] run a test batch of transients to make sure catalogue is installed as expected
 
-""" % locals())
+    """ % locals())
 
         self.log.debug('completed the ``add_data_to_database_table`` method')
         return None
@@ -221,7 +223,7 @@ class _base_importer(object):
         ```python
         self._add_htmids_to_database_table()
         ```
-        
+
         """
         self.log.debug('starting the ``add_htmids_to_database_table`` method')
 
@@ -251,7 +253,7 @@ class _base_importer(object):
         ```python
         self._update_database_helper_table()
         ```
-        
+
         """
         self.log.debug('starting the ``_update_database_helper_table`` method')
 

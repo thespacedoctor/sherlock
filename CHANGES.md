@@ -1,6 +1,8 @@
 
 ## Release Notes
 
+FIXED: synonym matching was not switched off in hidden settings
+
 **v2.2.0 - August 2, 2021** 
 
 *  **FEATURE**: Default search algorithm now version-controlled and ship alongside code. Users can override the default algorithm if they need to.
