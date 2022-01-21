@@ -188,7 +188,7 @@ class transient_classifier(object):
             advs = {}
         else:
             with open(advs, 'r') as stream:
-                advs = yaml.load(stream)
+                advs = yaml.safe_load(stream)
         # MERGE ADVANCED SETTINGS AND USER SETTINGS (USER SETTINGS OVERRIDE)
         self.settings = {**advs, **self.settings}
 
@@ -404,7 +404,7 @@ class transient_classifier(object):
                 thisBatch = transientsMetadataList[start:end]
                 theseBatches.append(thisBatch)
 
-            if self.verbose:
+            if self.verbose > 1:
                 print("BATCH SIZE = %(total)s" % locals())
                 print("MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals())
 
@@ -414,13 +414,13 @@ class transient_classifier(object):
 
             start_time2 = time.time()
 
-            if self.verbose:
+            if self.verbose > 1:
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
                                             inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps)
 
-            if self.verbose:
+            if self.verbose > 1:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
                       (time.time() - start_time2,))
             start_time2 = time.time()
@@ -466,7 +466,7 @@ class transient_classifier(object):
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
-            if self.verbose:
+            if self.verbose > 1:
                 print("FINISH RANKING/START UPDATING TRANSIENT DB: %d" %
                       (time.time() - start_time2,))
             start_time2 = time.time()
@@ -478,7 +478,7 @@ class transient_classifier(object):
                     colMaps=colMaps
                 )
 
-            if self.verbose:
+            if self.verbose > 1:
                 print("FINISH UPDATING TRANSIENT DB/START ANNOTATING TRANSIENT DB: %d" %
                       (time.time() - start_time2,))
             start_time2 = time.time()
@@ -1567,7 +1567,7 @@ class transient_classifier(object):
                     classifications[
                         row["transient_object_id"]].append(annotation)
                 if self.verbose != 0:
-                    print(annotation)
+                    print("\n" + annotation)
 
             update = {
                 "transient_object_id": row["transient_object_id"],

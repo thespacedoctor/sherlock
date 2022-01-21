@@ -837,6 +837,8 @@ class transient_catalogue_crossmatch(object):
 
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
         # A PHYSICAL SEPARATION WITHIN THE PHYSICAL RADIUS.
+        galaxyDenyList = self.settings["ignore morphology list"]
+        galaxyDenyList = [g.replace(" ", "") for g in galaxyDenyList]
         if catalogueMatches:
             for row in catalogueMatches:
                 thisMatch = False
@@ -845,16 +847,27 @@ class transient_catalogue_crossmatch(object):
                 # FIRST CHECK FOR MAJOR AXIS MEASUREMENT
                 # BYPASS NED FAULTY AXES MEASUREMENTS:
                 # https://gist.github.com/search?utf8=%E2%9C%93&q=user%3Athespacedoctor+ned
-
-                if row["major_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)):
-
-                    if row["separationArcsec"] < row["major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]:
+                # NOTE MAJOR AXIS IS A DIAMETER, NOT RADIUS
+                if row["major_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and row["catalogue_object_id"].replace(" ", "") not in galaxyDenyList:
+                    # FOR SOURCES > 10 arcmin IN SKY
+                    if row["major_axis_arcsec"] < 10 * 60:
+                        sizeAdjustment = self.settings[
+                            "galaxy radius stretch factor"]
+                    elif row["major_axis_arcsec"] < 100 * 60:
+                        sizeAdjustment = self.settings[
+                            "galaxy radius stretch factor"] * 0.7
+                    elif row["major_axis_arcsec"] >= 100 * 60:
+                        sizeAdjustment = self.settings[
+                            "galaxy radius stretch factor"] * 0.5
+                        # print(row["major_axis_arcsec"] * sizeAdjustment / 2. *
+                        #       self.settings["galaxy radius stretch factor"])
+                    if row["separationArcsec"] < row["major_axis_arcsec"] / 2. * sizeAdjustment:
                         thisMatch = True
                         newsearch_name = newsearch_name + \
-                            " (within %s * major axis)" % (
-                                self.settings["galaxy radius stetch factor"],)
+                            " (within %0.2f * semi-major axis)" % (
+                                sizeAdjustment,)
                         newAngularSep = row[
-                            "major_axis_arcsec"] * self.settings["galaxy radius stetch factor"]
+                            "major_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
 
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 if row["direct_distance_scale"] and physical_separation_kpc < physicalRadius and thisMatch == False:

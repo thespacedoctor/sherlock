@@ -15,8 +15,15 @@ stop-search-on-synonym-match: False
 ned stream search radius arcec: 900
 first pass ned search radius arcec: 240
 ned stream refresh rate in days: 90
-galaxy radius stetch factor: 1.2
+# THERE IS SOME ADJUSTMENT IN MANY CODE FOR ANGULARLY LARGE GALAXIES
+galaxy radius stretch factor: 1.2
 synonym radius arcsec: 1.5
+
+ignore morphology list:
+    - WISEAJ193037.70-521726.0
+    - 2MASXJ19303773-5217259
+    - Sagittarius Dwarf Spheroidal
+
 
 search algorithm:
     GSC star 1:
