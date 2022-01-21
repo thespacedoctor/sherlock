@@ -3,12 +3,12 @@
 
 **v2.2.1 - January 21, 2022** 
 
-**ENHANCEMENT**: added separate treatment of galaxies which extend > 10 arcmin in the sky. Search radii are reduced to reduce the chance of a background source getting incorrectly associated with these local neighbours.  
-**ENHANCEMENT**: added a 'deny list' in settings for galaxies with incorrect morphology reports in NED (only morphology ignored, all other metadata read as usual). So far list members only include "Sagittarius Dwarf Spheroidal" and "WISEA J193037.70-521726.0"  
-**REFACTOR**: reduced cl chattiness when verbosity is set to 0.  
-**FIXED**: synonym matching was not switched off in hidden settings  
-**FIXED**: semi major axis (diameter) now divided by 2 (to get radius) before comparing with separations to determine associations.   
-**FIXED**: typo in 'galaxy radius stretch factor' (was 'galaxy radius stetch factor')  
+* **ENHANCEMENT**: added separate treatment of galaxies which extend > 10 arcmin in the sky. Search radii are reduced to reduce the chance of a background source getting incorrectly associated with these local neighbours.  
+* **ENHANCEMENT**: added a 'deny list' in settings for galaxies with incorrect morphology reports in NED (only morphology ignored, all other metadata read as usual). So far list members only include "Sagittarius Dwarf Spheroidal" and "WISEA J193037.70-521726.0"  
+* **REFACTOR**: reduced cl chattiness when verbosity is set to 0.  
+* **FIXED**: synonym matching was not switched off in hidden settings  
+* **FIXED**: semi major axis (diameter) now divided by 2 (to get radius) before comparing with separations to determine associations.   
+* **FIXED**: typo in 'galaxy radius stretch factor' (was 'galaxy radius stetch factor')  
 
 
 **v2.2.0 - August 2, 2021** 
