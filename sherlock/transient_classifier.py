@@ -7,6 +7,21 @@
     David Young
 """
 from __future__ import print_function
+from astrocalc.coords import unit_conversion
+import copy
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+from fundamentals import fmultiprocess
+import psutil
+from sherlock.commonutils import get_crossmatch_catalogues_column_map
+from sherlock.imports import ned
+from HMpTy.htm import sets
+from HMpTy.mysql import conesearch
+from fundamentals.renderer import list_of_dictionaries
+from fundamentals.mysql import readquery, directory_script_runner, writequery
+from fundamentals import tools
+import numpy as np
+from operator import itemgetter
+from datetime import datetime, date, time, timedelta
 from __future__ import division
 from builtins import zip
 from builtins import str
@@ -24,24 +39,6 @@ import inspect
 import yaml
 from random import randint
 os.environ['TERM'] = 'vt100'
-from datetime import datetime, date, time, timedelta
-from operator import itemgetter
-import numpy as np
-from fundamentals import tools
-from fundamentals.mysql import readquery, directory_script_runner, writequery
-from fundamentals.renderer import list_of_dictionaries
-from HMpTy.mysql import conesearch
-from HMpTy.htm import sets
-from sherlock.imports import ned
-from sherlock.commonutils import get_crossmatch_catalogues_column_map
-import psutil
-from fundamentals import fmultiprocess
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
-import copy
-import psutil
-import copy
-from operator import itemgetter
-from astrocalc.coords import unit_conversion
 
 theseBatches = []
 crossmatchArray = []
@@ -2097,8 +2094,12 @@ END""" % locals())
                 absMag = ""
 
         annotation = "The transient is %(classificationReliability)s with <em>%(objectId)s</em>; %(best_mag_filter)s%(best_mag)smag %(objectType)s found in the %(catalogueString)s. It's located %(location)s.%(absMag)s" % locals()
-        summary = '%(sep)0.1f" from %(objectType)s in %(catalogue)s' % locals(
-        )
+        try:
+            summary = '%(sep)0.1f" from %(objectType)s in %(catalogue)s' % locals()
+        except:
+            badGuy = match["transient_object_id"]
+            print(f"Issue with object {badGuy}")
+            raise TypeError(f"Issue with object {badGuy}")
 
         self.log.debug('completed the ``generate_match_annotation`` method')
         return annotation, summary, sep
