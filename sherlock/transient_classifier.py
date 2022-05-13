@@ -7,6 +7,7 @@
     David Young
 """
 from __future__ import print_function
+from __future__ import division
 from astrocalc.coords import unit_conversion
 import copy
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
@@ -22,7 +23,7 @@ from fundamentals import tools
 import numpy as np
 from operator import itemgetter
 from datetime import datetime, date, time, timedelta
-from __future__ import division
+
 from builtins import zip
 from builtins import str
 from builtins import range
@@ -1941,6 +1942,10 @@ END""" % locals())
         objectType = match["catalogue_object_type"]
         objectSubtype = match["catalogue_object_subtype"]
         catalogueString = catalogue
+        if catalogueString is None:
+            badGuy = match["transient_object_id"]
+            print(f"Issue with object {badGuy}")
+            raise TypeError(f"Issue with object {badGuy}")
         if "catalogue" not in catalogueString.lower():
             catalogueString = catalogue + " catalogue"
         if "/" in catalogueString:
