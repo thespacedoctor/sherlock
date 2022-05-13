@@ -7,20 +7,21 @@
     David Young
 """
 from __future__ import print_function
+from ._base_importer import _base_importer
+from fundamentals.download import multiobject_download
+from astrocalc.coords import unit_conversion
+from docopt import docopt
+import re
+import requests
+import string
+import codecs
+import pickle
+import glob
+import readline
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-import codecs
-import string
-import requests
-import re
-from docopt import docopt
-from astrocalc.coords import unit_conversion
-from fundamentals.download import multiobject_download
-from ._base_importer import _base_importer
+
 
 class ifs(_base_importer):
     """
@@ -30,12 +31,12 @@ class ifs(_base_importer):
 
     - ``log`` -- logger
     - ``settings`` -- the settings dictionary
-    
+
 
     **Usage**
 
     To import the IFS catalogue stream into the sherlock-catalogues database, run the following:
-    
+
 
       ```python
       from sherlock.imports import IFS
@@ -62,7 +63,7 @@ class ifs(_base_importer):
         **Usage**
 
         See class docstring for usage
-        
+
         """
         self.log.debug('starting the ``get`` method')
 
@@ -76,7 +77,7 @@ class ifs(_base_importer):
 
         tableName = self.dbTableName
         createStatement = """
-    CREATE TABLE `%(tableName)s` (
+    CREATE TABLE IF NOT EXISTS `%(tableName)s` (
       `primaryId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'An internal counter',
       `dateCreated` datetime DEFAULT  CURRENT_TIMESTAMP,
       `decDeg` double DEFAULT NULL,
@@ -111,7 +112,7 @@ class ifs(_base_importer):
         **Return**
 
         - ``dictList`` - a list of dictionaries containing all the rows in the IFS stream
-        
+
 
         **Usage**
 
@@ -123,7 +124,7 @@ class ifs(_base_importer):
         )
         dictList = stream._create_dictionary_of_IFS()
         ```
-        
+
         """
         self.log.debug(
             'starting the ``_create_dictionary_of_IFS`` method')
