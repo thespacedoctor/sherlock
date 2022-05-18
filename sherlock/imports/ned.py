@@ -6,27 +6,27 @@
 :Author:
     David Young
 """
-from __future__ import print_function
-from __future__ import division
+from __future__ import print_function, division
+from ._base_importer import _base_importer
+from fundamentals.mysql import directory_script_runner, readquery, writequery
+from fundamentals.renderer import list_of_dictionaries
+from astrocalc.coords import unit_conversion
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+from neddy import namesearch, conesearch
+from docopt import docopt
+from datetime import datetime, date, time
+import re
+import string
+import codecs
+import pickle
+import glob
+import readline
+
 from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-import codecs
-import string
-import re
-from datetime import datetime, date, time
-from docopt import docopt
-from neddy import namesearch, conesearch
-from HMpTy.mysql import add_htm_ids_to_mysql_database_table
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
-from astrocalc.coords import unit_conversion
-from fundamentals.renderer import list_of_dictionaries
-from fundamentals.mysql import directory_script_runner, readquery, writequery
-from ._base_importer import _base_importer
 
 
 class ned(_base_importer):
@@ -376,7 +376,7 @@ class ned(_base_importer):
         )
 
         self.theseIds = []
-        self.theseIds[:] = [r["ned_name"] for r in rows]
+        self.theseIds[:] = [r["ned_name"].replace('"', '\\"') for r in rows]
 
         self.log.debug(
             'completed the ``_get_ned_sources_needing_metadata`` method')
