@@ -1263,12 +1263,19 @@ class transient_classifier(object):
 
                 printCrossmatches.append(ordDict)
 
+            outputFormat = None
+            # outputFormat = "csv"
+
             from fundamentals.renderer import list_of_dictionaries
             dataSet = list_of_dictionaries(
                 log=self.log,
                 listOfDictionaries=printCrossmatches
             )
-            tableData = dataSet.table(filepath=None)
+
+            if outputFormat == "csv":
+                tableData = dataSet.csv(filepath=None)
+            else:
+                tableData = dataSet.table(filepath=None)
 
             print(tableData)
 
