@@ -9,7 +9,7 @@ version: 1
 database-batch-size: 20000
 cpu-pool-size: False
 
-stop-search-on-synonym-match: False
+stop-search-on-synonym-match: True
 
 ## SEARCH ALGORITHM SETTINGS
 ned stream search radius arcec: 900
@@ -109,6 +109,7 @@ search algorithm:
             association: BS
         general:
             angular radius arcsec: 2.5
+            synonym: VS
             association: VS
     gaia galaxy:
         database table: tcs_view_unclear_gaia_dr2

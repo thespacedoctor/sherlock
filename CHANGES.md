@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v2.2.3 - April 3, 2023** 
+
+* **FIXED**: GAIA DR2 stars not getting matched as synonyms in default algorithm.  
+
 **v2.2.2 - May 18, 2022** 
 
 **FIXED**: NED name parsing errors fixed

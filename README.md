@@ -1,5 +1,9 @@
 # sherlock
 
+
+[![](https://zenodo.org/badge/42115533.svg)](https://zenodo.org/badge/latestdoi/42115533) 
+
+
 <!-- INFO BADGES -->  
 
 [![](https://img.shields.io/pypi/pyversions/qub-sherlock)](https://pypi.org/project/qub-sherlock/)  
@@ -23,3 +27,20 @@ Documentation for sherlock is hosted by [Read the Docs](https://qub-sherlock.rea
 ## Features
 
 * 
+
+
+
+## How to cite sherlock
+
+If you use `sherlock` in your work, please cite using the following BibTeX entry: 
+
+```bibtex
+@software{Young_sherlock,
+    author = {Young, David R.},
+    doi = {10.5281/zenodo.8038058},
+    license = {GPL-3.0-only},
+    title = {{sherlock}},
+    url = {https://github.com/thespacedoctor/sherlock}
+}
+```
+ 
