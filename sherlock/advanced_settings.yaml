@@ -148,8 +148,8 @@ search algorithm:
         database table: tcs_view_galaxy_ps1_dr1
         mag column: _r
         bright:
-            mag limit: 16.
-            angular radius arcsec: 100.0
+            mag limit: 14.5
+            angular radius arcsec: 70.0
             synonym: VS
             association: BS
         faint:
@@ -165,8 +165,8 @@ search algorithm:
         database table: tcs_view_galaxy_ps1_dr1
         mag column: _i
         bright:
-            mag limit: 16.
-            angular radius arcsec: 100.0
+            mag limit: 14.5
+            angular radius arcsec: 70.0
             synonym: VS
             association: BS
         general:
