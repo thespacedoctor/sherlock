@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v2.2.4 - August 28, 2023** 
+
+* **FIXED**: increasing the brightness threshold for which a PS source identified as a galaxy is flagged as a bright star by Sherlock
+
 **v2.2.3 - April 3, 2023** 
 
 * **FIXED**: GAIA DR2 stars not getting matched as synonyms in default algorithm.  
