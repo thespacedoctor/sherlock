@@ -1,6 +1,11 @@
 
 ## Release Notes
 
+**v2.3.0 - September 21, 2023** 
+
+* **ENHANCEMENT**: updating NED-D import and moving NED-D catalogue to v17.1.2
+* **FIXED**: NED-D catalogue >= v17.1.2 now reports the median redshift independent distance (not the minimum)
+
 **v2.2.4 - August 28, 2023** 
 
 * **FIXED**: increasing the brightness threshold for which a PS source identified as a galaxy is flagged as a bright star by Sherlock
