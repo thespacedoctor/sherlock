@@ -8,25 +8,27 @@
 """
 from __future__ import print_function
 from __future__ import division
+from ._base_importer import _base_importer
+from docopt import docopt
+from neddy import namesearch
+from sloancone import check_coverage
+from astrocalc.coords import unit_conversion
+from fundamentals.mysql import writequery, readquery
+import re
+import string
+import codecs
+import pickle
+import glob
+import time
+import csv
+import readline
+
 from builtins import zip
 from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import csv
-import time
-import glob
-import pickle
-import codecs
-import string
-import re
-from fundamentals.mysql import writequery, readquery
-from astrocalc.coords import unit_conversion
-from sloancone import check_coverage
-from neddy import namesearch
-from docopt import docopt
-from ._base_importer import _base_importer
+
 
 class ned_d(_base_importer):
     """
@@ -39,7 +41,7 @@ class ned_d(_base_importer):
     - ``pathToDataFile`` -- path to the ned_d data file
     - ``version`` -- version of the ned_d catalogue
     - ``catalogueName`` -- the name of the catalogue
-    
+
 
     **Usage**
 
@@ -56,13 +58,13 @@ class ned_d(_base_importer):
     )
     catalogue.ingest()
     ```
-    
+
 
     .. todo ::
 
         - abstract this module out into its own stand alone script
     """
-    # INITIALISATION
+    # INITIALIZATION
 
     def ingest(self):
         """Import the ned_d catalogue into the catalogues database
@@ -72,7 +74,7 @@ class ned_d(_base_importer):
         **Usage**
 
         See class docstring for usage
-        
+
 
         .. todo ::
 
@@ -89,6 +91,7 @@ class ned_d(_base_importer):
         self.declColName = "decDeg"
 
         tableName = self.dbTableName
+        viewName = tableName.replace("tcs_cat_", "tcs_view_galaxy_")
         createStatement = u"""
             CREATE TABLE `%(tableName)s` (
               `primaryId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'An internal counter',
@@ -127,40 +130,71 @@ class ned_d(_base_importer):
               `raDeg` double DEFAULT NULL,
               `decDeg` double DEFAULT NULL,
               `eb_v` double DEFAULT NULL,
-              `sdss_coverage` TINYINT DEFAULT NULL,
+              `sdss_coverage` tinyint(4) DEFAULT NULL,
+              `htm16ID` bigint(20) DEFAULT NULL,
+              `htm13ID` int(11) DEFAULT NULL,
+              `htm10ID` int(11) DEFAULT NULL,
+              `magnitude` double DEFAULT NULL,
               PRIMARY KEY (`primaryId`),
-              UNIQUE KEY `galaxy_index_id_dist_index_id` (`galaxy_index_id`,`dist_index_id`)
+              UNIQUE KEY `galaxy_index_id_dist_index_id` (`galaxy_index_id`,`dist_index_id`),
+              KEY `idx_htm10ID` (`htm10ID`),
+              KEY `idx_htm13ID` (`htm13ID`),
+              KEY `idx_htm16ID` (`htm16ID`),
+              KEY `idx_dist` (`dist_mpc`),
+              KEY `idx_redshift` (`redshift`),
+              KEY `idx_major_diameter` (`major_diameter_arcmin`),
+              KEY `idx_master_name` (`master_row`),
+              KEY `idx_magnitude` (`magnitude`),
+              KEY `idx_in_ned` (`in_ned`),
+              KEY `idx_type` (`object_type`),
+              KEY `idx_dist_from_sn` (`dist_derived_from_sn`)
             ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-        DROP VIEW IF EXISTS `view_%(tableName)s_master_recorders`;
+        DROP VIEW IF EXISTS `%(viewName)s`;
             CREATE
-                VIEW `view_%(tableName)s_master_recorders` AS
+                VIEW `%(viewName)s` AS
                     (SELECT 
-                        `%(tableName)s`.`primary_ned_id` AS `primary_ned_id`,
-                        `%(tableName)s`.`object_type` AS `object_type`,
-                        `%(tableName)s`.`raDeg` AS `raDeg`,
-                        `%(tableName)s`.`decDeg` AS `decDeg`,
-                        `%(tableName)s`.`dist_mpc` AS `dist_mpc`,
-                        `%(tableName)s`.`dist_mod` AS `dist_mod`,
-                        `%(tableName)s`.`dist_mod_err` AS `dist_mod_err`,
-                        `%(tableName)s`.`Method` AS `dist_measurement_method`,
-                        `%(tableName)s`.`redshift` AS `redshift`,
-                        `%(tableName)s`.`redshift_err` AS `redshift_err`,
-                        `%(tableName)s`.`redshift_quality` AS `redshift_quality`,
-                        `%(tableName)s`.`major_diameter_arcmin` AS `major_diameter_arcmin`,
-                        `%(tableName)s`.`minor_diameter_arcmin` AS `minor_diameter_arcmin`,
-                        `%(tableName)s`.`magnitude_filter` AS `magnitude_filter`,
-                        `%(tableName)s`.`eb_v` AS `gal_eb_v`,
-                        `%(tableName)s`.`hierarchy` AS `hierarchy`,
-                        `%(tableName)s`.`morphology` AS `morphology`,
-                        `%(tableName)s`.`radio_morphology` AS `radio_morphology`,
-                        `%(tableName)s`.`activity_type` AS `activity_type`,
-                        `%(tableName)s`.`ned_notes` AS `ned_notes`,
-                        `%(tableName)s`.`in_ned` AS `in_ned`,
-                        `%(tableName)s`.`primaryId` AS `primaryId`
-                    FROM
-                        `%(tableName)s`
-                    WHERE
-                        (`%(tableName)s`.`master_row` = 1));
+        `%(tableName)s`.`primaryId` AS `primaryId`,
+        `%(tableName)s`.`Method` AS `Method`,
+        `%(tableName)s`.`dateCreated` AS `dateCreated`,
+        `%(tableName)s`.`dist_derived_from_sn` AS `dist_derived_from_sn`,
+        `%(tableName)s`.`dist_in_ned_flag` AS `dist_in_ned_flag`,
+        `%(tableName)s`.`dist_index_id` AS `dist_index_id`,
+        `%(tableName)s`.`dist_mod_median` AS `dist_mod`,
+        `%(tableName)s`.`dist_mod_err` AS `dist_mod_err`,
+        `%(tableName)s`.`dist_mpc_median` AS `dist_mpc`,
+        `%(tableName)s`.`galaxy_index_id` AS `galaxy_index_id`,
+        `%(tableName)s`.`hubble_const` AS `hubble_const`,
+        `%(tableName)s`.`lmc_mod` AS `lmc_mod`,
+        `%(tableName)s`.`notes` AS `notes`,
+        `%(tableName)s`.`primary_ned_id` AS `primary_ned_id`,
+        `%(tableName)s`.`redshift` AS `redshift`,
+        `%(tableName)s`.`ref` AS `ref`,
+        `%(tableName)s`.`ref_date` AS `ref_date`,
+        `%(tableName)s`.`master_row` AS `master_row`,
+        `%(tableName)s`.`major_diameter_arcmin` AS `major_diameter_arcmin`,
+        `%(tableName)s`.`ned_notes` AS `ned_notes`,
+        `%(tableName)s`.`object_type` AS `object_type`,
+        `%(tableName)s`.`redshift_err` AS `redshift_err`,
+        `%(tableName)s`.`redshift_quality` AS `redshift_quality`,
+        `%(tableName)s`.`magnitude` AS `magnitude`,
+        `%(tableName)s`.`minor_diameter_arcmin` AS `minor_diameter_arcmin`,
+        `%(tableName)s`.`morphology` AS `morphology`,
+        `%(tableName)s`.`hierarchy` AS `hierarchy`,
+        `%(tableName)s`.`galaxy_morphology` AS `galaxy_morphology`,
+        `%(tableName)s`.`radio_morphology` AS `radio_morphology`,
+        `%(tableName)s`.`activity_type` AS `activity_type`,
+        `%(tableName)s`.`in_ned` AS `in_ned`,
+        `%(tableName)s`.`raDeg` AS `raDeg`,
+        `%(tableName)s`.`decDeg` AS `decDeg`,
+        `%(tableName)s`.`eb_v` AS `eb_v`,
+        `%(tableName)s`.`htm16ID` AS `htm16ID`,
+        `%(tableName)s`.`htm10ID` AS `htm10ID`,
+        `%(tableName)s`.`htm13ID` AS `htm13ID`,
+        `%(tableName)s`.`sdss_coverage` AS `sdss_coverage`
+    FROM
+        `%(tableName)s`
+    WHERE
+        `%(tableName)s`.`master_row` = 1);
         """ % locals()
 
         self.add_data_to_database_table(
@@ -170,7 +204,7 @@ class ned_d(_base_importer):
 
         self._clean_up_columns()
         self._get_metadata_for_galaxies()
-        self._update_sdss_coverage()
+        # self._update_sdss_coverage()
 
         self.log.debug('completed the ``get`` method')
         return None
@@ -182,7 +216,7 @@ class ned_d(_base_importer):
         **Return**
 
         - ``dictList`` - a list of dictionaries containing all the rows in the ned_d catalogue
-        
+
 
         .. todo ::
 
@@ -196,6 +230,8 @@ class ned_d(_base_importer):
         """
         self.log.debug(
             'starting the ``_create_dictionary_of_ned_d`` method')
+
+        import pandas as pd
 
         count = 0
         with open(self.pathToDataFile, 'r') as csvFile:
@@ -273,6 +309,24 @@ class ned_d(_base_importer):
 
         csvFile.close()
 
+        df = pd.DataFrame(dictList)
+        df['galaxy_index_id'] = df['galaxy_index_id'].values.astype(int)
+        # GROUP RESULTS
+        dfGroups = df.groupby(['galaxy_index_id'])
+
+        medianDistDf = dfGroups[["dist_mpc", "dist_mod"]].median().reset_index()
+        # RENAME COLUMNS
+        medianDistDf.rename(columns={"dist_mpc": "dist_mpc_median"}, inplace=True)
+        medianDistDf.rename(columns={"dist_mod": "dist_mod_median"}, inplace=True)
+
+        # MERGE DATAFRAMES
+        df = df.merge(medianDistDf, on=['galaxy_index_id'], how='outer')
+
+        # SORT BY COLUMN NAME
+        df.sort_values(['galaxy_index_id'],
+                       ascending=[True], inplace=True)
+
+        dictList = df.to_dict('records')
         self.log.debug(
             'completed the ``_create_dictionary_of_ned_d`` method')
         return dictList
@@ -371,7 +425,7 @@ class ned_d(_base_importer):
         **Return**
 
         - ``self.total``, ``self.batches`` -- total number of galaxies needing metadata & the number of batches required to be sent to NED
-        
+
 
         .. todo ::
 
@@ -414,7 +468,7 @@ class ned_d(_base_importer):
         **Return**
 
         - ``len(self.theseIds)`` -- the number of NED IDs returned
-        
+
 
         .. todo ::
 
@@ -458,7 +512,7 @@ class ned_d(_base_importer):
         **Key Arguments**
 
         - ``batchCount`` - the index number of the batch sent to NED
-        
+
 
         .. todo ::
 
@@ -472,6 +526,9 @@ class ned_d(_base_importer):
         """
         self.log.debug(
             'starting the ``_query_ned_and_add_results_to_database`` method')
+
+        import re
+        regex = re.compile(r'[^\d\.]')
 
         tableName = self.dbTableName
         # ASTROCALC UNIT CONVERTER OBJECT
@@ -497,7 +554,7 @@ class ned_d(_base_importer):
         dictList = []
 
         colList = ["redshift_quality", "redshift", "hierarchy", "object_type", "major_diameter_arcmin", "morphology", "magnitude_filter",
-                   "ned_notes", "eb_v", "raDeg", "radio_morphology", "activity_type", "minor_diameter_arcmin", "decDeg", "redshift_err", "in_ned"]
+                   "ned_notes", "eb_v", "raDeg", "radio_morphology", "activity_type", "minor_diameter_arcmin", "decDeg", "redshift_err", "in_ned", "magnitude"]
 
         if not len(results):
             for k, v in list(self.theseIds.items()):
@@ -506,7 +563,7 @@ class ned_d(_base_importer):
                     "primaryID": v
                 })
         for thisDict in results:
-
+            thisDict["magnitude"] = thisDict["magnitude_filter"]
             thisDict["tableName"] = tableName
             count += 1
             for k, v in list(thisDict.items()):
@@ -517,6 +574,9 @@ class ned_d(_base_importer):
                         "?", "").replace("<", "")
                 if isinstance(v, ("".__class__, u"".__class__)) and '"' in v:
                     thisDict[k] = v.replace('"', '\\"')
+                if k in ["magnitude"] and thisDict[k] != "null":
+                    thisDict[k] = regex.sub("", thisDict[k])
+
             if "Input name not" not in thisDict["input_note"] and "Same object as" not in thisDict["input_note"]:
                 if thisDict["ra"] != "null" and thisDict["dec"] != "null":
                     thisDict["raDeg"] = converter.ra_sexegesimal_to_decimal(
@@ -629,7 +689,7 @@ class ned_d(_base_importer):
             elif sdss_coverage == False:
                 sdss_coverage_flag = 0
             else:
-                self.log.error('cound not get sdss coverage' % locals())
+                self.log.error('could not get sdss coverage' % locals())
                 sys.exit(0)
 
             # UPDATE THE DATABASE FLAG

@@ -20,7 +20,8 @@ install_requires = [
     'pymysql',
     'psutil',
     'sloancone',
-    'numpy'
+    'numpy',
+    'tabulate'
 ]
 
 # READ THE DOCS SERVERS

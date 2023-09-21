@@ -47,24 +47,25 @@ Options:
 """
 from __future__ import print_function
 from __future__ import absolute_import
+import readline
+from sherlock import transient_classifier
+from sherlock.commonutils import update_wiki_pages
+from sherlock.imports import ned as nedStreamImporter
+from sherlock.imports import ned_d as nedImporter
+from sherlock.imports import ifs as ifsImporter
+from sherlock.imports import veron as veronImporter
+from .commonutils import update_wiki_pages
+from .database_cleaner import database_cleaner
+from fundamentals.renderer import list_of_dictionaries
+from subprocess import Popen, PIPE, STDOUT
+from fundamentals import tools, times
+from docopt import docopt
+import pickle
+import glob
+
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-from docopt import docopt
-from fundamentals import tools, times
-from subprocess import Popen, PIPE, STDOUT
-from fundamentals.renderer import list_of_dictionaries
-from .database_cleaner import database_cleaner
-from .commonutils import update_wiki_pages
-from sherlock.imports import veron as veronImporter
-from sherlock.imports import ifs as ifsImporter
-from sherlock.imports import ned_d as nedImporter
-from sherlock.imports import ned as nedStreamImporter
-from sherlock.commonutils import update_wiki_pages
-from sherlock import transient_classifier
 
 
 def tab_complete(text, state):
@@ -170,7 +171,9 @@ def main(arguments=None):
     dec = a["dec"]
     radiusArcsec = a["radiusArcsec"]
     cat_name = a["cat_name"]
+    cat_version = a["cat_version"]
     stream_name = a["stream_name"]
+    pathToDataFile = a["pathToDataFile"]
     skipNedUpdateFlag = a["skipNedUpdateFlag"]
     skipMagUpdateFlag = a["skipMagUpdateFlag"]
     settingsFlag = a["settingsFlag"]
@@ -228,6 +231,7 @@ def main(arguments=None):
             radiusArcsec=radiusArcsec
         )
         ned.ingest()
+
     if iimport and cat:
 
         if cat_name == "veron":
@@ -314,6 +318,7 @@ def main(arguments=None):
              (endTime, runningTime, ))
 
     return
+
 
 if __name__ == '__main__':
     main()
