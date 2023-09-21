@@ -5,305 +5,322 @@
     <title>Coverage report</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
-    <script type="text/javascript" src="jquery.min.js"></script>
-    <script type="text/javascript" src="jquery.ba-throttle-debounce.min.js"></script>
-    <script type="text/javascript" src="jquery.tablesorter.min.js"></script>
-    <script type="text/javascript" src="jquery.hotkeys.js"></script>
-    <script type="text/javascript" src="coverage_html.js"></script>
-    <script type="text/javascript">
-        jQuery(document).ready(coverage.index_ready);
-    </script>
+    <script type="text/javascript" src="coverage_html.js" defer></script>
 </head>
 <body class="indexfile">
-<div id="header">
+<header>
     <div class="content">
         <h1>Coverage report:
-            <span class="pc_cov">76%</span>
+            <span class="pc_cov">70%</span>
         </h1>
-        <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
+        <aside id="help_panel_wrapper">
+            <input id="help_panel_state" type="checkbox">
+            <label for="help_panel_state">
+                <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
+            </label>
+            <div id="help_panel">
+                <p class="legend">Shortcuts on this page</p>
+                <div class="keyhelp">
+                    <p>
+                        <kbd>n</kbd>
+                        <kbd>s</kbd>
+                        <kbd>m</kbd>
+                        <kbd>x</kbd>
+                        <kbd>c</kbd>
+                        &nbsp; change column sorting
+                    </p>
+                    <p>
+                        <kbd>[</kbd>
+                        <kbd>]</kbd>
+                        &nbsp; prev/next file
+                    </p>
+                    <p>
+                        <kbd>?</kbd> &nbsp; show/hide this help
+                    </p>
+                </div>
+            </div>
+        </aside>
         <form id="filter_container">
             <input id="filter" type="text" value="" placeholder="filter..." />
         </form>
+        <p class="text">
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.2.2">coverage.py v7.2.2</a>,
+            created at 2023-09-21 12:36 +0000
+        </p>
     </div>
-</div>
-<div class="help_panel">
-    <img id="panel_icon" src="keybd_open.png" alt="Hide keyboard shortcuts" />
-    <p class="legend">Hot-keys on this page</p>
-    <div>
-    <p class="keyhelp">
-        <span class="key">n</span>
-        <span class="key">s</span>
-        <span class="key">m</span>
-        <span class="key">x</span>
-        <span class="key">c</span> &nbsp; change column sorting
-    </p>
-    </div>
-</div>
-<div id="index">
-    <table class="index">
+</header>
+<main id="index">
+    <table class="index" data-sortable>
         <thead>
             <tr class="tablehead" title="Click to sort">
-                <th class="name left headerSortDown shortkey_n">Module</th>
-                <th class="shortkey_s">statements</th>
-                <th class="shortkey_m">missing</th>
-                <th class="shortkey_x">excluded</th>
-                <th class="right shortkey_c">coverage</th>
+                <th class="name left" aria-sort="none" data-shortcut="n">Module</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded</th>
+                <th class="right" aria-sort="none" data-shortcut="c">coverage</th>
             </tr>
         </thead>
-        <tfoot>
-            <tr class="total">
-                <td class="name left">Total</td>
-                <td>3156</td>
-                <td>758</td>
-                <td>0</td>
-                <td class="right" data-ratio="2398 3156">76%</td>
-            </tr>
-        </tfoot>
         <tbody>
             <tr class="file">
-                <td class="name left"><a href="sherlock___init___py.html">sherlock/__init__.py</a></td>
+                <td class="name left"><a href="d_52b090ab5321b905___init___py.html">sherlock/__init__.py</a></td>
                 <td>9</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="9 9">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_catalogue_conesearch_py.html">sherlock/catalogue_conesearch.py</a></td>
+                <td class="name left"><a href="d_52b090ab5321b905_catalogue_conesearch_py.html">sherlock/catalogue_conesearch.py</a></td>
                 <td>78</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="78 78">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_cl_utils_py.html">sherlock/cl_utils.py</a></td>
-                <td>157</td>
-                <td>106</td>
+                <td class="name left"><a href="d_52b090ab5321b905_cl_utils_py.html">sherlock/cl_utils.py</a></td>
+                <td>159</td>
+                <td>108</td>
                 <td>0</td>
-                <td class="right" data-ratio="51 157">32%</td>
+                <td class="right" data-ratio="51 159">32%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_commonutils___init___py.html">sherlock/commonutils/__init__.py</a></td>
+                <td class="name left"><a href="d_084e72e3f4fa81ff___init___py.html">sherlock/commonutils/__init__.py</a></td>
                 <td>4</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="4 4">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_commonutils_get_crossmatch_catalogues_column_map_py.html">sherlock/commonutils/get_crossmatch_catalogues_column_map.py</a></td>
+                <td class="name left"><a href="d_084e72e3f4fa81ff_get_crossmatch_catalogues_column_map_py.html">sherlock/commonutils/get_crossmatch_catalogues_column_map.py</a></td>
                 <td>15</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="15 15">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_commonutils_getpackagepath_py.html">sherlock/commonutils/getpackagepath.py</a></td>
+                <td class="name left"><a href="d_084e72e3f4fa81ff_getpackagepath_py.html">sherlock/commonutils/getpackagepath.py</a></td>
                 <td>6</td>
                 <td>3</td>
                 <td>0</td>
                 <td class="right" data-ratio="3 6">50%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_commonutils_tests___init___py.html">sherlock/commonutils/tests/__init__.py</a></td>
+                <td class="name left"><a href="d_6a92159ee28339b6___init___py.html">sherlock/commonutils/tests/__init__.py</a></td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="0 0">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_commonutils_tests_test_get_crossmatch_catalogues_column_map_py.html">sherlock/commonutils/tests/test_get_crossmatch_catalogues_column_map.py</a></td>
+                <td class="name left"><a href="d_6a92159ee28339b6_test_get_crossmatch_catalogues_column_map_py.html">sherlock/commonutils/tests/test_get_crossmatch_catalogues_column_map.py</a></td>
                 <td>42</td>
                 <td>3</td>
                 <td>0</td>
                 <td class="right" data-ratio="39 42">93%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_commonutils_tests_test_update_wiki_pages_py.html">sherlock/commonutils/tests/test_update_wiki_pages.py</a></td>
+                <td class="name left"><a href="d_6a92159ee28339b6_test_update_wiki_pages_py.html">sherlock/commonutils/tests/test_update_wiki_pages.py</a></td>
                 <td>30</td>
                 <td>3</td>
                 <td>0</td>
                 <td class="right" data-ratio="27 30">90%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_commonutils_update_wiki_pages_py.html">sherlock/commonutils/update_wiki_pages.py</a></td>
+                <td class="name left"><a href="d_084e72e3f4fa81ff_update_wiki_pages_py.html">sherlock/commonutils/update_wiki_pages.py</a></td>
                 <td>220</td>
                 <td>196</td>
                 <td>0</td>
                 <td class="right" data-ratio="24 220">11%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_database_py.html">sherlock/database.py</a></td>
+                <td class="name left"><a href="d_52b090ab5321b905_database_py.html">sherlock/database.py</a></td>
                 <td>88</td>
                 <td>24</td>
                 <td>0</td>
                 <td class="right" data-ratio="64 88">73%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_database_cleaner_py.html">sherlock/database_cleaner.py</a></td>
+                <td class="name left"><a href="d_52b090ab5321b905_database_cleaner_py.html">sherlock/database_cleaner.py</a></td>
                 <td>137</td>
                 <td>35</td>
                 <td>0</td>
                 <td class="right" data-ratio="102 137">74%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports___init___py.html">sherlock/imports/__init__.py</a></td>
+                <td class="name left"><a href="d_fe407af61149699b___init___py.html">sherlock/imports/__init__.py</a></td>
                 <td>6</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="6 6">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports__base_importer_py.html">sherlock/imports/_base_importer.py</a></td>
-                <td>90</td>
+                <td class="name left"><a href="d_fe407af61149699b__base_importer_py.html">sherlock/imports/_base_importer.py</a></td>
+                <td>91</td>
                 <td>5</td>
                 <td>0</td>
-                <td class="right" data-ratio="85 90">94%</td>
+                <td class="right" data-ratio="86 91">95%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_ifs_py.html">sherlock/imports/ifs.py</a></td>
+                <td class="name left"><a href="d_fe407af61149699b_ifs_py.html">sherlock/imports/ifs.py</a></td>
                 <td>69</td>
                 <td>10</td>
                 <td>0</td>
                 <td class="right" data-ratio="59 69">86%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_ned_py.html">sherlock/imports/ned.py</a></td>
-                <td>150</td>
-                <td>23</td>
+                <td class="name left"><a href="d_fe407af61149699b_ned_py.html">sherlock/imports/ned.py</a></td>
+                <td>155</td>
+                <td>16</td>
                 <td>0</td>
-                <td class="right" data-ratio="127 150">85%</td>
+                <td class="right" data-ratio="139 155">90%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_ned_d_py.html">sherlock/imports/ned_d.py</a></td>
-                <td>239</td>
-                <td>19</td>
+                <td class="name left"><a href="d_fe407af61149699b_ned_d_py.html">sherlock/imports/ned_d.py</a></td>
+                <td>254</td>
+                <td>223</td>
                 <td>0</td>
-                <td class="right" data-ratio="220 239">92%</td>
+                <td class="right" data-ratio="31 254">12%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_tests___init___py.html">sherlock/imports/tests/__init__.py</a></td>
+                <td class="name left"><a href="d_03f8a53278e0009f___init___py.html">sherlock/imports/tests/__init__.py</a></td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="0 0">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_tests_test_ifs_py.html">sherlock/imports/tests/test_ifs.py</a></td>
+                <td class="name left"><a href="d_03f8a53278e0009f_test_ifs_py.html">sherlock/imports/tests/test_ifs.py</a></td>
                 <td>43</td>
                 <td>5</td>
                 <td>0</td>
                 <td class="right" data-ratio="38 43">88%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_tests_test_ned_py.html">sherlock/imports/tests/test_ned.py</a></td>
+                <td class="name left"><a href="d_03f8a53278e0009f_test_ned_py.html">sherlock/imports/tests/test_ned.py</a></td>
                 <td>50</td>
                 <td>7</td>
                 <td>0</td>
                 <td class="right" data-ratio="43 50">86%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_tests_test_ned_d_py.html">sherlock/imports/tests/test_ned_d.py</a></td>
+                <td class="name left"><a href="d_03f8a53278e0009f_test_ned_d_py.html">sherlock/imports/tests/test_ned_d.py</a></td>
+                <td>51</td>
+                <td>10</td>
+                <td>0</td>
+                <td class="right" data-ratio="41 51">80%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_03f8a53278e0009f_test_veron_py.html">sherlock/imports/tests/test_veron.py</a></td>
                 <td>49</td>
                 <td>7</td>
                 <td>0</td>
                 <td class="right" data-ratio="42 49">86%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_imports_tests_test_veron_py.html">sherlock/imports/tests/test_veron.py</a></td>
-                <td>49</td>
-                <td>7</td>
-                <td>0</td>
-                <td class="right" data-ratio="42 49">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="sherlock_imports_veron_py.html">sherlock/imports/veron.py</a></td>
+                <td class="name left"><a href="d_fe407af61149699b_veron_py.html">sherlock/imports/veron.py</a></td>
                 <td>91</td>
                 <td>6</td>
                 <td>0</td>
                 <td class="right" data-ratio="85 91">93%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_tests___init___py.html">sherlock/tests/__init__.py</a></td>
+                <td class="name left"><a href="d_199abea7f80f01c9___init___py.html">sherlock/tests/__init__.py</a></td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="0 0">100%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_tests_test_catalogue_conesearch_py.html">sherlock/tests/test_catalogue_conesearch.py</a></td>
+                <td class="name left"><a href="d_199abea7f80f01c9_test_catalogue_conesearch_py.html">sherlock/tests/test_catalogue_conesearch.py</a></td>
                 <td>54</td>
                 <td>3</td>
                 <td>0</td>
                 <td class="right" data-ratio="51 54">94%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_tests_test_cl_utils_py.html">sherlock/tests/test_cl_utils.py</a></td>
+                <td class="name left"><a href="d_199abea7f80f01c9_test_cl_utils_py.html">sherlock/tests/test_cl_utils.py</a></td>
                 <td>33</td>
                 <td>3</td>
                 <td>0</td>
                 <td class="right" data-ratio="30 33">91%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_tests_test_database_py.html">sherlock/tests/test_database.py</a></td>
+                <td class="name left"><a href="d_199abea7f80f01c9_test_database_py.html">sherlock/tests/test_database.py</a></td>
                 <td>51</td>
                 <td>5</td>
                 <td>0</td>
                 <td class="right" data-ratio="46 51">90%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_tests_test_database_cleaner_py.html">sherlock/tests/test_database_cleaner.py</a></td>
+                <td class="name left"><a href="d_199abea7f80f01c9_test_database_cleaner_py.html">sherlock/tests/test_database_cleaner.py</a></td>
                 <td>43</td>
                 <td>5</td>
                 <td>0</td>
                 <td class="right" data-ratio="38 43">88%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_tests_test_transient_catalogue_crossmatch_py.html">sherlock/tests/test_transient_catalogue_crossmatch.py</a></td>
+                <td class="name left"><a href="d_199abea7f80f01c9_test_transient_catalogue_crossmatch_py.html">sherlock/tests/test_transient_catalogue_crossmatch.py</a></td>
                 <td>115</td>
                 <td>5</td>
                 <td>0</td>
                 <td class="right" data-ratio="110 115">96%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_tests_test_transient_classifier_py.html">sherlock/tests/test_transient_classifier.py</a></td>
+                <td class="name left"><a href="d_199abea7f80f01c9_test_transient_classifier_py.html">sherlock/tests/test_transient_classifier.py</a></td>
                 <td>73</td>
                 <td>5</td>
                 <td>0</td>
                 <td class="right" data-ratio="68 73">93%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_transient_catalogue_crossmatch_py.html">sherlock/transient_catalogue_crossmatch.py</a></td>
-                <td>320</td>
-                <td>26</td>
+                <td class="name left"><a href="d_52b090ab5321b905_transient_catalogue_crossmatch_py.html">sherlock/transient_catalogue_crossmatch.py</a></td>
+                <td>328</td>
+                <td>30</td>
                 <td>0</td>
-                <td class="right" data-ratio="294 320">92%</td>
+                <td class="right" data-ratio="298 328">91%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_transient_classifier_py.html">sherlock/transient_classifier.py</a></td>
-                <td>823</td>
-                <td>240</td>
+                <td class="name left"><a href="d_52b090ab5321b905_transient_classifier_py.html">sherlock/transient_classifier.py</a></td>
+                <td>832</td>
+                <td>249</td>
                 <td>0</td>
-                <td class="right" data-ratio="583 823">71%</td>
+                <td class="right" data-ratio="583 832">70%</td>
             </tr>
             <tr class="file">
-                <td class="name left"><a href="sherlock_utKit_py.html">sherlock/utKit.py</a></td>
+                <td class="name left"><a href="d_52b090ab5321b905_utKit_py.html">sherlock/utKit.py</a></td>
                 <td>22</td>
                 <td>7</td>
                 <td>0</td>
                 <td class="right" data-ratio="15 22">68%</td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>3198</td>
+                <td>973</td>
+                <td>0</td>
+                <td class="right" data-ratio="2225 3198">70%</td>
+            </tr>
+        </tfoot>
     </table>
     <p id="no_rows">
         No items found using the specified filter.
     </p>
-</div>
-<div id="footer">
+</main>
+<footer>
     <div class="content">
         <p>
-            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
-            created at 2021-08-02 19:11 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.2.2">coverage.py v7.2.2</a>,
+            created at 2023-09-21 12:36 +0000
         </p>
     </div>
-</div>
+    <aside class="hidden">
+        <a id="prevFileLink" class="nav" href="d_52b090ab5321b905_utKit_py.html"/>
+        <a id="nextFileLink" class="nav" href="d_52b090ab5321b905___init___py.html"/>
+        <button type="button" class="button_prev_file" data-shortcut="["/>
+        <button type="button" class="button_next_file" data-shortcut="]"/>
+        <button type="button" class="button_show_hide_help" data-shortcut="?"/>
+    </aside>
+</footer>
 </body>
 </html>
