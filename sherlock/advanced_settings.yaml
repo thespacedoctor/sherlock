@@ -219,7 +219,7 @@ search algorithm:
             synonym: AGN
             association: AGN
     ned_d spec galaxy:
-        database table: tcs_view_galaxy_ned_d_v13_1_0
+        database table: tcs_view_galaxy_ned_d_v17_1_2
         general:
             physical radius kpc: 50.0
             angular radius arcsec: 6000.0
