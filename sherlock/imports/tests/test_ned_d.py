@@ -1,4 +1,5 @@
 from __future__ import print_function
+from sherlock import database
 from builtins import str
 import os
 import unittest
@@ -39,7 +40,6 @@ if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
 # SETUP ALL DATABASE CONNECTIONS
-from sherlock import database
 db = database(
     log=log,
     settings=settings
@@ -59,8 +59,12 @@ try:
 except:
     pass
 
+
 class test_ned_d(unittest.TestCase):
 
+    import pytest
+
+    @pytest.mark.full
     def test_ned_d_function(self):
 
         from sherlock.imports import ned_d
