@@ -1255,7 +1255,7 @@ class transient_classifier(object):
                         value = c[k]
                         if k not in dontFormat:
                             try:
-                                ordDict[columnName] = "%(value)0.2f" % locals()
+                                ordDict[columnName] = "%(value)0.3f" % locals()
                             except:
                                 ordDict[columnName] = value
                         else:
@@ -1343,7 +1343,7 @@ class transient_classifier(object):
                     value = c[k]
                     if k not in dontFormat:
                         try:
-                            ordDict[columnName] = float(f'{value:0.2f}')
+                            ordDict[columnName] = float(f'{value:0.3f}')
                         except:
                             ordDict[columnName] = value
                     else:

@@ -208,6 +208,7 @@ def main(arguments=None):
             updateNed=updateNed,
             updatePeakMags=updatePeakMags
         )
+
         classifier.classify()
 
     if clean:
