@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v2.3.1 - October 10, 2023** 
+
+* **REFACTOR**: increasing precision of reported catalogue values from 2dp to 3dp when running in lite mode. Note values in full mode are still reported with the same precision as found in the source catalogues. 
+
 **v2.3.0 - September 21, 2023** 
 
 * **ENHANCEMENT**: updating NED-D import and moving NED-D catalogue to v17.1.2
