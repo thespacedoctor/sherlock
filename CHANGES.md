@@ -22,7 +22,7 @@
 
 **v2.2.2 - May 18, 2022** 
 
-**FIXED**: NED name parsing errors fixed
+* **FIXED**: NED name parsing errors fixed
 
 **v2.2.1 - January 21, 2022** 
 
