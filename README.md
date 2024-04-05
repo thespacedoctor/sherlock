@@ -39,7 +39,6 @@ If you use `sherlock` in your work, please cite using the following BibTeX entry
     author = {Young, David R.},
     doi = {10.5281/zenodo.8038057},
     license = {GPL-3.0-only},
-    month = aug,
     title = {{sherlock}},
     url = {https://github.com/thespacedoctor/sherlock},
     year = {2023}
