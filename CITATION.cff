@@ -6,7 +6,7 @@ authors:
   given-names: "David R."
   orcid: "https://orcid.org/0000-0002-1229-2499"
 doi: 10.5281/zenodo.8038057
-url: "https://github.com/thespacedoctor/sherlock"
+url: "https://zenodo.org/doi/10.5281/zenodo.8038057"
 abstract: mine a library of historical and on-going astronomical survey data in an attempt to identify the sources of transient/variable events, and predict their classifications based on crossmatched data.
 keywords: [astronomy]
 license: GPL-3.0-only
