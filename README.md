@@ -1,7 +1,7 @@
 # sherlock
 
 
-[![](https://zenodo.org/badge/42115533.svg)](https://zenodo.org/badge/latestdoi/42115533) 
+[![](https://zenodo.org/badge/8038057.svg)](https://zenodo.org/badge/latestdoi/8038057) 
 
 
 <!-- INFO BADGES -->  
