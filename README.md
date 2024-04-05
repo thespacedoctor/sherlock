@@ -39,7 +39,7 @@ If you use `sherlock` in your work, please cite using the following BibTeX entry
     author = {Young, David R.},
     doi = {10.5281/zenodo.8038057},
     license = {GPL-3.0-only},
-    title = {{sherlock}},
+    title = {{Sherlock. Contextual classification of astronomical transient sources}},
     url = {https://zenodo.org/doi/10.5281/zenodo.8038057},
     year = {2023}
 }
