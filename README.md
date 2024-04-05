@@ -40,7 +40,7 @@ If you use `sherlock` in your work, please cite using the following BibTeX entry
     doi = {10.5281/zenodo.8038057},
     license = {GPL-3.0-only},
     title = {{sherlock}},
-    url = {https://github.com/thespacedoctor/sherlock},
+    url = {https://zenodo.org/doi/10.5281/zenodo.8038057},
     year = {2023}
 }
 ```
