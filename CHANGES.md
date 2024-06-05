@@ -1,6 +1,8 @@
 
 ## Release Notes
 
+* **REFACTOR**: increasing the default 'galaxy radius stretch factor', used to multiply a galaxy semi-major axis to get a search radius, from 1.2 to 1.5
+
 **v2.3.1 - October 10, 2023** 
 
 * **REFACTOR**: increasing precision of reported catalogue values from 2dp to 3dp when running in lite mode. Note values in full mode are still reported with the same precision as found in the source catalogues. 
@@ -20,7 +22,7 @@
 
 **v2.2.2 - May 18, 2022** 
 
-**FIXED**: NED name parsing errors fixed
+* **FIXED**: NED name parsing errors fixed
 
 **v2.2.1 - January 21, 2022** 
 

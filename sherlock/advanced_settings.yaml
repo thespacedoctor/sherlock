@@ -16,7 +16,7 @@ ned stream search radius arcec: 900
 first pass ned search radius arcec: 240
 ned stream refresh rate in days: 180
 # THERE IS SOME ADJUSTMENT IN MANY CODE FOR ANGULARLY LARGE GALAXIES
-galaxy radius stretch factor: 1.2
+galaxy radius stretch factor: 1.5
 synonym radius arcsec: 1.5
 
 ignore morphology list:
