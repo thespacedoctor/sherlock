@@ -6,19 +6,19 @@
 :Author:
     David Young
 """
+from fundamentals.mysql import readquery
+from docopt import docopt
+import pymysql as ms
+from subprocess import Popen, PIPE, STDOUT
+import time
+import pickle
+import glob
+import readline
 from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-import time
-from subprocess import Popen, PIPE, STDOUT
-import pymysql as ms
 # import pymysql as ms
-from docopt import docopt
-from fundamentals.mysql import readquery
 
 
 class database(object):
@@ -126,11 +126,13 @@ class database(object):
                 port = int(dbSettings["port"])
 
             if dbSettings:
+
                 # SETUP A DATABASE CONNECTION FOR THE STATIC CATALOGUES
                 host = dbSettings["host"]
                 user = dbSettings["user"]
                 passwd = dbSettings["password"]
                 dbName = dbSettings["db"]
+
                 thisConn = ms.connect(
                     host=host,
                     user=user,
