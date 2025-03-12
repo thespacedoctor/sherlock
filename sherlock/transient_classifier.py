@@ -207,6 +207,12 @@ class transient_classifier(object):
         self.largeBatchSize = self.settings["database-batch-size"]
         self.miniBatchSize = 1000
 
+        # CHECK INPUT TYPES
+        if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float):
+            message = "Input RA and Dec must be floats or lists of floats"
+            self.log.error(message)
+            raise TypeError(message)
+
         # LITE VERSION CANNOT BE RUN ON A DATABASE QUERY AS YET
         if self.ra == False:
             self.lite = False

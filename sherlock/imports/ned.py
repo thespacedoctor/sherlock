@@ -31,7 +31,7 @@ os.environ['TERM'] = 'vt100'
 
 class ned(_base_importer):
     """
-    *Using a list of coordinates, query the online* `NED <https://ned.ipac.caltech.edu/>`_ *database and import sources found within a given search radius of each of the loctions into the sherlock-catalogues database*
+    *Using a list of coordinates, query the online* `NED <https://ned.ipac.caltech.edu/>`_ *database and import sources found within a given search radius of each of the locations into the sherlock-catalogues database*
 
     The code:
 
