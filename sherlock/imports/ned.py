@@ -164,6 +164,7 @@ class ned(_base_importer):
         )
 
         self._update_ned_query_history()
+
         self._download_ned_source_metadata()
 
         self.log.debug('completed the ``ingest`` method')

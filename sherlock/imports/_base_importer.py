@@ -11,23 +11,23 @@
     - document this module
 """
 from __future__ import print_function
+from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+from fundamentals.renderer import list_of_dictionaries
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, directory_script_runner, writequery
+from docopt import docopt
+from datetime import datetime, date, time
+from sherlock.database_cleaner import database_cleaner
+import string
+import re
+import codecs
+import pickle
+import glob
+import readline
 from builtins import str
 from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-import codecs
-import re
-import string
-from sherlock.database_cleaner import database_cleaner
-from datetime import datetime, date, time
-from docopt import docopt
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, directory_script_runner, writequery
-from fundamentals.renderer import list_of_dictionaries
-from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 
 
 class _base_importer(object):
