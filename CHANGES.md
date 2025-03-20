@@ -1,6 +1,7 @@
 
 ## Release Notes
 
+* **ENHANCEMENT**: 'distance' has been removed from Sherlock's outputs and replaced with 'best_distance' and 'best_distance_flag'. 'distance' was calculated from the spectroscopic redshift (luminosity distance), but this was not clear to the end-user. Sherlock now processes through a distance measurement list for each transient and reports a single 'best_distance' in Mpc. From best to worst, this list is direct distance (redshift independent), spectroscopic redshift (converted to Mpc), and photometric redshift (converted to Mpc). A 'best_distance_flag' indicates how the best distance is derived.
 * **REFACTOR**: increasing the default 'galaxy radius stretch factor', used to multiply a galaxy semi-major axis to get a search radius, from 1.2 to 1.5
 
 **v2.3.1 - October 10, 2023** 
