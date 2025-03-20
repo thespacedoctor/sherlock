@@ -7,6 +7,12 @@
     David Young
 """
 from __future__ import division
+from fundamentals.mysql import database
+import time
+from astrocalc.coords import separations
+from astrocalc.distances import converter
+from sherlock.catalogue_conesearch import catalogue_conesearch
+from fundamentals import tools
 from builtins import zip
 from builtins import object
 from past.utils import old_div
@@ -14,12 +20,6 @@ import sys
 import os
 import math
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from sherlock.catalogue_conesearch import catalogue_conesearch
-from astrocalc.distances import converter
-from astrocalc.coords import separations
-import time
-from fundamentals.mysql import database
 
 
 class transient_catalogue_crossmatch(object):
@@ -564,15 +564,19 @@ class transient_catalogue_crossmatch(object):
         self.log.debug(
             'starting the ``_annotate_crossmatch_with_value_added_parameters`` method')
 
-        redshift = None
-        z = None
-        scale = None
-        distance = None
-        distance_modulus = None
-        major_axis_arcsec = None
         direct_distance = None
         direct_distance_scale = None
         direct_distance_modulus = None
+        redshift = None
+        z = None
+        z_distance_scale = None
+        z_distance = None
+        z_distance_modulus = None
+        pz = None
+        pz_distance_scale = None
+        pz_distance = None
+        pz_distance_modulus = None
+        major_axis_arcsec = None
 
         # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
         if 'z' in crossmatchDict:
@@ -590,9 +594,30 @@ class transient_catalogue_crossmatch(object):
 
             if dists:
                 z = dists['z']
-                scale = dists["da_scale"]
-                distance = dists["dl_mpc"]
-                distance_modulus = dists["dmod"]
+                z_distance_scale = dists["da_scale"]
+                z_distance = dists["dl_mpc"]
+                z_distance_modulus = dists["dmod"]
+
+        # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
+        if 'photoZ' in crossmatchDict:
+            # THE CATALOGUE HAS A REDSHIFT COLUMN
+            pz = crossmatchDict['photoZ']
+        if pz and pz > 0.0:
+            # CALCULATE DISTANCE MODULUS, ETC
+            c = converter(log=self.log)
+            dists = c.redshift_to_distance(
+                z=pz,
+                WM=0.3,
+                WV=0.7,
+                H0=70.0
+            )
+
+            if dists:
+                pz = dists['z']
+                pz_distance_scale = dists["da_scale"]
+                pz_distance = dists["dl_mpc"]
+                pz_distance_modulus = dists["dmod"]
+
         # ADD MAJOR AXIS VALUE
         if "or within semi major axis" in searchPara and searchPara["or within semi major axis"] == True and "semiMajor" in crossmatchDict and crossmatchDict["semiMajor"]:
             major_axis_arcsec = crossmatchDict[
@@ -607,9 +632,12 @@ class transient_catalogue_crossmatch(object):
             direct_distance_modulus = 5 * \
                 math.log10(direct_distance * 1e6) - 5
         # crossmatchDict['z'] = z
-        crossmatchDict['scale'] = scale
-        crossmatchDict['distance'] = distance
-        crossmatchDict['distance_modulus'] = distance_modulus
+        crossmatchDict['z_distance_scale'] = z_distance_scale
+        crossmatchDict['z_distance'] = z_distance
+        crossmatchDict['z_distance_modulus'] = z_distance_modulus
+        crossmatchDict['pz_distance_scale'] = pz_distance_scale
+        crossmatchDict['pz_distance'] = pz_distance
+        crossmatchDict['pz_distance_modulus'] = pz_distance_modulus
         crossmatchDict['major_axis_arcsec'] = major_axis_arcsec
         crossmatchDict['direct_distance'] = direct_distance
         crossmatchDict['direct_distance_scale'] = direct_distance_scale
@@ -631,9 +659,9 @@ class transient_catalogue_crossmatch(object):
         if crossmatchDict["direct_distance_scale"]:
             physical_separation_kpc = crossmatchDict[
                 "direct_distance_scale"] * crossmatchDict["separationArcsec"]
-        elif crossmatchDict["scale"]:
+        elif crossmatchDict["z_distance_scale"]:
             physical_separation_kpc = crossmatchDict[
-                "scale"] * crossmatchDict["separationArcsec"]
+                "z_distance_scale"] * crossmatchDict["separationArcsec"]
 
         crossmatchDict["physical_separation_kpc"] = physical_separation_kpc
 
@@ -878,10 +906,10 @@ class transient_catalogue_crossmatch(object):
                     newAngularSep = old_div(physicalRadius,
                                             row["direct_distance_scale"])
                 # NEW CHECK FOR A REDSHIFT DISTANCE
-                elif row["scale"] and physical_separation_kpc < physicalRadius:
+                elif row["z_distance_scale"] and physical_separation_kpc < physicalRadius:
                     thisMatch = True
                     newsearch_name = newsearch_name + " (redshift distance)"
-                    newAngularSep = old_div(physicalRadius, row["scale"])
+                    newAngularSep = old_div(physicalRadius, row["z_distance_scale"])
 
                 if thisMatch == True:
                     row["physical_separation_kpc"] = physical_separation_kpc
