@@ -398,8 +398,12 @@ class transient_catalogue_crossmatch(object):
 
         # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
         if classificationType == "synonym":
-            radius = self.settings["synonym radius arcsec"]
+            if self.settings["synonym radius arcsec"] < theseSearchPara["angular radius arcsec"]:
+                radius = self.settings["synonym radius arcsec"]
+            else:
+                radius = theseSearchPara["angular radius arcsec"]
             matchedType = theseSearchPara["synonym"]
+
         elif classificationType == "association":
             radius = theseSearchPara["angular radius arcsec"]
             matchedType = theseSearchPara["association"]
@@ -759,6 +763,8 @@ class transient_catalogue_crossmatch(object):
         galaxyMatches = []
         for row in matchedObjects:
             if not magnitudeLimitFilter or row[magnitudeLimitFilter] == None:
+                galaxyMatches.append(row)
+            elif not upperMagnitudeLimit and not lowerMagnitudeLimit:
                 galaxyMatches.append(row)
             else:
                 mag = decimal.Decimal(row[magnitudeLimitFilter])

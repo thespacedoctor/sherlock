@@ -1,8 +1,10 @@
 
 ## Release Notes
 
-* **ENHANCEMENT**: 'distance' has been removed from Sherlock's outputs and replaced with 'best_distance' and 'best_distance_flag'. 'distance' was calculated from the spectroscopic redshift (luminosity distance), but this was not clear to the end-user. Sherlock now processes through a distance measurement list for each transient and reports a single 'best_distance' in Mpc. From best to worst, this list is direct distance (redshift independent), spectroscopic redshift (converted to Mpc), and photometric redshift (converted to Mpc). A 'best_distance_flag' indicates how the best distance is derived.
+* **ENHANCEMENT**: 'distance' has been removed from Sherlock's outputs and replaced with 'best_distance', 'best_distance_flag' and 'best_distance_source'. 'distance' was calculated from the spectroscopic redshift (luminosity distance), but this was not clear to the end-user. Sherlock now processes through a distance measurement list for each transient and reports a single 'best_distance' in Mpc. From best to worst, this list is direct distance (redshift independent), spectroscopic redshift (converted to Mpc), and photometric redshift (converted to Mpc). A 'best_distance_flag' indicates how the best distance is derived (`dd`, `sz`, `pz`). The 'best_distance_source' reveals which catalogue is to blame for the distance measurement.
 * **REFACTOR**: increasing the default 'galaxy radius stretch factor', used to multiply a galaxy semi-major axis to get a search radius, from 1.2 to 1.5
+* **FIXED**: a bug when using 'mag column' within a yaml search module, but then only giving a 'general' search filter (no bright and faint filters). No matches are return even if a positive match exists, resulting in an 'ORPHAN' classification.
+* **FIXED**: a bug in the synonym matching, where the default synonym radius (1.5") was getting used even if a search modules synonym was smaller.
 
 **v2.3.1 - October 10, 2023** 
 

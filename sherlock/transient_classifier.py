@@ -900,6 +900,7 @@ class transient_classifier(object):
                 "direct_distance": mergedMatch["direct_distance"],
                 "direct_distance_modulus": mergedMatch["direct_distance_modulus"],
                 "direct_distance_scale": mergedMatch["direct_distance_scale"],
+                "direct_distance_cat": mergedMatch["catalogue_table_name"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
             if not mergedMatch["direct_distance"]:
@@ -910,6 +911,7 @@ class transient_classifier(object):
                 "z_distance": mergedMatch["z_distance"],
                 "z_distance_modulus": mergedMatch["z_distance_modulus"],
                 "z_distance_scale": mergedMatch["z_distance_scale"],
+                "z_distance_cat": mergedMatch["catalogue_table_name"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
             if not mergedMatch["z_distance"]:
@@ -918,6 +920,9 @@ class transient_classifier(object):
             bestPhotoz = {
                 "photoZ": mergedMatch["photoZ"],
                 "photoZErr": mergedMatch["photoZErr"],
+                "pz_distance_modulus": mergedMatch["pz_distance_modulus"],
+                "pz_distance_scale": mergedMatch["pz_distance_scale"],
+                "pz_distance_cat": mergedMatch["catalogue_table_name"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
             if not mergedMatch["photoZ"]:
@@ -951,8 +956,6 @@ class transient_classifier(object):
                         if not mergedMatch["catalogue_object_id"]:
                             mergedMatch["catalogue_object_id"] = str(
                                 m["catalogue_object_id"])
-
-            mergedMatch["crap"] = True
 
             # NOW ADD THE REST
             for i, m in enumerate(x):
@@ -1034,6 +1037,7 @@ class transient_classifier(object):
                             "direct_distance_modulus": m["direct_distance_modulus"],
                             "direct_distance_scale": m["direct_distance_scale"],
                             "catalogue_object_type": m["catalogue_object_type"],
+                            "direct_distance_cat": m["catalogue_table_name"],
                             "qual": colMaps[m["catalogue_view_name"]]["object_type_accuracy"]
                         }
                     # FIND BEST SPEC-Z
@@ -1044,6 +1048,7 @@ class transient_classifier(object):
                             "z_distance_modulus": m["z_distance_modulus"],
                             "z_distance_scale": m["z_distance_scale"],
                             "catalogue_object_type": m["catalogue_object_type"],
+                            "z_distance_cat": m["catalogue_table_name"],
                             "qual": colMaps[m["catalogue_view_name"]]["object_type_accuracy"]
                         }
                     # FIND BEST PHOT-Z
@@ -1055,6 +1060,7 @@ class transient_classifier(object):
                             "pz_distance_modulus": m["pz_distance_modulus"],
                             "pz_distance_scale": m["pz_distance_scale"],
                             "catalogue_object_type": m["catalogue_object_type"],
+                            "pz_distance_cat": m["catalogue_table_name"],
                             "qual": colMaps[m["catalogue_view_name"]]["object_type_accuracy"]
                         }
                     # CLOSEST ANGULAR SEP & COORDINATES
@@ -1069,15 +1075,6 @@ class transient_classifier(object):
                     if k != "qual" and v:
                         mergedMatch[k] = v
 
-            # DETERMINE THE BEST DISTANCE MATCH
-            mergedMatch["best_distance"] = None
-            mergedMatch["best_distance_flag"] = None
-            for d, f in zip(["direct_distance", "z_distance", "pz_distance"], ["dd", "sz", "pz"]):
-                if mergedMatch[d]:
-                    mergedMatch["best_distance"] = mergedMatch[d]
-                    mergedMatch["best_distance_flag"] = f
-                    break
-
             mergedMatch["catalogue_object_id"] = str(mergedMatch[
                 "catalogue_object_id"]).replace(" ", "")
 
@@ -1085,13 +1082,22 @@ class transient_classifier(object):
             if mergedMatch["direct_distance_scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
                     "direct_distance_scale"] * mergedMatch["separationArcsec"]
-
             elif mergedMatch["z_distance_scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
                     "z_distance_scale"] * mergedMatch["separationArcsec"]
 
             if "/" in mergedMatch["search_name"]:
                 mergedMatch["search_name"] = "multiple"
+                # DETERMINE THE BEST DISTANCE MATCH
+                mergedMatch["best_distance"] = None
+                mergedMatch["best_distance_flag"] = None
+                mergedMatch["best_distance_source"] = None
+                for d, f in zip(["direct_distance", "z_distance", "pz_distance"], ["dd", "sz", "pz"]):
+                    if mergedMatch[d]:
+                        mergedMatch["best_distance"] = mergedMatch[d]
+                        mergedMatch["best_distance_flag"] = f
+                        mergedMatch["best_distance_source"] = mergedMatch[d + "_cat"]
+                        break
 
             distinctMatches.append(mergedMatch)
 
@@ -1202,10 +1208,10 @@ class transient_classifier(object):
 
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
-                 "raDeg", "decDeg", "separationArcsec", "best_distance", "best_distance_flag", "physical_separation_kpc", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
+                 "raDeg", "decDeg", "separationArcsec", "best_distance", "best_distance_flag", "best_distance_source", "physical_separation_kpc", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
         verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "direct_distance_scale", "z_distance", "z_distance_modulus", "z_distance_scale", "pz_distance", "pz_distance_modulus", "pz_distance_scale", "major_axis_arcsec", "U", "UErr", "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
-                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank"]
+                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "z", "photoZ", "photoZErr"]
         if self.verbose == 2:
             basic = basic + verbose
 
@@ -1311,11 +1317,11 @@ class transient_classifier(object):
 
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["transient_object_id", "association_type", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type",
-                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "best_distance", "best_distance_flag", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "major_axis_arcsec"]
+                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "best_distance", "best_distance_flag", "best_distance_source", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "major_axis_arcsec"]
         verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "z_distance_modulus", "direct_distance_scale", "z_distance_scale", "U", "UErr",
                    "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
-                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "classificationReliability"]
+                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "classificationReliability", "z", "photoZ", "photoZErr"]
         if self.verbose == 2:
             basic = basic + verbose
 

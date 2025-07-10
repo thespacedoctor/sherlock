@@ -99,24 +99,35 @@ search algorithm:
             angular radius arcsec: 2.5
             synonym: CV
             association: CV
+    gaia galaxy:
+        database table: tcs_view_galaxy_gaia_dr3
+        mag column: G
+        general:
+            angular radius arcsec: 5.0
+            synonym: NT
+            association: SN
     gaia star:
-        database table: tcs_view_star_gaia_dr2
+        database table: tcs_view_star_gaia_dr3
         mag column: G
         bright:
             mag limit: 16.
-            angular radius arcsec: 100.0
+            angular radius arcsec: 5.0
             synonym: VS
             association: BS
         general:
-            angular radius arcsec: 2.5
+            angular radius arcsec: 0.5
             synonym: VS
             association: VS
-    gaia galaxy:
-        database table: tcs_view_unclear_gaia_dr2
+        faint:
+            mag limit: 21.
+            angular radius arcsec: 0.5
+            annotation: UNCLEAR
+    gaia qso:
+        database table: tcs_view_qso_gaia_dr3
         mag column: G
         general:
             angular radius arcsec: 3.0
-            synonym: UNCLEAR
+            synonym: AGN
             association: SN
     ps1 star r:
         database table: tcs_view_star_ps1_dr1
