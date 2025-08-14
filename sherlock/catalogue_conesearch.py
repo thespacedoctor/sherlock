@@ -8,15 +8,15 @@
 
 :noindex:
 """
+import copy
+from HMpTy.mysql import conesearch as hmptyConesearch
+from astrocalc.coords import unit_conversion
+from fundamentals import tools
 from builtins import zip
 from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from astrocalc.coords import unit_conversion
-from HMpTy.mysql import conesearch as hmptyConesearch
-import copy
 
 
 class catalogue_conesearch(object):
@@ -27,18 +27,18 @@ class catalogue_conesearch(object):
 
     - ``dbConn`` -- mysql database connection to the catalogues database
     - ``log`` -- logger
-    - ``ra`` -- ra of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
-    - ``dec`` -- dec of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
+    - ``ra`` -- ra of transient location (sexagesimal or decimal degrees, J2000, single location or list of locations)
+    - ``dec`` -- dec of transient location (sexagesimal or decimal degrees, J2000, single location or list of locations)
     - ``tableName`` -- the name of the database table to perform the conesearch on
     - ``radius`` -- radius of the conesearch to perform (arcsec)
     - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
     - ``nearestOnly`` -- return only the nearest object. Default *False*
     - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
-    - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
+    - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is required with the conesearch. Default *False*
 
 
-        - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
-        - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
+        - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is required with the conesearch. Default *False*
+        - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if required. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
 
     **Usage**
 
@@ -48,7 +48,7 @@ class catalogue_conesearch(object):
 
         - update the package tutorial if needed
 
-    The following examples assume you've connected to the various databases and generated the catalogue column maps in the following menner:
+    The following examples assume you've connected to the various databases and generated the catalogue column maps in the following manner:
 
     ```python
     # SETUP ALL DATABASE CONNECTIONS
