@@ -517,6 +517,37 @@ class transient_catalogue_crossmatch(object):
                 magnitudeLimitFilter=searchPara["mag column"]
             )
 
+        galaxyDenyList = self.settings["ignore morphology list"]
+        galaxyDenyList = [g.replace(" ", "") for g in galaxyDenyList]
+
+        if "or within semi major axis" in theseSearchPara and theseSearchPara["or within semi major axis"] == True:
+            withinSMMatches = []
+            for row in catalogueMatches:
+                if row["sm_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and str(row["catalogue_object_id"]).replace(" ", "") not in galaxyDenyList:
+
+                    # FOR SOURCES > 10 arcmin IN SKY
+                    if row["sm_axis_arcsec"] < 10 * 60:
+                        sizeAdjustment = self.settings[
+                            "galaxy radius stretch factor"]
+                    elif row["sm_axis_arcsec"] < 100 * 60:
+                        sizeAdjustment = self.settings[
+                            "galaxy radius stretch factor"] * 0.7
+                    elif row["sm_axis_arcsec"] >= 100 * 60:
+                        sizeAdjustment = self.settings[
+                            "galaxy radius stretch factor"] * 0.5
+                        # print(row["sm_axis_arcsec"] * sizeAdjustment / 2. *
+                        #       self.settings["galaxy radius stretch factor"])
+                    if row["separationArcsec"] < row["sm_axis_arcsec"] / 2. * sizeAdjustment:
+                        withinSMMatches.append(row)
+                        row["search_name"] = row["search_name"] + \
+                            " (within %0.2f * semi-major axis)" % (
+                                sizeAdjustment,)
+                        newAngularSep = row[
+                            "sm_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
+                else:
+                    withinSMMatches.append(row)
+            catalogueMatches = withinSMMatches
+
         if "match nearest source only" in theseSearchPara and theseSearchPara["match nearest source only"] == True and len(catalogueMatches):
             nearestMatches = []
             transList = []
@@ -580,7 +611,7 @@ class transient_catalogue_crossmatch(object):
         pz_distance_scale = None
         pz_distance = None
         pz_distance_modulus = None
-        major_axis_arcsec = None
+        sm_axis_arcsec = None
 
         # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
         if 'z' in crossmatchDict:
@@ -624,7 +655,7 @@ class transient_catalogue_crossmatch(object):
 
         # ADD MAJOR AXIS VALUE
         if "or within semi major axis" in searchPara and searchPara["or within semi major axis"] == True and "semiMajor" in crossmatchDict and crossmatchDict["semiMajor"]:
-            major_axis_arcsec = crossmatchDict[
+            sm_axis_arcsec = crossmatchDict[
                 "semiMajor"] * self.colMaps[catalogueName]["semiMajorToArcsec"]
 
         if "semiMajor" in crossmatchDict:
@@ -642,7 +673,7 @@ class transient_catalogue_crossmatch(object):
         crossmatchDict['pz_distance_scale'] = pz_distance_scale
         crossmatchDict['pz_distance'] = pz_distance
         crossmatchDict['pz_distance_modulus'] = pz_distance_modulus
-        crossmatchDict['major_axis_arcsec'] = major_axis_arcsec
+        crossmatchDict['sm_axis_arcsec'] = sm_axis_arcsec
         crossmatchDict['direct_distance'] = direct_distance
         crossmatchDict['direct_distance_scale'] = direct_distance_scale
         crossmatchDict['direct_distance_modulus'] = direct_distance_modulus
@@ -882,26 +913,26 @@ class transient_catalogue_crossmatch(object):
                 # BYPASS NED FAULTY AXES MEASUREMENTS:
                 # https://gist.github.com/search?utf8=%E2%9C%93&q=user%3Athespacedoctor+ned
                 # NOTE MAJOR AXIS IS A DIAMETER, NOT RADIUS
-                if row["major_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and row["catalogue_object_id"].replace(" ", "") not in galaxyDenyList:
+                if row["sm_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and row["catalogue_object_id"].replace(" ", "") not in galaxyDenyList:
                     # FOR SOURCES > 10 arcmin IN SKY
-                    if row["major_axis_arcsec"] < 10 * 60:
+                    if row["sm_axis_arcsec"] < 10 * 60:
                         sizeAdjustment = self.settings[
                             "galaxy radius stretch factor"]
-                    elif row["major_axis_arcsec"] < 100 * 60:
+                    elif row["sm_axis_arcsec"] < 100 * 60:
                         sizeAdjustment = self.settings[
                             "galaxy radius stretch factor"] * 0.7
-                    elif row["major_axis_arcsec"] >= 100 * 60:
+                    elif row["sm_axis_arcsec"] >= 100 * 60:
                         sizeAdjustment = self.settings[
                             "galaxy radius stretch factor"] * 0.5
-                        # print(row["major_axis_arcsec"] * sizeAdjustment / 2. *
+                        # print(row["sm_axis_arcsec"] * sizeAdjustment / 2. *
                         #       self.settings["galaxy radius stretch factor"])
-                    if row["separationArcsec"] < row["major_axis_arcsec"] / 2. * sizeAdjustment:
+                    if row["separationArcsec"] < row["sm_axis_arcsec"] / 2. * sizeAdjustment:
                         thisMatch = True
                         newsearch_name = newsearch_name + \
                             " (within %0.2f * semi-major axis)" % (
                                 sizeAdjustment,)
                         newAngularSep = row[
-                            "major_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
+                            "sm_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
 
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 if row["direct_distance_scale"] and physical_separation_kpc < physicalRadius and thisMatch == False:
