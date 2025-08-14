@@ -1206,10 +1206,10 @@ class transient_classifier(object):
 
         crossmatchesCopy = copy.deepcopy(crossmatches)
 
-        # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
+        # REPORT ONLY THE MOST PREFERRED MAGNITUDE VALUE
         basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
                  "raDeg", "decDeg", "separationArcsec", "best_distance", "best_distance_flag", "best_distance_source", "physical_separation_kpc", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
-        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "direct_distance_scale", "z_distance", "z_distance_modulus", "z_distance_scale", "pz_distance", "pz_distance_modulus", "pz_distance_scale", "major_axis_arcsec", "U", "UErr", "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
+        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "direct_distance_scale", "z_distance", "z_distance_modulus", "z_distance_scale", "pz_distance", "pz_distance_modulus", "pz_distance_scale", "sm_axis_arcsec", "U", "UErr", "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
                       "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "z", "photoZ", "photoZErr"]
         if self.verbose == 2:
@@ -1317,7 +1317,7 @@ class transient_classifier(object):
 
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["transient_object_id", "association_type", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type",
-                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "best_distance", "best_distance_flag", "best_distance_source", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "major_axis_arcsec"]
+                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "best_distance", "best_distance_flag", "best_distance_source", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "sm_axis_arcsec"]
         verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "z_distance_modulus", "direct_distance_scale", "z_distance_scale", "U", "UErr",
                    "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
@@ -1782,7 +1782,7 @@ CREATE TABLE IF NOT EXISTS `sherlock_crossmatches` (
   `rank` int(11) DEFAULT NULL,
   `rankScore` double DEFAULT NULL,
   `search_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `major_axis_arcsec` double DEFAULT NULL,
+  `sm_axis_arcsec` double DEFAULT NULL,
   `direct_distance` double DEFAULT NULL,
   `direct_distance_scale` double DEFAULT NULL,
   `direct_distance_modulus` double DEFAULT NULL,
