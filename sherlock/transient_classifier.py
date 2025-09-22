@@ -205,7 +205,7 @@ class transient_classifier(object):
 
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
         self.largeBatchSize = self.settings["database-batch-size"]
-        self.miniBatchSize = 1000
+        self.miniBatchSize = 5000
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -422,7 +422,7 @@ class transient_classifier(object):
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps)
+                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=True)
 
             if self.verbose > 1:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
@@ -890,6 +890,9 @@ class transient_classifier(object):
             mergedMatch = copy.deepcopy(x[0])
             mergedMatch["merged_rank"] = int(dupKey)
 
+            if 'photoZErr' in mergedMatch and ('photoZ' not in mergedMatch or not mergedMatch['photoZ']):
+                mergedMatch['photoZErr'] = None
+
             # ADD OTHER ESSENTIAL KEYS
             for e in ['z', 'photoZ', 'photoZErr']:
                 if e not in mergedMatch:
@@ -1088,48 +1091,60 @@ class transient_classifier(object):
 
             if "/" in mergedMatch["search_name"]:
                 mergedMatch["search_name"] = "multiple"
-                # DETERMINE THE BEST DISTANCE MATCH
-                mergedMatch["best_distance"] = None
-                mergedMatch["best_distance_flag"] = None
-                mergedMatch["best_distance_source"] = None
-                for d, f in zip(["direct_distance", "z_distance", "pz_distance"], ["dd", "sz", "pz"]):
-                    if mergedMatch[d]:
-                        mergedMatch["best_distance"] = mergedMatch[d]
-                        mergedMatch["best_distance_flag"] = f
-                        mergedMatch["best_distance_source"] = mergedMatch[d + "_cat"]
-                        break
+            # DETERMINE THE BEST DISTANCE MATCH
+            mergedMatch["best_distance"] = None
+            mergedMatch["best_distance_flag"] = None
+            mergedMatch["best_distance_source"] = None
+            for d, f in zip(["direct_distance", "z_distance", "pz_distance"], ["dd", "sz", "pz"]):
+                if mergedMatch[d]:
+                    mergedMatch["best_distance"] = mergedMatch[d]
+                    mergedMatch["best_distance_flag"] = f
+                    mergedMatch["best_distance_source"] = mergedMatch[d + "_cat"]
+                    break
 
             distinctMatches.append(mergedMatch)
 
         crossmatches = []
         for xm, gm in zip(distinctMatches, groupedMatches):
-            # SPEC-Z GALAXIES
-            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
+            angular_separation_penalty = min(
+                xm["separationArcsec"] / 60, 100)            # SPEC-Z GALAXIES
+            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
+                # print(xm["catalogue_object_id"], 1)
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
-                    (50 - old_div(xm["physical_separation_kpc"], 20))
+                    (50 - (xm["physical_separation_kpc"])) + \
+                    angular_separation_penalty
             # PHOTO-Z GALAXIES
-            elif (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
+            elif (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["association_type"] == "SN"):
+                # print(xm["catalogue_object_id"], 2)
                 rankScore = xm["classificationReliability"] * 1000 + 5 - \
-                    (50 - old_div(xm["physical_separation_kpc"], 20))
+                    (50 - (xm["physical_separation_kpc"])) + \
+                    angular_separation_penalty
             # NOT SPEC-Z, NON PHOTO-Z GALAXIES & PHOTO-Z GALAXIES
             elif (xm["association_type"] == "SN"):
-                rankScore = xm["classificationReliability"] * 1000 + 5.
+                # print(xm["catalogue_object_id"], 3)
+                rankScore = xm["classificationReliability"] * \
+                    1000 + 5. + angular_separation_penalty
             # VS
             elif (xm["association_type"] == "VS"):
+                # print(xm["catalogue_object_id"], 4)
                 rankScore = xm["classificationReliability"] * \
                     1000 + xm["separationArcsec"] + 2.
             # BS
             elif (xm["association_type"] == "BS"):
+                # print(xm["catalogue_object_id"], 5)
                 rankScore = xm["classificationReliability"] * \
                     1000 + xm["separationArcsec"]
             else:
+                # print(xm["catalogue_object_id"], 6)
                 rankScore = xm["classificationReliability"] * \
-                    1000 + xm["separationArcsec"] + 10.
+                    1000 + 10. + angular_separation_penalty
             xm["rankScore"] = rankScore
             crossmatches.append(xm)
             if len(gm) > 1:
                 for g in gm:
                     g["rankScore"] = rankScore
+            # print(rankScore)
+            # print("----")
 
         crossmatches = sorted(
             crossmatches, key=itemgetter('rankScore'), reverse=False)
@@ -1209,7 +1224,8 @@ class transient_classifier(object):
         # REPORT ONLY THE MOST PREFERRED MAGNITUDE VALUE
         basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
                  "raDeg", "decDeg", "separationArcsec", "best_distance", "best_distance_flag", "best_distance_source", "physical_separation_kpc", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
-        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "direct_distance_scale", "z_distance", "z_distance_modulus", "z_distance_scale", "pz_distance", "pz_distance_modulus", "pz_distance_scale", "sm_axis_arcsec", "U", "UErr", "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
+        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "direct_distance_scale", "z_distance", "z_distance_modulus", "z_distance_scale", "pz_distance", "pz_distance_modulus", "pz_distance_scale",
+                   "sm_axis_arcsec", "U", "UErr", "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
                       "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "z", "photoZ", "photoZErr"]
         if self.verbose == 2:
