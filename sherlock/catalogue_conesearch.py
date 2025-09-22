@@ -35,10 +35,9 @@ class catalogue_conesearch(object):
     - ``nearestOnly`` -- return only the nearest object. Default *False*
     - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
     - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is required with the conesearch. Default *False*
-
-
-        - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is required with the conesearch. Default *False*
-        - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if required. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
+    - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is required with the conesearch. Default *False*
+    - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if required. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
+    - ``semiMajorAxisOperator`` -- the boolean operator to used when adding the semi major axis constraint to the conesearch. Default *False*
 
     **Usage**
 
@@ -155,7 +154,8 @@ class catalogue_conesearch(object):
             physicalSearch=False,
             upperMagnitudeLimit=False,
             lowerMagnitudeLimit=False,
-            magnitudeLimitFilter=False
+            magnitudeLimitFilter=False,
+            semiMajorAxisOperator=False
     ):
         self.log = log
         log.debug("instansiating a new 'conesearcher' object")
@@ -168,6 +168,7 @@ class catalogue_conesearch(object):
         self.upperMagnitudeLimit = upperMagnitudeLimit
         self.lowerMagnitudeLimit = lowerMagnitudeLimit
         self.magnitudeLimitFilter = magnitudeLimitFilter
+        self.semiMajorAxisOperator = semiMajorAxisOperator
         # xt-self-arg-tmpx
 
         # CONVERT RA AND DEC TO DEGREES
@@ -234,7 +235,9 @@ class catalogue_conesearch(object):
         sqlWhere = False
         magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
-                   "distanceColName", "semiMajorColName"]
+                   "distanceColName"]
+        if True or self.semiMajorAxisOperator and self.semiMajorAxisOperator.lower() in ["and", "or"]:
+            disCols.append("semiMajorColName")
         sqlWhere = ""
 
         if self.physicalSearch == True:
@@ -269,6 +272,10 @@ class catalogue_conesearch(object):
                 columns[k] = "`%(v)s` as `%(name)s`" % locals()
         columns = ", ".join(list(columns.values()))
 
+        htmColumns = ["htm10ID", "htm13ID", "htm16ID"]
+        if "ned_d_" in self.tableName.lower():
+            htmColumns = ["htm07ID", "htm10ID", "htm13ID", "htm16ID"]
+
         cs = hmptyConesearch(
             log=self.log,
             dbConn=self.dbConn,
@@ -282,7 +289,8 @@ class catalogue_conesearch(object):
             sqlWhere=sqlWhere,
             closest=self.nearestOnly,
             raCol="ra",
-            decCol="dec"
+            decCol="dec",
+            htmColumns=htmColumns
         )
         matchIndies, matches = cs.search()
 
