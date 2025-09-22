@@ -147,6 +147,7 @@ class transient_catalogue_crossmatch(object):
                     # THE PHYSICAL SEPARATION SEARCHES
                     self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
+
                     catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
                         objectList=self.transients,
                         searchPara=searchPara,
@@ -373,6 +374,8 @@ class transient_catalogue_crossmatch(object):
         self.log.info("STARTING %s SEARCH" %
                       (search_name,))
 
+        search_name = search_name.lower()
+
         start_time = time.time()
 
         # DEFAULTS
@@ -520,32 +523,34 @@ class transient_catalogue_crossmatch(object):
         galaxyDenyList = self.settings["ignore morphology list"]
         galaxyDenyList = [g.replace(" ", "") for g in galaxyDenyList]
 
-        if "or within semi major axis" in theseSearchPara and theseSearchPara["or within semi major axis"] == True:
+        if "and within semi major axis" in theseSearchPara and theseSearchPara["and within semi major axis"] == True:
             withinSMMatches = []
             for row in catalogueMatches:
-                if row["sm_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and str(row["catalogue_object_id"]).replace(" ", "") not in galaxyDenyList:
 
-                    # FOR SOURCES > 10 arcmin IN SKY
-                    if row["sm_axis_arcsec"] < 10 * 60:
-                        sizeAdjustment = self.settings[
-                            "galaxy radius stretch factor"]
-                    elif row["sm_axis_arcsec"] < 100 * 60:
-                        sizeAdjustment = self.settings[
-                            "galaxy radius stretch factor"] * 0.7
-                    elif row["sm_axis_arcsec"] >= 100 * 60:
-                        sizeAdjustment = self.settings[
-                            "galaxy radius stretch factor"] * 0.5
-                        # print(row["sm_axis_arcsec"] * sizeAdjustment / 2. *
-                        #       self.settings["galaxy radius stretch factor"])
-                    if row["separationArcsec"] < row["sm_axis_arcsec"] / 2. * sizeAdjustment:
+                if ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.) or row["z_distance"]) and str(row["catalogue_object_id"]).replace(" ", "") not in galaxyDenyList:
+                    if row["sm_axis_arcsec"]:
+                        # FOR SOURCES > 10 arcmin IN SKY
+                        if row["sm_axis_arcsec"] < 10 * 60:
+                            sizeAdjustment = self.settings[
+                                "galaxy radius stretch factor"]
+                        elif row["sm_axis_arcsec"] < 100 * 60:
+                            sizeAdjustment = self.settings[
+                                "galaxy radius stretch factor"] * 0.7
+                        elif row["sm_axis_arcsec"] >= 100 * 60:
+                            sizeAdjustment = self.settings[
+                                "galaxy radius stretch factor"] * 0.5
+                            # print(row["sm_axis_arcsec"] * sizeAdjustment / 2. *
+                            #       self.settings["galaxy radius stretch factor"])
+                        if row["separationArcsec"] < row["sm_axis_arcsec"] / 2. * sizeAdjustment:
+                            withinSMMatches.append(row)
+                            row["search_name"] = row["search_name"] + \
+                                " (within %0.2f * semi-major axis)" % (
+                                    sizeAdjustment,)
+                            newAngularSep = row[
+                                "sm_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
+                    else:
                         withinSMMatches.append(row)
-                        row["search_name"] = row["search_name"] + \
-                            " (within %0.2f * semi-major axis)" % (
-                                sizeAdjustment,)
-                        newAngularSep = row[
-                            "sm_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
-                else:
-                    withinSMMatches.append(row)
+
             catalogueMatches = withinSMMatches
 
         if "match nearest source only" in theseSearchPara and theseSearchPara["match nearest source only"] == True and len(catalogueMatches):
@@ -654,7 +659,7 @@ class transient_catalogue_crossmatch(object):
                 pz_distance_modulus = dists["dmod"]
 
         # ADD MAJOR AXIS VALUE
-        if "or within semi major axis" in searchPara and searchPara["or within semi major axis"] == True and "semiMajor" in crossmatchDict and crossmatchDict["semiMajor"]:
+        if "semiMajor" in crossmatchDict and crossmatchDict["semiMajor"]:
             sm_axis_arcsec = crossmatchDict[
                 "semiMajor"] * self.colMaps[catalogueName]["semiMajorToArcsec"]
 
@@ -943,11 +948,12 @@ class transient_catalogue_crossmatch(object):
                     newAngularSep = old_div(physicalRadius,
                                             row["direct_distance_scale"])
                 # NEW CHECK FOR A REDSHIFT DISTANCE
-                elif row["z_distance_scale"] and physical_separation_kpc < physicalRadius:
+                elif row["z_distance_scale"] and physical_separation_kpc < physicalRadius and thisMatch == False:
                     thisMatch = True
                     newsearch_name = newsearch_name + " (redshift distance)"
-                    newAngularSep = old_div(physicalRadius, row["z_distance_scale"])
-
+                    newAngularSep = old_div(
+                        physicalRadius, row["z_distance_scale"])
+                # FINALLY CHECK FOR A PHOTO-Z DISTANCE
                 if thisMatch == True:
                     row["physical_separation_kpc"] = physical_separation_kpc
                     row["original_search_radius_arcsec"] = newAngularSep
