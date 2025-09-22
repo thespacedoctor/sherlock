@@ -5,7 +5,7 @@ version: 1
 # WHERE NEEDED IN THIS PACKAGE
 # xt-collect-packages-advanced-settings
 
-# MAXIMUM NUMBER OF TRANSIENTS TO REQEUEST FROM DATABASE
+# MAXIMUM NUMBER OF TRANSIENTS TO REQUEST FROM DATABASE
 database-batch-size: 20000
 cpu-pool-size: False
 
@@ -19,46 +19,293 @@ ned stream refresh rate in days: 180
 galaxy radius stretch factor: 1.5
 synonym radius arcsec: 1.5
 
+
 ignore morphology list:
     - WISEAJ193037.70-521726.0
     - 2MASXJ19303773-5217259
     - Sagittarius Dwarf Spheroidal
-
+    - SDSSJ093558.42+055602.5
+    - CFN1064
 
 search algorithm:
-    GSC star:
-        database table: tcs_view_star_guide_star_catalogue_v2_3
+    ###### UNCLEAR OBJECT SEARCHES
+    PS1 unclear:
+        database table: tcs_view_unclear_ps1_dr1
         general:
-            angular radius arcsec: 2.5
+            angular radius arcsec: 1.5
+            synonym: UNCLEAR
+    DESI LS DR10 unclear: 
+        database table: tcs_view_unclear_desi_legacy_dr10
+        general:
+            angular radius arcsec: 1.5
+            synonym: UNCLEAR
+    SDSS DR12 unclear: 
+        database table: tcs_view_unclear_sdss_photo_stars_galaxies_dr12
+        general:
+            angular radius arcsec: 1.5
+            synonym: UNCLEAR
+    NED unclear:
+        database table: tcs_view_unclear_ned_stream
+        general:
+            angular radius arcsec: 1.5
+            synonym: UNCLEAR
+    NED spec unclear:
+        database table: tcs_view_unclear_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 60.0
+            annotation: UNCLEAR
+    GSC unclear:
+        database table: tcs_view_unclear_guide_star_catalogue_v2_3
+        general:
+            angular radius arcsec: 1.5
+            synonym: UNCLEAR
+    2MASS unclear:
+        database table: tcs_view_unclear_2mass_psc_final
+        general:
+            angular radius arcsec: 1.5
+            synonym: UNCLEAR
+    #### BRIGHT STAR SEARCHES
+    PS1 bright stars:
+        database table: tcs_view_bright_star_ps1_dr1
+        general:
+            angular radius arcsec: 7.
             synonym: VS
-            association: VS
-    GSC unknown:
-        database table: tcs_view_unknown_guide_star_catalogue_v2_3
+            association: BS
+    DESI LS bright stars:
+        database table: tcs_view_bright_star_desi_legacy_dr10
         general:
-            angular radius arcsec: 100.
-            or within semi major axis: True
-            annotation: SN
-    2mass star:
+            angular radius arcsec: 7.
+            synonym: VS
+            association: BS
+    gaia bright stars:
+        database table: tcs_view_bright_star_gaia_dr3
+        general:
+            angular radius arcsec: 7.
+            synonym: VS
+            association: BS
+    GSC v2.3 bright stars:
+        database table: tcs_view_bright_star_guide_star_catalogue_v2_3
+        general:
+            angular radius arcsec: 7.
+            synonym: VS
+            association: BS
+    SDSS dr12 bright stars:
+        database table: tcs_view_bright_star_sdss_photo_stars_galaxies_dr12
+        general:
+            angular radius arcsec: 7.
+            synonym: VS
+            association: BS
+    ###### REGULAR STAR SEARCHES
+    2MASS stars:
         database table: tcs_view_star_2mass_psc_final
         general:
-            angular radius arcsec: 1.0
-            association: VS
-    2mass galaxy:
-        database table: tcs_view_galaxy_2mass_xsc_final
-        mag column: J
-        bright:
-            mag limit: 12.
-            angular radius arcsec:  50.
-            association: SN
+            angular radius arcsec: 1.5
+            synonym: VS
+    DESI LS stars:
+        database table: tcs_view_star_desi_legacy_dr10
+        general:
+            angular radius arcsec: 1.5
+            synonym: VS
+    gaia stars:
+        database table: tcs_view_star_gaia_dr3
+        general:
+            angular radius arcsec: 1.5
+            synonym: VS
+    GSC v2.3 stars:
+        database table: tcs_view_star_guide_star_catalogue_v2_3
+        general:
+            angular radius arcsec: 1.5
+            synonym: VS
+    PS1 stars:
+        database table: tcs_view_star_ps1_dr1
+        general:
+            angular radius arcsec: 1.5
+            synonym: VS
+    SDSS dr12 stars:
+        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
+        general:
+            angular radius arcsec: 1.5
+            synonym: VS
+    ###### PHYSICAL GALAXY SEARCHES
+    NED-D spec super big galaxies:
+        # SUPER BIG > 2 ARCMIN
+        database table: tcs_view_super_big_galaxy_ned_d_v17_1_2
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 14000.0
+            and within semi major axis: True
             synonym: NT
-        faint:
-            mag limit: 15.
+            association: SN
+    NED spec super big galaxies:
+        # SUPER BIG > 2 ARCMIN
+        database table: tcs_view_super_big_galaxy_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 1800.0
+            and within semi major axis: True
+            synonym: NT
+            association: SN   
+    NED-D spec big galaxies:
+        # BIG > 20 ARCSEC
+        database table: tcs_view_big_galaxy_ned_d_v17_1_2
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 120.0
+            and within semi major axis: True
+            synonym: NT
+            association: SN
+    NED spec big galaxies:
+        # BIG > 20 ARCSEC
+        database table: tcs_view_big_galaxy_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 120.0
+            and within semi major axis: True
+            synonym: NT
+            association: SN  
+    NED-D spec galaxies:
+        database table: tcs_view_galaxy_ned_d_v17_1_2
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 30.
+            synonym: NT
+            association: SN 
+    NED spec galaxies:
+        database table: tcs_view_galaxy_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 30.
+            synonym: NT
+            association: SN
+    SDSS spec galaxies:
+        database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 60.0
+            synonym: NT
+            association: SN
+    LASr galaxy:
+        database table: tcs_view_galaxy_lasr_v1
+        mag column: W1
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 240.0
+            synonym: NT
+            association: SN
+    ### ANGULAR GALAXY SEARCHES
+    DESI LS big galaxies:
+        # BIG > 20 ARCSEC. GALAXIES > 30.0 ARCSEC ALL CAUGHT BY NED/LASR
+        database table: tcs_view_big_galaxy_desi_legacy_dr10
+        general:
+            angular radius arcsec:  30.0
+            and within semi major axis: True
+            synonym: NT
+            association: SN
+    GSC big galaxies:
+        # BIG > 20 ARCSEC.  GALAXIES > 30.0 ARCSEC ALL CAUGHT BY NED/LASR
+        database table: tcs_view_big_galaxy_guide_star_catalogue_v2_3
+        general:
+            angular radius arcsec: 30.0
+            and within semi major axis: True
+            synonym: NT
+            association: SN
+    NED-D phot galaxies:
+        database table: tcs_view_galaxy_ned_d_v17_1_2
+        general:
+            angular radius arcsec: 10.
+            and within semi major axis: True
+            synonym: NT
+            association: SN 
+    NED phot galaxies:
+        database table: tcs_view_galaxy_ned_stream
+        general:
+            angular radius arcsec: 10.
+            and within semi major axis: True
+            synonym: NT
+            association: SN
+    NED phot galaxy-like:
+        database table: tcs_view_galaxy_like_ned_stream
+        general:
+            angular radius arcsec: 10.
+            annotation: SN
+    PS1 galaxies:
+        database table: tcs_view_galaxy_ps1_dr1
+        general:
+            angular radius arcsec: 10.
+            and within semi major axis: True
+            synonym: NT
+            association: SN
+    2mass galaxies:
+        database table: tcs_view_galaxy_2mass_xsc_final
+        general:
             angular radius arcsec: 10.
             association: SN
+            synonym: NT
+    SDSS phot galaxies:
+        database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
         general:
-            angular radius arcsec: 20.
+            angular radius arcsec: 10.
             association: SN
             synonym: NT
+    GSC v2.3 galaxies:
+        database table: tcs_view_galaxy_guide_star_catalogue_v2_3
+        general:
+            angular radius arcsec: 20.
+            and within semi major axis: True
+            synonym: NT
+            association: SN
+    DESI LS galaxies:
+        database table: tcs_view_galaxy_desi_legacy_dr10
+        general:
+            angular radius arcsec: 20.0
+            and within semi major axis: True
+            synonym: NT
+            association: SN
+
+    #### AGN
+    SDSS spec agn:
+        database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 60.0
+            synonym: AGN
+            association: SN
+    NED spec agn:
+        database table: tcs_view_agn_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 60.0
+            synonym: AGN
+            association: SN
+    NED agn:
+        database table: tcs_view_agn_ned_stream
+        general:
+            angular radius arcsec: 3.0
+            synonym: AGN
+            association: SN
+    MILLIQUAS agn:
+        database table: tcs_view_agn_milliquas_v8_0
+        general:
+            angular radius arcsec: 3.0
+            synonym: AGN
+            association: SN
+    GAIA AGN:
+        database table: tcs_view_qso_gaia_dr3
+        mag column: G
+        general:
+            angular radius arcsec: 3.0
+            synonym: AGN
+            association: SN
+    LASr agn:
+        database table: tcs_view_agn_lasr_v1
+        mag column: W1
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 240.0
+            synonym: AGN
+            association: SN
+    #### CVs
     downes cv:
         database table: tcs_view_cv_downes_cataclysmic_variables_final
         general:
@@ -71,248 +318,3 @@ search algorithm:
             angular radius arcsec: 2.5
             synonym: CV
             association: CV
-    gaia galaxy:
-        database table: tcs_view_galaxy_gaia_dr3
-        mag column: G
-        general:
-            angular radius arcsec: 5.0
-            synonym: NT
-            association: SN
-    gaia star:
-        database table: tcs_view_star_gaia_dr3
-        mag column: G
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 5.0
-            synonym: VS
-            association: BS
-        general:
-            angular radius arcsec: 0.5
-            synonym: VS
-            association: VS
-        faint:
-            mag limit: 21.
-            angular radius arcsec: 0.5
-            annotation: UNCLEAR
-    gaia qso:
-        database table: tcs_view_qso_gaia_dr3
-        mag column: G
-        general:
-            angular radius arcsec: 3.0
-            synonym: AGN
-            association: SN
-    ps1 star r:
-        database table: tcs_view_star_ps1_dr1
-        mag column: _r
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 100.0
-            synonym: VS
-            association: BS
-        general:
-            angular radius arcsec: 2.5
-            or within semi major axis: True
-            synonym: VS
-            association: VS
-    ps1 star i:
-        database table: tcs_view_star_ps1_dr1
-        mag column: _i
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 100.0
-            synonym: VS
-            association: BS
-        general:
-            angular radius arcsec: 2.5
-            or within semi major axis: True
-            synonym: VS
-            association: VS
-    ps1 galaxy r:
-        database table: tcs_view_galaxy_ps1_dr1
-        mag column: _r
-        bright:
-            mag limit: 14.5
-            angular radius arcsec: 70.0
-            synonym: VS
-            association: BS
-        faint:
-            mag limit: 20.
-            angular radius arcsec: 6.
-            or within semi major axis: True
-            association: SN
-        general:
-            angular radius arcsec: 35.
-            or within semi major axis: True
-            association: SN
-    ps1 galaxy i:
-        database table: tcs_view_galaxy_ps1_dr1
-        mag column: _i
-        bright:
-            mag limit: 14.5
-            angular radius arcsec: 70.0
-            synonym: VS
-            association: BS
-        general:
-            angular radius arcsec: 35.
-            or within semi major axis: True
-            association: SN
-        faint:
-            mag limit: 20.
-            angular radius arcsec: 6.
-            or within semi major axis: True
-            association: SN
-    ps1 faint sources r:
-        database table: tcs_view_unclear_ps1_dr1
-        mag column: _r
-        general:
-            angular radius arcsec: 1.0
-            or within semi major axis: True
-            annotation: UNCLEAR
-    ps1 faint sources i:
-        database table: tcs_view_unclear_ps1_dr1
-        mag column: _i
-        general:
-            angular radius arcsec: 1.0
-            or within semi major axis: True
-            annotation: UNCLEAR
-    kepler galaxy:
-        database table: tcs_view_galaxy_kepler_k2
-        mag column: _r
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 35.
-            annotation: SN
-        faint:
-            mag limit: 20.5
-            angular radius arcsec: 6.
-            annotation: SN
-        general:
-            angular radius arcsec: 35.
-            annotation: SN
-    milliquas agn:
-        database table: tcs_view_agn_milliquas_v8_0
-        general:
-            angular radius arcsec: 3.0
-            synonym: AGN
-            association: SN
-    ned_d spec galaxy:
-        database table: tcs_view_galaxy_ned_d_v17_1_2
-        general:
-            physical radius kpc: 50.0
-            angular radius arcsec: 6000.0
-            or within semi major axis: True
-            synonym: NT
-            association: SN
-    ned spec galaxy:
-        database table: tcs_view_galaxy_ned_stream
-        general:
-            physical radius kpc: 50.0
-            angular radius arcsec: 240.0
-            or within semi major axis: True
-            synonym: NT
-            association: SN
-    ned phot galaxy:
-        database table: tcs_view_galaxy_ned_stream
-        mag column: unkMag
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 35.
-            association: SN
-        faint:
-            mag limit: 20.
-            angular radius arcsec: 6.
-            association: SN
-        general:
-            angular radius arcsec: 35.
-            association: SN
-    ned phot galaxy-like:
-        database table: tcs_view_galaxy_like_ned_stream
-        general:
-            angular radius arcsec: 10.
-            annotation: SN
-    ned agn:
-        database table: tcs_view_agn_ned_stream
-        general:
-            angular radius arcsec: 3.0
-            synonym: AGN
-            association: AGN
-    ned spec unknown:
-        database table: tcs_view_other_ned_stream
-        general:
-            physical radius kpc: 50.0
-            angular radius arcsec: 60.0
-            annotation: UNCLEAR
-    ned phot unknown:
-        database table: tcs_view_other_ned_stream
-        general:
-            angular radius arcsec: 20.
-            annotation: UNCLEAR
-    ned star:
-        database table: tcs_view_star_ned_stream
-        general:
-            angular radius arcsec: 2.5
-            synonym: VS
-            association: VS
-    sdss agn:
-        database table: tcs_view_qso_sdss_spect_galaxies_qsos_dr12
-        general:
-            angular radius arcsec: 3.0
-            synonym: AGN
-            association: AGN
-    sdss star:
-        database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
-        mag column: _r
-        bright:
-            mag limit: 16.
-            angular radius arcsec: 100.0
-            synonym: VS
-            association: BS
-        faint:
-            mag limit: 20.0
-            angular radius arcsec: 3.0
-            annotation: SN
-        general:
-            angular radius arcsec: 2.0
-            synonym: VS
-            association: VS
-    sdss phot galaxy:
-        database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
-        mag column: _r
-        bright:
-            bright:
-            mag limit: 14.5
-            angular radius arcsec: 100.0
-            synonym: VS
-            association: BS
-        faint:
-            mag limit: 20.
-            angular radius arcsec: 6.
-            association: SN
-        general:
-            angular radius arcsec: 35.
-            association: SN
-    sdss spec sn:
-        database table: tcs_view_galaxy_sdss_spect_galaxies_qsos_dr12
-        general:
-            physical radius kpc: 50.0
-            angular radius arcsec: 60.0
-            or within semi major axis: True
-            synonym: NT
-            association: SN
-    
-    LASr galaxy:
-        database table: tcs_view_galaxy_lasr_v1
-        mag column: W1
-        general:
-            physical radius kpc: 50.0
-            angular radius arcsec: 240.0
-            synonym: NT
-            association: SN
-    LASr agn:
-        database table: tcs_view_agn_lasr_v1
-        mag column: W1
-        general:
-            physical radius kpc: 50.0
-            angular radius arcsec: 240.0
-            synonym: AGN
-            association: SN
