@@ -422,7 +422,7 @@ class transient_classifier(object):
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=True)
+                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False)
 
             if self.verbose > 1:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
@@ -546,6 +546,8 @@ class transient_classifier(object):
         """
         self.log.debug(
             'starting the ``_get_transient_metadata_from_database_list`` method')
+
+        print("GETTING A LIST OF UNCLASSIFIED TRANSIENTS FROM THE DATABASE")
 
         sqlQuery = self.settings["database settings"][
             "transients"]["transient query"] + " limit " + str(self.largeBatchSize)
