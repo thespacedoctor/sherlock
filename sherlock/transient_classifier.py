@@ -423,7 +423,7 @@ class transient_classifier(object):
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False)
+                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=True)
 
             if self.verbose > 1:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
