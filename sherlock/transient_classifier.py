@@ -316,6 +316,7 @@ class transient_classifier(object):
                         "where", "where %(thisInt)s=%(thisInt)s and " % locals())
 
                 if remaining == 1 or remaining < self.largeBatchSize:
+                    print("COUNTING OF THE UNCLASSIFIED TRANSIENTS FROM THE DATABASE")
                     rows = readquery(
                         log=self.log,
                         sqlQuery=sqlQuery,
