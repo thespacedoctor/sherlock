@@ -58,11 +58,11 @@ class transient_classifier(object):
     - ``dec`` -- declination of a single transient source. Default *False*
     - ``name`` -- the ID of a single transient source. Default *False*
     - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
-    - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
+    - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accurate the NED database is not up-to-date. Default *True*.
     - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
-    - ``updatePeakMags`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
+    - ``updatePeakMags`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occasionally)
     - ``lite`` -- return only a lite version of the results with the topped ranked matches only. Default *False*
-    - ``oneRun`` -- only process one batch of transients, usful for unit testing. Default *False*
+    - ``oneRun`` -- only process one batch of transients, useful for unit testing. Default *False*
 
     **Usage**
 

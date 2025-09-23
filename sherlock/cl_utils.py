@@ -180,6 +180,10 @@ def main(arguments=None):
     verboseFlag = a["verboseFlag"]
     updateFlag = a["updateFlag"]
 
+    if not ra:
+        ra = False
+        dec = False
+
     # CALL FUNCTIONS/OBJECTS
     if match or dbmatch:
         if verboseFlag:
