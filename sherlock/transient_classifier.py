@@ -788,8 +788,9 @@ class transient_classifier(object):
               (time.time() - start_time,))
         start_time = time.time()
 
-        from tabulate import tabulate
-        print(tabulate(crossmatches.head(10), headers='keys', tablefmt='psql'))
+        for i in crossmatches:
+            for k, v in i.items():
+                print(k, v)
 
         sys.exit()
 
