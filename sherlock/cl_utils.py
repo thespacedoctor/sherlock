@@ -202,7 +202,7 @@ def main(arguments=None):
             updatePeakMags = True
 
         try:
-            transient_classifier = transient_classifier.transient_classifier
+            transient_classifier = transient_classifier.transient_classifier()
         except:
             pass
 
