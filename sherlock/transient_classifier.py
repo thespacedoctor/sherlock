@@ -1004,13 +1004,21 @@ class transient_classifier(object):
                 if i > 0:
                     # MERGE ALL BEST MAGNITUDE MEASUREMENTS
                     for f in self.filterPreference:
+                        m_val = m.get(f)
+                        if m_val is None:
+                            continue
+                        m_err = m.get(f + "Err")
+                        merged_val = mergedMatch.get(f)
+                        merged_err = mergedMatch.get(f + "Err")
 
-                        if f in m and m[f] and (f not in mergedMatch or (f + "Err" in mergedMatch and f + "Err" in m and (mergedMatch[f + "Err"] == None or (m[f + "Err"] and mergedMatch[f + "Err"] > m[f + "Err"])))):
-                            mergedMatch[f] = m[f]
-                            try:
-                                mergedMatch[f + "Err"] = m[f + "Err"]
-                            except:
-                                pass
+                        # Only update if merged_val is None or m_err is better (smaller) than merged_err
+                        if merged_val is None or (
+                            m_err is not None and (
+                                merged_err is None or merged_err > m_err)
+                        ):
+                            mergedMatch[f] = m_val
+                            if m_err is not None:
+                                mergedMatch[f + "Err"] = m_err
                     mergedMatch["original_search_radius_arcsec"] = "multiple"
                     mergedMatch["catalogue_object_subtype"] = "multiple"
                     mergedMatch["catalogue_view_name"] = "multiple"
