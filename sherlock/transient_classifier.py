@@ -23,7 +23,7 @@ from fundamentals import tools
 import numpy as np
 from operator import itemgetter
 from datetime import datetime, date, time, timedelta
-
+from line_profiler import profile
 from builtins import zip
 from builtins import str
 from builtins import range
@@ -242,6 +242,7 @@ class transient_classifier(object):
 
         return None
 
+    @profile
     def classify(self):
         """
         *classify the transients selected from the transient selection query in the settings file or passed in via the CL or other code*
@@ -837,6 +838,7 @@ class transient_classifier(object):
         self.log.debug('completed the ``_update_transient_database`` method')
         return None
 
+    @profile
     def _rank_classifications(
             self,
             crossmatchArray,
