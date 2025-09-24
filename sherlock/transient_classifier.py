@@ -450,8 +450,7 @@ class transient_classifier(object):
                             cl, cr = self._rank_classifications(
                                 batch, colMaps)
                             crossmatches.extend(cr)
-                            classifications = dict(
-                                list(classifications.items()) + list(cl.items()))
+                            classifications.update(cl)
 
                             transientId = s['transient_object_id']
                             batch = [s]
@@ -461,8 +460,7 @@ class transient_classifier(object):
                     # RANK FINAL BATCH
                     cl, cr = self._rank_classifications(
                         batch, colMaps)
-                    classifications = dict(
-                        list(classifications.items()) + list(cl.items()))
+                    classifications.update(cl)
                     crossmatches.extend(cr)
 
             for t in transientsMetadataList:
@@ -890,9 +888,9 @@ class transient_classifier(object):
         # ADD DISTINCT-SOURCE KEY
         dupKey = 0
         distinctMatches = []
-        for x in groupedMatches:
+        gmCopy = copy.deepcopy(groupedMatches)
+        for x in gmCopy:
             dupKey += 1
-            mergedMatch = copy.deepcopy(x[0])
             mergedMatch["merged_rank"] = int(dupKey)
 
             if 'photoZErr' in mergedMatch and ('photoZ' not in mergedMatch or not mergedMatch['photoZ']):
