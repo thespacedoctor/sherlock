@@ -329,11 +329,11 @@ class transient_classifier(object):
                 print(
                     "%(remaining)s transient sources requiring a classification remain" % locals())
 
-                # START THE TIME TO TRACK CLASSIFICATION SPPED
-                start_time = time.time()
-
                 # A LIST OF DICTIONARIES OF TRANSIENT METADATA
                 transientsMetadataList = self._get_transient_metadata_from_database_list()
+
+                # START THE TIME TO TRACK CLASSIFICATION SPEED
+                start_time = time.time()
 
                 count = len(transientsMetadataList)
                 print(
@@ -468,6 +468,10 @@ class transient_classifier(object):
                 if t["id"] not in classifications:
                     classifications[t["id"]] = ["ORPHAN"]
 
+            classificationRate = count / (time.time() - start_time)
+            print(
+                "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec (excluding time writing results to transient database)" % locals())
+
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
@@ -518,10 +522,6 @@ class transient_classifier(object):
             print("FINISH ANNOTATING TRANSIENT DB: %d" %
                   (time.time() - start_time2,))
             start_time2 = time.time()
-
-            classificationRate = old_div(count, (time.time() - start_time))
-            print(
-                "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals())
 
         self.log.debug('completed the ``classify`` method')
         return None, None
