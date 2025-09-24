@@ -776,6 +776,7 @@ class transient_classifier(object):
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
         )
+        print(sqlQuery)
         sqlQuery = """delete from sherlock_classifications where transient_object_id in (%(transientIDs)s);""" % locals(
         )
         writequery(
@@ -783,6 +784,7 @@ class transient_classifier(object):
             sqlQuery=sqlQuery,
             dbConn=self.transientsDbConn,
         )
+        print(sqlQuery)
 
         print("FINISHED DELETING OLD RESULTS/ADDING TO CROSSMATCHES: %d" %
               (time.time() - start_time,))
