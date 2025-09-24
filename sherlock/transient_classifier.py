@@ -788,12 +788,6 @@ class transient_classifier(object):
               (time.time() - start_time,))
         start_time = time.time()
 
-        for i in crossmatches:
-            for k, v in i.items():
-                print(k, v)
-
-        sys.exit()
-
         if len(crossmatches):
             insert_list_of_dictionaries_into_database_tables(
                 dbConn=self.transientsDbConn,
