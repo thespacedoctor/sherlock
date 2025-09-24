@@ -788,6 +788,11 @@ class transient_classifier(object):
               (time.time() - start_time,))
         start_time = time.time()
 
+        from tabulate import tabulate
+        print(tabulate(crossmatches.head(10), headers='keys', tablefmt='psql'))
+
+        sys.exit()
+
         if len(crossmatches):
             insert_list_of_dictionaries_into_database_tables(
                 dbConn=self.transientsDbConn,
