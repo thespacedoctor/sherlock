@@ -50,7 +50,7 @@ from __future__ import absolute_import
 import readline
 try:
     from sherlock.transient_classifier import transient_classifier
-else:
+except:
     from sherlock import transient_classifier
 from sherlock.commonutils import update_wiki_pages
 from sherlock.imports import ned as nedStreamImporter
