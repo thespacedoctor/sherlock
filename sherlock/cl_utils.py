@@ -201,7 +201,12 @@ def main(arguments=None):
         else:
             updatePeakMags = True
 
-        classifier = transient_classifier.transient_classifier(
+        try:
+            transient_classifier = transient_classifier.transient_classifier
+        except:
+            pass
+
+        classifier = transient_classifier(
             log=log,
             settings=settings,
             ra=ra,
@@ -266,6 +271,11 @@ def main(arguments=None):
             )
             stream.ingest()
     if not init and not match and not clean and not wiki and not iimport and ra:
+
+        try:
+            transient_classifier = transient_classifier.transient_classifier
+        except:
+            pass
 
         classifier = transient_classifier.transient_classifier(
             log=log,
