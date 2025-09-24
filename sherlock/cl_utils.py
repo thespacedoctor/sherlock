@@ -54,8 +54,8 @@ from sherlock.imports import ned as nedStreamImporter
 from sherlock.imports import ned_d as nedImporter
 from sherlock.imports import ifs as ifsImporter
 from sherlock.imports import veron as veronImporter
-from .commonutils import update_wiki_pages
-from .database_cleaner import database_cleaner
+# from .commonutils import update_wiki_pages
+# from .database_cleaner import database_cleaner
 from fundamentals.renderer import list_of_dictionaries
 from subprocess import Popen, PIPE, STDOUT
 from fundamentals import tools, times
