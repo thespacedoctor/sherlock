@@ -891,6 +891,7 @@ class transient_classifier(object):
         gmCopy = copy.deepcopy(groupedMatches)
         for x in gmCopy:
             dupKey += 1
+            mergedMatch = x[0]
             mergedMatch["merged_rank"] = int(dupKey)
 
             if 'photoZErr' in mergedMatch and ('photoZ' not in mergedMatch or not mergedMatch['photoZ']):
