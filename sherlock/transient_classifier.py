@@ -167,6 +167,9 @@ class transient_classifier(object):
         self.filterPreference = [
             "R", "_r", "G", "V", "_g", "B", "I", "_i", "_z", "J", "H", "K", "U", "_u", "_y", "W1", "unkMag"
         ]
+        # At class init
+        self.filterPreferenceErr = [
+            (f, f + "Err") for f in self.filterPreference]
 
         # COLLECT ADVANCED SETTINGS IF AVAILABLE
         parentDirectory = os.path.dirname(__file__)
@@ -1003,13 +1006,14 @@ class transient_classifier(object):
                 m["merged_rank"] = int(dupKey)
                 if i > 0:
                     # MERGE ALL BEST MAGNITUDE MEASUREMENTS
-                    for f in self.filterPreference:
+
+                    for f, ferr in self.filterPreferenceErr:
                         m_val = m.get(f)
                         if m_val is None:
                             continue
-                        m_err = m.get(f + "Err")
+                        m_err = m.get(ferr)
                         merged_val = mergedMatch.get(f)
-                        merged_err = mergedMatch.get(f + "Err")
+                        merged_err = mergedMatch.get(ferr)
 
                         # Only update if merged_val is None or m_err is better (smaller) than merged_err
                         if merged_val is None or (
