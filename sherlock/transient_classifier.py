@@ -419,13 +419,13 @@ class transient_classifier(object):
 
             start_time2 = time.time()
 
-            if self.verbose > 1:
+            if self.verbose > 0:
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
                                             inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False, progressBar=True)
 
-            if self.verbose > 1:
+            if self.verbose > 0:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
                       (time.time() - start_time2,))
             start_time2 = time.time()
@@ -475,7 +475,7 @@ class transient_classifier(object):
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
-            if self.verbose > 1:
+            if self.verbose > 0:
                 print("FINISH RANKING/START UPDATING TRANSIENT DB: %d" %
                       (time.time() - start_time2,))
             start_time2 = time.time()
