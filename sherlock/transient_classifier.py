@@ -888,10 +888,12 @@ class transient_classifier(object):
         # ADD DISTINCT-SOURCE KEY
         dupKey = 0
         distinctMatches = []
-        gmCopy = copy.deepcopy(groupedMatches)
-        for x in gmCopy:
+
+        mms = []
+        mms[:] = [copy.copy(x[0]) for x in groupedMatches]
+
+        for mergedMatch, x in zip(mms, groupedMatches):
             dupKey += 1
-            mergedMatch = x[0]
             mergedMatch["merged_rank"] = int(dupKey)
 
             if 'photoZErr' in mergedMatch and ('photoZ' not in mergedMatch or not mergedMatch['photoZ']):
