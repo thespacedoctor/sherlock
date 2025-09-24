@@ -1464,6 +1464,11 @@ class transient_classifier(object):
         # LET'S BE CONSERVATIVE
         # radius = radius * 0.9
 
+        print(radius)
+        print(radius)
+        print(radius)
+        print(radius)
+
         xmatcher = sets(
             log=self.log,
             ra=raList,
