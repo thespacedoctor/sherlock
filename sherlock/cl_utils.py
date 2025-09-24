@@ -48,7 +48,10 @@ Options:
 from __future__ import print_function
 from __future__ import absolute_import
 import readline
-from sherlock import transient_classifier
+try:
+    from sherlock.transient_classifier import transient_classifier
+else:
+    from sherlock import transient_classifier
 from sherlock.commonutils import update_wiki_pages
 from sherlock.imports import ned as nedStreamImporter
 from sherlock.imports import ned_d as nedImporter
@@ -201,11 +204,6 @@ def main(arguments=None):
         else:
             updatePeakMags = True
 
-        try:
-            transient_classifier = transient_classifier.transient_classifier()
-        except:
-            pass
-
         classifier = transient_classifier(
             log=log,
             settings=settings,
@@ -272,12 +270,7 @@ def main(arguments=None):
             stream.ingest()
     if not init and not match and not clean and not wiki and not iimport and ra:
 
-        try:
-            transient_classifier = transient_classifier.transient_classifier
-        except:
-            pass
-
-        classifier = transient_classifier.transient_classifier(
+        classifier = transient_classifier(
             log=log,
             settings=settings,
             ra=ra,
