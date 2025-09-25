@@ -23,7 +23,6 @@ from fundamentals import tools
 import numpy as np
 from operator import itemgetter
 from datetime import datetime, date, time, timedelta
-from line_profiler import profile
 from builtins import zip
 from builtins import str
 from builtins import range
@@ -211,8 +210,8 @@ class transient_classifier(object):
 
         cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / cpuCount) + 2
-        if self.miniBatchSize < 500:
-            self.miniBatchSize = 500
+        if self.miniBatchSize < 2000:
+            self.miniBatchSize = 2000
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -249,7 +248,6 @@ class transient_classifier(object):
 
         return None
 
-    @profile
     def classify(self):
         """
         *classify the transients selected from the transient selection query in the settings file or passed in via the CL or other code*
@@ -311,7 +309,7 @@ class transient_classifier(object):
                         "where", "where %(thisInt)s=%(thisInt)s and " % locals())
 
                 if remaining == 1 or remaining < self.largeBatchSize:
-                    print("COUNTING OF THE UNCLASSIFIED TRANSIENTS FROM THE DATABASE")
+                    print("COUNTING THE UNCLASSIFIED TRANSIENTS FROM THE DATABASE")
                     rows = readquery(
                         log=self.log,
                         sqlQuery=sqlQuery,
@@ -422,7 +420,7 @@ class transient_classifier(object):
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=True, progressBar=False)
+                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False, progressBar=True)
 
             if self.verbose > 0:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
@@ -834,7 +832,6 @@ class transient_classifier(object):
         self.log.debug('completed the ``_update_transient_database`` method')
         return None
 
-    @profile
     def _rank_classifications(
             self,
             crossmatchArray,
