@@ -208,7 +208,11 @@ class transient_classifier(object):
 
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
         self.largeBatchSize = self.settings["database-batch-size"]
-        self.miniBatchSize = 5000
+
+        cpuCount = psutil.cpu_count()
+        self.miniBatchSize = int(self.largeBatchSize / cpuCount) + 2
+        if self.miniBatchSize < 500:
+            self.miniBatchSize = 500
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -289,19 +293,6 @@ class transient_classifier(object):
         import time
         start_time = time.time()
 
-        # COUNT SEARCHES
-        sa = self.settings["search algorithm"]
-        searchCount = 0
-        brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
-            for bf in brightnessFilters:
-                if bf in searchPara:
-                    searchCount += 1
-
-        cpuCount = psutil.cpu_count()
-        if searchCount > cpuCount:
-            searchCount = cpuCount
-
         miniBatchSize = self.miniBatchSize
 
         while remaining:
@@ -357,6 +348,10 @@ class transient_classifier(object):
                     self.ra = [self.ra]
                     self.dec = [self.dec]
                     self.name = [self.name]
+
+                count = len(self.dec)
+                print(
+                    "  now classifying the next %(count)s transient sources" % locals())
 
                 # GIVEN TRANSIENTS UNIQUE NAMES IF NOT PROVIDED
                 if not self.name[0]:
@@ -1463,11 +1458,6 @@ class transient_classifier(object):
 
         # LET'S BE CONSERVATIVE
         # radius = radius * 0.9
-
-        print(radius)
-        print(radius)
-        print(radius)
-        print(radius)
 
         xmatcher = sets(
             log=self.log,
