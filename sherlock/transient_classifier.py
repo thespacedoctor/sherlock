@@ -522,7 +522,7 @@ class transient_classifier(object):
 
             del transientsMetadataList[:]
             del crossmatches[:]
-            del classifications[:]
+            del classifications
 
         self.log.debug('completed the ``classify`` method')
         return None, None
