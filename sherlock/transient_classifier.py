@@ -210,8 +210,8 @@ class transient_classifier(object):
 
         cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / cpuCount) + 2
-        if self.miniBatchSize < 2000:
-            self.miniBatchSize = 2000
+        if self.miniBatchSize < 500:
+            self.miniBatchSize = 500
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -465,7 +465,7 @@ class transient_classifier(object):
 
             classificationRate = count / (time.time() - start_time)
             print(
-                "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec (excluding time writing results to transient database)" % locals())
+                "Sherlock is classifying at a rate of %(classificationRate)2.1f transients/sec (excluding time writing results to transient database)" % locals())
 
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
@@ -2227,6 +2227,9 @@ def _crossmatch_transients_against_catalogues(
         colMaps=colMaps
     )
     crossmatches = cm.match()
+
+    dbConn.commit()
+    dbConn.close()
 
     log.debug(
         'completed the ``_crossmatch_transients_against_catalogues`` method')
