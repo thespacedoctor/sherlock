@@ -210,8 +210,8 @@ class transient_classifier(object):
 
         cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / cpuCount) + 2
-        if self.miniBatchSize < 3000:
-            self.miniBatchSize = 3000
+        if self.miniBatchSize < 50:
+            self.miniBatchSize = 50
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -2227,9 +2227,6 @@ def _crossmatch_transients_against_catalogues(
         colMaps=colMaps
     )
     crossmatches = cm.match()
-
-    dbConn.commit()
-    dbConn.close()
 
     log.debug(
         'completed the ``_crossmatch_transients_against_catalogues`` method')
