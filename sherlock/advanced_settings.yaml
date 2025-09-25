@@ -6,7 +6,7 @@ version: 1
 # xt-collect-packages-advanced-settings
 
 # MAXIMUM NUMBER OF TRANSIENTS TO REQUEST FROM DATABASE
-database-batch-size: 100000
+database-batch-size: 50000
 cpu-pool-size: False
 
 stop-search-on-synonym-match: True

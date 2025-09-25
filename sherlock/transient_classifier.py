@@ -210,8 +210,8 @@ class transient_classifier(object):
 
         cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / cpuCount) + 2
-        if self.miniBatchSize < 1000:
-            self.miniBatchSize = 1000
+        if self.miniBatchSize < 3000:
+            self.miniBatchSize = 3000
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -422,6 +422,8 @@ class transient_classifier(object):
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
                                             inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False, progressBar=True)
 
+            del theseBatches[:]
+
             if self.verbose > 0:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
                       (time.time() - start_time2,))
@@ -517,6 +519,10 @@ class transient_classifier(object):
             print("FINISH ANNOTATING TRANSIENT DB: %d" %
                   (time.time() - start_time2,))
             start_time2 = time.time()
+
+            del transientsMetadataList[:]
+            del crossmatches[:]
+            del classifications[:]
 
         self.log.debug('completed the ``classify`` method')
         return None, None
