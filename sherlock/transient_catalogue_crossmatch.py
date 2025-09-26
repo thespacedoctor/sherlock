@@ -386,11 +386,10 @@ class transient_catalogue_crossmatch(object):
         upperMagnitudeLimit = False
         lowerMagnitudeLimit = False
 
+        catalogueName = searchPara["database table"]
         semiMajorAxisOperator = False
         if "and within semi major axis" in theseSearchPara and theseSearchPara["and within semi major axis"] == True:
             semiMajorAxisOperator = True
-
-        catalogueName = searchPara["database table"]
 
         if not "mag column" in searchPara:
             searchPara["mag column"] = None
