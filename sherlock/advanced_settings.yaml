@@ -34,11 +34,11 @@ search algorithm:
         general:
             angular radius arcsec: 1.5
             synonym: UNCLEAR
-    # DESI LS DR10 unclear: 
-    #     database table: tcs_view_unclear_desi_legacy_dr10
-    #     general:
-    #         angular radius arcsec: 1.5
-    #         synonym: UNCLEAR
+    DESI LS DR10 unclear: 
+        database table: tcs_view_unclear_desi_legacy_dr10
+        general:
+            angular radius arcsec: 1.5
+            synonym: UNCLEAR
     SDSS DR12 unclear: 
         database table: tcs_view_unclear_sdss_photo_stars_galaxies_dr12
         general:

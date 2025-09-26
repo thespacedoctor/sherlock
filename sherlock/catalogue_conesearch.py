@@ -154,8 +154,7 @@ class catalogue_conesearch(object):
             physicalSearch=False,
             upperMagnitudeLimit=False,
             lowerMagnitudeLimit=False,
-            magnitudeLimitFilter=False,
-            semiMajorAxisOperator=False
+            magnitudeLimitFilter=False
     ):
         self.log = log
         log.debug("instansiating a new 'conesearcher' object")
@@ -168,7 +167,6 @@ class catalogue_conesearch(object):
         self.upperMagnitudeLimit = upperMagnitudeLimit
         self.lowerMagnitudeLimit = lowerMagnitudeLimit
         self.magnitudeLimitFilter = magnitudeLimitFilter
-        self.semiMajorAxisOperator = semiMajorAxisOperator
         # xt-self-arg-tmpx
 
         # CONVERT RA AND DEC TO DEGREES
@@ -236,8 +234,9 @@ class catalogue_conesearch(object):
         magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
                    "distanceColName"]
-        if True or self.semiMajorAxisOperator and self.semiMajorAxisOperator.lower() in ["and", "or"]:
-            disCols.append("semiMajorColName")
+        if "_big_" not in tableName.lower():
+            disCols.append("semiMinorColName")
+
         sqlWhere = ""
 
         if self.physicalSearch == True:
