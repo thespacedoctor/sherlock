@@ -234,8 +234,9 @@ class catalogue_conesearch(object):
         magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
                    "distanceColName"]
-        if "_big_" not in self.tableName.lower():
-            disCols.append("semiMinorColName")
+        if True or self.semiMajorAxisOperator and self.semiMajorAxisOperator.lower() in ["and", "or"]:
+            if "_big_" not in self.tableName.lower():
+                disCols.append("semiMinorColName")
 
         sqlWhere = ""
 
@@ -244,8 +245,8 @@ class catalogue_conesearch(object):
                 colName = self.colMaps[self.tableName][d]
                 if colName:
                     sqlWhere += " or `%(colName)s` is not null" % locals()
-            if len(sqlWhere):
-                sqlWhere = " and (" + sqlWhere[4:] + ")"
+                if len(sqlWhere):
+                    sqlWhere = " and (" + sqlWhere[4:] + ")"
 
         if self.upperMagnitudeLimit != False and self.upperMagnitudeLimit and not self.lowerMagnitudeLimit:
             mag = self.upperMagnitudeLimit
