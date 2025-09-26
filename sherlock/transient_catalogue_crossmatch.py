@@ -386,6 +386,10 @@ class transient_catalogue_crossmatch(object):
         upperMagnitudeLimit = False
         lowerMagnitudeLimit = False
 
+        semiMajorAxisOperator = False
+        if "and within semi major axis" in theseSearchPara and theseSearchPara["and within semi major axis"] == True:
+            semiMajorAxisOperator = True
+
         catalogueName = searchPara["database table"]
 
         if not "mag column" in searchPara:
@@ -448,8 +452,8 @@ class transient_catalogue_crossmatch(object):
             physicalSearch=physicalSearch,
             upperMagnitudeLimit=upperMagnitudeLimit,
             lowerMagnitudeLimit=lowerMagnitudeLimit,
-            magnitudeLimitFilter=magnitudeLimitFilter
-        )
+            magnitudeLimitFilter=magnitudeLimitFilter,
+            semiMajorAxisOperator=semiMajorAxisOperator)
 
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
         indices, catalogueMatches = cs.search()

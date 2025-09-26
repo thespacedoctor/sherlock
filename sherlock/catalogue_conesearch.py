@@ -37,6 +37,7 @@ class catalogue_conesearch(object):
     - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is required with the conesearch. Default *False*
     - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is required with the conesearch. Default *False*
     - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if required. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
+    - ``semiMajorAxisOperator`` -- the semi-major axis operator in use.
 
     **Usage**
 
@@ -94,7 +95,7 @@ class catalogue_conesearch(object):
     [{'R': 20.1, 'cmSepArcsec': 0.28015184686564643, 'ra': 345.2832267, 'catalogue_object_subtype': u'QR', 'z': 0.777, 'dec': -1.9679629, 'catalogue_object_id': u'PKS 2258-022'}]        
     ```
 
-    Note ``catalogue_conesearch`` can accept coordinates in sexegesimal or decimal degrees (J200). It can also accept lists of corrdinates:
+    Note ``catalogue_conesearch`` can accept coordinates in sexagesimal or decimal degrees (J200). It can also accept lists of coordinates:
 
     ```python
     from sherlock import catalogue_conesearch
@@ -153,7 +154,8 @@ class catalogue_conesearch(object):
             physicalSearch=False,
             upperMagnitudeLimit=False,
             lowerMagnitudeLimit=False,
-            magnitudeLimitFilter=False
+            magnitudeLimitFilter=False,
+            semiMajorAxisOperator=False
     ):
         self.log = log
         log.debug("instansiating a new 'conesearcher' object")
@@ -166,6 +168,7 @@ class catalogue_conesearch(object):
         self.upperMagnitudeLimit = upperMagnitudeLimit
         self.lowerMagnitudeLimit = lowerMagnitudeLimit
         self.magnitudeLimitFilter = magnitudeLimitFilter
+        self.semiMajorAxisOperator = semiMajorAxisOperator
         # xt-self-arg-tmpx
 
         # CONVERT RA AND DEC TO DEGREES
@@ -207,7 +210,7 @@ class catalogue_conesearch(object):
 
         **Return**
 
-        - ``matchIndies`` -- the indicies of the input transient sources (syncs with ``uniqueMatchDicts``)
+        - ``matchIndices`` -- the indices of the input transient sources (syncs with ``uniqueMatchDicts``)
         - ``uniqueMatchDicts`` -- the crossmatch results
 
 
@@ -233,7 +236,7 @@ class catalogue_conesearch(object):
         magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
                    "distanceColName"]
-        if "_big_" not in self.tableName.lower():
+        if "_big_" not in self.tableName.lower() and self.semiMajorAxisOperator:
             disCols.append("semiMajorColName")
         sqlWhere = ""
 
@@ -289,13 +292,13 @@ class catalogue_conesearch(object):
             decCol="dec",
             htmColumns=htmColumns
         )
-        matchIndies, matches = cs.search()
+        matchIndices, matches = cs.search()
 
         # MATCH ARE NOT NECESSARILY UNIQUE IF MANY TRANSIENT MATCH ONE SOURCE
         uniqueMatchDicts = []
         uniqueMatchDicts[:] = [copy.copy(d) for d in matches.list]
 
         self.log.debug('completed the ``search`` method')
-        return matchIndies, uniqueMatchDicts
+        return matchIndices, uniqueMatchDicts
 
     # xt-class-method
