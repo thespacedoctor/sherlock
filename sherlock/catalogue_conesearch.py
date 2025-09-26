@@ -234,7 +234,7 @@ class catalogue_conesearch(object):
         magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
                    "distanceColName"]
-        if "_big_" not in tableName.lower():
+        if "_big_" not in self.tableName.lower():
             disCols.append("semiMinorColName")
 
         sqlWhere = ""
