@@ -37,7 +37,6 @@ class catalogue_conesearch(object):
     - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is required with the conesearch. Default *False*
     - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is required with the conesearch. Default *False*
     - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if required. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
-    - ``semiMajorAxisOperator`` -- the boolean operator to used when adding the semi major axis constraint to the conesearch. Default *False*
 
     **Usage**
 
@@ -225,7 +224,7 @@ class catalogue_conesearch(object):
             - update docstring text
             - check sublime snippet exists
             - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            - regenerate the docs and check rerendering of this docstring
         """
         self.log.debug('starting the ``search`` method')
 
@@ -234,10 +233,8 @@ class catalogue_conesearch(object):
         magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
                    "distanceColName"]
-        if True or self.semiMajorAxisOperator and self.semiMajorAxisOperator.lower() in ["and", "or"]:
-            if "_big_" not in self.tableName.lower():
-                disCols.append("semiMinorColName")
-
+        if "_big_" not in self.tableName.lower():
+            disCols.append("semiMajorColName")
         sqlWhere = ""
 
         if self.physicalSearch == True:
