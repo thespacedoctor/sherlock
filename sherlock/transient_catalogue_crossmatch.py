@@ -119,6 +119,8 @@ class transient_catalogue_crossmatch(object):
         """
         self.log.debug('starting the ``match`` method')
 
+        import random
+
         classifications = []
 
         # COUNT NUMBER OF TRANSIENT TO CROSSMATCH
@@ -128,6 +130,10 @@ class transient_catalogue_crossmatch(object):
         # GRAB SEARCH ALGORITHM
         sa = self.settings["search algorithm"]
 
+        # SHUFFLE TO BALANCE LOAD ON DATABASE TABLES A LITTLE
+        sa_items = list(sa.items())
+        random.shuffle(sa_items)
+
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         allCatalogueMatches = []
         catalogueMatches = []
@@ -136,7 +142,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
+        for search_name, searchPara in sa_items:
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -187,7 +193,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         if len(remainingTransientsToMatch) > 0:
-            for search_name, searchPara in list(sa.items()):
+            for search_name, searchPara in sa_items:
                 self.log.debug("""  searching: %(search_name)s""" % locals())
                 for bf in brightnessFilters:
                     if bf not in searchPara:
@@ -237,7 +243,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
+        for search_name, searchPara in sa_items:
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
