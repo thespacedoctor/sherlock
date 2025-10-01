@@ -334,13 +334,6 @@ class transient_classifier(object):
                 print(
                     "  now classifying the next %(count)s transient sources" % locals())
 
-                # EXAMPLE OF TRANSIENT METADATA
-                # { 'name': 'PS17gx',
-                # 'alt_id': 'PS17gx',
-                # 'object_classification': 'SN',
-                # 'dec': '+43:25:44.1',
-                # 'id': 1,
-                # 'ra': '08:57:57.19'}
             # TRANSIENT PASSED VIA COMMAND-LINE
             else:
                 # CONVERT SINGLE TRANSIENTS TO LIST
@@ -421,7 +414,7 @@ class transient_classifier(object):
 
             if self.verbose > 0:
                 print("START CROSSMATCH")
-
+            crossmatchArray = []
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
                                             inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False, progressBar=False)
 
@@ -520,6 +513,8 @@ class transient_classifier(object):
             print("FINISH ANNOTATING TRANSIENT DB: %d" %
                   (time.time() - start_time2,))
             start_time2 = time.time()
+
+            del crossmatchArray, classifications, crossmatches
 
         self.log.debug('completed the ``classify`` method')
         return None, None
