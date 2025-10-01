@@ -208,6 +208,14 @@ class transient_classifier(object):
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
         self.largeBatchSize = self.settings["database-batch-size"]
 
+        # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
+        if self.ra and self.dec:
+            self.cl = True
+            if not self.name:
+                self.name = "Transient"
+            self.largeBatchSize = len(self.ra)
+        print(self.largeBatchSize)
+
         self.cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / (self.cpuCount*5))+2
         if self.miniBatchSize < 1000:
@@ -222,12 +230,6 @@ class transient_classifier(object):
         # LITE VERSION CANNOT BE RUN ON A DATABASE QUERY AS YET
         if self.ra == False:
             self.lite = False
-
-        # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
-        if self.ra and self.dec:
-            self.cl = True
-            if not self.name:
-                self.name = "Transient"
 
         # ASTROCALC UNIT CONVERTER OBJECT
         self.converter = unit_conversion(
@@ -2213,7 +2215,7 @@ def _crossmatch_transients_against_catalogues(
     process = psutil.Process(os.getpid())
     memory_usage = process.memory_info().rss / (1024 * 1024)  # Convert bytes to MB
     print(
-        f"CHILD: Python is using {memory_usage:.2f} MB of memory at this point.")
+        f"CHILD: {os.getpid()}: Python is using {memory_usage:.2f} MB of memory at this point.")
 
     log.debug(
         'starting the ``_crossmatch_transients_against_catalogues`` method')
