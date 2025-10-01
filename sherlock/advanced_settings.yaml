@@ -53,7 +53,7 @@ search algorithm:
         database table: tcs_view_unclear_ned_stream
         general:
             physical radius kpc: 50.0
-            angular radius arcsec: 60.0
+            angular radius arcsec: 20.0
             annotation: UNCLEAR
     GSC unclear:
         database table: tcs_view_unclear_guide_star_catalogue_v2_3

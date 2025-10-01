@@ -214,7 +214,6 @@ class transient_classifier(object):
             if not self.name:
                 self.name = "Transient"
             self.largeBatchSize = len(self.ra)
-        print(self.largeBatchSize)
 
         self.cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / (self.cpuCount*5))+2
