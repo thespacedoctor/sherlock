@@ -49,6 +49,12 @@ search algorithm:
         general:
             angular radius arcsec: 1.5
             synonym: UNCLEAR
+    NED spec unclear:
+        database table: tcs_view_unclear_ned_stream
+        general:
+            physical radius kpc: 50.0
+            angular radius arcsec: 60.0
+            annotation: UNCLEAR
     GSC unclear:
         database table: tcs_view_unclear_guide_star_catalogue_v2_3
         general:

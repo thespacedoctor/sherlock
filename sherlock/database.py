@@ -6,19 +6,19 @@
 :Author:
     David Young
 """
+from fundamentals.mysql import readquery
+from docopt import docopt
+import pymysql as ms
+from subprocess import Popen, PIPE, STDOUT
+import time
+import pickle
+import glob
+import readline
 from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-import time
-from subprocess import Popen, PIPE, STDOUT
-import pymysql as ms
 # import pymysql as ms
-from docopt import docopt
-from fundamentals.mysql import readquery
 
 
 class database(object):

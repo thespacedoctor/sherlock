@@ -208,10 +208,10 @@ class transient_classifier(object):
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
         self.largeBatchSize = self.settings["database-batch-size"]
 
-        cpuCount = psutil.cpu_count()
-        self.miniBatchSize = int(self.largeBatchSize / cpuCount) + 2
-        if self.miniBatchSize < 5000:
-            self.miniBatchSize = 5000
+        self.cpuCount = psutil.cpu_count()
+        self.miniBatchSize = int(self.largeBatchSize / (self.cpuCount*5))+2
+        if self.miniBatchSize < 1000:
+            self.miniBatchSize = 1000
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -420,7 +420,7 @@ class transient_classifier(object):
                 print("START CROSSMATCH")
 
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False, progressBar=True)
+                                            inputArray=list(range(len(theseBatches))), poolSize=self.cpuCount, settings=self.settings, colMaps=colMaps, turnOffMP=False, progressBar=True)
 
             if self.verbose > 0:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
