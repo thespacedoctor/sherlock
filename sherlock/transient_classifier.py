@@ -211,7 +211,7 @@ class transient_classifier(object):
         self.cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / (self.cpuCount*5))+2
         if self.miniBatchSize < 1000:
-            self.miniBatchSize = 1000
+            self.miniBatchSize = 2500
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -411,11 +411,9 @@ class transient_classifier(object):
                 print("MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals())
 
             poolSize = self.settings["cpu-pool-size"]
-            poolSize = self.cpuCount
+            poolSize = self.cpuCount*4
             if poolSize and batches < poolSize:
                 poolSize = batches
-
-            print(poolSize)
 
             start_time2 = time.time()
 
@@ -2209,6 +2207,8 @@ def _crossmatch_transients_against_catalogues(
     from sherlock import transient_catalogue_crossmatch
 
     global theseBatches
+
+    print("OPENED")
 
     log.debug(
         'starting the ``_crossmatch_transients_against_catalogues`` method')
