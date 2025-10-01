@@ -2212,7 +2212,8 @@ def _crossmatch_transients_against_catalogues(
 
     process = psutil.Process(os.getpid())
     memory_usage = process.memory_info().rss / (1024 * 1024)  # Convert bytes to MB
-    log.info(f"Python is using {memory_usage:.2f} MB of memory at this point.")
+    print(
+        f"CHILD: Python is using {memory_usage:.2f} MB of memory at this point.")
 
     log.debug(
         'starting the ``_crossmatch_transients_against_catalogues`` method')
