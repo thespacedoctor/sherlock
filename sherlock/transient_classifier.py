@@ -193,8 +193,8 @@ class transient_classifier(object):
 
         self.cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / (self.cpuCount*5))+2
-        if self.miniBatchSize < 2500:
-            self.miniBatchSize = 2500
+        if self.miniBatchSize < 4000:
+            self.miniBatchSize = 4000
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
