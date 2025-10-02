@@ -182,8 +182,8 @@ class transient_classifier(object):
         self.cataloguesDbConn = dbConns["catalogues"]
 
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
-        self.cpuCount = psutil.cpu_count()-1
-        self.miniBatchSize = 2500
+        self.cpuCount = psutil.cpu_count()*5
+        self.miniBatchSize = 3500
         self.largeBatchSize = self.cpuCount * self.miniBatchSize
 
         # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
@@ -381,7 +381,7 @@ class transient_classifier(object):
                 print("BATCH SIZE = %(total)s" % locals())
                 print("MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals())
 
-            poolSize = self.cpuCount-1
+            poolSize = self.cpuCount
             if poolSize and batches < poolSize:
                 poolSize = batches
 
