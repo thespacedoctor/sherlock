@@ -5,10 +5,6 @@ version: 1
 # WHERE NEEDED IN THIS PACKAGE
 # xt-collect-packages-advanced-settings
 
-# MAXIMUM NUMBER OF TRANSIENTS TO REQUEST FROM DATABASE
-database-batch-size: 50000
-cpu-pool-size: False
-
 stop-search-on-synonym-match: True
 
 ## SEARCH ALGORITHM SETTINGS
