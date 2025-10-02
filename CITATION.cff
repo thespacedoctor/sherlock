@@ -1,12 +1,13 @@
-cff-version: 1.2.0
-title: sherlock
+scff-version: 1.2.0
+title: Sherlock. Contextual classification of astronomical transient sources
 message: If you use this software, please cite it as below.
 authors:
 - family-names: "Young"
   given-names: "David R."
   orcid: "https://orcid.org/0000-0002-1229-2499"
-doi: 10.5281/zenodo.7970743
-url: "https://github.com/thespacedoctor/sherlock"
+doi: 10.5281/zenodo.8038057
+url: "https://zenodo.org/doi/10.5281/zenodo.8038057"
 abstract: mine a library of historical and on-going astronomical survey data in an attempt to identify the sources of transient/variable events, and predict their classifications based on crossmatched data.
 keywords: [astronomy]
 license: GPL-3.0-only
+date-released: 2023-08-23

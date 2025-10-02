@@ -1,7 +1,7 @@
 # sherlock
 
 
-[![](https://zenodo.org/badge/42115533.svg)](https://zenodo.org/badge/latestdoi/42115533) 
+[![](https://zenodo.org/badge/DOI/10.5281/zenodo.8038057.svg)](https://zenodo.org/doi/10.5281/zenodo.8038057) 
 
 
 <!-- INFO BADGES -->  
@@ -35,12 +35,13 @@ Documentation for sherlock is hosted by [Read the Docs](https://qub-sherlock.rea
 If you use `sherlock` in your work, please cite using the following BibTeX entry: 
 
 ```bibtex
-@software{Young_sherlock,
+@software{Young_sherlock_2023,
     author = {Young, David R.},
-    doi = {10.5281/zenodo.8038058},
+    doi = {10.5281/zenodo.8038057},
     license = {GPL-3.0-only},
-    title = {{sherlock}},
-    url = {https://github.com/thespacedoctor/sherlock}
+    title = {{Sherlock. Contextual classification of astronomical transient sources}},
+    url = {https://zenodo.org/doi/10.5281/zenodo.8038057},
+    year = {2023}
 }
 ```
  
