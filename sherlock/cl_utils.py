@@ -45,28 +45,11 @@ Options:
     -u, --update            update the transient database with new classifications and crossmatches
     -v, --version           print the version of sherlock
 """
-from __future__ import print_function
-from __future__ import absolute_import
-import readline
-try:
-    from sherlock.transient_classifier import transient_classifier
-except:
-    from sherlock import transient_classifier
-from sherlock.commonutils import update_wiki_pages
-from sherlock.imports import ned as nedStreamImporter
-from sherlock.imports import ned_d as nedImporter
-from sherlock.imports import ifs as ifsImporter
-from sherlock.imports import veron as veronImporter
-# from .commonutils import update_wiki_pages
-# from .database_cleaner import database_cleaner
-from fundamentals.renderer import list_of_dictionaries
-from subprocess import Popen, PIPE, STDOUT
-from fundamentals import tools, times
-from docopt import docopt
-import pickle
-import glob
 
-import sys
+
+from docopt import docopt
+
+
 import os
 os.environ['TERM'] = 'vt100'
 
@@ -80,6 +63,25 @@ def main(arguments=None):
     *The main function used when `cl_utils.py` is run as a single script from the cl, or when installed as a cl command*
     """
     # setup the command-line util settings
+
+    try:
+        from sherlock.transient_classifier import transient_classifier
+    except:
+        from sherlock import transient_classifier
+    from sherlock.commonutils import update_wiki_pages
+    from sherlock.imports import ned as nedStreamImporter
+    from sherlock.imports import ned_d as nedImporter
+    from sherlock.imports import ifs as ifsImporter
+    from sherlock.imports import veron as veronImporter
+    from fundamentals.renderer import list_of_dictionaries
+    from sherlock.commonutils import update_wiki_pages
+    from sherlock.database_cleaner import database_cleaner
+    import readline
+    from subprocess import Popen, PIPE
+    from fundamentals import tools, times
+    import pickle
+    import glob
+
     su = tools(
         arguments=arguments,
         docString=__doc__,

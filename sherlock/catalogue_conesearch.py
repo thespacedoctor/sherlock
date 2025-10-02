@@ -8,13 +8,6 @@
 
 :noindex:
 """
-import copy
-from HMpTy.mysql import conesearch as hmptyConesearch
-from astrocalc.coords import unit_conversion
-from fundamentals import tools
-from builtins import zip
-from builtins import object
-import sys
 import os
 os.environ['TERM'] = 'vt100'
 
@@ -157,6 +150,9 @@ class catalogue_conesearch(object):
             magnitudeLimitFilter=False,
             semiMajorAxisOperator=False
     ):
+
+        from astrocalc.coords import unit_conversion
+
         self.log = log
         log.debug("instansiating a new 'conesearcher' object")
         self.dbConn = dbConn
@@ -230,6 +226,9 @@ class catalogue_conesearch(object):
             - regenerate the docs and check rerendering of this docstring
         """
         self.log.debug('starting the ``search`` method')
+
+        from HMpTy.mysql import conesearch as hmptyConesearch
+        import copy
 
         # ACCOUNT FOR TYPE OF SEARCH
         sqlWhere = False

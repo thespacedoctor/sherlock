@@ -6,19 +6,9 @@
 :Author:
     David Young
 """
-from __future__ import division
-from fundamentals.mysql import database
-import time
-from astrocalc.coords import separations
-from astrocalc.distances import converter
-from sherlock.catalogue_conesearch import catalogue_conesearch
-from fundamentals import tools
-from builtins import zip
-from builtins import object
-from past.utils import old_div
-import sys
+
+
 import os
-import math
 os.environ['TERM'] = 'vt100'
 
 
@@ -80,6 +70,8 @@ class transient_catalogue_crossmatch(object):
             dbSettings=False,
             dbConn=False
     ):
+
+        from fundamentals.mysql import database
         self.log = log
         log.debug("instansiating a new 'transient_catalogue_crossmatch' object")
         self.dbConn = dbConn
@@ -374,6 +366,10 @@ class transient_catalogue_crossmatch(object):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
+        from astrocalc.coords import separations
+        import time
+        from sherlock.catalogue_conesearch import catalogue_conesearch
+
         self.log.debug(
             'starting the ``angular_crossmatch_against_catalogue`` method')
 
@@ -614,6 +610,9 @@ class transient_catalogue_crossmatch(object):
         self.log.debug(
             'starting the ``_annotate_crossmatch_with_value_added_parameters`` method')
 
+        from astrocalc.distances import converter
+        import math
+
         direct_distance = None
         direct_distance_scale = None
         direct_distance_modulus = None
@@ -678,7 +677,7 @@ class transient_catalogue_crossmatch(object):
         # ADD DISTANCE VALUES
         if "distance" in crossmatchDict and crossmatchDict["distance"]:
             direct_distance = crossmatchDict["distance"]
-            direct_distance_scale = old_div(direct_distance, 206.264806)
+            direct_distance_scale = direct_distance / 206.264806
             direct_distance_modulus = 5 * \
                 math.log10(direct_distance * 1e6) - 5
         # crossmatchDict['z'] = z
@@ -816,7 +815,7 @@ class transient_catalogue_crossmatch(object):
                 mag = decimal.Decimal(row[magnitudeLimitFilter])
                 if mag and mag < lowerMagnitudeLimit and mag > upperMagnitudeLimit:
                     sep = decimal.Decimal(row["separationArcsec"])
-                    if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal(old_div((decimal.Decimal(25.) - mag), decimal.Decimal(6.))))):
+                    if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal((decimal.Decimal(25.) - mag) / decimal.Decimal(6.)))):
                         galaxyMatches.append(row)
 
         self.log.debug('completed the ``_galaxy_association_cuts`` method')
@@ -875,6 +874,8 @@ class transient_catalogue_crossmatch(object):
         """
         self.log.debug(
             'starting the ``physical_separation_crossmatch_against_catalogue`` method')
+
+        import time
 
         start_time = time.time()
 
@@ -955,14 +956,13 @@ class transient_catalogue_crossmatch(object):
                         continue
                     thisMatch = True
                     newsearch_name = newsearch_name + " (direct distance)"
-                    newAngularSep = old_div(physicalRadius,
-                                            row["direct_distance_scale"])
+                    newAngularSep = physicalRadius / \
+                        row["direct_distance_scale"]
                 # NEW CHECK FOR A REDSHIFT DISTANCE
                 elif row["z_distance_scale"] and physical_separation_kpc < physicalRadius and thisMatch == False:
                     thisMatch = True
                     newsearch_name = newsearch_name + " (redshift distance)"
-                    newAngularSep = old_div(
-                        physicalRadius, row["z_distance_scale"])
+                    newAngularSep = physicalRadius / row["z_distance_scale"]
                 # FINALLY CHECK FOR A PHOTO-Z DISTANCE
                 if thisMatch == True:
                     row["physical_separation_kpc"] = physical_separation_kpc

@@ -6,19 +6,12 @@
 :Author:
     David Young
 """
-from __future__ import print_function
-from builtins import zip
-import sys
+
+
+from ._base_importer import _base_importer
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-import codecs
-import string
-import re
-from docopt import docopt
-from ._base_importer import _base_importer
+
 
 class veron(_base_importer):
     """
@@ -31,12 +24,12 @@ class veron(_base_importer):
     - ``settings`` -- the settings dictionary
     - ``pathToDataFIle`` -- path to the veron data file
     - ``version`` -- version of the veron catalogue
-    
+
 
     **Usage**
 
     To import the veron catalogue catalogue, run the following:
-    
+
 
       ```python
       from sherlock.imports import veron
@@ -126,7 +119,7 @@ class veron(_base_importer):
         **Return**
 
         - ``dictList`` - a list of dictionaries containing all the rows in the veron catalogue
-        
+
 
         .. todo ::
 
@@ -140,6 +133,9 @@ class veron(_base_importer):
         """
         self.log.debug(
             'starting the ``_create_dictionary_of_veron`` method')
+
+        import sys
+        import string
 
         dictList = []
         try:

@@ -6,20 +6,11 @@
 :Author:
     David Young
 """
-from __future__ import print_function
-from builtins import str
-from builtins import object
-import sys
+
+
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import collections
-import codecs
-from datetime import datetime, date, time
-import pickle
-from docopt import docopt
-from fundamentals.mysql import readquery
+
 
 class update_wiki_pages(object):
     """
@@ -29,7 +20,7 @@ class update_wiki_pages(object):
 
     - ``log`` -- logger
     - ``settings`` -- the settings dictionary
-    
+
 
     **Usage**
 
@@ -43,7 +34,7 @@ class update_wiki_pages(object):
     )
     wiki.update()
     ```
-    
+
 
     .. todo ::
 
@@ -126,6 +117,9 @@ class update_wiki_pages(object):
         """
         self.log.debug('starting the ``_get_table_infos`` method')
 
+        from fundamentals.mysql import readquery
+        import collections
+
         sqlQuery = u"""
             SELECT * FROM tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%" and table_name not like "%%stream"  order by number_of_rows desc;
         """ % locals()
@@ -156,6 +150,9 @@ class update_wiki_pages(object):
         """
         self.log.debug('starting the ``_get_view_infos`` method')
 
+        from fundamentals.mysql import readquery
+        import collections
+
         sqlQuery = u"""
             SELECT v.*, t.description as "master table" FROM tcs_helper_catalogue_views_info as v,  tcs_helper_catalogue_tables_info AS t where v.legacy_view = 0 and v.view_name not like "legacy%%" and t.id=v.table_id order by number_of_rows desc
         """ % locals()
@@ -185,6 +182,8 @@ class update_wiki_pages(object):
         """query the sherlock-catalogues database streamed data tables' metadata
         """
         self.log.debug('starting the ``_get_stream_view_infos`` method')
+
+        import collections
 
         sqlQuery = u"""
             SELECT * FROM tcs_helper_catalogue_tables_info where legacy_table = 0 and table_name not like "legacy%%"  and table_name like "%%stream" order by number_of_rows desc;
@@ -222,12 +221,12 @@ class update_wiki_pages(object):
         - ``tableData`` -- the sherlock-catalogues database table metadata.
         - ``viewData`` -- the sherlock-catalogues database view metadata.
         - ``streamData`` -- the sherlock-catalogues database streamed data tables' metadata.
-        
+
 
         **Return**
 
         - None
-        
+
         """
         self.log.debug('starting the ``_create_md_tables`` method')
 
@@ -363,6 +362,9 @@ class update_wiki_pages(object):
         """write the markdown formated content of the database tables' metadata to local wiki pages
         """
         self.log.debug('starting the ``_write_wiki_pages`` method')
+
+        import codecs
+        from datetime import datetime
 
         pathToWriteFile = self.settings[
             "sherlock wiki root"] + "/Crossmatch-Catalogue Tables.md"

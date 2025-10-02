@@ -6,42 +6,12 @@
 :Author:
     David Young
 """
-from __future__ import print_function
-from __future__ import division
-from astrocalc.coords import unit_conversion
-import copy
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
-from fundamentals import fmultiprocess
-import psutil
-from sherlock.commonutils import get_crossmatch_catalogues_column_map
-from sherlock.imports import ned
-from HMpTy.htm import sets
-from HMpTy.mysql import conesearch
-from fundamentals.renderer import list_of_dictionaries
-from fundamentals.mysql import readquery, directory_script_runner, writequery
-from fundamentals import tools
-import numpy as np
-from operator import itemgetter
-from datetime import datetime, date, time, timedelta
-from builtins import zip
-from builtins import str
-from builtins import range
-from builtins import object
-from past.utils import old_div
-import sys
+
 import os
-import collections
-import codecs
-import re
-import math
-import time
-import inspect
-import yaml
-from random import randint
 os.environ['TERM'] = 'vt100'
 
-theseBatches = []
-crossmatchArray = []
+# theseBatches = []
+# crossmatchArray = []
 
 
 class transient_classifier(object):
@@ -149,6 +119,12 @@ class transient_classifier(object):
             oneRun=False,
             lite=False
     ):
+
+        from astrocalc.coords import unit_conversion
+        import psutil
+        import yaml
+        import re
+
         self.log = log
         log.debug("instansiating a new 'classifier' object")
         self.settings = settings
@@ -217,8 +193,8 @@ class transient_classifier(object):
 
         self.cpuCount = psutil.cpu_count()
         self.miniBatchSize = int(self.largeBatchSize / (self.cpuCount*5))+2
-        if self.miniBatchSize < 1000:
-            self.miniBatchSize = 2500
+        if self.miniBatchSize < 500:
+            self.miniBatchSize = 500
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -272,6 +248,10 @@ class transient_classifier(object):
             - regenerate the docs and check redendering of this docstring
         """
 
+        from sherlock.commonutils import get_crossmatch_catalogues_column_map
+        from fundamentals import fmultiprocess
+        from operator import itemgetter
+        from random import randint
         global theseBatches
         global crossmatchArray
 
@@ -386,7 +366,7 @@ class transient_classifier(object):
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList)
-            batches = int((old_div(float(total), float(miniBatchSize))) + 1.)
+            batches = int((float(total) / float(miniBatchSize)) + 1.)
 
             if batches == 0:
                 batches = 1
@@ -540,6 +520,9 @@ class transient_classifier(object):
         self.log.debug(
             'starting the ``_get_transient_metadata_from_database_list`` method')
 
+        from fundamentals.mysql import readquery
+        from random import randint
+
         print("GETTING A LIST OF UNCLASSIFIED TRANSIENTS FROM THE DATABASE")
 
         sqlQuery = self.settings["database settings"][
@@ -583,6 +566,9 @@ class transient_classifier(object):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_update_ned_stream`` method')
+
+        from sherlock.imports import ned
+        from fundamentals.mysql import writequery
 
         coordinateList = []
         for i in transientsMetadataList:
@@ -651,6 +637,9 @@ class transient_classifier(object):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_remove_previous_ned_queries`` method')
+
+        from HMpTy.mysql import conesearch
+        from datetime import datetime, timedelta
 
         # 1 DEGREE QUERY RADIUS
         radius = 60. * 60.
@@ -740,6 +729,10 @@ class transient_classifier(object):
         self.log.debug('starting the ``_update_transient_database`` method')
 
         import time
+        from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+        from fundamentals.mysql import writequery
+        from datetime import datetime
+
         start_time = time.time()
         print("UPDATING TRANSIENTS DATABASE WITH RESULTS")
         print("DELETING OLD RESULTS")
@@ -859,13 +852,16 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``_rank_classifications`` method')
 
+        import copy
+        from HMpTy.htm import sets
+        from operator import itemgetter
+
         crossmatches = crossmatchArray
 
         # GROUP CROSSMATCHES INTO DISTINCT SOURCES (DUPLICATE ENTRIES OF THE
         # SAME ASTROPHYSICAL SOURCE ACROSS MULTIPLE CATALOGUES)
         ra, dec = list(zip(*[(r["raDeg"], r["decDeg"]) for r in crossmatches]))
 
-        from HMpTy.htm import sets
         xmatcher = sets(
             log=self.log,
             ra=ra,
@@ -1223,6 +1219,9 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``_print_results_to_stdout`` method')
 
+        import copy
+        import collections
+
         if self.verbose == 0:
             return
 
@@ -1337,6 +1336,7 @@ class transient_classifier(object):
         - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
         """
         self.log.debug('starting the ``_lighten_return`` method')
+        import collections
 
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["transient_object_id", "association_type", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type",
@@ -1439,15 +1439,18 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``_consolidate_coordinateList`` method')
 
+        from HMpTy.htm import sets
+        import numpy as np
+
         raList = []
         raList[:] = np.array([c[0] for c in coordinateList])
         decList = []
         decList[:] = np.array([c[1] for c in coordinateList])
 
-        nedStreamRadius = old_div(self.settings[
-            "ned stream search radius arcec"], (60. * 60.))
-        firstPassNedSearchRadius = old_div(self.settings[
-            "first pass ned search radius arcec"], (60. * 60.))
+        nedStreamRadius = self.settings["ned stream search radius arcec"] / (
+            60. * 60.)
+        firstPassNedSearchRadius = self.settings["first pass ned search radius arcec"] / (
+            60. * 60.)
         radius = nedStreamRadius - firstPassNedSearchRadius
 
         # LET'S BE CONSERVATIVE
@@ -1578,6 +1581,9 @@ class transient_classifier(object):
         self.log.debug(
             'starting the ``update_classification_annotations_and_summaries`` method')
 
+        from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+        from fundamentals.mysql import readquery, writequery
+
         # import time
         # start_time = time.time()
         # print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
@@ -1702,6 +1708,8 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``update_peak_magnitudes`` method')
 
+        from fundamentals.mysql import writequery
+
         sqlQuery = self.settings["database settings"][
             "transients"]["transient peak magnitude query"]
 
@@ -1767,6 +1775,8 @@ class transient_classifier(object):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_create_tables_if_not_exist`` method')
+
+        from fundamentals.mysql import readquery, writequery
 
         transientTable = self.settings["database settings"][
             "transients"]["transient table"]
@@ -1989,6 +1999,8 @@ END""" % locals())
         ```
         """
         self.log.debug('starting the ``generate_match_annotation`` method')
+
+        import math
 
         if "catalogue_object_subtype" not in match:
             match["catalogue_object_subtype"] = None

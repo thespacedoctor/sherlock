@@ -49,12 +49,6 @@ search algorithm:
         general:
             angular radius arcsec: 1.5
             synonym: UNCLEAR
-    NED spec unclear:
-        database table: tcs_view_unclear_ned_stream
-        general:
-            physical radius kpc: 50.0
-            angular radius arcsec: 20.0
-            annotation: UNCLEAR
     GSC unclear:
         database table: tcs_view_unclear_guide_star_catalogue_v2_3
         general:
@@ -66,18 +60,18 @@ search algorithm:
             angular radius arcsec: 1.5
             synonym: UNCLEAR
     #### BRIGHT STAR SEARCHES
-    PS1 bright stars:
-        database table: tcs_view_bright_star_ps1_dr1
-        general:
-            angular radius arcsec: 7.
-            synonym: VS
-            association: BS
-    DESI LS bright stars:
-        database table: tcs_view_bright_star_desi_legacy_dr10
-        general:
-            angular radius arcsec: 7.
-            synonym: VS
-            association: BS
+    # PS1 bright stars:
+    #     database table: tcs_view_bright_star_ps1_dr1
+    #     general:
+    #         angular radius arcsec: 7.
+    #         synonym: VS
+    #         association: BS
+    # DESI LS bright stars:
+    #     database table: tcs_view_bright_star_desi_legacy_dr10
+    #     general:
+    #         angular radius arcsec: 7.
+    #         synonym: VS
+    #         association: BS
     gaia bright stars:
         database table: tcs_view_bright_star_gaia_dr3
         general:
@@ -90,12 +84,12 @@ search algorithm:
             angular radius arcsec: 7.
             synonym: VS
             association: BS
-    SDSS dr12 bright stars:
-        database table: tcs_view_bright_star_sdss_photo_stars_galaxies_dr12
-        general:
-            angular radius arcsec: 7.
-            synonym: VS
-            association: BS
+    # SDSS dr12 bright stars:
+    #     database table: tcs_view_bright_star_sdss_photo_stars_galaxies_dr12
+    #     general:
+    #         angular radius arcsec: 7.
+    #         synonym: VS
+    #         association: BS
     ###### REGULAR STAR SEARCHES
     2MASS stars:
         database table: tcs_view_star_2mass_psc_final
@@ -198,7 +192,7 @@ search algorithm:
         # BIG > 20 ARCSEC. GALAXIES > 30.0 ARCSEC ALL CAUGHT BY NED/LASR
         database table: tcs_view_big_galaxy_desi_legacy_dr10
         general:
-            angular radius arcsec:  30.0
+            angular radius arcsec:  25.0
             and within semi major axis: True
             synonym: NT
             association: SN
@@ -206,7 +200,7 @@ search algorithm:
         # BIG > 20 ARCSEC.  GALAXIES > 30.0 ARCSEC ALL CAUGHT BY NED/LASR
         database table: tcs_view_big_galaxy_guide_star_catalogue_v2_3
         general:
-            angular radius arcsec: 30.0
+            angular radius arcsec: 25.0
             and within semi major axis: True
             synonym: NT
             association: SN

@@ -6,26 +6,7 @@
 :Author:
     David Young
 """
-from __future__ import print_function
-from __future__ import division
 from ._base_importer import _base_importer
-from docopt import docopt
-from neddy import namesearch
-from sloancone import check_coverage
-from astrocalc.coords import unit_conversion
-from fundamentals.mysql import writequery, readquery
-import re
-import string
-import codecs
-import pickle
-import glob
-import time
-import csv
-import readline
-
-from builtins import zip
-from past.utils import old_div
-import sys
 import os
 os.environ['TERM'] = 'vt100'
 
@@ -232,6 +213,8 @@ class ned_d(_base_importer):
             'starting the ``_create_dictionary_of_ned_d`` method')
 
         import pandas as pd
+        import csv
+        import sys
 
         count = 0
         with open(self.pathToDataFile, 'r') as csvFile:
@@ -292,7 +275,7 @@ class ned_d(_base_importer):
                         sys.stdout.write("\x1b[1A\x1b[2K")
                     if count > totalCount:
                         count = totalCount
-                    percent = (old_div(float(count), float(totalCount))) * 100.
+                    percent = (float(count) / float(totalCount)) * 100.
                     print(
                         "%(count)s / %(totalCount)s (%(percent)1.1f%%) rows added to memory" % locals())
                     rowDict = {}
@@ -314,10 +297,13 @@ class ned_d(_base_importer):
         # GROUP RESULTS
         dfGroups = df.groupby(['galaxy_index_id'])
 
-        medianDistDf = dfGroups[["dist_mpc", "dist_mod"]].median().reset_index()
+        medianDistDf = dfGroups[["dist_mpc",
+                                 "dist_mod"]].median().reset_index()
         # RENAME COLUMNS
-        medianDistDf.rename(columns={"dist_mpc": "dist_mpc_median"}, inplace=True)
-        medianDistDf.rename(columns={"dist_mod": "dist_mod_median"}, inplace=True)
+        medianDistDf.rename(
+            columns={"dist_mpc": "dist_mpc_median"}, inplace=True)
+        medianDistDf.rename(
+            columns={"dist_mod": "dist_mod_median"}, inplace=True)
 
         # MERGE DATAFRAMES
         df = df.merge(medianDistDf, on=['galaxy_index_id'], how='outer')
@@ -346,6 +332,8 @@ class ned_d(_base_importer):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_clean_up_columns`` method')
+
+        from fundamentals.mysql import writequery
 
         tableName = self.dbTableName
 
@@ -440,6 +428,8 @@ class ned_d(_base_importer):
         self.log.debug(
             'starting the ``_count_galaxies_requiring_metadata`` method')
 
+        from fundamentals.mysql import readquery
+
         tableName = self.dbTableName
 
         sqlQuery = u"""
@@ -452,7 +442,7 @@ class ned_d(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(old_div(self.total, 3000.)) + 1
+        self.batches = int(self.total // 3000) + 1
 
         if self.total == 0:
             self.batches = 0
@@ -482,6 +472,8 @@ class ned_d(_base_importer):
         """
         self.log.debug(
             'starting the ``_get_3000_galaxies_needing_metadata`` method')
+
+        from fundamentals.mysql import readquery
 
         tableName = self.dbTableName
 
@@ -528,6 +520,8 @@ class ned_d(_base_importer):
             'starting the ``_query_ned_and_add_results_to_database`` method')
 
         import re
+        from neddy import namesearch
+        from astrocalc.coords import unit_conversion
         regex = re.compile(r'[^\d\.]')
 
         tableName = self.dbTableName
@@ -638,6 +632,11 @@ class ned_d(_base_importer):
         """
         self.log.debug('starting the ``_update_sdss_coverage`` method')
 
+        from sloancone import check_coverage
+        from fundamentals.mysql import writequery, readquery
+        import time
+        import sys
+
         tableName = self.dbTableName
 
         # SELECT THE LOCATIONS NEEDING TO BE CHECKED
@@ -663,7 +662,7 @@ class ned_d(_base_importer):
 
             if count > totalCount:
                 count = totalCount
-            percent = (old_div(float(count), float(totalCount))) * 100.
+            percent = (float(count) / float(totalCount)) * 100.
 
             primaryID = row["primaryID"]
             raDeg = float(row["raDeg"])

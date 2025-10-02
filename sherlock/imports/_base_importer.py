@@ -10,22 +10,6 @@
 
     - document this module
 """
-from __future__ import print_function
-from HMpTy.mysql import add_htm_ids_to_mysql_database_table
-from fundamentals.renderer import list_of_dictionaries
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, directory_script_runner, writequery
-from docopt import docopt
-from datetime import datetime, date, time
-from sherlock.database_cleaner import database_cleaner
-import string
-import re
-import codecs
-import pickle
-import glob
-import readline
-from builtins import str
-from builtins import object
-import sys
 import os
 os.environ['TERM'] = 'vt100'
 
@@ -67,6 +51,10 @@ class _base_importer(object):
             coordinateList=[],
             radiusArcsec=False
     ):
+
+        import re
+        import codecs
+
         self.log = log
         log.debug("instansiating a new '_base_importer' object")
         self.settings = settings
@@ -162,6 +150,9 @@ class _base_importer(object):
         """
         self.log.debug('starting the ``add_data_to_database_table`` method')
 
+        from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, writequery
+        from sherlock.database_cleaner import database_cleaner
+
         if len(dictList) == 0:
             return
 
@@ -227,6 +218,8 @@ class _base_importer(object):
         """
         self.log.debug('starting the ``add_htmids_to_database_table`` method')
 
+        from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+
         tableName = self.dbTableName
 
         self.log.info("Adding HTMIds to %(tableName)s" % locals())
@@ -256,6 +249,8 @@ class _base_importer(object):
 
         """
         self.log.debug('starting the ``_update_database_helper_table`` method')
+
+        from fundamentals.mysql import writequery
 
         tableName = self.dbTableName
 
