@@ -1,7 +1,20 @@
 
 ## Release Notes
 
+**v3.0 October 2, 2025** 
+
+* **ENHANCEMENT**: 'distance' has been removed from Sherlock's outputs and replaced with 'best_distance', 'best_distance_flag' and 'best_distance_source'. 'distance' was calculated from the spectroscopic redshift (luminosity distance), but this was not clear to the end-user. Sherlock now processes through a distance measurement list for each transient and reports a single 'best_distance' in Mpc. From best to worst, this list is direct distance (redshift independent), spectroscopic redshift (converted to Mpc), and photometric redshift (converted to Mpc). A 'best_distance_flag' indicates how the best distance is derived (`dd`, `sz`, `pz`). The 'best_distance_source' reveals which catalogue is to blame for the distance measurement.
+* **ENHANCEMENT**: DESI Legacy Survey DR10 added to the default algorithm.
+* **ENHANCEMENT**: Gaia DR2 is replaced by Gaia DR3 in the default algorithm.
+* **ENHANCEMENT**: Upgraded Milliquas from v5.2 to v8 (final version of the catalogue). Milliquas algorithm has also been refined.
+* **REFACTOR**: 2MASS PSC algorithm refined
+* **REFACTOR**: added indexes to GSC and SDSS PhotoObjAll MySQL tables to improve query speeds.
+* **REFACTOR**: database and code optimisations to make Sherlock 5-10 times faster.
 * **REFACTOR**: increasing the default 'galaxy radius stretch factor', used to multiply a galaxy semi-major axis to get a search radius, from 1.2 to 1.5
+* **FIXED**: a bug in the synonym matching, where the default synonym radius (1.5") was getting used even if a search modules synonym was smaller.
+* **FIXED**: a bug when using 'mag column' within a yaml search module, but then only giving a 'general' search filter (no bright and faint filters). No matches are return even if a positive match exists, resulting in an 'ORPHAN' classification.
+* **FIXED**: extended sources have been removed from the 2MASS PSC search
+
 
 **v2.3.1 - October 10, 2023** 
 

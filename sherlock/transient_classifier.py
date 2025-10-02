@@ -6,43 +6,12 @@
 :Author:
     David Young
 """
-from __future__ import print_function
-from __future__ import division
-from astrocalc.coords import unit_conversion
-import copy
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
-from fundamentals import fmultiprocess
-import psutil
-from sherlock.commonutils import get_crossmatch_catalogues_column_map
-from sherlock.imports import ned
-from HMpTy.htm import sets
-from HMpTy.mysql import conesearch
-from fundamentals.renderer import list_of_dictionaries
-from fundamentals.mysql import readquery, directory_script_runner, writequery
-from fundamentals import tools
-import numpy as np
-from operator import itemgetter
-from datetime import datetime, date, time, timedelta
 
-from builtins import zip
-from builtins import str
-from builtins import range
-from builtins import object
-from past.utils import old_div
-import sys
 import os
-import collections
-import codecs
-import re
-import math
-import time
-import inspect
-import yaml
-from random import randint
 os.environ['TERM'] = 'vt100'
 
-theseBatches = []
-crossmatchArray = []
+# theseBatches = []
+# crossmatchArray = []
 
 
 class transient_classifier(object):
@@ -58,11 +27,11 @@ class transient_classifier(object):
     - ``dec`` -- declination of a single transient source. Default *False*
     - ``name`` -- the ID of a single transient source. Default *False*
     - ``verbose`` -- amount of details to print about crossmatches to stdout. 0|1|2 Default *0*
-    - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accuracte the NED database is not up-to-date. Default *True*.
+    - ``updateNed`` -- update the local NED database before running the classifier. Classification will not be as accurate the NED database is not up-to-date. Default *True*.
     - ``daemonMode`` -- run sherlock in daemon mode. In daemon mode sherlock remains live and classifies sources as they come into the database. Default *True*
-    - ``updatePeakMags`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occationally)
+    - ``updatePeakMags`` -- update peak magnitudes in human-readable annotation of objects (can take some time - best to run occasionally)
     - ``lite`` -- return only a lite version of the results with the topped ranked matches only. Default *False*
-    - ``oneRun`` -- only process one batch of transients, usful for unit testing. Default *False*
+    - ``oneRun`` -- only process one batch of transients, useful for unit testing. Default *False*
 
     **Usage**
 
@@ -150,6 +119,12 @@ class transient_classifier(object):
             oneRun=False,
             lite=False
     ):
+
+        from astrocalc.coords import unit_conversion
+        import psutil
+        import yaml
+        import re
+
         self.log = log
         log.debug("instansiating a new 'classifier' object")
         self.settings = settings
@@ -167,6 +142,9 @@ class transient_classifier(object):
         self.filterPreference = [
             "R", "_r", "G", "V", "_g", "B", "I", "_i", "_z", "J", "H", "K", "U", "_u", "_y", "W1", "unkMag"
         ]
+        # At class init
+        self.filterPreferenceErr = [
+            (f, f + "Err") for f in self.filterPreference]
 
         # COLLECT ADVANCED SETTINGS IF AVAILABLE
         parentDirectory = os.path.dirname(__file__)
@@ -204,18 +182,26 @@ class transient_classifier(object):
         self.cataloguesDbConn = dbConns["catalogues"]
 
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
-        self.largeBatchSize = self.settings["database-batch-size"]
-        self.miniBatchSize = 1000
-
-        # LITE VERSION CANNOT BE RUN ON A DATABASE QUERY AS YET
-        if self.ra == False:
-            self.lite = False
+        self.cpuCount = psutil.cpu_count()
+        self.miniBatchSize = 2500
+        self.largeBatchSize = self.cpuCount * self.miniBatchSize
 
         # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
         if self.ra and self.dec:
             self.cl = True
             if not self.name:
                 self.name = "Transient"
+            self.largeBatchSize = len(self.ra)
+
+        # CHECK INPUT TYPES
+        if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
+            message = "Input RA and Dec must be floats or lists of floats"
+            self.log.error(message)
+            raise TypeError(message)
+
+        # LITE VERSION CANNOT BE RUN ON A DATABASE QUERY AS YET
+        if self.ra == False:
+            self.lite = False
 
         # ASTROCALC UNIT CONVERTER OBJECT
         self.converter = unit_conversion(
@@ -259,6 +245,10 @@ class transient_classifier(object):
             - regenerate the docs and check redendering of this docstring
         """
 
+        from sherlock.commonutils import get_crossmatch_catalogues_column_map
+        from fundamentals import fmultiprocess
+        from operator import itemgetter
+        from random import randint
         global theseBatches
         global crossmatchArray
 
@@ -279,19 +269,6 @@ class transient_classifier(object):
         import time
         start_time = time.time()
 
-        # COUNT SEARCHES
-        sa = self.settings["search algorithm"]
-        searchCount = 0
-        brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
-            for bf in brightnessFilters:
-                if bf in searchPara:
-                    searchCount += 1
-
-        cpuCount = psutil.cpu_count()
-        if searchCount > cpuCount:
-            searchCount = cpuCount
-
         miniBatchSize = self.miniBatchSize
 
         while remaining:
@@ -310,6 +287,7 @@ class transient_classifier(object):
                         "where", "where %(thisInt)s=%(thisInt)s and " % locals())
 
                 if remaining == 1 or remaining < self.largeBatchSize:
+                    print("COUNTING THE UNCLASSIFIED TRANSIENTS FROM THE DATABASE")
                     rows = readquery(
                         log=self.log,
                         sqlQuery=sqlQuery,
@@ -322,23 +300,16 @@ class transient_classifier(object):
                 print(
                     "%(remaining)s transient sources requiring a classification remain" % locals())
 
-                # START THE TIME TO TRACK CLASSIFICATION SPPED
-                start_time = time.time()
-
                 # A LIST OF DICTIONARIES OF TRANSIENT METADATA
                 transientsMetadataList = self._get_transient_metadata_from_database_list()
+
+                # START THE TIME TO TRACK CLASSIFICATION SPEED
+                start_time = time.time()
 
                 count = len(transientsMetadataList)
                 print(
                     "  now classifying the next %(count)s transient sources" % locals())
 
-                # EXAMPLE OF TRANSIENT METADATA
-                # { 'name': 'PS17gx',
-                # 'alt_id': 'PS17gx',
-                # 'object_classification': 'SN',
-                # 'dec': '+43:25:44.1',
-                # 'id': 1,
-                # 'ra': '08:57:57.19'}
             # TRANSIENT PASSED VIA COMMAND-LINE
             else:
                 # CONVERT SINGLE TRANSIENTS TO LIST
@@ -346,6 +317,10 @@ class transient_classifier(object):
                     self.ra = [self.ra]
                     self.dec = [self.dec]
                     self.name = [self.name]
+
+                count = len(self.dec)
+                print(
+                    "  now classifying the next %(count)s transient sources" % locals())
 
                 # GIVEN TRANSIENTS UNIQUE NAMES IF NOT PROVIDED
                 if not self.name[0]:
@@ -388,7 +363,7 @@ class transient_classifier(object):
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList)
-            batches = int((old_div(float(total), float(miniBatchSize))) + 1.)
+            batches = int((float(total) / float(miniBatchSize)) + 1.)
 
             if batches == 0:
                 batches = 1
@@ -406,19 +381,19 @@ class transient_classifier(object):
                 print("BATCH SIZE = %(total)s" % locals())
                 print("MINI BATCH SIZE = %(batches)s x %(miniBatchSize)s" % locals())
 
-            poolSize = self.settings["cpu-pool-size"]
+            poolSize = self.cpuCount
             if poolSize and batches < poolSize:
                 poolSize = batches
 
             start_time2 = time.time()
 
-            if self.verbose > 1:
+            if self.verbose > 0:
                 print("START CROSSMATCH")
-
+            crossmatchArray = []
             crossmatchArray = fmultiprocess(log=self.log, function=_crossmatch_transients_against_catalogues,
-                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps)
+                                            inputArray=list(range(len(theseBatches))), poolSize=poolSize, settings=self.settings, colMaps=colMaps, turnOffMP=False, progressBar=True)
 
-            if self.verbose > 1:
+            if self.verbose > 0:
                 print("FINISH CROSSMATCH/START RANKING: %d" %
                       (time.time() - start_time2,))
             start_time2 = time.time()
@@ -442,8 +417,7 @@ class transient_classifier(object):
                             cl, cr = self._rank_classifications(
                                 batch, colMaps)
                             crossmatches.extend(cr)
-                            classifications = dict(
-                                list(classifications.items()) + list(cl.items()))
+                            classifications.update(cl)
 
                             transientId = s['transient_object_id']
                             batch = [s]
@@ -453,18 +427,21 @@ class transient_classifier(object):
                     # RANK FINAL BATCH
                     cl, cr = self._rank_classifications(
                         batch, colMaps)
-                    classifications = dict(
-                        list(classifications.items()) + list(cl.items()))
+                    classifications.update(cl)
                     crossmatches.extend(cr)
 
             for t in transientsMetadataList:
                 if t["id"] not in classifications:
                     classifications[t["id"]] = ["ORPHAN"]
 
+            classificationRate = count / (time.time() - start_time)
+            print(
+                "Sherlock is classifying at a rate of %(classificationRate)2.1f transients/sec (excluding time writing results to transient database)" % locals())
+
             # UPDATE THE TRANSIENT DATABASE IF UPDATE REQUESTED (ADD DATA TO
             # tcs_crossmatch_table AND A CLASSIFICATION TO THE ORIGINAL TRANSIENT
             # TABLE)
-            if self.verbose > 1:
+            if self.verbose > 0:
                 print("FINISH RANKING/START UPDATING TRANSIENT DB: %d" %
                       (time.time() - start_time2,))
             start_time2 = time.time()
@@ -512,9 +489,7 @@ class transient_classifier(object):
                   (time.time() - start_time2,))
             start_time2 = time.time()
 
-            classificationRate = old_div(count, (time.time() - start_time))
-            print(
-                "Sherlock is classify at a rate of %(classificationRate)2.1f transients/sec" % locals())
+            del crossmatchArray, classifications, crossmatches
 
         self.log.debug('completed the ``classify`` method')
         return None, None
@@ -540,6 +515,11 @@ class transient_classifier(object):
         """
         self.log.debug(
             'starting the ``_get_transient_metadata_from_database_list`` method')
+
+        from fundamentals.mysql import readquery
+        from random import randint
+
+        print("GETTING A LIST OF UNCLASSIFIED TRANSIENTS FROM THE DATABASE")
 
         sqlQuery = self.settings["database settings"][
             "transients"]["transient query"] + " limit " + str(self.largeBatchSize)
@@ -582,6 +562,9 @@ class transient_classifier(object):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_update_ned_stream`` method')
+
+        from sherlock.imports import ned
+        from fundamentals.mysql import writequery
 
         coordinateList = []
         for i in transientsMetadataList:
@@ -650,6 +633,9 @@ class transient_classifier(object):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_remove_previous_ned_queries`` method')
+
+        from HMpTy.mysql import conesearch
+        from datetime import datetime, timedelta
 
         # 1 DEGREE QUERY RADIUS
         radius = 60. * 60.
@@ -739,6 +725,10 @@ class transient_classifier(object):
         self.log.debug('starting the ``_update_transient_database`` method')
 
         import time
+        from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+        from fundamentals.mysql import writequery
+        from datetime import datetime
+
         start_time = time.time()
         print("UPDATING TRANSIENTS DATABASE WITH RESULTS")
         print("DELETING OLD RESULTS")
@@ -858,13 +848,16 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``_rank_classifications`` method')
 
+        import copy
+        from HMpTy.htm import sets
+        from operator import itemgetter
+
         crossmatches = crossmatchArray
 
         # GROUP CROSSMATCHES INTO DISTINCT SOURCES (DUPLICATE ENTRIES OF THE
         # SAME ASTROPHYSICAL SOURCE ACROSS MULTIPLE CATALOGUES)
         ra, dec = list(zip(*[(r["raDeg"], r["decDeg"]) for r in crossmatches]))
 
-        from HMpTy.htm import sets
         xmatcher = sets(
             log=self.log,
             ra=ra,
@@ -879,10 +872,16 @@ class transient_classifier(object):
         # ADD DISTINCT-SOURCE KEY
         dupKey = 0
         distinctMatches = []
-        for x in groupedMatches:
+
+        mms = []
+        mms[:] = [copy.copy(x[0]) for x in groupedMatches]
+
+        for mergedMatch, x in zip(mms, groupedMatches):
             dupKey += 1
-            mergedMatch = copy.deepcopy(x[0])
             mergedMatch["merged_rank"] = int(dupKey)
+
+            if 'photoZErr' in mergedMatch and ('photoZ' not in mergedMatch or not mergedMatch['photoZ']):
+                mergedMatch['photoZErr'] = None
 
             # ADD OTHER ESSENTIAL KEYS
             for e in ['z', 'photoZ', 'photoZErr']:
@@ -894,6 +893,7 @@ class transient_classifier(object):
                 "direct_distance": mergedMatch["direct_distance"],
                 "direct_distance_modulus": mergedMatch["direct_distance_modulus"],
                 "direct_distance_scale": mergedMatch["direct_distance_scale"],
+                "direct_distance_cat": mergedMatch["catalogue_table_name"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
             if not mergedMatch["direct_distance"]:
@@ -901,17 +901,21 @@ class transient_classifier(object):
 
             bestSpecz = {
                 "z": mergedMatch["z"],
-                "distance": mergedMatch["distance"],
-                "distance_modulus": mergedMatch["distance_modulus"],
-                "scale": mergedMatch["scale"],
+                "z_distance": mergedMatch["z_distance"],
+                "z_distance_modulus": mergedMatch["z_distance_modulus"],
+                "z_distance_scale": mergedMatch["z_distance_scale"],
+                "z_distance_cat": mergedMatch["catalogue_table_name"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
-            if not mergedMatch["distance"]:
+            if not mergedMatch["z_distance"]:
                 bestSpecz["qual"] = 0
 
             bestPhotoz = {
                 "photoZ": mergedMatch["photoZ"],
                 "photoZErr": mergedMatch["photoZErr"],
+                "pz_distance_modulus": mergedMatch["pz_distance_modulus"],
+                "pz_distance_scale": mergedMatch["pz_distance_scale"],
+                "pz_distance_cat": mergedMatch["catalogue_table_name"],
                 "qual": colMaps[mergedMatch["catalogue_view_name"]]["object_type_accuracy"]
             }
             if not mergedMatch["photoZ"]:
@@ -983,14 +987,23 @@ class transient_classifier(object):
                 m["merged_rank"] = int(dupKey)
                 if i > 0:
                     # MERGE ALL BEST MAGNITUDE MEASUREMENTS
-                    for f in self.filterPreference:
 
-                        if f in m and m[f] and (f not in mergedMatch or (f + "Err" in mergedMatch and f + "Err" in m and (mergedMatch[f + "Err"] == None or (m[f + "Err"] and mergedMatch[f + "Err"] > m[f + "Err"])))):
-                            mergedMatch[f] = m[f]
-                            try:
-                                mergedMatch[f + "Err"] = m[f + "Err"]
-                            except:
-                                pass
+                    for f, ferr in self.filterPreferenceErr:
+                        m_val = m.get(f)
+                        if m_val is None:
+                            continue
+                        m_err = m.get(ferr)
+                        merged_val = mergedMatch.get(f)
+                        merged_err = mergedMatch.get(ferr)
+
+                        # Only update if merged_val is None or m_err is better (smaller) than merged_err
+                        if merged_val is None or (
+                            m_err is not None and (
+                                merged_err is None or merged_err > m_err)
+                        ):
+                            mergedMatch[f] = m_val
+                            if m_err is not None:
+                                mergedMatch[f + "Err"] = m_err
                     mergedMatch["original_search_radius_arcsec"] = "multiple"
                     mergedMatch["catalogue_object_subtype"] = "multiple"
                     mergedMatch["catalogue_view_name"] = "multiple"
@@ -1026,16 +1039,18 @@ class transient_classifier(object):
                             "direct_distance_modulus": m["direct_distance_modulus"],
                             "direct_distance_scale": m["direct_distance_scale"],
                             "catalogue_object_type": m["catalogue_object_type"],
+                            "direct_distance_cat": m["catalogue_table_name"],
                             "qual": colMaps[m["catalogue_view_name"]]["object_type_accuracy"]
                         }
                     # FIND BEST SPEC-Z
                     if "z" in m and m["z"] and colMaps[m["catalogue_view_name"]]["object_type_accuracy"] > bestSpecz["qual"]:
                         bestSpecz = {
                             "z": m["z"],
-                            "distance": m["distance"],
-                            "distance_modulus": m["distance_modulus"],
-                            "scale": m["scale"],
+                            "z_distance": m["z_distance"],
+                            "z_distance_modulus": m["z_distance_modulus"],
+                            "z_distance_scale": m["z_distance_scale"],
                             "catalogue_object_type": m["catalogue_object_type"],
+                            "z_distance_cat": m["catalogue_table_name"],
                             "qual": colMaps[m["catalogue_view_name"]]["object_type_accuracy"]
                         }
                     # FIND BEST PHOT-Z
@@ -1043,10 +1058,11 @@ class transient_classifier(object):
                         bestPhotoz = {
                             "photoZ": m["photoZ"],
                             "photoZErr": m["photoZErr"],
-                            "distance": m["distance"],
-                            "distance_modulus": m["distance_modulus"],
-                            "scale": m["scale"],
+                            "pz_distance": m["pz_distance"],
+                            "pz_distance_modulus": m["pz_distance_modulus"],
+                            "pz_distance_scale": m["pz_distance_scale"],
                             "catalogue_object_type": m["catalogue_object_type"],
+                            "pz_distance_cat": m["catalogue_table_name"],
                             "qual": colMaps[m["catalogue_view_name"]]["object_type_accuracy"]
                         }
                     # CLOSEST ANGULAR SEP & COORDINATES
@@ -1068,45 +1084,66 @@ class transient_classifier(object):
             if mergedMatch["direct_distance_scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
                     "direct_distance_scale"] * mergedMatch["separationArcsec"]
-
-            elif mergedMatch["scale"]:
+            elif mergedMatch["z_distance_scale"]:
                 mergedMatch["physical_separation_kpc"] = mergedMatch[
-                    "scale"] * mergedMatch["separationArcsec"]
+                    "z_distance_scale"] * mergedMatch["separationArcsec"]
 
             if "/" in mergedMatch["search_name"]:
                 mergedMatch["search_name"] = "multiple"
+            # DETERMINE THE BEST DISTANCE MATCH
+            mergedMatch["best_distance"] = None
+            mergedMatch["best_distance_flag"] = None
+            mergedMatch["best_distance_source"] = None
+            for d, f in zip(["direct_distance", "z_distance", "pz_distance"], ["dd", "sz", "pz"]):
+                if mergedMatch[d]:
+                    mergedMatch["best_distance"] = mergedMatch[d]
+                    mergedMatch["best_distance_flag"] = f
+                    mergedMatch["best_distance_source"] = mergedMatch[d + "_cat"]
+                    break
 
             distinctMatches.append(mergedMatch)
 
         crossmatches = []
         for xm, gm in zip(distinctMatches, groupedMatches):
-            # SPEC-Z GALAXIES
-            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
+            angular_separation_penalty = min(
+                xm["separationArcsec"] / 60, 100)            # SPEC-Z GALAXIES
+            if (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and (("z" in xm and xm["z"] is not None) or "photoZ" not in xm or xm["photoZ"] is None or xm["photoZ"] < 0.)):
+                # print(xm["catalogue_object_id"], 1)
                 rankScore = xm["classificationReliability"] * 1000 + 2. - \
-                    (50 - old_div(xm["physical_separation_kpc"], 20))
+                    (50 - (xm["physical_separation_kpc"])) + \
+                    angular_separation_penalty
             # PHOTO-Z GALAXIES
-            elif (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["physical_separation_kpc"] < 20. and xm["association_type"] == "SN"):
+            elif (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["association_type"] == "SN"):
+                # print(xm["catalogue_object_id"], 2)
                 rankScore = xm["classificationReliability"] * 1000 + 5 - \
-                    (50 - old_div(xm["physical_separation_kpc"], 20))
+                    (50 - (xm["physical_separation_kpc"])) + \
+                    angular_separation_penalty
             # NOT SPEC-Z, NON PHOTO-Z GALAXIES & PHOTO-Z GALAXIES
             elif (xm["association_type"] == "SN"):
-                rankScore = xm["classificationReliability"] * 1000 + 5.
+                # print(xm["catalogue_object_id"], 3)
+                rankScore = xm["classificationReliability"] * \
+                    1000 + 5. + angular_separation_penalty
             # VS
             elif (xm["association_type"] == "VS"):
+                # print(xm["catalogue_object_id"], 4)
                 rankScore = xm["classificationReliability"] * \
                     1000 + xm["separationArcsec"] + 2.
             # BS
             elif (xm["association_type"] == "BS"):
+                # print(xm["catalogue_object_id"], 5)
                 rankScore = xm["classificationReliability"] * \
                     1000 + xm["separationArcsec"]
             else:
+                # print(xm["catalogue_object_id"], 6)
                 rankScore = xm["classificationReliability"] * \
-                    1000 + xm["separationArcsec"] + 10.
+                    1000 + 10. + angular_separation_penalty
             xm["rankScore"] = rankScore
             crossmatches.append(xm)
             if len(gm) > 1:
                 for g in gm:
                     g["rankScore"] = rankScore
+            # print(rankScore)
+            # print("----")
 
         crossmatches = sorted(
             crossmatches, key=itemgetter('rankScore'), reverse=False)
@@ -1178,18 +1215,21 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``_print_results_to_stdout`` method')
 
+        import copy
+        import collections
+
         if self.verbose == 0:
             return
 
         crossmatchesCopy = copy.deepcopy(crossmatches)
 
-        # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
+        # REPORT ONLY THE MOST PREFERRED MAGNITUDE VALUE
         basic = ["association_type", "rank", "rankScore", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type", "catalogue_object_subtype",
-                 "raDeg", "decDeg", "separationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
-        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "distance_modulus", "direct_distance_scale", "major_axis_arcsec", "scale", "U", "UErr",
-                   "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
+                 "raDeg", "decDeg", "separationArcsec", "best_distance", "best_distance_flag", "best_distance_source", "physical_separation_kpc", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "merged_rank"]
+        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "direct_distance_scale", "z_distance", "z_distance_modulus", "z_distance_scale", "pz_distance", "pz_distance_modulus", "pz_distance_scale",
+                   "sm_axis_arcsec", "U", "UErr", "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
-                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank"]
+                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "z", "photoZ", "photoZErr"]
         if self.verbose == 2:
             basic = basic + verbose
 
@@ -1292,14 +1332,15 @@ class transient_classifier(object):
         - ``classifications`` -- the classifications assigned to the transients post-crossmatches (dictionary of rank ordered list of classifications)
         """
         self.log.debug('starting the ``_lighten_return`` method')
+        import collections
 
         # REPORT ONLY THE MOST PREFERED MAGNITUDE VALUE
         basic = ["transient_object_id", "association_type", "catalogue_table_name", "catalogue_object_id", "catalogue_object_type",
-                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "direct_distance", "distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "major_axis_arcsec"]
-        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "distance_modulus", "direct_distance_scale", "scale", "U", "UErr",
+                 "raDeg", "decDeg", "separationArcsec", "northSeparationArcsec", "eastSeparationArcsec", "physical_separation_kpc", "best_distance", "best_distance_flag", "best_distance_source", "direct_distance", "z", "photoZ", "photoZErr", "Mag", "MagFilter", "MagErr", "classificationReliability", "sm_axis_arcsec"]
+        verbose = ["search_name", "catalogue_view_name", "original_search_radius_arcsec", "direct_distance_modulus", "z_distance_modulus", "direct_distance_scale", "z_distance_scale", "U", "UErr",
                    "B", "BErr", "V", "VErr", "R", "RErr", "I", "IErr", "J", "JErr", "H", "HErr", "K", "KErr", "_u", "_uErr", "_g", "_gErr", "_r", "_rErr", "_i", "_iErr", "_z", "_zErr", "_y", "G", "GErr", "_yErr", "unkMag"]
         dontFormat = ["decDeg", "raDeg", "rank",
-                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "classificationReliability"]
+                      "catalogue_object_id", "catalogue_object_subtype", "merged_rank", "classificationReliability", "z", "photoZ", "photoZErr"]
         if self.verbose == 2:
             basic = basic + verbose
 
@@ -1394,15 +1435,18 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``_consolidate_coordinateList`` method')
 
+        from HMpTy.htm import sets
+        import numpy as np
+
         raList = []
         raList[:] = np.array([c[0] for c in coordinateList])
         decList = []
         decList[:] = np.array([c[1] for c in coordinateList])
 
-        nedStreamRadius = old_div(self.settings[
-            "ned stream search radius arcec"], (60. * 60.))
-        firstPassNedSearchRadius = old_div(self.settings[
-            "first pass ned search radius arcec"], (60. * 60.))
+        nedStreamRadius = self.settings["ned stream search radius arcec"] / (
+            60. * 60.)
+        firstPassNedSearchRadius = self.settings["first pass ned search radius arcec"] / (
+            60. * 60.)
         radius = nedStreamRadius - firstPassNedSearchRadius
 
         # LET'S BE CONSERVATIVE
@@ -1533,6 +1577,9 @@ class transient_classifier(object):
         self.log.debug(
             'starting the ``update_classification_annotations_and_summaries`` method')
 
+        from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+        from fundamentals.mysql import readquery, writequery
+
         # import time
         # start_time = time.time()
         # print "COLLECTING TRANSIENTS WITH NO ANNOTATIONS"
@@ -1657,6 +1704,8 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``update_peak_magnitudes`` method')
 
+        from fundamentals.mysql import writequery
+
         sqlQuery = self.settings["database settings"][
             "transients"]["transient peak magnitude query"]
 
@@ -1664,11 +1713,11 @@ class transient_classifier(object):
             (%(sqlQuery)s) t
         SET
             s.transientAbsMag = ROUND(t.mag - IFNULL(direct_distance_modulus,
-                            distance_modulus),
+                            z_distance_modulus),
                     2)
         WHERE
             IFNULL(direct_distance_modulus,
-                    distance_modulus) IS NOT NULL
+                    z_distance_modulus) IS NOT NULL
             AND (s.association_type not in ("AGN","CV","BS","VS")
                  or s.transientAbsMag is null)
                 AND t.id = s.transient_object_id
@@ -1723,6 +1772,8 @@ class transient_classifier(object):
         """
         self.log.debug('starting the ``_create_tables_if_not_exist`` method')
 
+        from fundamentals.mysql import readquery, writequery
+
         transientTable = self.settings["database settings"][
             "transients"]["transient table"]
         transientTableClassCol = self.settings["database settings"][
@@ -1741,11 +1792,14 @@ CREATE TABLE IF NOT EXISTS `sherlock_crossmatches` (
   `eastSeparationArcsec` double DEFAULT NULL,
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `z` double DEFAULT NULL,
-  `scale` double DEFAULT NULL,
-  `distance` double DEFAULT NULL,
-  `distance_modulus` double DEFAULT NULL,
+  `z_distance_scale` double DEFAULT NULL,
+  `z_distance` double DEFAULT NULL,
+  `z_distance_modulus` double DEFAULT NULL,
   `photoZ` double DEFAULT NULL,
   `photoZErr` double DEFAULT NULL,
+  `pz_distance_scale` double DEFAULT NULL,
+  `pz_distance` double DEFAULT NULL,
+  `pz_distance_modulus` double DEFAULT NULL,
   `association_type` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `dateCreated` datetime DEFAULT NULL,
   `physical_separation_kpc` double DEFAULT NULL,
@@ -1757,7 +1811,7 @@ CREATE TABLE IF NOT EXISTS `sherlock_crossmatches` (
   `rank` int(11) DEFAULT NULL,
   `rankScore` double DEFAULT NULL,
   `search_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `major_axis_arcsec` double DEFAULT NULL,
+  `sm_axis_arcsec` double DEFAULT NULL,
   `direct_distance` double DEFAULT NULL,
   `direct_distance_scale` double DEFAULT NULL,
   `direct_distance_modulus` double DEFAULT NULL,
@@ -1942,6 +1996,8 @@ END""" % locals())
         """
         self.log.debug('starting the ``generate_match_annotation`` method')
 
+        import math
+
         if "catalogue_object_subtype" not in match:
             match["catalogue_object_subtype"] = None
         catalogue = match["catalogue_table_name"]
@@ -2092,8 +2148,10 @@ END""" % locals())
         distance_modulus = None
         if match["direct_distance_modulus"]:
             distance_modulus = match["direct_distance_modulus"]
-        elif match["distance_modulus"]:
-            distance_modulus = match["distance_modulus"]
+        elif match["z_distance_modulus"]:
+            distance_modulus = match["z_distance_modulus"]
+        elif match["pz_distance_modulus"]:
+            distance_modulus = match["pz_distance_modulus"]
 
         if updatePeakMagnitudes:
             if distance:
@@ -2179,6 +2237,8 @@ def _crossmatch_transients_against_catalogues(
         colMaps=colMaps
     )
     crossmatches = cm.match()
+
+    dbConn.close()
 
     log.debug(
         'completed the ``_crossmatch_transients_against_catalogues`` method')

@@ -6,19 +6,8 @@
 :Author:
     David Young
 """
-from fundamentals.mysql import readquery
-from docopt import docopt
-import pymysql as ms
-from subprocess import Popen, PIPE, STDOUT
-import time
-import pickle
-import glob
-import readline
-from builtins import object
-import sys
 import os
 os.environ['TERM'] = 'vt100'
-# import pymysql as ms
 
 
 class database(object):
@@ -103,6 +92,8 @@ class database(object):
         """
         self.log.debug('starting the ``get`` method')
 
+        from fundamentals.mysql import readquery
+
         # CATALOGUE DATABASE ALWAYS NEEDED
         catalogueSettings = self.settings[
             "database settings"]["static catalogues"]
@@ -126,13 +117,12 @@ class database(object):
                 port = int(dbSettings["port"])
 
             if dbSettings:
-
+                import pymysql as ms
                 # SETUP A DATABASE CONNECTION FOR THE STATIC CATALOGUES
                 host = dbSettings["host"]
                 user = dbSettings["user"]
                 passwd = dbSettings["password"]
                 dbName = dbSettings["db"]
-
                 thisConn = ms.connect(
                     host=host,
                     user=user,
@@ -147,17 +137,6 @@ class database(object):
                 thisConn.autocommit(True)
                 dbConns.append(thisConn)
 
-                # from fundamentals.mysql import readquery
-                # sqlQuery = u"""
-                #     show databases;
-                # """ % locals()
-                # rows = readquery(
-                #     log=self.log,
-                #     sqlQuery=sqlQuery,
-                #     dbConn=thisConn,
-                #     quiet=False
-                # )
-                # print(rows)
             else:
                 dbConns.append(None)
 
@@ -214,6 +193,10 @@ class database(object):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_setup_tunnel`` method')
+
+        from subprocess import Popen
+        import time
+        import sys
 
         # TEST TUNNEL DOES NOT ALREADY EXIST
         sshPort = tunnelParameters["port"]

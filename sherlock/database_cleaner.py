@@ -6,17 +6,9 @@
 :Author:
     David Young
 """
-from __future__ import print_function
-from builtins import object
-import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-from fundamentals import tools, times
-from docopt import docopt
-from fundamentals.mysql import readquery, writequery
+
 
 class database_cleaner(object):
     """*Clean and maintain the database helper tables used by sherlock*
@@ -28,14 +20,14 @@ class database_cleaner(object):
     - ``dbConn`` -- mysql database connection
     - ``log`` -- logger
     - ``settings`` -- the settings dictionary
-    
+
 
      **Usage**
 
      .. todo::
 
         - add an entry in the tutorial to clean database tables
-     
+
 
         ```python
         from sherlock.database_cleaner import database_cleaner
@@ -127,6 +119,8 @@ class database_cleaner(object):
         self.log.debug(
             'starting the ``_updated_row_counts_in_tcs_helper_catalogue_tables_info`` method')
 
+        from fundamentals.mysql import readquery, writequery
+
         sqlQuery = u"""
             select * from tcs_helper_catalogue_tables_info where table_name like "%%stream" or (number_of_rows is null and legacy_table = 0)
         """ % locals()
@@ -193,6 +187,8 @@ class database_cleaner(object):
         self.log.debug(
             'starting the ``_update_tcs_helper_catalogue_tables_info_with_new_tables`` method')
 
+        from fundamentals.mysql import readquery, writequery
+
         sqlQuery = u"""
             SELECT max(id) as thisId FROM tcs_helper_catalogue_tables_info;
         """ % locals()
@@ -240,7 +236,8 @@ class database_cleaner(object):
         for tb in tablesInDatabase:
             if tb["TABLE_NAME"] not in tbList:
                 thisTableName = tb["TABLE_NAME"]
-                print("`%(thisTableName)s` added to `tcs_helper_catalogue_tables_info` database table" % locals())
+                print(
+                    "`%(thisTableName)s` added to `tcs_helper_catalogue_tables_info` database table" % locals())
                 sqlQuery = u"""
                     INSERT INTO tcs_helper_catalogue_tables_info (
                             id,
@@ -276,6 +273,8 @@ class database_cleaner(object):
             - regenerate the docs and check redendering of this docstring
         """
         self.log.debug('starting the ``_clean_up_columns`` method')
+
+        from fundamentals.mysql import readquery, writequery
 
         sqlQueries = [
             "update tcs_helper_catalogue_tables_info set old_table_name = table_name where old_table_name is null;",
@@ -362,6 +361,8 @@ class database_cleaner(object):
         self.log.debug(
             'starting the ``_update_tcs_helper_catalogue_views_info_with_new_views`` method')
 
+        from fundamentals.mysql import readquery, writequery
+
         sqlQuery = u"""
             SELECT max(id) as thisId FROM tcs_helper_catalogue_views_info;
         """ % locals()
@@ -402,7 +403,8 @@ class database_cleaner(object):
         for tb in tablesInDatabase:
             if tb["TABLE_NAME"] not in tbList:
                 thisViewName = tb["TABLE_NAME"]
-                print("`%(thisViewName)s` added to `tcs_helper_catalogue_views_info` database table" % locals())
+                print(
+                    "`%(thisViewName)s` added to `tcs_helper_catalogue_views_info` database table" % locals())
                 sqlQuery = u"""
                     INSERT INTO tcs_helper_catalogue_views_info (
                             id,
@@ -430,16 +432,16 @@ class database_cleaner(object):
         **Key Arguments**
 
         # -
-        
+
 
         **Return**
 
         - None
-        
+
 
         **Usage**
 
-        
+
 
         ```python
         usage code 

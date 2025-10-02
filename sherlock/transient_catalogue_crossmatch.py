@@ -6,20 +6,10 @@
 :Author:
     David Young
 """
-from __future__ import division
-from builtins import zip
-from builtins import object
-from past.utils import old_div
-import sys
+
+
 import os
-import math
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from sherlock.catalogue_conesearch import catalogue_conesearch
-from astrocalc.distances import converter
-from astrocalc.coords import separations
-import time
-from fundamentals.mysql import database
 
 
 class transient_catalogue_crossmatch(object):
@@ -80,6 +70,8 @@ class transient_catalogue_crossmatch(object):
             dbSettings=False,
             dbConn=False
     ):
+
+        from fundamentals.mysql import database
         self.log = log
         log.debug("instansiating a new 'transient_catalogue_crossmatch' object")
         self.dbConn = dbConn
@@ -119,6 +111,8 @@ class transient_catalogue_crossmatch(object):
         """
         self.log.debug('starting the ``match`` method')
 
+        import random
+
         classifications = []
 
         # COUNT NUMBER OF TRANSIENT TO CROSSMATCH
@@ -128,6 +122,10 @@ class transient_catalogue_crossmatch(object):
         # GRAB SEARCH ALGORITHM
         sa = self.settings["search algorithm"]
 
+        # SHUFFLE TO BALANCE LOAD ON DATABASE TABLES A LITTLE
+        sa_items = list(sa.items())
+        random.shuffle(sa_items)
+
         # FOR EACH TRANSIENT SOURCE IN THE LIST ...
         allCatalogueMatches = []
         catalogueMatches = []
@@ -136,7 +134,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
+        for search_name, searchPara in sa_items:
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -147,6 +145,7 @@ class transient_catalogue_crossmatch(object):
                     # THE PHYSICAL SEPARATION SEARCHES
                     self.log.debug(
                         'checking physical distance crossmatches in %(search_name)s' % locals())
+
                     catalogueMatches = self.physical_separation_crossmatch_against_catalogue(
                         objectList=self.transients,
                         searchPara=searchPara,
@@ -186,7 +185,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         if len(remainingTransientsToMatch) > 0:
-            for search_name, searchPara in list(sa.items()):
+            for search_name, searchPara in sa_items:
                 self.log.debug("""  searching: %(search_name)s""" % locals())
                 for bf in brightnessFilters:
                     if bf not in searchPara:
@@ -236,7 +235,7 @@ class transient_catalogue_crossmatch(object):
         # ITERATE THROUGH SEARCH ALGORITHM IN ORDER
         # PRESENTED IN THE SETTINGS FILE
         brightnessFilters = ["bright", "faint", "general"]
-        for search_name, searchPara in list(sa.items()):
+        for search_name, searchPara in sa_items:
             for bf in brightnessFilters:
                 if bf not in searchPara:
                     continue
@@ -367,11 +366,17 @@ class transient_catalogue_crossmatch(object):
             - clip any useful text to docs mindmap
             - regenerate the docs and check redendering of this docstring
         """
+        from astrocalc.coords import separations
+        import time
+        from sherlock.catalogue_conesearch import catalogue_conesearch
+
         self.log.debug(
             'starting the ``angular_crossmatch_against_catalogue`` method')
 
         self.log.info("STARTING %s SEARCH" %
                       (search_name,))
+
+        search_name = search_name.lower()
 
         start_time = time.time()
 
@@ -396,10 +401,18 @@ class transient_catalogue_crossmatch(object):
         else:
             theseSearchPara = searchPara
 
+        semiMajorAxisOperator = False
+        if "and within semi major axis" in theseSearchPara and theseSearchPara["and within semi major axis"] == True:
+            semiMajorAxisOperator = True
+
         # EXTRACT PARAMETERS FROM ARGUMENTS & SETTINGS FILE
         if classificationType == "synonym":
-            radius = self.settings["synonym radius arcsec"]
+            if self.settings["synonym radius arcsec"] < theseSearchPara["angular radius arcsec"]:
+                radius = self.settings["synonym radius arcsec"]
+            else:
+                radius = theseSearchPara["angular radius arcsec"]
             matchedType = theseSearchPara["synonym"]
+
         elif classificationType == "association":
             radius = theseSearchPara["angular radius arcsec"]
             matchedType = theseSearchPara["association"]
@@ -441,8 +454,8 @@ class transient_catalogue_crossmatch(object):
             physicalSearch=physicalSearch,
             upperMagnitudeLimit=upperMagnitudeLimit,
             lowerMagnitudeLimit=lowerMagnitudeLimit,
-            magnitudeLimitFilter=magnitudeLimitFilter
-        )
+            magnitudeLimitFilter=magnitudeLimitFilter,
+            semiMajorAxisOperator=semiMajorAxisOperator)
 
         # catalogueMatches ARE ORDERED BY ANGULAR SEPARATION
         indices, catalogueMatches = cs.search()
@@ -513,6 +526,39 @@ class transient_catalogue_crossmatch(object):
                 magnitudeLimitFilter=searchPara["mag column"]
             )
 
+        galaxyDenyList = self.settings["ignore morphology list"]
+        galaxyDenyList = [g.replace(" ", "") for g in galaxyDenyList]
+
+        if "and within semi major axis" in theseSearchPara and theseSearchPara["and within semi major axis"] == True:
+            withinSMMatches = []
+            for row in catalogueMatches:
+
+                if ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.) or row["z_distance"]) and str(row["catalogue_object_id"]).replace(" ", "") not in galaxyDenyList:
+                    if row["sm_axis_arcsec"]:
+                        # FOR SOURCES > 10 arcmin IN SKY
+                        if row["sm_axis_arcsec"] < 10 * 60:
+                            sizeAdjustment = self.settings[
+                                "galaxy radius stretch factor"]
+                        elif row["sm_axis_arcsec"] < 100 * 60:
+                            sizeAdjustment = self.settings[
+                                "galaxy radius stretch factor"] * 0.7
+                        elif row["sm_axis_arcsec"] >= 100 * 60:
+                            sizeAdjustment = self.settings[
+                                "galaxy radius stretch factor"] * 0.5
+                            # print(row["sm_axis_arcsec"] * sizeAdjustment / 2. *
+                            #       self.settings["galaxy radius stretch factor"])
+                        if row["separationArcsec"] < row["sm_axis_arcsec"] / 2. * sizeAdjustment:
+                            withinSMMatches.append(row)
+                            row["search_name"] = row["search_name"] + \
+                                " (within %0.2f * semi-major axis)" % (
+                                    sizeAdjustment,)
+                            newAngularSep = row[
+                                "sm_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
+                    else:
+                        withinSMMatches.append(row)
+
+            catalogueMatches = withinSMMatches
+
         if "match nearest source only" in theseSearchPara and theseSearchPara["match nearest source only"] == True and len(catalogueMatches):
             nearestMatches = []
             transList = []
@@ -564,15 +610,22 @@ class transient_catalogue_crossmatch(object):
         self.log.debug(
             'starting the ``_annotate_crossmatch_with_value_added_parameters`` method')
 
-        redshift = None
-        z = None
-        scale = None
-        distance = None
-        distance_modulus = None
-        major_axis_arcsec = None
+        from astrocalc.distances import converter
+        import math
+
         direct_distance = None
         direct_distance_scale = None
         direct_distance_modulus = None
+        redshift = None
+        z = None
+        z_distance_scale = None
+        z_distance = None
+        z_distance_modulus = None
+        pz = None
+        pz_distance_scale = None
+        pz_distance = None
+        pz_distance_modulus = None
+        sm_axis_arcsec = None
 
         # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
         if 'z' in crossmatchDict:
@@ -590,12 +643,33 @@ class transient_catalogue_crossmatch(object):
 
             if dists:
                 z = dists['z']
-                scale = dists["da_scale"]
-                distance = dists["dl_mpc"]
-                distance_modulus = dists["dmod"]
+                z_distance_scale = dists["da_scale"]
+                z_distance = dists["dl_mpc"]
+                z_distance_modulus = dists["dmod"]
+
+        # IF THERE'S A REDSHIFT, CALCULATE PHYSICAL PARAMETERS
+        if 'photoZ' in crossmatchDict:
+            # THE CATALOGUE HAS A REDSHIFT COLUMN
+            pz = crossmatchDict['photoZ']
+        if pz and pz > 0.0:
+            # CALCULATE DISTANCE MODULUS, ETC
+            c = converter(log=self.log)
+            dists = c.redshift_to_distance(
+                z=pz,
+                WM=0.3,
+                WV=0.7,
+                H0=70.0
+            )
+
+            if dists:
+                pz = dists['z']
+                pz_distance_scale = dists["da_scale"]
+                pz_distance = dists["dl_mpc"]
+                pz_distance_modulus = dists["dmod"]
+
         # ADD MAJOR AXIS VALUE
-        if "or within semi major axis" in searchPara and searchPara["or within semi major axis"] == True and "semiMajor" in crossmatchDict and crossmatchDict["semiMajor"]:
-            major_axis_arcsec = crossmatchDict[
+        if "semiMajor" in crossmatchDict and crossmatchDict["semiMajor"]:
+            sm_axis_arcsec = crossmatchDict[
                 "semiMajor"] * self.colMaps[catalogueName]["semiMajorToArcsec"]
 
         if "semiMajor" in crossmatchDict:
@@ -603,14 +677,17 @@ class transient_catalogue_crossmatch(object):
         # ADD DISTANCE VALUES
         if "distance" in crossmatchDict and crossmatchDict["distance"]:
             direct_distance = crossmatchDict["distance"]
-            direct_distance_scale = old_div(direct_distance, 206.264806)
+            direct_distance_scale = direct_distance / 206.264806
             direct_distance_modulus = 5 * \
                 math.log10(direct_distance * 1e6) - 5
         # crossmatchDict['z'] = z
-        crossmatchDict['scale'] = scale
-        crossmatchDict['distance'] = distance
-        crossmatchDict['distance_modulus'] = distance_modulus
-        crossmatchDict['major_axis_arcsec'] = major_axis_arcsec
+        crossmatchDict['z_distance_scale'] = z_distance_scale
+        crossmatchDict['z_distance'] = z_distance
+        crossmatchDict['z_distance_modulus'] = z_distance_modulus
+        crossmatchDict['pz_distance_scale'] = pz_distance_scale
+        crossmatchDict['pz_distance'] = pz_distance
+        crossmatchDict['pz_distance_modulus'] = pz_distance_modulus
+        crossmatchDict['sm_axis_arcsec'] = sm_axis_arcsec
         crossmatchDict['direct_distance'] = direct_distance
         crossmatchDict['direct_distance_scale'] = direct_distance_scale
         crossmatchDict['direct_distance_modulus'] = direct_distance_modulus
@@ -631,9 +708,9 @@ class transient_catalogue_crossmatch(object):
         if crossmatchDict["direct_distance_scale"]:
             physical_separation_kpc = crossmatchDict[
                 "direct_distance_scale"] * crossmatchDict["separationArcsec"]
-        elif crossmatchDict["scale"]:
+        elif crossmatchDict["z_distance_scale"]:
             physical_separation_kpc = crossmatchDict[
-                "scale"] * crossmatchDict["separationArcsec"]
+                "z_distance_scale"] * crossmatchDict["separationArcsec"]
 
         crossmatchDict["physical_separation_kpc"] = physical_separation_kpc
 
@@ -732,11 +809,13 @@ class transient_catalogue_crossmatch(object):
         for row in matchedObjects:
             if not magnitudeLimitFilter or row[magnitudeLimitFilter] == None:
                 galaxyMatches.append(row)
+            elif not upperMagnitudeLimit and not lowerMagnitudeLimit:
+                galaxyMatches.append(row)
             else:
                 mag = decimal.Decimal(row[magnitudeLimitFilter])
                 if mag and mag < lowerMagnitudeLimit and mag > upperMagnitudeLimit:
                     sep = decimal.Decimal(row["separationArcsec"])
-                    if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal(old_div((decimal.Decimal(25.) - mag), decimal.Decimal(6.))))):
+                    if sep < decimal.Decimal(decimal.Decimal(10)**(decimal.Decimal((decimal.Decimal(25.) - mag) / decimal.Decimal(6.)))):
                         galaxyMatches.append(row)
 
         self.log.debug('completed the ``_galaxy_association_cuts`` method')
@@ -796,6 +875,8 @@ class transient_catalogue_crossmatch(object):
         self.log.debug(
             'starting the ``physical_separation_crossmatch_against_catalogue`` method')
 
+        import time
+
         start_time = time.time()
 
         bf = brightnessFilter
@@ -848,26 +929,26 @@ class transient_catalogue_crossmatch(object):
                 # BYPASS NED FAULTY AXES MEASUREMENTS:
                 # https://gist.github.com/search?utf8=%E2%9C%93&q=user%3Athespacedoctor+ned
                 # NOTE MAJOR AXIS IS A DIAMETER, NOT RADIUS
-                if row["major_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and row["catalogue_object_id"].replace(" ", "") not in galaxyDenyList:
+                if row["sm_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and row["catalogue_object_id"].replace(" ", "") not in galaxyDenyList:
                     # FOR SOURCES > 10 arcmin IN SKY
-                    if row["major_axis_arcsec"] < 10 * 60:
+                    if row["sm_axis_arcsec"] < 10 * 60:
                         sizeAdjustment = self.settings[
                             "galaxy radius stretch factor"]
-                    elif row["major_axis_arcsec"] < 100 * 60:
+                    elif row["sm_axis_arcsec"] < 100 * 60:
                         sizeAdjustment = self.settings[
                             "galaxy radius stretch factor"] * 0.7
-                    elif row["major_axis_arcsec"] >= 100 * 60:
+                    elif row["sm_axis_arcsec"] >= 100 * 60:
                         sizeAdjustment = self.settings[
                             "galaxy radius stretch factor"] * 0.5
-                        # print(row["major_axis_arcsec"] * sizeAdjustment / 2. *
+                        # print(row["sm_axis_arcsec"] * sizeAdjustment / 2. *
                         #       self.settings["galaxy radius stretch factor"])
-                    if row["separationArcsec"] < row["major_axis_arcsec"] / 2. * sizeAdjustment:
+                    if row["separationArcsec"] < row["sm_axis_arcsec"] / 2. * sizeAdjustment:
                         thisMatch = True
                         newsearch_name = newsearch_name + \
                             " (within %0.2f * semi-major axis)" % (
                                 sizeAdjustment,)
                         newAngularSep = row[
-                            "major_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
+                            "sm_axis_arcsec"] * self.settings["galaxy radius stretch factor"]
 
                 # NOW CHECK FOR A DIRECT DISTANCE MEASUREMENT
                 if row["direct_distance_scale"] and physical_separation_kpc < physicalRadius and thisMatch == False:
@@ -875,14 +956,14 @@ class transient_catalogue_crossmatch(object):
                         continue
                     thisMatch = True
                     newsearch_name = newsearch_name + " (direct distance)"
-                    newAngularSep = old_div(physicalRadius,
-                                            row["direct_distance_scale"])
+                    newAngularSep = physicalRadius / \
+                        row["direct_distance_scale"]
                 # NEW CHECK FOR A REDSHIFT DISTANCE
-                elif row["scale"] and physical_separation_kpc < physicalRadius:
+                elif row["z_distance_scale"] and physical_separation_kpc < physicalRadius and thisMatch == False:
                     thisMatch = True
                     newsearch_name = newsearch_name + " (redshift distance)"
-                    newAngularSep = old_div(physicalRadius, row["scale"])
-
+                    newAngularSep = physicalRadius / row["z_distance_scale"]
+                # FINALLY CHECK FOR A PHOTO-Z DISTANCE
                 if thisMatch == True:
                     row["physical_separation_kpc"] = physical_separation_kpc
                     row["original_search_radius_arcsec"] = newAngularSep

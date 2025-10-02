@@ -6,19 +6,8 @@
 :Author:
     David Young
 """
-from __future__ import print_function
+
 from ._base_importer import _base_importer
-from fundamentals.download import multiobject_download
-from astrocalc.coords import unit_conversion
-from docopt import docopt
-import re
-import requests
-import string
-import codecs
-import pickle
-import glob
-import readline
-import sys
 import os
 os.environ['TERM'] = 'vt100'
 
@@ -128,6 +117,10 @@ class ifs(_base_importer):
         """
         self.log.debug(
             'starting the ``_create_dictionary_of_IFS`` method')
+
+        from astrocalc.coords import unit_conversion
+        import requests
+        import sys
 
         # GRAB THE CONTENT OF THE IFS CSV
         try:

@@ -6,11 +6,10 @@
 :Author:
     David Young
 """
-import sys
+
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from fundamentals.mysql import readquery
+
 
 def get_crossmatch_catalogues_column_map(
         dbConn,
@@ -31,12 +30,12 @@ def get_crossmatch_catalogues_column_map(
 
     - ``dbConn`` -- the sherlock-catalogues database connection
     - ``log`` -- logger
-    
+
 
     **Return**
 
     - ``colMaps`` -- dictionary of dictionaries with the name of the database-view (e.g. `tcs_view_agn_milliquas_v4_5`) as the key and the column-name dictary map as value (`{view_name: {columnMap}}`).
-    
+
 
     **Usage**
 
@@ -49,9 +48,11 @@ def get_crossmatch_catalogues_column_map(
         dbConn=cataloguesDbConn
     )
     ```
-    
+
     """
     log.debug('starting the ``get_crossmatch_catalogues_column_map`` function')
+
+    from fundamentals.mysql import readquery
 
     # GRAB THE NAMES OF THE IMPORTANT COLUMNS FROM DATABASE
     sqlQuery = u"""

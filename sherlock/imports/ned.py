@@ -6,32 +6,15 @@
 :Author:
     David Young
 """
-from __future__ import print_function, division
-from ._base_importer import _base_importer
-from fundamentals.mysql import directory_script_runner, readquery, writequery
-from fundamentals.renderer import list_of_dictionaries
-from astrocalc.coords import unit_conversion
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
-from HMpTy.mysql import add_htm_ids_to_mysql_database_table
-from neddy import namesearch, conesearch
-from docopt import docopt
-from datetime import datetime, date, time
-import re
-import string
-import codecs
-import pickle
-import glob
-import readline
 
-from past.utils import old_div
-import sys
+from ._base_importer import _base_importer
 import os
 os.environ['TERM'] = 'vt100'
 
 
 class ned(_base_importer):
     """
-    *Using a list of coordinates, query the online* `NED <https://ned.ipac.caltech.edu/>`_ *database and import sources found within a given search radius of each of the loctions into the sherlock-catalogues database*
+    *Using a list of coordinates, query the online* `NED <https://ned.ipac.caltech.edu/>`_ *database and import sources found within a given search radius of each of the locations into the sherlock-catalogues database*
 
     The code:
 
@@ -106,6 +89,8 @@ class ned(_base_importer):
         """
         self.log.debug('starting the ``ingest`` method')
 
+        import sys
+
         if not self.radiusArcsec:
             self.log.error(
                 'please give a radius in arcsec with which to preform the initial NED conesearch' % locals())
@@ -164,6 +149,7 @@ class ned(_base_importer):
         )
 
         self._update_ned_query_history()
+
         self._download_ned_source_metadata()
 
         self.log.debug('completed the ``ingest`` method')
@@ -190,6 +176,7 @@ class ned(_base_importer):
 
         # GET THE NAMES (UNIQUE IDS) OF THE SOURCES WITHIN THE CONESEARCH FROM
         # NED
+        from neddy import conesearch
         names, searchParams = conesearch(
             log=self.log,
             radiusArcsec=self.radiusArcsec,
@@ -219,6 +206,11 @@ class ned(_base_importer):
             ```
         """
         self.log.debug('starting the ``_update_ned_query_history`` method')
+
+        from fundamentals.mysql import writequery
+        from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+        from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+        from astrocalc.coords import unit_conversion
 
         myPid = self.myPid
 
@@ -359,6 +351,8 @@ class ned(_base_importer):
         self.log.debug(
             'starting the ``_get_ned_sources_needing_metadata`` method')
 
+        from fundamentals.mysql import readquery
+
         tableName = self.dbTableName
 
         # SELECT THE DATA FROM NED TABLE
@@ -401,6 +395,11 @@ class ned(_base_importer):
         """
         self.log.debug(
             'starting the ``_do_ned_namesearch_queries_and_add_resulting_metadata_to_database`` method')
+
+        from fundamentals.mysql import writequery
+        from neddy import namesearch
+        from astrocalc.coords import unit_conversion
+        import sys
 
         # ASTROCALC UNIT CONVERTER OBJECT
         converter = unit_conversion(
@@ -517,6 +516,8 @@ class ned(_base_importer):
         self.log.debug(
             'starting the ``_count_ned_sources_in_database_requiring_metadata`` method')
 
+        from fundamentals.mysql import readquery
+
         tableName = self.dbTableName
 
         # sqlQuery = u"""
@@ -532,7 +533,7 @@ class ned(_base_importer):
             quiet=False
         )
         self.total = rows[0]["count"]
-        self.batches = int(old_div(self.total, 50000.)) + 1
+        self.batches = (self.total // 50000) + 1
 
         if self.total == 0:
             self.batches = 0

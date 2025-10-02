@@ -8,15 +8,8 @@
 
 :noindex:
 """
-from builtins import zip
-from builtins import object
-import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from astrocalc.coords import unit_conversion
-from HMpTy.mysql import conesearch as hmptyConesearch
-import copy
 
 
 class catalogue_conesearch(object):
@@ -27,18 +20,17 @@ class catalogue_conesearch(object):
 
     - ``dbConn`` -- mysql database connection to the catalogues database
     - ``log`` -- logger
-    - ``ra`` -- ra of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
-    - ``dec`` -- dec of transient location (sexegesimal or decimal degrees, J2000, single location or list of locations)
+    - ``ra`` -- ra of transient location (sexagesimal or decimal degrees, J2000, single location or list of locations)
+    - ``dec`` -- dec of transient location (sexagesimal or decimal degrees, J2000, single location or list of locations)
     - ``tableName`` -- the name of the database table to perform the conesearch on
     - ``radius`` -- radius of the conesearch to perform (arcsec)
     - ``colMaps`` -- maps of the important column names for each table/view in the crossmatch-catalogues database
     - ``nearestOnly`` -- return only the nearest object. Default *False*
     - ``physicalSearch`` -- is this a physical search, so only return matches with distance information. Default *False*
-    - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
-
-
-        - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is requird with the conesearch. Default *False*
-        - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if requird. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
+    - ``upperMagnitudeLimit`` -- the upper magnitude limit if a magnitude cut is required with the conesearch. Default *False*
+    - ``lowerMagnitudeLimit`` -- the lower magnitude limit if a magnitude cut is required with the conesearch. Default *False*
+    - ``magnitudeLimitFilter`` -- the filter to use for the magnitude limit if required. Default *False*, ("_u"|"_g"|"_r"|"_i"|"_z"|"_y"|"U"|"B"|"V"|"R"|"I"|"Z"|"J"|"H"|"K"|"G")
+    - ``semiMajorAxisOperator`` -- the semi-major axis operator in use.
 
     **Usage**
 
@@ -48,7 +40,7 @@ class catalogue_conesearch(object):
 
         - update the package tutorial if needed
 
-    The following examples assume you've connected to the various databases and generated the catalogue column maps in the following menner:
+    The following examples assume you've connected to the various databases and generated the catalogue column maps in the following manner:
 
     ```python
     # SETUP ALL DATABASE CONNECTIONS
@@ -96,7 +88,7 @@ class catalogue_conesearch(object):
     [{'R': 20.1, 'cmSepArcsec': 0.28015184686564643, 'ra': 345.2832267, 'catalogue_object_subtype': u'QR', 'z': 0.777, 'dec': -1.9679629, 'catalogue_object_id': u'PKS 2258-022'}]        
     ```
 
-    Note ``catalogue_conesearch`` can accept coordinates in sexegesimal or decimal degrees (J200). It can also accept lists of corrdinates:
+    Note ``catalogue_conesearch`` can accept coordinates in sexagesimal or decimal degrees (J200). It can also accept lists of coordinates:
 
     ```python
     from sherlock import catalogue_conesearch
@@ -155,8 +147,12 @@ class catalogue_conesearch(object):
             physicalSearch=False,
             upperMagnitudeLimit=False,
             lowerMagnitudeLimit=False,
-            magnitudeLimitFilter=False
+            magnitudeLimitFilter=False,
+            semiMajorAxisOperator=False
     ):
+
+        from astrocalc.coords import unit_conversion
+
         self.log = log
         log.debug("instansiating a new 'conesearcher' object")
         self.dbConn = dbConn
@@ -168,6 +164,7 @@ class catalogue_conesearch(object):
         self.upperMagnitudeLimit = upperMagnitudeLimit
         self.lowerMagnitudeLimit = lowerMagnitudeLimit
         self.magnitudeLimitFilter = magnitudeLimitFilter
+        self.semiMajorAxisOperator = semiMajorAxisOperator
         # xt-self-arg-tmpx
 
         # CONVERT RA AND DEC TO DEGREES
@@ -209,7 +206,7 @@ class catalogue_conesearch(object):
 
         **Return**
 
-        - ``matchIndies`` -- the indicies of the input transient sources (syncs with ``uniqueMatchDicts``)
+        - ``matchIndices`` -- the indices of the input transient sources (syncs with ``uniqueMatchDicts``)
         - ``uniqueMatchDicts`` -- the crossmatch results
 
 
@@ -226,15 +223,20 @@ class catalogue_conesearch(object):
             - update docstring text
             - check sublime snippet exists
             - clip any useful text to docs mindmap
-            - regenerate the docs and check redendering of this docstring
+            - regenerate the docs and check rerendering of this docstring
         """
         self.log.debug('starting the ``search`` method')
+
+        from HMpTy.mysql import conesearch as hmptyConesearch
+        import copy
 
         # ACCOUNT FOR TYPE OF SEARCH
         sqlWhere = False
         magnitudeLimitFilter = self.magnitudeLimitFilter
         disCols = ["zColName",
-                   "distanceColName", "semiMajorColName"]
+                   "distanceColName"]
+        if "_big_" not in self.tableName.lower() and self.semiMajorAxisOperator:
+            disCols.append("semiMajorColName")
         sqlWhere = ""
 
         if self.physicalSearch == True:
@@ -269,6 +271,10 @@ class catalogue_conesearch(object):
                 columns[k] = "`%(v)s` as `%(name)s`" % locals()
         columns = ", ".join(list(columns.values()))
 
+        htmColumns = ["htm10ID", "htm13ID", "htm16ID"]
+        if "ned_d_" in self.tableName.lower():
+            htmColumns = ["htm07ID", "htm10ID", "htm13ID", "htm16ID"]
+
         cs = hmptyConesearch(
             log=self.log,
             dbConn=self.dbConn,
@@ -282,15 +288,16 @@ class catalogue_conesearch(object):
             sqlWhere=sqlWhere,
             closest=self.nearestOnly,
             raCol="ra",
-            decCol="dec"
+            decCol="dec",
+            htmColumns=htmColumns
         )
-        matchIndies, matches = cs.search()
+        matchIndices, matches = cs.search()
 
         # MATCH ARE NOT NECESSARILY UNIQUE IF MANY TRANSIENT MATCH ONE SOURCE
         uniqueMatchDicts = []
         uniqueMatchDicts[:] = [copy.copy(d) for d in matches.list]
 
         self.log.debug('completed the ``search`` method')
-        return matchIndies, uniqueMatchDicts
+        return matchIndices, uniqueMatchDicts
 
     # xt-class-method
