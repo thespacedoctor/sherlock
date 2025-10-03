@@ -367,6 +367,9 @@ class transient_classifier(object):
                     transientsMetadataList=transientsMetadataList
                 )
 
+            if miniBatchSize < self.miniBatchSize:
+                miniBatchSize = self.miniBatchSize
+
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList)
             batches = int((float(total) / float(miniBatchSize)))
@@ -377,9 +380,6 @@ class transient_classifier(object):
             start = 0
             end = 0
             theseBatches = []
-
-            if miniBatchSize < self.miniBatchSize:
-                miniBatchSize = self.miniBatchSize
 
             for i in range(batches):
                 end = end + miniBatchSize
