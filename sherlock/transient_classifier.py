@@ -184,7 +184,7 @@ class transient_classifier(object):
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
         self.cpuCount = psutil.cpu_count()-1
 
-        self.miniBatchSize = 2500
+        self.miniBatchSize = 1000
 
         # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
         if self.ra and self.dec:
