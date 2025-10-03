@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v3.0.1 October 3, 2025** 
+
+* **REFACTOR**: small optimisation
+
 **v3.0 October 2, 2025** 
 
 * **ENHANCEMENT**: 'distance' has been removed from Sherlock's outputs and replaced with 'best_distance', 'best_distance_flag' and 'best_distance_source'. 'distance' was calculated from the spectroscopic redshift (luminosity distance), but this was not clear to the end-user. Sherlock now processes through a distance measurement list for each transient and reports a single 'best_distance' in Mpc. From best to worst, this list is direct distance (redshift independent), spectroscopic redshift (converted to Mpc), and photometric redshift (converted to Mpc). A 'best_distance_flag' indicates how the best distance is derived (`dd`, `sz`, `pz`). The 'best_distance_source' reveals which catalogue is to blame for the distance measurement.
