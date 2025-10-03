@@ -2039,7 +2039,12 @@ END""" % locals())
                 dec=match["decDeg"],
                 delimiter=""
             )
-            betterName = "SDSS J" + ra[0:9] + dec[0:9]
+            # 2025-07-17 KWS Added a quick workaround for when the ra or dec are not parseable.
+            try:
+                betterName = "SDSS J" + ra[0:9] + dec[0:9]
+            except TypeError as e:
+                print("ERROR", ra, dec, objectId)
+                betterName = ''
             objectId = '''<a href="%(objectId)s">%(betterName)s</a>''' % locals()
         elif "milliquas" in catalogue.lower():
             thisName = objectId
