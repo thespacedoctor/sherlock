@@ -182,7 +182,7 @@ class transient_classifier(object):
         self.cataloguesDbConn = dbConns["catalogues"]
 
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
-        self.cpuCount = min(32, psutil.cpu_count()-1)
+        self.cpuCount = psutil.cpu_count()-1
 
         self.miniBatchSize = 2500
 
