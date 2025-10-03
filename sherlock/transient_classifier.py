@@ -182,9 +182,9 @@ class transient_classifier(object):
         self.cataloguesDbConn = dbConns["catalogues"]
 
         # SIZE OF BATCHES TO SPLIT TRANSIENT INTO BEFORE CLASSIFYING
-        self.cpuCount = psutil.cpu_count()
+        self.cpuCount = psutil.cpu_count()-1
+
         self.miniBatchSize = 2500
-        self.largeBatchSize = self.cpuCount * self.miniBatchSize
 
         # IS SHERLOCK CLASSIFIER BEING QUERIED FROM THE COMMAND-LINE?
         if self.ra and self.dec:
@@ -192,6 +192,8 @@ class transient_classifier(object):
             if not self.name:
                 self.name = "Transient"
             self.largeBatchSize = len(self.ra)
+        else:
+            self.largeBatchSize = self.cpuCount * self.miniBatchSize
 
         # CHECK INPUT TYPES
         if not isinstance(self.ra, list) and not isinstance(self.ra, bool) and not isinstance(self.ra, float) and not isinstance(self.ra, str):
@@ -269,9 +271,10 @@ class transient_classifier(object):
         import time
         start_time = time.time()
 
-        miniBatchSize = self.miniBatchSize
-
         while remaining:
+
+            miniBatchSize = int(
+                (self.largeBatchSize) / (self.cpuCount))
 
             # IF A TRANSIENT HAS NOT BEEN PASSED IN VIA THE COMMAND-LINE, THEN
             # QUERY THE TRANSIENT DATABASE
@@ -296,6 +299,9 @@ class transient_classifier(object):
                     remaining = rows[0]["count(*)"]
                 else:
                     remaining = remaining - self.largeBatchSize
+
+                if remaining <= self.largeBatchSize:
+                    miniBatchSize = int((remaining) / (self.cpuCount))
 
                 print(
                     "%(remaining)s transient sources requiring a classification remain" % locals())
@@ -361,9 +367,12 @@ class transient_classifier(object):
                     transientsMetadataList=transientsMetadataList
                 )
 
+            if miniBatchSize < self.miniBatchSize:
+                miniBatchSize = self.miniBatchSize
+
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList)
-            batches = int((float(total) / float(miniBatchSize)) + 1.)
+            batches = int((float(total) / float(miniBatchSize)))
 
             if batches == 0:
                 batches = 1
@@ -371,6 +380,7 @@ class transient_classifier(object):
             start = 0
             end = 0
             theseBatches = []
+
             for i in range(batches):
                 end = end + miniBatchSize
                 start = i * miniBatchSize
