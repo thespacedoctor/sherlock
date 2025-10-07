@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v3.0.2 October 7, 2025** 
+
+* **FIXED**: Adding minimum versions of some dependencies.
+
 **v3.0.1 October 3, 2025** 
 
 * **REFACTOR**: small optimisation
