@@ -13,10 +13,10 @@ def readme():
 install_requires = [
     'pyyaml',
     'qub-sherlock',
-    'fundamentals',
-    'astrocalc',
+    'fundamentals >= 2.7.7',
+    'astrocalc >= 0.4.6',
     'neddy',
-    'HMpTy',
+    'HMpTy >= 1.8.0',
     'pymysql',
     'psutil',
     'sloancone',
