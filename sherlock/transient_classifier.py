@@ -1114,6 +1114,13 @@ class transient_classifier(object):
             distinctMatches.append(mergedMatch)
 
         crossmatches = []
+        # RANK THE DISTINCT MATCHES - LOWER RANK SCORE = BETTER MATCH
+        # RANKING LOGIC:
+        # 1) CLASSIFICATION RELIABILITY (3,2,1)
+        # 2) ASSOCIATION TYPE (SN,NT,AGN,CV,VS,BS)
+        # 3) PHYSICAL SEPARATION (IF AVAILABLE)
+        # 4) ANGULAR SEPARATION
+        # 5) BRIGHTNESS (IF AVAILABLE)
         for xm, gm in zip(distinctMatches, groupedMatches):
             angular_separation_penalty = min(
                 xm["separationArcsec"] / 60, 100)            # SPEC-Z GALAXIES
@@ -1123,18 +1130,18 @@ class transient_classifier(object):
                     (50 - (xm["physical_separation_kpc"])) + \
                     angular_separation_penalty
             # PHOTO-Z GALAXIES
-            elif (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["association_type"] == "SN"):
+            elif (xm["physical_separation_kpc"] is not None and xm["physical_separation_kpc"] != "null" and xm["association_type"] == ["SN", "NT", "AGN"]):
                 # print(xm["catalogue_object_id"], 2)
                 rankScore = xm["classificationReliability"] * 1000 + 5 - \
                     (50 - (xm["physical_separation_kpc"])) + \
                     angular_separation_penalty
             # NOT SPEC-Z, NON PHOTO-Z GALAXIES & PHOTO-Z GALAXIES
-            elif (xm["association_type"] == "SN"):
+            elif (xm["association_type"] in ["SN", "NT", "AGN"]):
                 # print(xm["catalogue_object_id"], 3)
                 rankScore = xm["classificationReliability"] * \
-                    1000 + 5. + angular_separation_penalty
+                    1000 + 2. + angular_separation_penalty
             # VS
-            elif (xm["association_type"] == "VS"):
+            elif (xm["association_type"] in ["CV", "VS"]):
                 # print(xm["catalogue_object_id"], 4)
                 rankScore = xm["classificationReliability"] * \
                     1000 + xm["separationArcsec"] + 2.
