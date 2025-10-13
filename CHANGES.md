@@ -1,6 +1,10 @@
 
 ## Release Notes
 
+**v3.0.3 October 13, 2025**
+
+* **FIXED**: fixed a ranking error when comparing a VS classification against a nearby NT (NT should win).
+
 **v3.0.2 October 7, 2025** 
 
 * **FIXED**: Adding minimum versions of some dependencies.
