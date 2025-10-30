@@ -527,13 +527,18 @@ class transient_catalogue_crossmatch(object):
             )
 
         galaxyDenyList = self.settings["ignore morphology list"]
-        galaxyDenyList = [g.replace(" ", "") for g in galaxyDenyList]
+        galaxyDenyList = [str(g).replace(" ", "") for g in galaxyDenyList]
+        notDenied = []
+        for row in catalogueMatches:
+            if str(row["catalogue_object_id"]).replace(" ", "") not in galaxyDenyList:
+                notDenied.append(row)
+        catalogueMatches = notDenied
 
         if "and within semi major axis" in theseSearchPara and theseSearchPara["and within semi major axis"] == True:
             withinSMMatches = []
             for row in catalogueMatches:
 
-                if ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.) or row["z_distance"]) and str(row["catalogue_object_id"]).replace(" ", "") not in galaxyDenyList:
+                if ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.) or row["z_distance"]) and str(row["catalogue_object_id"]).replace(" ", ""):
                     if row["sm_axis_arcsec"]:
                         # FOR SOURCES > 10 arcmin IN SKY
                         if row["sm_axis_arcsec"] < 10 * 60:
@@ -919,7 +924,13 @@ class transient_catalogue_crossmatch(object):
         # OK - WE HAVE SOME ANGULAR SEPARATION MATCHES. NOW SEARCH THROUGH THESE FOR MATCHES WITH
         # A PHYSICAL SEPARATION WITHIN THE PHYSICAL RADIUS.
         galaxyDenyList = self.settings["ignore morphology list"]
-        galaxyDenyList = [g.replace(" ", "") for g in galaxyDenyList]
+        galaxyDenyList = [str(g).replace(" ", "") for g in galaxyDenyList]
+        notDenied = []
+        for row in catalogueMatches:
+            if str(row["catalogue_object_id"]).replace(" ", "") not in galaxyDenyList:
+                notDenied.append(row)
+        catalogueMatches = notDenied
+
         if catalogueMatches:
             for row in catalogueMatches:
                 thisMatch = False
@@ -929,7 +940,7 @@ class transient_catalogue_crossmatch(object):
                 # BYPASS NED FAULTY AXES MEASUREMENTS:
                 # https://gist.github.com/search?utf8=%E2%9C%93&q=user%3Athespacedoctor+ned
                 # NOTE MAJOR AXIS IS A DIAMETER, NOT RADIUS
-                if row["sm_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and row["catalogue_object_id"].replace(" ", "") not in galaxyDenyList:
+                if row["sm_axis_arcsec"] and ("ned" not in search_name or (row["unkMag"] and row["unkMag"] < 20.)) and row["catalogue_object_id"].replace(" ", ""):
                     # FOR SOURCES > 10 arcmin IN SKY
                     if row["sm_axis_arcsec"] < 10 * 60:
                         sizeAdjustment = self.settings[
