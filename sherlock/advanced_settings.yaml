@@ -12,8 +12,8 @@ ned stream search radius arcec: 900
 first pass ned search radius arcec: 240
 ned stream refresh rate in days: 180
 # THERE IS SOME ADJUSTMENT IN MANY CODE FOR ANGULARLY LARGE GALAXIES
-galaxy radius stretch factor: 1.5
-synonym radius arcsec: 1.5
+galaxy radius stretch factor: 2.5
+synonym radius arcsec: 0.5
 
 
 ignore morphology list:
@@ -22,6 +22,7 @@ ignore morphology list:
     - Sagittarius Dwarf Spheroidal
     - SDSSJ093558.42+055602.5
     - CFN1064
+    - 1237663531875827788
 
 search algorithm:
     ###### UNCLEAR OBJECT SEARCHES
@@ -29,32 +30,32 @@ search algorithm:
         database table: tcs_view_unclear_ps1_dr1
         general:
             angular radius arcsec: 1.5
-            synonym: UNCLEAR
+            association: UNCLEAR
     DESI LS DR10 unclear: 
         database table: tcs_view_unclear_desi_legacy_dr10
         general:
             angular radius arcsec: 1.5
-            synonym: UNCLEAR
+            association: UNCLEAR
     SDSS DR12 unclear: 
         database table: tcs_view_unclear_sdss_photo_stars_galaxies_dr12
         general:
             angular radius arcsec: 1.5
-            synonym: UNCLEAR
+            association: UNCLEAR
     NED unclear:
         database table: tcs_view_unclear_ned_stream
         general:
             angular radius arcsec: 1.5
-            synonym: UNCLEAR
+            association: UNCLEAR
     GSC unclear:
         database table: tcs_view_unclear_guide_star_catalogue_v2_3
         general:
             angular radius arcsec: 1.5
-            synonym: UNCLEAR
+            association: UNCLEAR
     2MASS unclear:
         database table: tcs_view_unclear_2mass_psc_final
         general:
             angular radius arcsec: 1.5
-            synonym: UNCLEAR
+            association: UNCLEAR
     #### BRIGHT STAR SEARCHES
     # PS1 bright stars:
     #     database table: tcs_view_bright_star_ps1_dr1
@@ -92,31 +93,37 @@ search algorithm:
         general:
             angular radius arcsec: 1.5
             synonym: VS
+            association: VS
     DESI LS stars:
         database table: tcs_view_star_desi_legacy_dr10
         general:
             angular radius arcsec: 1.5
             synonym: VS
+            association: VS
     gaia stars:
         database table: tcs_view_star_gaia_dr3
         general:
             angular radius arcsec: 1.5
             synonym: VS
+            association: VS
     GSC v2.3 stars:
         database table: tcs_view_star_guide_star_catalogue_v2_3
         general:
             angular radius arcsec: 1.5
             synonym: VS
+            association: VS
     PS1 stars:
         database table: tcs_view_star_ps1_dr1
         general:
             angular radius arcsec: 1.5
             synonym: VS
+            association: VS
     SDSS dr12 stars:
         database table: tcs_view_star_sdss_photo_stars_galaxies_dr12
         general:
             angular radius arcsec: 1.5
             synonym: VS
+            association: VS
     ###### PHYSICAL GALAXY SEARCHES
     NED-D spec super big galaxies:
         # SUPER BIG > 2 ARCMIN
@@ -212,7 +219,6 @@ search algorithm:
         general:
             angular radius arcsec: 10.
             and within semi major axis: True
-            synonym: NT
             association: SN
     NED phot galaxy-like:
         database table: tcs_view_galaxy_like_ned_stream
@@ -224,33 +230,28 @@ search algorithm:
         general:
             angular radius arcsec: 10.
             and within semi major axis: True
-            synonym: NT
             association: SN
     2mass galaxies:
         database table: tcs_view_galaxy_2mass_xsc_final
         general:
             angular radius arcsec: 10.
             association: SN
-            synonym: NT
     SDSS phot galaxies:
         database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
         general:
             angular radius arcsec: 10.
             association: SN
-            synonym: NT
     GSC v2.3 galaxies:
         database table: tcs_view_galaxy_guide_star_catalogue_v2_3
         general:
             angular radius arcsec: 20.
             and within semi major axis: True
-            synonym: NT
             association: SN
     DESI LS galaxies:
         database table: tcs_view_galaxy_desi_legacy_dr10
         general:
             angular radius arcsec: 20.0
             and within semi major axis: True
-            synonym: NT
             association: SN
 
     #### AGN
