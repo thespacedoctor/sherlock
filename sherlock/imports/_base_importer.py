@@ -229,6 +229,7 @@ class _base_importer(object):
             declColName=self.declColName,
             tableName=self.dbTableName,
             dbConn=self.cataloguesDbConn,
+            batchSize=500000,
             log=self.log,
             primaryIdColumnName=self.primaryIdColumnName,
             dbSettings=self.settings["database settings"]["static catalogues"]

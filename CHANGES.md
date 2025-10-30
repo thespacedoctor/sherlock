@@ -1,6 +1,14 @@
 
 ## Release Notes
 
+**v3.0.4 October 30, 2025**
+
+* **REFACTOR**: Increasing the 'galaxy stretch factor" from 1.5 to 2.5. This increases the catch radius for galaxies with shape parameters. Some SN on the edges of their galaxies were not getting associated.
+* **REFACTOR**: Removing synonym matching from typical, photometry-only (no distance) galaxy searches (too many transients incorrectly flagged as NT). Transients in the core of angularly large galaxies and galaxies with a distance measurement still get an NT classification.
+* **REFACTOR**: Default synonym radius reduced from 1.5" to 0.5".
+* **REFACTOR**: Revised UNCLEAR classifications from synonym to association. This enables more certain classifications to rise to the top of the ranking algorithm.
+* **REFACTOR**: updated the 'denied galaxy' code to exclude individually flagged bad catalogue data.
+
 **v3.0.3 October 13, 2025**
 
 * **FIXED**: fixed a ranking error when comparing a VS classification against a nearby NT (NT should win).
