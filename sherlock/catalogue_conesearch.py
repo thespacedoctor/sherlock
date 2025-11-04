@@ -272,7 +272,7 @@ class catalogue_conesearch(object):
         columns = ", ".join(list(columns.values()))
 
         htmColumns = ["htm10ID", "htm13ID", "htm16ID"]
-        if "ned_d_" in self.tableName.lower():
+        if "ned" in self.tableName.lower():
             htmColumns = ["htm07ID", "htm10ID", "htm13ID", "htm16ID"]
 
         cs = hmptyConesearch(
