@@ -1,6 +1,11 @@
 
 ## Release Notes
 
+
+**v3.0.5 November 4, 2025**
+
+* **FIXED**: fixed bug where last batch of transients all got ORPHAN classification
+
 **v3.0.4 October 30, 2025**
 
 * **REFACTOR**: Increasing the 'galaxy stretch factor" from 1.5 to 2.5. This increases the catch radius for galaxies with shape parameters. Some SN on the edges of their galaxies were not getting associated.
