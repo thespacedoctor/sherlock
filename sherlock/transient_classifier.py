@@ -8,6 +8,7 @@
 """
 
 import os
+import sys
 os.environ['TERM'] = 'vt100'
 
 # theseBatches = []
@@ -253,6 +254,7 @@ class transient_classifier(object):
         from random import randint
         global theseBatches
         global crossmatchArray
+        import math
 
         self.log.debug('starting the ``classify`` method')
 
@@ -372,7 +374,7 @@ class transient_classifier(object):
 
             # SOME TESTING SHOWED THAT 25 IS GOOD
             total = len(transientsMetadataList)
-            batches = int((float(total) / float(miniBatchSize)))
+            batches = math.ceil((float(total) / float(miniBatchSize)))
 
             if batches == 0:
                 batches = 1
@@ -421,6 +423,7 @@ class transient_classifier(object):
                 batch = []
                 if len(sublist) != 0:
                     transientId = sublist[0]['transient_object_id']
+
                     for s in sublist:
                         if s['transient_object_id'] != transientId:
                             # RANK TRANSIENT CROSSMATCH BATCH
