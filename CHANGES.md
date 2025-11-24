@@ -1,6 +1,11 @@
 
 ## Release Notes
 
+**v3.0.6 November 24, 2025**
+
+* **FEATURE**: Added code to calculate e Direct Light Radius for galaxies with morphology info (not switched on by default yet)
+* **REFACTOR**: Guide Star Catalogue v2.3 has been retired from the default Sherlock search algorithm.
+* **REFACTOR**: Change the default synonym radius from 0.5 to 1.2 arcsec
 
 **v3.0.5 November 4, 2025**
 

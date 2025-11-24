@@ -79,6 +79,11 @@ class transient_catalogue_crossmatch(object):
         self.transients = transients
         self.colMaps = colMaps
 
+        if "dlr_testing" in settings and settings["dlr_testing"] == True:
+            self.dlr_testing = True
+        else:
+            self.dlr_testing = False
+
         if dbSettings:
             self.dbConn = database(
                 log=self.log,
@@ -535,6 +540,15 @@ class transient_catalogue_crossmatch(object):
         catalogueMatches = notDenied
 
         if "and within semi major axis" in theseSearchPara and theseSearchPara["and within semi major axis"] == True:
+
+            if self.dlr_testing:
+                import random
+                random.seed(42)  # Set a seed for reproducibility
+                random_values = [(random.uniform(4, 12), random.uniform(
+                    0.2, 4), random.uniform(0, 360)) for _ in catalogueMatches]
+                for row, (smaj, smin, pos_ang) in zip(catalogueMatches, random_values):
+                    row['smaj_arcsec'], row['smin_arcsec'], row['pos_ang'] = smaj, smin, pos_ang
+
             withinSMMatches = []
             for row in catalogueMatches:
 
