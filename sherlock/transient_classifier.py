@@ -2258,9 +2258,160 @@ def _crossmatch_transients_against_catalogues(
     )
     crossmatches = cm.match()
 
+    if "dlr_testing" in settings and settings["dlr_testing"] and True:
+        # crossmatches = add_DLR(crossmatches)
+        crossmatches = add_DLR2(crossmatches)
+
     dbConn.close()
 
     log.debug(
         'completed the ``_crossmatch_transients_against_catalogues`` method')
 
     return crossmatches
+
+
+def add_DLR(catalogueMatches):
+    """*Calculate the Directional Light Radius*
+
+    **Key Arguments:**
+
+    - `catalogueMatches` -- a list of dictionaries containing catalogue match information, including semi-major axis, semi-minor axis, position angle, and offsets in RA and Dec.
+
+    **Usage:**
+
+    ```eval_rst
+    .. todo::
+
+            add usage info
+            create a sublime snippet for usage
+    ```
+
+    ```python
+    usage code 
+    ```           
+    """
+    import numpy as np
+
+    import pandas as pd
+    # CREATE DATA FRAME FROM A DICTIONARY OF LISTS
+    df = pd.DataFrame(catalogueMatches)
+
+    from tabulate import tabulate
+    # Convert columns to float
+    columns_to_convert = ['smaj_arcsec', 'smin_arcsec', 'pos_ang', 'eastSeparationArcsec',
+                          'northSeparationArcsec', 'separationArcsec']
+
+    df[columns_to_convert] = df[columns_to_convert].astype('float64')
+    df['separationArcsec'] = df['separationArcsec'].round(4)
+
+    # print(tabulate(df[columns_to_convert], headers='keys', tablefmt='psql'))
+    tmpColumns = ['theta', 'costheta', 'sintheta',
+                  'a2', 'b2', 'cxx', 'cyy', 'cxy']
+    for col in tmpColumns:
+        df[col] = np.nan
+
+    # ADD DLR AND DDLR COLUMNS - KEEP THEM LATER
+    df["dlr"] = np.nan
+    df["ddlr"] = np.nan
+
+    # FILTER TO ROWS WITH THE REQUIRED DATA
+    mask = (df['smaj_arcsec'].notnull()) & (
+        df['smin_arcsec'].notnull()) & (df['pos_ang'].notnull())
+
+    # CALCULATE DLR AND DDLR
+    df.loc[mask, 'theta'] = np.radians(df.loc[mask, 'pos_ang'])
+    df.loc[mask, 'costheta'] = np.cos(df.loc[mask, 'theta'])
+    df.loc[mask, 'sintheta'] = np.sin(df.loc[mask, 'theta'])
+    df.loc[mask, 'a2'] = df.loc[mask, 'smaj_arcsec'].pow(2)
+    df.loc[mask, 'b2'] = df.loc[mask, 'smin_arcsec'].pow(2)
+    df.loc[mask, 'cxx'] = (df.loc[mask, 'costheta'].pow(2)) / \
+        df.loc[mask, 'a2'] + \
+        (df.loc[mask, 'sintheta'].pow(2)) / df.loc[mask, 'b2']
+    df.loc[mask, 'cyy'] = (df.loc[mask, 'sintheta'].pow(2)) / \
+        df.loc[mask, 'a2'] + \
+        (df.loc[mask, 'costheta'].pow(2)) / df.loc[mask, 'b2']
+    df.loc[mask, 'cxy'] = 2 * df.loc[mask, 'costheta'] * \
+        df.loc[mask, 'sintheta'] * \
+        (1 / df.loc[mask, 'a2'] - 1 / df.loc[mask, 'b2'])
+    df.loc[mask, 'ddlr'] = np.sqrt(df.loc[mask, 'cxx'] * (df.loc[mask, 'eastSeparationArcsec'].pow(2)) + df.loc[mask, 'cyy'] * (
+        df.loc[mask, 'northSeparationArcsec'].pow(2)) + df.loc[mask, 'cxy'] * df.loc[mask, 'eastSeparationArcsec'] * df.loc[mask, 'northSeparationArcsec'])
+    df.loc[mask, 'dlr'] = df.loc[mask, 'separationArcsec'] / \
+        df.loc[mask, 'ddlr']
+    # CHANGE THE PRECISION OF THE DLR VALUE
+    df.loc[mask, 'dlr'] = df.loc[mask, 'dlr'].round(3)
+    df.loc[mask, 'ddlr'] = df.loc[mask, 'ddlr'].round(3)
+
+    # REMOVE TEMPORARY COLUMNS
+    df = df.drop(columns=tmpColumns)
+
+    return df.to_dict('records')
+
+
+def add_DLR2(catalogueMatches):
+    """*Calculate the Directional Light Radius*
+
+    **Key Arguments:**
+
+    - `catalogueMatches` -- a list of dictionaries containing catalogue match information, including semi-major axis, semi-minor axis, position angle, and offsets in RA and Dec.
+
+    **Usage:**
+
+    ```eval_rst
+    .. todo::
+
+            add usage info
+            create a sublime snippet for usage
+    ```
+
+    ```python
+    usage code 
+    ```           
+    """
+    import numpy as np
+
+    import pandas as pd
+    # CREATE DATA FRAME FROM A DICTIONARY OF LISTS
+    df = pd.DataFrame(catalogueMatches)
+
+    from tabulate import tabulate
+    # Convert columns to float
+    columns_to_convert = ['smaj_arcsec', 'smin_arcsec', 'pos_ang', 'eastSeparationArcsec',
+                          'northSeparationArcsec', 'separationArcsec']
+
+    df[columns_to_convert] = df[columns_to_convert].astype('float64')
+    df['separationArcsec'] = df['separationArcsec'].round(4)
+
+    # print(tabulate(df[columns_to_convert], headers='keys', tablefmt='psql'))
+    tmpColumns = ['theta', 'numerator', 'denominator']
+    for col in tmpColumns:
+        df[col] = np.nan
+
+    # ADD DLR AND DDLR COLUMNS - KEEP THEM LATER
+    df["dlr"] = np.nan
+    df["ddlr"] = np.nan
+
+    # FILTER TO ROWS WITH THE REQUIRED DATA
+    mask = (df['smaj_arcsec'].notnull()) & (
+        df['smin_arcsec'].notnull()) & (df['pos_ang'].notnull())
+
+    # CALCULATE DLR AND DDLR
+    df.loc[mask, 'numerator'] = df.loc[mask,
+                                       'smaj_arcsec'] * df.loc[mask, 'smin_arcsec']
+
+    df.loc[mask, 'theta'] = np.arctan2(df.loc[mask, 'northSeparationArcsec'],
+                                       df.loc[mask, 'eastSeparationArcsec']) - np.radians(df.loc[mask, 'pos_ang'])
+    df.loc[mask, 'denominator'] = np.sqrt((df.loc[mask, 'smaj_arcsec'] * np.sin(
+        df.loc[mask, 'theta']))**2 + (df.loc[mask, 'smin_arcsec'] * np.cos(df.loc[mask, 'theta']))**2)
+    df.loc[mask, 'dlr'] = df.loc[mask, 'numerator'] / \
+        df.loc[mask, 'denominator']
+    df.loc[mask, 'ddlr'] = df.loc[mask,
+                                  'separationArcsec'] / df.loc[mask, 'dlr']
+
+    # CHANGE THE PRECISION OF THE DLR VALUE
+    df.loc[mask, 'dlr'] = df.loc[mask, 'dlr'].round(3)
+    df.loc[mask, 'ddlr'] = df.loc[mask, 'ddlr'].round(3)
+
+    # REMOVE TEMPORARY COLUMNS
+    df = df.drop(columns=tmpColumns)
+
+    return df.to_dict('records')

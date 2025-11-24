@@ -13,8 +13,9 @@ first pass ned search radius arcec: 240
 ned stream refresh rate in days: 180
 # THERE IS SOME ADJUSTMENT IN MANY CODE FOR ANGULARLY LARGE GALAXIES
 galaxy radius stretch factor: 2.5
-synonym radius arcsec: 0.5
+synonym radius arcsec: 1.3
 
+dlr_testing: False
 
 ignore morphology list:
     - WISEAJ193037.70-521726.0
@@ -46,11 +47,6 @@ search algorithm:
         general:
             angular radius arcsec: 1.5
             association: UNCLEAR
-    GSC unclear:
-        database table: tcs_view_unclear_guide_star_catalogue_v2_3
-        general:
-            angular radius arcsec: 1.5
-            association: UNCLEAR
     2MASS unclear:
         database table: tcs_view_unclear_2mass_psc_final
         general:
@@ -71,12 +67,6 @@ search algorithm:
     #         association: BS
     gaia bright stars:
         database table: tcs_view_bright_star_gaia_dr3
-        general:
-            angular radius arcsec: 7.
-            synonym: VS
-            association: BS
-    GSC v2.3 bright stars:
-        database table: tcs_view_bright_star_guide_star_catalogue_v2_3
         general:
             angular radius arcsec: 7.
             synonym: VS
@@ -102,12 +92,6 @@ search algorithm:
             association: VS
     gaia stars:
         database table: tcs_view_star_gaia_dr3
-        general:
-            angular radius arcsec: 1.5
-            synonym: VS
-            association: VS
-    GSC v2.3 stars:
-        database table: tcs_view_star_guide_star_catalogue_v2_3
         general:
             angular radius arcsec: 1.5
             synonym: VS
@@ -199,14 +183,6 @@ search algorithm:
             and within semi major axis: True
             synonym: NT
             association: SN
-    GSC big galaxies:
-        # BIG > 20 ARCSEC.  GALAXIES > 30.0 ARCSEC ALL CAUGHT BY NED/LASR
-        database table: tcs_view_big_galaxy_guide_star_catalogue_v2_3
-        general:
-            angular radius arcsec: 25.0
-            and within semi major axis: True
-            synonym: NT
-            association: SN
     NED-D phot galaxies:
         database table: tcs_view_galaxy_ned_d_v17_1_2
         general:
@@ -240,12 +216,6 @@ search algorithm:
         database table: tcs_view_galaxy_sdss_photo_stars_galaxies_dr12
         general:
             angular radius arcsec: 10.
-            association: SN
-    GSC v2.3 galaxies:
-        database table: tcs_view_galaxy_guide_star_catalogue_v2_3
-        general:
-            angular radius arcsec: 20.
-            and within semi major axis: True
             association: SN
     DESI LS galaxies:
         database table: tcs_view_galaxy_desi_legacy_dr10
@@ -309,3 +279,38 @@ search algorithm:
             angular radius arcsec: 2.5
             synonym: CV
             association: CV
+
+
+
+#### REMOVED SEARCHES
+# GSC v2.3 stars:
+#     database table: tcs_view_star_guide_star_catalogue_v2_3
+#     general:
+#         angular radius arcsec: 1.5
+#         synonym: VS
+#         association: VS
+# GSC big galaxies:
+#     # BIG > 20 ARCSEC.  GALAXIES > 30.0 ARCSEC ALL CAUGHT BY NED/LASR
+#     database table: tcs_view_big_galaxy_guide_star_catalogue_v2_3
+#     general:
+#         angular radius arcsec: 25.0
+#         and within semi major axis: True
+#         synonym: NT
+#         association: SN
+# GSC v2.3 galaxies:
+#     database table: tcs_view_galaxy_guide_star_catalogue_v2_3
+#     general:
+#         angular radius arcsec: 20.
+#         and within semi major axis: True
+#         association: SN
+# GSC unclear:
+#     database table: tcs_view_unclear_guide_star_catalogue_v2_3
+#     general:
+#         angular radius arcsec: 1.5
+#         association: UNCLEAR
+# GSC v2.3 bright stars:
+#     database table: tcs_view_bright_star_guide_star_catalogue_v2_3
+#     general:
+#         angular radius arcsec: 7.
+#         synonym: VS
+#         association: BS
