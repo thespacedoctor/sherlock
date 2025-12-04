@@ -113,8 +113,8 @@ search algorithm:
         database table: tcs_view_hpm_stars_gaia_dr3
         general:
             angular radius arcsec: 3.0
-            synonym: HPM
-            association: HPM
+            synonym: HPMS
+            association: HPMS
     ###### PHYSICAL GALAXY SEARCHES
     NED-D spec super big galaxies:
         # SUPER BIG > 2 ARCMIN
