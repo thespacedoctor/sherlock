@@ -68,7 +68,7 @@ search algorithm:
     gaia bright stars:
         database table: tcs_view_bright_star_gaia_dr3
         general:
-            synonym radius arcsec: 5.
+            synonym radius arcsec: 3.
             angular radius arcsec: 7.
             synonym: VS
             association: BS
