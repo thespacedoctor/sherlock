@@ -93,7 +93,7 @@ search algorithm:
     gaia stars:
         database table: tcs_view_star_gaia_dr3
         general:
-            angular radius arcsec: 1.5
+            angular radius arcsec: 3.0
             synonym: VS
             association: VS
     PS1 stars:
