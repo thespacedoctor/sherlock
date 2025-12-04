@@ -68,6 +68,7 @@ search algorithm:
     gaia bright stars:
         database table: tcs_view_bright_star_gaia_dr3
         general:
+            synonym radius arcsec: 3.
             angular radius arcsec: 7.
             synonym: VS
             association: BS
@@ -93,7 +94,7 @@ search algorithm:
     gaia stars:
         database table: tcs_view_star_gaia_dr3
         general:
-            angular radius arcsec: 1.5
+            angular radius arcsec: 3.0
             synonym: VS
             association: VS
     PS1 stars:
@@ -112,9 +113,10 @@ search algorithm:
     gaia high pm stars:
         database table: tcs_view_hpm_stars_gaia_dr3
         general:
-            angular radius arcsec: 3.0
-            synonym: HPM
-            association: HPM
+            synonym radius arcsec: 3.
+            angular radius arcsec: 3.
+            synonym: HPMS
+            association: HPMS
     ###### PHYSICAL GALAXY SEARCHES
     NED-D spec super big galaxies:
         # SUPER BIG > 2 ARCMIN

@@ -1,6 +1,11 @@
 
 ## Release Notes
 
+**v3.1.0 December 4, 2025**
+
+* **FEATURE**: High Proper Motion Stars now identified and given the new classification of 'HPMS'
+* **REFACTOR**: specific 'synonym radius arcsec' can now be set on search modules to override the global value
+
 **v3.0.6 November 24, 2025**
 
 * **FEATURE**: Added code to calculate e Direct Light Radius for galaxies with morphology info (not switched on by default yet)
